@@ -1,7 +1,8 @@
-package geurime.backend.database.entity;
+package geurime.database.entity;
 
-import geurime.backend.database.enums.BoxType;
+import geurime.database.enums.BoxType;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
@@ -18,7 +19,7 @@ import java.util.List;
 public class DrawingBox {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "drawing_id", nullable = false)
+    @Column(name = "drawing_box_id", nullable = false)
     private Long id;
 
     @Column(name = "drawing_box_name", nullable = false, length = 40)
@@ -35,4 +36,12 @@ public class DrawingBox {
     @OneToMany(mappedBy = "drawingBox", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Drawing> drawingList = new ArrayList<>();
 
+    @Builder
+    public DrawingBox(Long id, String drawingBoxName, BoxType drawingBoxCategory, Kid kid, List<Drawing> drawingList) {
+        this.id = id;
+        this.drawingBoxName = drawingBoxName;
+        this.drawingBoxCategory = drawingBoxCategory;
+        this.kid = kid;
+        this.drawingList = drawingList;
+    }
 }

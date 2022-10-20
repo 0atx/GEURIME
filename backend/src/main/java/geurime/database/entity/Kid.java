@@ -1,6 +1,7 @@
-package geurime.backend.database.entity;
+package geurime.database.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
@@ -40,6 +41,14 @@ public class Kid {
     @OneToMany(mappedBy = "kid", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<DrawingBox> drawingBoxList = new ArrayList<>();
 
-
-
+    @Builder
+    public Kid(Long id, String kidName, String kidProfileImage, String kidGender, LocalDate kidBirth, User user, List<DrawingBox> drawingBoxList) {
+        this.id = id;
+        this.kidName = kidName;
+        this.kidProfileImage = kidProfileImage;
+        this.kidGender = kidGender;
+        this.kidBirth = kidBirth;
+        this.user = user;
+        this.drawingBoxList = drawingBoxList;
+    }
 }

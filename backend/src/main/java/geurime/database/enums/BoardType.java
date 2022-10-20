@@ -1,4 +1,4 @@
-package geurime.backend.database.enums;
+package geurime.database.enums;
 
 import lombok.Getter;
 

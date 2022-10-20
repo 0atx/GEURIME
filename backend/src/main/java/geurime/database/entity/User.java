@@ -1,6 +1,7 @@
-package geurime.backend.database.entity;
+package geurime.database.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
@@ -26,13 +27,13 @@ public class User {
     private String email;
 
     @Column(name = "refresh_token")
-    private String refresh_token;
+    private String refreshToken;
 
     @Column(name = "user_name", nullable = false)
     private String userName;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "create_date", nullable = false)
+    @Column(name = "create_date")
     private LocalDate createDate;
 
     @Column(name = "nickname", nullable = false)
@@ -53,6 +54,18 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Board> boardList = new ArrayList<>();
 
-
-
+    @Builder
+    public User(Long id, String email, String refreshToken, String userName, LocalDate createDate, String nickname, String userProfileImage, String simplePassword, Boolean isActive, List<Kid> kidList, List<Board> boardList) {
+        this.id = id;
+        this.email = email;
+        this.refreshToken = refreshToken;
+        this.userName = userName;
+        this.createDate = createDate;
+        this.nickname = nickname;
+        this.userProfileImage = userProfileImage;
+        this.simplePassword = simplePassword;
+        this.isActive = isActive;
+        this.kidList = kidList;
+        this.boardList = boardList;
+    }
 }
