@@ -1,6 +1,7 @@
-package geurime.backend.database.entity;
+package geurime.database.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
@@ -22,7 +23,7 @@ public class Comment {
     @Column(name = "comment_user_id", nullable = false)
     private Long commentUserId;
 
-    @Column(name = "create_time", nullable = false)
+    @Column(name = "create_time")
     private LocalDateTime createTime;
 
     @Column(name = "update_time")
@@ -34,4 +35,14 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
+
+    @Builder
+    public Comment(Long id, Long commentUserId, LocalDateTime createTime, LocalDateTime updateTime, String commentContent, Board board) {
+        this.id = id;
+        this.commentUserId = commentUserId;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+        this.commentContent = commentContent;
+        this.board = board;
+    }
 }

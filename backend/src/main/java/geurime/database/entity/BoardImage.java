@@ -1,6 +1,7 @@
-package geurime.backend.database.entity;
+package geurime.database.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
@@ -25,4 +26,10 @@ public class BoardImage {
     @JoinColumn(name = "board_board_id")
     private Board board;
 
+    @Builder
+    public BoardImage(Long id, String boardImagePath, Board board) {
+        this.id = id;
+        this.boardImagePath = boardImagePath;
+        this.board = board;
+    }
 }

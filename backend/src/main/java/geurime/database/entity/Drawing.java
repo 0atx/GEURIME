@@ -1,6 +1,7 @@
-package geurime.backend.database.entity;
+package geurime.database.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
@@ -20,7 +21,7 @@ public class Drawing {
     @Column(name = "drawing_id", nullable = false)
     private Long id;
 
-    @Column(name = "create_time", nullable = false)
+    @Column(name = "create_time")
     private LocalDateTime createTime;
 
     @Column(name = "drawing_title", nullable = false, length = 40)
@@ -54,5 +55,19 @@ public class Drawing {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "drawing_box_id")
     private DrawingBox drawingBox;
-
+    @Builder
+    public Drawing(Long id, LocalDateTime createTime, String drawingTitle, Float emotionHappy, Float emotionHope, Float emotionSad, Float emotionAngry, Boolean isDiary, String drawingDiary, String drawingImagePath, Boolean isLike, DrawingBox drawingBox) {
+        this.id = id;
+        this.createTime = createTime;
+        this.drawingTitle = drawingTitle;
+        this.emotionHappy = emotionHappy;
+        this.emotionHope = emotionHope;
+        this.emotionSad = emotionSad;
+        this.emotionAngry = emotionAngry;
+        this.isDiary = isDiary;
+        this.drawingDiary = drawingDiary;
+        this.drawingImagePath = drawingImagePath;
+        this.isLike = isLike;
+        this.drawingBox = drawingBox;
+    }
 }
