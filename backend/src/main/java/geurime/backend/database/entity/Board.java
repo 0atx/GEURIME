@@ -9,6 +9,8 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -34,10 +36,21 @@ public class Board {
     @Type(type = "org.hibernate.type.TextType")
     private String boardContent;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "board_category", nullable = false)
     private BoardType boardCategory;
 
     @Column(name = "board_views", nullable = false)
     private Integer boardViews;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<BoardImage> boardImages = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Comment> commentList = new ArrayList<>();
 
 }

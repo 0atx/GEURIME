@@ -31,4 +31,7 @@ public class Comment {
     @Column(name = "comment_content", nullable = false)
     private String commentContent;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    private Board board;
 }

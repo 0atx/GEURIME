@@ -21,4 +21,8 @@ public class BoardImage {
     @Column(name = "board_image_path", nullable = false)
     private String boardImagePath;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_board_id")
+    private Board board;
+
 }

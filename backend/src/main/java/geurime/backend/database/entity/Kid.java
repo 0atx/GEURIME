@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,8 +27,19 @@ public class Kid {
     @Column(name = "kid_profile_image")
     private String kidProfileImage;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @Column(name = "kid_gender", length = 1)
+    private String kidGender;
+
+    @Column(name = "kid_birth")
+    private LocalDate kidBirth;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "kid", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<DrawingBox> drawingBoxList = new ArrayList<>();
+
+
 
 }

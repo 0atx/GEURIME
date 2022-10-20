@@ -51,4 +51,8 @@ public class Drawing {
     @Column(name = "is_like", nullable = false)
     private Boolean isLike;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "drawing_box_id")
+    private DrawingBox drawingBox;
+
 }
