@@ -29,6 +29,11 @@ dependencies {
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.1.0' //엔티티와 DTO간의 변환을 도와줌
 
 
+    // 소셜 로그인 관련 설정
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
     compileOnly 'org.projectlombok:lombok'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
