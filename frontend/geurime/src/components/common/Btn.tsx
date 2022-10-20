@@ -7,18 +7,29 @@
 
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
+import styled from 'styled-components';
 
-export default function ContainedButtons() {
-  return (
-    <Stack direction="row" spacing={2}>
-      <Button variant="contained">Contained</Button>
-      <Button variant="contained" disabled>
-        Disabled
-      </Button>
-      <Button variant="contained" href="#contained-buttons">
-        Link
-      </Button>
-    </Stack>
-  );
+//props 설정
+interface StyledButtonprops { 
+    bgColor: string;
+    fontColor: string;
+    width: string;
 }
+
+const StyledButton = styled.button<StyledButtonprops>`
+&& {
+    background-color: ${(props) => props.bgColor || "#FFE082"};
+    color: ${(props) => props.fontColor || "black"};
+    border-radius: 24px;
+    width: ${(props) => props.width};
+    height: 37px;
+  }
+
+  &:hover {
+    background-color: ${(props) => props.bgColor} !important;
+    transform: scale(1.1);
+  }
+
+`;
+
+export default StyledButton;
