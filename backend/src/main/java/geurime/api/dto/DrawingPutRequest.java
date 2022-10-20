@@ -1,16 +1,13 @@
 package geurime.api.dto;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.io.Serializable;
 
 @Getter
 @NoArgsConstructor
-public class DrawingRequest{
+public class DrawingPutRequest {
+    private Long drawingId;
     private Long drawingBoxId;
     private String drawingTitle;
-    private String drawingImagePath;
+    private Boolean isLike;
 }

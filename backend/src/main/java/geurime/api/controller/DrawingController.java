@@ -1,6 +1,6 @@
 package geurime.api.controller;
 
-import geurime.api.dto.DrawingRequest;
+import geurime.api.dto.DrawingPostRequest;
 import geurime.api.dto.DrawingResponse;
 import geurime.api.dto.common.BasicResponse;
 import geurime.api.service.DrawingService;
@@ -11,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,8 +31,8 @@ public class DrawingController {
 
     @PostMapping
     @ApiOperation(value = "그림 기록 등록", notes = "그림 기록을 등록하고 저장된 그림의 id를 반환한다")
-    @ApiImplicitParam(name = "drawingRequest", value = "그림 기록 request", required = true, dataTypeClass = DrawingRequest.class)
-    public ResponseEntity<BasicResponse<Long>> createDrawing(@RequestBody DrawingRequest drawingRequest) {
+    @ApiImplicitParam(name = "drawingRequest", value = "그림 기록 request", required = true, dataTypeClass = DrawingPostRequest.class)
+    public ResponseEntity<BasicResponse<Long>> createDrawing(@RequestBody DrawingPostRequest drawingRequest) {
         Long drawingId = drawingService.createDrawing(drawingRequest);
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingId), HttpStatus.OK);
     }

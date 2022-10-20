@@ -3,7 +3,8 @@ package geurime.api.service;
  @author 신지한
  @since 2022-10-20
 */
-import geurime.api.dto.DrawingRequest;
+import geurime.api.dto.DrawingPostRequest;
+import geurime.api.dto.DrawingPutRequest;
 import geurime.api.dto.DrawingResponse;
 import geurime.database.entity.Drawing;
 import geurime.database.entity.DrawingBox;
@@ -26,6 +27,14 @@ public class DrawingService {
     private final DrawingBoxRepository drawingBoxRepository;
     private final ModelMapper modelMapper = new ModelMapper();
 
+    public Long changeDrawing(DrawingPutRequest request){
+        Drawing drawing = drawingRepository.findById(request.getDrawingId())
+                .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_NOT_FOUND_ERROR));
+        //drawing 수정
+
+        return null;
+    }
+
     public DrawingResponse readDrawing(Long drawingId){
         Drawing drawing = drawingRepository.findById(drawingId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_NOT_FOUND_ERROR));
@@ -37,7 +46,7 @@ public class DrawingService {
      * @param request 보관함id, 그림제목, 이미지경로(변경예정)
      * @return 저장된 그림의 id
      */
-    public Long createDrawing(DrawingRequest request){
+    public Long createDrawing(DrawingPostRequest request){
         DrawingBox drawingBox = drawingBoxRepository.findById(request.getDrawingBoxId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_BOX_NOT_FOUND_ERROR));
 
