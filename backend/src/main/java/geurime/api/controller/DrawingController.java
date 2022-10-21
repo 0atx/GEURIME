@@ -3,7 +3,7 @@ package geurime.api.controller;
 import geurime.api.dto.DrawingPostRequest;
 import geurime.api.dto.DrawingResponse;
 import geurime.api.dto.common.BasicResponse;
-import geurime.api.service.DrawingService;
+import geurime.api.service.DrawingServiceImpl;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +18,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/drawing")
 public class DrawingController {
 
-    final DrawingService drawingService;
+    final DrawingServiceImpl drawingService;
     static final String SUCCESS = "success";
 
     @GetMapping("/{drawingId}")
     @ApiOperation(value = "그림 기록 조회", notes = "그림 기록을 id로 조회한다")
     @ApiImplicitParam(name = "drawingId", value = "그림 기록 Id", required = true, dataTypeClass = Long.class)
     public ResponseEntity<BasicResponse<DrawingResponse>> readDrawing(@PathVariable("drawingId") Long drawingId) {
+        DrawingResponse response = drawingService.readDrawing(drawingId);
+        return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
+    }
+
+    @GetMapping("/preview/{kidId}")
+    @ApiOperation(value = "자녀의 그림 기록 전체조회", notes = "자녀id로 전체 그림기록을 조회한다")
+    @ApiImplicitParam(name = "kidId", value = "자녀 Id", required = true, dataTypeClass = Long.class)
+    public ResponseEntity<BasicResponse<DrawingResponse>> readKidDrawing(@PathVariable("kidId") Long drawingId) {
         DrawingResponse response = drawingService.readDrawing(drawingId);
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
     }

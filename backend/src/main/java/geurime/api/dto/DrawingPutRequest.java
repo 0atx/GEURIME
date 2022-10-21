@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class DrawingPutRequest {
+    private Long kidId;
     private Long drawingId;
     private Long drawingBoxId;
     private String drawingTitle;

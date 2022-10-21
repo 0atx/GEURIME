@@ -70,4 +70,14 @@ public class Drawing {
         this.isLike = isLike;
         this.drawingBox = drawingBox;
     }
+
+    public void changeDrawingInfo(DrawingBox drawingBox, String drawingTitle, Boolean isLike){
+        this.drawingBox = drawingBox;
+        this.drawingTitle = drawingTitle;
+        this.isLike = isLike;
+    }
+
+    public void changeDrawingLocation(DrawingBox drawingBox){
+        this.drawingBox = drawingBox;
+    }
 }
