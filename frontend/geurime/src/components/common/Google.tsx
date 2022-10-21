@@ -8,7 +8,7 @@ export default function Google() {
   return (
     <>
       <a href={GOOGLE_REQUEST}>
-      구글 로그인
+        <img src="/assets/loginBtn/googlelogin.png" width="65vh" />
       </a>
     </>
     

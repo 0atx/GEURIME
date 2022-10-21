@@ -7,8 +7,8 @@ export default function Kakao() {
 
   return (
     <>
-      <a href={KAKAO_REQUEST}>
-      카카오 로그인
+      <a href={KAKAO_REQUEST} style={{marginRight: "2vh"}}>
+        <img src="/assets/loginBtn/kakaologin.png" width="65vh" />
       </a>
     </>
     
