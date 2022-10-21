@@ -9,8 +9,8 @@ export default function Home() {
   let easelStyle = {
     margin: "5vw",
     width: "100%",
-    height: "40vh",
-    backgroundImage: `url(${easel}) noRepeat center`,
+    height: "42vh",
+    backgroundImage: `url(${easel})`,
     backgroundRepeat: "no-repeat",
     backgroundPosition: "top center",
     backgroundSize: "31vh",
@@ -22,14 +22,22 @@ export default function Home() {
       <Grid item xs={12}>
         <img src="assets/icon/topcrayon.png" width="100%" alt="crayon"/>
       </Grid>
-      <Grid item xs={12} sx={{fontSize: "10vw", marginTop: "4vh"}}>그림일기 도우미</Grid>
-      <Grid item xs={12} sx={{fontSize: "10vw", marginTop: "2vh"}}>
+      <Grid item xs={12} sx={{fontSize: "5vh", marginTop: "4vh"}}>그림일기 도우미</Grid>
+      {/* 그리미 텍스트 로고 */}
+      <Grid item xs={12} sx={{ marginTop: "2vh" }}>
         <img src="assets/logo/logotext.png" width="60%" />
       </Grid>
+      {/* 이젤 */}
       <div style={easelStyle}>
-        간편 로그인
-        <Kakao />
-        <Google />
+        <Grid container sx={{marginTop: "10vh"}}>
+          <Grid item xs={12} sx={{fontSize: "7vw", marginBottom: "3vh"}}>
+            간편 로그인
+          </Grid>
+          <Grid item xs={12}>
+            <Kakao />
+            <Google />
+          </Grid>
+        </Grid>
       </div>
       {/* 하단 크레파스 */}
       <Grid item xs={12}>
