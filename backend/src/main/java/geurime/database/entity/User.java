@@ -49,13 +49,14 @@ public class User {
     private Boolean isActive;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Kid> kidList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Board> boardList = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "family_id")
+    private Family user;
+
     @Builder
-    public User(Long id, String email, String refreshToken, String userName, LocalDate createDate, String nickname, String userProfileImage, String simplePassword, Boolean isActive, List<Kid> kidList, List<Board> boardList) {
+    public User(Long id, String email, String refreshToken, String userName, LocalDate createDate, String nickname, String userProfileImage, String simplePassword, Boolean isActive, List<Board> boardList, Family user) {
         this.id = id;
         this.email = email;
         this.refreshToken = refreshToken;
@@ -65,7 +66,7 @@ public class User {
         this.userProfileImage = userProfileImage;
         this.simplePassword = simplePassword;
         this.isActive = isActive;
-        this.kidList = kidList;
         this.boardList = boardList;
+        this.user = user;
     }
 }

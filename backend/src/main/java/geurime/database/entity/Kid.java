@@ -34,21 +34,21 @@ public class Kid {
     @Column(name = "kid_birth")
     private LocalDate kidBirth;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @OneToMany(mappedBy = "kid", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<DrawingBox> drawingBoxList = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "family_id")
+    private Family family;
+
     @Builder
-    public Kid(Long id, String kidName, String kidProfileImage, String kidGender, LocalDate kidBirth, User user, List<DrawingBox> drawingBoxList) {
+    public Kid(Long id, String kidName, String kidProfileImage, String kidGender, LocalDate kidBirth, List<DrawingBox> drawingBoxList, Family family) {
         this.id = id;
         this.kidName = kidName;
         this.kidProfileImage = kidProfileImage;
         this.kidGender = kidGender;
         this.kidBirth = kidBirth;
-        this.user = user;
         this.drawingBoxList = drawingBoxList;
+        this.family = family;
     }
 }
