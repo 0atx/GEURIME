@@ -1,5 +1,5 @@
 /*
-버튼
+버튼 속성: bgcolor(배경색), fontcolor(글씨색)
 @author 여예원
 @since 2022.10.20
 */

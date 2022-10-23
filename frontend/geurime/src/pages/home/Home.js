@@ -3,7 +3,6 @@ import Kakao from "components/common/Kakao";
 import Google from "components/common/Google";
 import { Grid } from "@mui/material";
 import easel from "assets/easel.png";
-import Btn from "components/common/Btn";
 
 export default function Home() {
   let easelStyle = {
@@ -24,7 +23,6 @@ export default function Home() {
       alignItems="center"
       textAlign="center"
     >
-      <Btn>버튼테스트</Btn>
       {/* 상단 크레파스 */}
       <Grid item xs={12}>
         <img src="assets/icon/topcrayon.png" width="100%" alt="crayon" />
