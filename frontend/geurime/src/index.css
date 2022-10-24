@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'THEHongChawangjanemo';
+  font-weight: 300;
+  src: url('./assets/fonts/THE_HongChawangjanemo.ttf') format('woff2'),
+    url('./assets/fonts/THE_HongChawangjanemo.ttf') format('woff'),
+    url('./assets/fonts/THE_HongChawangjanemo.ttf') format('truetype');
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'THEHongChawangjanemo', sans-serif;
+}
