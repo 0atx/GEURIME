@@ -24,16 +24,20 @@ public class Family {
     @Column(name = "family_name", length = 20)
     private String familyName;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<User> users = new ArrayList<>();
+    @Column(name = "family_leader_id")
+    private Long familyLeaderId;
 
     @OneToMany(mappedBy = "family", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<User> users = new ArrayList<>();
+
+    @OneToMany(mappedBy = "family", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Kid> kidList = new ArrayList<>();
 
     @Builder
-    public Family(Long id, String familyName, List<User> users, List<Kid> kidList) {
+    public Family(Long id, String familyName, Long familyLeaderId, List<User> users, List<Kid> kidList) {
         this.id = id;
         this.familyName = familyName;
+        this.familyLeaderId = familyLeaderId;
         this.users = users;
         this.kidList = kidList;
     }
