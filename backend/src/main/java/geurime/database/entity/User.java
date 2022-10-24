@@ -30,9 +30,6 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "provider", nullable = false)
-    private String provider;
-
     @Column(name = "refresh_token")
     private String refreshToken;
 
@@ -56,7 +53,7 @@ public class User {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
-    @Column(name = "provider", length = 10)
+    @Column(name = "provider", length = 10, nullable = false)
     private String provider;
 
     @Column(name = "is_child")
@@ -69,8 +66,6 @@ public class User {
     @JoinColumn(name = "family_id")
     private Family family;
 
-    @Builder
-    public User(Long id, String email, String refreshToken, String userName, LocalDate createDate, String nickname, String userProfileImage, String simplePassword, Boolean isActive, String provider, Boolean isChild, List<Board> boardList, Family family) {
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
@@ -81,10 +76,9 @@ public class User {
     }
 
     @Builder
-    public User(Long id, String email, String provider, String refreshToken, String userName, LocalDate createDate, String nickname, String userProfileImage, String simplePassword, Boolean isActive, List<Kid> kidList, List<Board> boardList) {
+    public User(Long id, String email, String refreshToken, String userName, LocalDate createDate, String nickname, String userProfileImage, String simplePassword, Boolean isActive, String provider, Boolean isChild, List<Board> boardList, Family family) {
         this.id = id;
         this.email = email;
-        this.provider = provider;
         this.refreshToken = refreshToken;
         this.userName = userName;
         this.createDate = createDate;
