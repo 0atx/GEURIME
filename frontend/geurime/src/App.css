@@ -46,3 +46,7 @@ body {
     transform: rotate(360deg);
   }
 }
+
+#container {
+  background-color: #FFFFF8;
+}
