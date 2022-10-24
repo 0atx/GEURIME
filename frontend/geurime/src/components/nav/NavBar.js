@@ -1,9 +1,4 @@
-import {
-  Paper,
-  BottomNavigation,
-  BottomNavigationAction,
-  Avatar,
-} from "@mui/material";
+import { Paper, BottomNavigation, BottomNavigationAction, Avatar } from "@mui/material";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PhotoOutlinedIcon from "@mui/icons-material/PhotoOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
@@ -16,10 +11,7 @@ export default function NavBar() {
   const [value, setValue] = useState(0);
 
   return (
-    <Paper
-      sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
-      elevation={3}
-    >
+    <Paper sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }} elevation={3}>
       <BottomNavigation
         showLabels
         value={value}
@@ -27,11 +19,17 @@ export default function NavBar() {
           setValue(newValue);
         }}
         sx={{
+          "&&": {
+            "& .MuiBottomNavigationAction-label": {
+              fontSize: "2vh",
+            },
+          },
           "& .Mui-selected": {
             "& .MuiBottomNavigationAction-label": {
               transition: "none",
               fontWeight: "bold",
               lineHeight: "20px",
+              fontSize: "2vh",
             },
             "& .MuiSvgIcon-root, & .MuiBottomNavigationAction-label": {
               color: "#FFCA28",
@@ -41,11 +39,8 @@ export default function NavBar() {
       >
         <BottomNavigationAction label="홈" icon={<HomeOutlinedIcon />} />
         <BottomNavigationAction label="갤러리" icon={<PhotoOutlinedIcon />} />
-        <BottomNavigationAction icon={<AddBoxIcon />} />
-        <BottomNavigationAction
-          label="커뮤니티"
-          icon={<GroupsOutlinedIcon />}
-        />
+        <BottomNavigationAction icon={<AddBoxIcon color="primary" />} />
+        <BottomNavigationAction label="커뮤니티" icon={<GroupsOutlinedIcon />} />
         <BottomNavigationAction label="설정" icon={<SettingsIcon />} />
       </BottomNavigation>
     </Paper>
