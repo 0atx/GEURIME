@@ -56,12 +56,21 @@ public class User {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Kid> kidList = new ArrayList<>();
+    @Column(name = "provider", length = 10)
+    private String provider;
+
+    @Column(name = "is_child")
+    private Boolean isChild;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Board> boardList = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "family_id")
+    private Family family;
+
+    @Builder
+    public User(Long id, String email, String refreshToken, String userName, LocalDate createDate, String nickname, String userProfileImage, String simplePassword, Boolean isActive, String provider, Boolean isChild, List<Board> boardList, Family family) {
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
@@ -83,8 +92,10 @@ public class User {
         this.userProfileImage = userProfileImage;
         this.simplePassword = simplePassword;
         this.isActive = isActive;
-        this.kidList = kidList;
+        this.provider = provider;
+        this.isChild = isChild;
         this.boardList = boardList;
+        this.family = family;
     }
 
     public User update(String userName, String email) {
