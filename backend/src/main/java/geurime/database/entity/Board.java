@@ -1,10 +1,8 @@
 package geurime.database.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import geurime.database.enums.BoardType;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Type;
 
@@ -67,4 +65,108 @@ public class Board {
         this.boardImages = boardImages;
         this.commentList = commentList;
     }
+
+    /**
+     * 게시글 수정 DTO
+     */
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BoardPutRequest{
+        private Long boardId;
+        private String boardTitle;
+        private String boardContent;
+        private String boardType;
+    }
+
+    /**
+     * 게시글 등록 DTO
+     */
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BoardPostRequest{
+        private Long userId;
+        private LocalDateTime createTime;
+        private String boardTitle;
+        private String boardContent;
+        private String boardCategory;
+
+        List<String> boardImagePathList;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class BoardTitleResponse{
+        private Long boardId;
+        private Long userId;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime createTime;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime updateTime;
+        private String boardTitle;
+        private String boardCategory;
+        private Boolean isImageExist;
+        private Integer boardViews;
+    }
+
+    /**
+     * 게시글 상세 조회 DTO
+     */
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class BoardInfoResponse{
+        private Long boardId;
+        private Long writerId;
+        private String writerNickname;
+        private String writerProfile;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime createTime;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime updateTime;
+        private String boardTitle;
+        private String boardContent;
+        private String boardCategory;
+        private Integer boardViews;
+
+        List<String> boardImagePathList;
+        List<BoardCommentDto> boardCommentDtoList;
+
+        @Builder
+        public BoardInfoResponse(Long boardId, Long writerId, String writerNickname, String writerProfile, LocalDateTime createTime, LocalDateTime updateTime, String boardTitle, String boardContent, String boardCategory, Integer boardViews, List<String> boardImagePathList, List<BoardCommentDto> boardCommentDtoList) {
+            this.boardId = boardId;
+            this.writerId = writerId;
+            this.writerNickname = writerNickname;
+            this.writerProfile = writerProfile;
+            this.createTime = createTime;
+            this.updateTime = updateTime;
+            this.boardTitle = boardTitle;
+            this.boardContent = boardContent;
+            this.boardCategory = boardCategory;
+            this.boardViews = boardViews;
+            this.boardImagePathList = boardImagePathList;
+            this.boardCommentDtoList = boardCommentDtoList;
+        }
+    }
+
+    /**
+     * 게시판 댓글 조회 DTO
+     */
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class BoardCommentDto{
+        private Long commentId;
+        private Long commentUserId;
+        private String commentUserProfile;
+        private String commentUserNickname;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime createTime;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime updateTime;
+        private String commentContent;
+    }
+
 }
