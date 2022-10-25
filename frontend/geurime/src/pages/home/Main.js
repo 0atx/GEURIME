@@ -3,27 +3,6 @@ import { Grid, Paper, Avatar } from "@mui/material";
 import Masonry from "@mui/lab/Masonry";
 import { useNavigate } from "react-router-dom";
 
-
-export default function Main() { 
-    return (
-        <div id="container">
-            <Grid container justifyContent="center">
-                <Grid item xs={10}>갤러리</Grid>
-                <Grid item xs={10}>
-                    갤러리
-                </Grid>
-            </Grid>
-            <Grid container justifyContent="center">
-                <Grid item xs={10} >우리 가족 정보</Grid>
-                <Grid item xs={10} >
-                    <Paper elevation={3} >
-                        {/* todo: 실제 가족 정보로 변경 필요 */}
-                        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                    </Paper>
-                </Grid>
-            </Grid>
-        </div>
-    )
 export default function Main() {
   const [imgList, setImgList] = useState([0, 1, 2, 3, 4]);
   const navigator = useNavigate();
