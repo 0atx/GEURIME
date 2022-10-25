@@ -6,7 +6,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/geurime?useSSL=false&useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/geurime?serverTimezone=Asia/Seoul&useUniCode=yes&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
     username: ssafy506
     password: geurime506
   jpa:
@@ -32,13 +32,13 @@ spring:
           google:
             client-id: 417526393965-udah7cpoj5lb6ko6svvrt9l0fglp9md6.apps.googleusercontent.com
             client-secret: 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
-            redirect-uri: http://localhost:9000/api/login/oauth2/code/google
+            redirect-uri: https://k7a506.p.ssafy.io/api/login/oauth2/code/google
             scope: profile, email
           # KAKAO LOGIN
           kakao:
             client-id: c0cbf77489ed0d9b1b576570c815869f
             client-secret: EkRKIwjPLCyv1nMF0K9zhf2VtJWUBend
-            redirect-uri: http://localhost:9000/api/login/oauth2/code/kakao
+            redirect-uri: https://k7a506.p.ssafy.io/api/login/oauth2/code/kakao
             client-authentication-method: POST
             authorization-grant-type: authorization_code
             client-name: Kakao
