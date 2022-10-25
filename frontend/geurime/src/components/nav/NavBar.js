@@ -1,3 +1,8 @@
+/*
+NavBar
+@author 조혜안
+@since 2022.10.25
+*/
 import { Paper, BottomNavigation, BottomNavigationAction, Avatar } from "@mui/material";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PhotoOutlinedIcon from "@mui/icons-material/PhotoOutlined";

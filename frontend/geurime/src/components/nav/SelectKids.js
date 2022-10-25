@@ -1,33 +1,48 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
-import ListSubheader from "@mui/material/ListSubheader";
-import List from "@mui/material/List";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Collapse from "@mui/material/Collapse";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import DraftsIcon from "@mui/icons-material/Drafts";
-import SendIcon from "@mui/icons-material/Send";
+/*
+SelectKids 헤더
+@author 조혜안
+@since 2022.10.25
+*/
+import { useState } from "react";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  Avatar,
+  List,
+  ListItemButton,
+  ListItemText,
+  Collapse,
+  ListItemAvatar,
+} from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import StarBorder from "@mui/icons-material/StarBorder";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
 
-export default function NestedList() {
-  const [open, setOpen] = React.useState(true);
+export default function SelectKids() {
+  const [open, setOpen] = useState(false);
+
+  // 아이 목록 - 실제 정보로 변경 필요!!!
+  const [kids, setKids] = useState([
+    {
+      image: "/assets/icon/default_profile.png",
+      name: "첫째",
+    },
+    {
+      image: "/assets/icon/default_profile.png",
+      name: "둘째",
+    },
+    {
+      image: "/assets/icon/default_profile.png",
+      name: "셋째",
+    },
+    {
+      image: "/assets/icon/default_profile.png",
+      name: "넷째",
+    },
+  ]);
+
+  // 클릭된 아이
+  const [clicked, setClicked] = useState(kids[0]);
 
   const handleClick = () => {
     setOpen(!open);
@@ -40,11 +55,13 @@ export default function NestedList() {
         "& .css-hyum1k-MuiToolbar-root": {
           padding: "0px",
         },
+        "& .css-e1xqc2-MuiList-root": {
+          paddingTop: "0px",
+        },
       }}
     >
       <AppBar
         color="transparent"
-        // position="static"
         style={{
           position: "fixed",
           paddingTop: "0px",
@@ -56,7 +73,7 @@ export default function NestedList() {
             sx={{
               width: "100%",
               "& .MuiListItemText-primary": {
-                fontSize: "2.5vh",
+                fontSize: "23px",
               },
             }}
             component="nav"
@@ -64,19 +81,30 @@ export default function NestedList() {
           >
             <ListItemButton onClick={handleClick}>
               <ListItemAvatar>
-                <Avatar alt="Remy Sharp" src="/assets/logo/onlylogo.png" />
+                <Avatar alt="Remy Sharp" src={clicked.image} />
               </ListItemAvatar>
-              <ListItemText primary="우주최강귀요미카니" />
+              <ListItemText primary={clicked.name}></ListItemText>
+
               {open ? <ExpandLess /> : <ExpandMore />}
             </ListItemButton>
             <Collapse sx={{ backgroundColor: "#ffffff" }} in={open} timeout="auto" unmountOnExit>
+              {/* 아이 목록 */}
               <List component="div" disablePadding>
-                <ListItemButton>
-                  <ListItemAvatar>
-                    <Avatar alt="Remy Sharp" src="/assets/logo/onlylogo.png" />
-                  </ListItemAvatar>
-                  <ListItemText primary="우주최강귀요미포" />
-                </ListItemButton>
+                {kids.map((kid, i) => (
+                  <ListItemButton
+                    key={i}
+                    onClick={() => {
+                      setOpen(!open);
+                      setClicked(kid);
+                      // 클릭된 아이의 정보로 화면 전체 변경 필요!!!
+                    }}
+                  >
+                    <ListItemAvatar>
+                      <Avatar alt="Remy Sharp" src={kid.image} />
+                    </ListItemAvatar>
+                    <ListItemText primary={kid.name} />
+                  </ListItemButton>
+                ))}
               </List>
             </Collapse>
           </List>
