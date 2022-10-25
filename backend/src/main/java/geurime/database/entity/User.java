@@ -1,5 +1,6 @@
 package geurime.database.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
@@ -35,7 +36,6 @@ public class User {
     private String userName;
 
     @CreatedDate
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "create_date")
     private LocalDate createDate;
 
@@ -44,9 +44,6 @@ public class User {
 
     @Column(name = "user_profile_image")
     private String userProfileImage;
-
-    @Column(name = "simple_password", length = 6)
-    private String simplePassword;
 
     @Column(name = "is_active")
     private Boolean isActive;
@@ -84,7 +81,7 @@ public class User {
     }
 
     @Builder
-    public User(Long id, String email, String refreshToken, String userName, LocalDate createDate, String nickname, String userProfileImage, String simplePassword, Boolean isActive, String provider, Boolean isChild, LocalDate userBirth, String userGender, List<Board> boardList, Family family) {
+    public User(Long id, String email, String refreshToken, String userName, LocalDate createDate, String nickname, String userProfileImage, Boolean isActive, String provider, Boolean isChild, LocalDate userBirth, String userGender, List<Board> boardList, Family family) {
         this.id = id;
         this.email = email;
         this.refreshToken = refreshToken;
@@ -92,7 +89,6 @@ public class User {
         this.createDate = createDate;
         this.nickname = nickname;
         this.userProfileImage = userProfileImage;
-        this.simplePassword = simplePassword;
         this.isActive = isActive;
         this.provider = provider;
         this.isChild = isChild;
@@ -118,7 +114,6 @@ public class User {
         this.createDate = LocalDate.now();
         this.nickname = request.getNickName();
         this.userProfileImage = request.getUserProfileImage();
-        this.simplePassword = request.getSimplePassword();
         this.isChild = request.getIsChild();
         this.userBirth = LocalDate.parse(request.getUserBirth(), DateTimeFormatter.ISO_DATE);
         this.userGender = request.getUserGender();
@@ -136,7 +131,6 @@ public class User {
         this.createDate = LocalDate.now();
         this.nickname = request.getNickName();
         this.userProfileImage = request.getUserProfileImage();
-        this.simplePassword = request.getSimplePassword();
         this.isChild = request.getIsChild();
         this.userBirth = LocalDate.parse(request.getUserBirth(), DateTimeFormatter.ISO_DATE);
         this.userGender = request.getUserGender();
@@ -183,7 +177,6 @@ public class User {
     public static class UserSignUpRequest{
         private String nickName;
         private String userProfileImage;
-        private String simplePassword;
         private Boolean isChild;
         private String userBirth;
         private String userGender;
@@ -204,7 +197,6 @@ public class User {
     public static class UserInviteSignUpRequest{
         private String nickName;
         private String userProfileImage;
-        private String simplePassword;
         private Boolean isChild;
         private String userBirth;
         private String userGender;
@@ -216,17 +208,18 @@ public class User {
      * 유저 조회 DTO
      */
     @Getter
+    @Setter
+    @NoArgsConstructor
     public static class UserInfoResponse{
         private Long userId;
         private String email;
         private String userName;
-        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDate createDate;
         private String nickName;
         private String userProfileImage;
-        private String simplePassword;
         private String provider;
-        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDate userBirth;
         private String userGender;
 
@@ -238,14 +231,13 @@ public class User {
         List<UserInfoKidDto> kidDtoList;
 
         @Builder
-        public UserInfoResponse(Long userId, String email, String userName, LocalDate createDate, String nickName, String userProfileImage, String simplePassword, String provider, LocalDate userBirth, String userGender, Long familyId, String familyName, Long familyLeaderId, String inviteCode, List<UserInfoKidDto> kidDtoList) {
+        public UserInfoResponse(Long userId, String email, String userName, LocalDate createDate, String nickName, String userProfileImage, String provider, LocalDate userBirth, String userGender, Long familyId, String familyName, Long familyLeaderId, String inviteCode, List<UserInfoKidDto> kidDtoList) {
             this.userId = userId;
             this.email = email;
             this.userName = userName;
             this.createDate = createDate;
             this.nickName = nickName;
             this.userProfileImage = userProfileImage;
-            this.simplePassword = simplePassword;
             this.provider = provider;
             this.userBirth = userBirth;
             this.userGender = userGender;
@@ -260,11 +252,14 @@ public class User {
     /**
      * 유저 조회 kid DTO
      */
+    @Getter
+    @Setter
+    @NoArgsConstructor
     public static class UserInfoKidDto{
         private Long kidId;
         private String kidName;
         private String kidProfileImage;
-        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDate kidBirth;
 
         @Builder
