@@ -1,0 +1,205 @@
+.react-calendar {
+    width: 90%;
+    color: #222;
+    background-color: white;
+    line-height: 1.125em;
+    border: 1px solid rgb(228, 225, 225);
+    border-radius: 15px;
+    padding: 10px;
+    box-shadow: 1px 2px 5px #c7c7c7;
+    margin: auto;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+  }
+
+.react-calendar__month-view__days {
+    height: 50vh;
+}
+
+  .react-calendar--doubleView {
+    width: 700px;
+  }
+  .react-calendar--doubleView .react-calendar__viewContainer {
+    display: flex;
+    margin: -0.5em;
+  }
+  .react-calendar--doubleView .react-calendar__viewContainer > * {
+    width: 50%;
+    margin: 0.5em;
+  }
+  .react-calendar,
+  .react-calendar *,
+  .react-calendar *:before,
+  .react-calendar *:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  .react-calendar button {
+    margin: 0;
+    border: 0;
+    outline: none;
+  }
+  .react-calendar button:enabled:hover {
+    cursor: pointer;
+  }
+  .react-calendar__navigation {
+    display: flex;
+    height: 44px;
+    margin-bottom: 1em;
+  }
+  /* 상단 날짜, <> 버튼 */
+  .react-calendar__navigation button {
+    color: #9DA6F8;
+    min-width: 44px;
+    background: none;
+    font-size: 16px;
+    margin-top: 8px;
+    font-weight: bolder;
+  }
+
+  .react-calendar__navigation button:enabled:hover,
+  .react-calendar__navigation button:enabled:focus {
+    background-color: #ffffff;
+  }
+
+  /* 상단 요일 */
+  .react-calendar__month-view__weekdays {
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1em;
+    margin-bottom: 10px;
+  }
+
+    /* 요일 밑의 밑줄 지우기 */
+    abbr[title] {
+        text-decoration: none;
+    }
+
+  .react-calendar__tile {
+    max-width: 100%;
+    padding: 10px 6.6667px;
+    border-radius: 9999px;
+    text-align: center;
+    line-height: 16px;
+    background-color: white;
+  }
+
+  /* 날짜 */
+  [aria-label ^= "2"] {
+        border-radius: 9999px;
+        width: 24px;
+        height: 24px;
+  }
+
+  /* 날짜 hover시 컬러 */
+  .react-calendar__tile:enabled:hover,
+  .react-calendar__tile:enabled:focus {
+    color: black;
+  font-weight: bolder;
+  }
+
+  .react-calendar__tile:enabled:hover > abbr{
+    background-color: #9DA6F8;
+    border-radius: 9999px;
+    border: solid 5px #9DA6F8;
+    color: white;
+  }
+  
+  /* 오늘 날짜 */
+  .react-calendar__tile--now {
+    border: 1px;
+    font-weight: bolder;
+    font-size: 15px;
+  }
+
+  .react-calendar__tile--now > abbr{
+    color: #9DA6F8;
+    font-weight: bolder;
+  }
+
+  /* 날짜 active시 컬러 */
+  .react-calendar__tile--active {
+    border: 1px;
+    font-weight: bolder;
+    font-size: 15px;
+  }
+
+  .react-calendar__tile--active > abbr {
+    background-color: #9DA6F8;
+    border-radius: 9999px;
+    border: solid 5px #9DA6F8;
+    color: white;
+  }
+
+  /* .react-calendar__tile--active:enabled:hover,
+  .react-calendar__tile--active:enabled:focus {
+    border: 1px;
+    color: white;
+  }
+
+  .react-calendar__tile--active:enabled:hover > abbr {
+    background-color: red;
+    border-radius: 9999px;
+    border: solid 5px red;
+    color: white;
+  } */
+
+
+  /* .react-calendar--selectRange .react-calendar__tile--hover {
+    background-color: white;
+  } */
+
+  .react-calendar__navigation__prev2-button,
+  .react-calendar__navigation__next2-button {
+    display: none;
+  }
+
+  .goodDot {
+    height: 10px;
+    width: 10px;
+    background-color: #A9D5C7;
+    border-radius: 50%;
+    display: flex;
+    margin: auto;
+    margin-top: 6px;
+  }
+
+  .normalDot {
+    height: 10px;
+    width: 10px;
+    background-color: #FFEFC9;
+    border-radius: 50%;
+    display: flex;
+    margin: auto;
+    margin-top: 6px;
+  }
+
+  .badDot {
+    height: 10px;
+    width: 10px;
+    background-color: #f87171;
+    border-radius: 50%;
+    display: flex;
+    margin: auto;
+    margin-top: 6px;
+  }
+
+  .unDot {
+    height: 10px;
+    width: 10px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    margin: auto;
+    margin-top: 6px;
+  }
+
+  .dotArea {
+    margin: auto;
+  }
+
+
+
+

@@ -10,6 +10,7 @@ import { Button } from "@mui/material";
 
 const StyledButton = styled(Button)`
   && {
+    width: ${(props) => props.width};
     background-color: ${(props) => props.bgcolor || "#FFE082"};
     color: ${(props) => props.fontcolor || "#000000"};
     border-radius: 25px;

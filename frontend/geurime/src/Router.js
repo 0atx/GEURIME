@@ -11,7 +11,7 @@ import ModifyDetailGallery from "pages/gallery/ModifyDetailGallery";
 import RegistDrawing from "pages/drawing/RegistDrawing";
 import Diary from "pages/diary/Diary";
 import DetailDiary from "pages/diary/DetailDiary";
-import RegistDiary from "pages/diary/Registdiary";
+import RegistDiary from "pages/diary/RegistDiary";
 import Board from "pages/board/Board";
 import DetailBoard from "pages/board/DetailBoard";
 import RegistBoard from "pages/board/RegistBoard";

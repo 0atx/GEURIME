@@ -1,3 +1,32 @@
-export default function RegistDiaryModal() { 
-    
+/*
+일기 등록 완료 모달
+@author 조혜안
+@since 2022.10.25
+*/
+import Button from "components/common/Btn.js";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import { useNavigate } from "react-router-dom";
+
+export default function RegistDiaryModal({ open }) {
+  const navigate = useNavigate();
+
+  return (
+    <Dialog open={open}>
+      <DialogContent>
+        <div style={{ fontSize: "23px" }}>그림일기 등록이 완료되었습니다.</div>
+      </DialogContent>
+      <DialogActions sx={{ display: "flex", justifyContent: "center", marginBottom: "10px" }}>
+        <Button
+          width="100px"
+          onClick={() => {
+            navigate(`/diary`);
+          }}
+        >
+          확인
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 }

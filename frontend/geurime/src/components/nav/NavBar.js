@@ -3,7 +3,15 @@ NavBar
 @author 조혜안
 @since 2022.10.25
 */
-import { Paper, BottomNavigation, BottomNavigationAction, Avatar } from "@mui/material";
+import {
+  Paper,
+  BottomNavigation,
+  BottomNavigationAction,
+  Avatar,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+} from "@mui/material";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PhotoOutlinedIcon from "@mui/icons-material/PhotoOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
@@ -14,6 +22,7 @@ import { useState, useEffect } from "react";
 import Button from "components/common/Btn.js";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Calendar from "components/nav/Calendar.js";
 
 export default function NavBar() {
   const location = useLocation();
@@ -22,6 +31,13 @@ export default function NavBar() {
 
   // 등록 메뉴
   const [menuOpen, setMenuOpen] = useState(false);
+  // 캘린더 열기
+  const [calOpen, setCalOpen] = useState(false);
+
+  const handleClose = () => {
+    setCalOpen(false);
+    setMenuOpen(false);
+  };
 
   useEffect(() => {
     AOS.init();
@@ -29,7 +45,7 @@ export default function NavBar() {
 
   return (
     <div>
-      {menuOpen === true && (
+      {menuOpen && (
         <div>
           <div
             style={{
@@ -43,25 +59,31 @@ export default function NavBar() {
               setMenuOpen(false);
             }}
           ></div>
-
+          <Dialog onClose={handleClose} open={calOpen}>
+            <DialogTitle>일기를 등록할 날짜를 선택해주세요!</DialogTitle>
+            <Calendar></Calendar>
+            <DialogActions></DialogActions>
+          </Dialog>
+          }
           <div style={{ textAlign: "center" }}>
-            <Link to="/registdiary">
-              <Button
-                data-aos="fade-up"
-                data-aos-delay="200"
-                sx={{
-                  position: "fixed",
-                  left: "33%",
-                  width: "33%",
-                  bottom: "140px",
-                }}
-              >
-                일기 등록
-              </Button>
-            </Link>
+            <Button
+              data-aos="fade-up"
+              data-aos-delay="200"
+              sx={{
+                position: "fixed",
+                left: "33%",
+                width: "33%",
+                bottom: "140px",
+              }}
+              onClick={() => {
+                setCalOpen(true);
+              }}
+            >
+              일기 등록
+            </Button>
           </div>
           <div style={{ textAlign: "center" }}>
-            <Link to="/registdiary">
+            <Link to="/registdrawing">
               <Button
                 data-aos="fade-up"
                 data-aos-delay="100"
