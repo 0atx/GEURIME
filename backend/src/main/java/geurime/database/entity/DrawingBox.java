@@ -29,19 +29,19 @@ public class DrawingBox {
     @Column(name = "drawing_box_category", nullable = false)
     private BoxType drawingBoxCategory;
 
+    @OneToMany(mappedBy = "drawingBox", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Drawing> drawingList = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "kid_id")
     private Kid kid;
 
-    @OneToMany(mappedBy = "drawingBox", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Drawing> drawingList = new ArrayList<>();
-
     @Builder
-    public DrawingBox(Long id, String drawingBoxName, BoxType drawingBoxCategory, Kid kid, List<Drawing> drawingList) {
+    public DrawingBox(Long id, String drawingBoxName, BoxType drawingBoxCategory, List<Drawing> drawingList, Kid kid) {
         this.id = id;
         this.drawingBoxName = drawingBoxName;
         this.drawingBoxCategory = drawingBoxCategory;
-        this.kid = kid;
         this.drawingList = drawingList;
+        this.kid = kid;
     }
 }
