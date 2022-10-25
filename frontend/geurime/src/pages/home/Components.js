@@ -4,7 +4,7 @@
 @since 2022.10.25
 */
 import { Container } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Button from "components/common/Btn.js";
 import NavBar from "components/nav/NavBar";
