@@ -8,7 +8,7 @@ export default function Home() {
   let easelStyle = {
     margin: "5vw",
     width: "100%",
-    height: "41vh",
+    height: "41.5vh",
     backgroundImage: `url(${easel})`,
     backgroundRepeat: "no-repeat",
     backgroundPosition: "top center",
