@@ -1,7 +1,6 @@
 echo '실행 시작'
 echo 'git pull'
 echo 'jar 파일 삭제'
-cp /var/jenkins_home/workspace/application.yml /var/jenkins_home/workspace/backend/backend/src/main/resources
 rm build/libs/*.jar
 echo '빌드 시작'
 ./gradlew build
