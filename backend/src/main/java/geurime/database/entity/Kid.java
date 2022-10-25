@@ -47,4 +47,7 @@ public class Kid {
         this.drawingBoxList = drawingBoxList;
         this.family = family;
     }
+    public void joinFamily(Family family){
+        this.family = family;
+    }
 }
