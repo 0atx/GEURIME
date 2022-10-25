@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -29,10 +31,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User.UserInfoResponse readUserInfo(Long userId) {
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByIdFetch(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         User.UserInfoResponse response = modelMapper.map(user, User.UserInfoResponse.class);
+
+        response.setInviteCode(user.getFamily().getInviteCode());
+
+        List<Kid> kidList = kidRepository.findByFamily(user.getFamily());
+        List<User.UserInfoKidDto> kidDtoList = new ArrayList<>(kidList.size());
+
+        for (Kid kid : kidList){
+            User.UserInfoKidDto kidDto = User.UserInfoKidDto.builder()
+                    .kidId(kid.getId())
+                    .kidName(kid.getKidName())
+                    .kidProfileImage(kid.getKidProfileImage())
+                    .kidBirth(kid.getKidBirth())
+                    .build();
+            kidDtoList.add(kidDto);
+        }
+
+        response.setKidDtoList(kidDtoList);
 
         return response;
     }
@@ -49,8 +68,8 @@ public class UserServiceImpl implements UserService {
                 .familyLeaderId(userId)
                 .build();
 
-        family.setInviteCode(family.makeInviteCode());
         familyRepository.save(family);
+        family.setInviteCode(family.makeInviteCode());
 
         user.joinFamily(family);
         userRepository.save(user);
