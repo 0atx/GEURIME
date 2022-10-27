@@ -13,7 +13,7 @@
   }
 
 .react-calendar__month-view__days {
-    height: 50vh;
+    height: 30vh;
 }
 
   .react-calendar--doubleView {
@@ -55,7 +55,7 @@
     background: none;
     font-size: 25px;
     margin-top: 8px;
-    font-weight: bolder;
+    /* font-weight: bolder; */
   }
 
   .react-calendar__navigation button:enabled:hover,
