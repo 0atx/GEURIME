@@ -3,7 +3,15 @@ NavBar
 @author 조혜안
 @since 2022.10.25
 */
-import { Paper, BottomNavigation, BottomNavigationAction, Avatar } from "@mui/material";
+import {
+  Paper,
+  BottomNavigation,
+  BottomNavigationAction,
+  Avatar,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+} from "@mui/material";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PhotoOutlinedIcon from "@mui/icons-material/PhotoOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
@@ -23,13 +31,17 @@ export default function NavBar() {
   // 등록 메뉴
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const handleClose = () => {
+    setMenuOpen(false);
+  };
+
   useEffect(() => {
     AOS.init();
   }, []);
 
   return (
     <div>
-      {menuOpen === true && (
+      {menuOpen && (
         <div>
           <div
             style={{
@@ -61,7 +73,7 @@ export default function NavBar() {
             </Link>
           </div>
           <div style={{ textAlign: "center" }}>
-            <Link to="/registdiary">
+            <Link to="/registdrawing">
               <Button
                 data-aos="fade-up"
                 data-aos-delay="100"
