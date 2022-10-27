@@ -47,13 +47,13 @@ public class Board {
     private User user;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<BoardImage> boardImages = new ArrayList<>();
+    private List<BoardImage> boardImageList = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> commentList = new ArrayList<>();
 
     @Builder
-    public Board(Long id, LocalDateTime createTime, LocalDateTime updateTime, String boardTitle, String boardContent, BoardType boardCategory, Integer boardViews, User user, List<BoardImage> boardImages, List<Comment> commentList) {
+    public Board(Long id, LocalDateTime createTime, LocalDateTime updateTime, String boardTitle, String boardContent, BoardType boardCategory, Integer boardViews, User user, List<BoardImage> boardImageList, List<Comment> commentList) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -62,8 +62,15 @@ public class Board {
         this.boardCategory = boardCategory;
         this.boardViews = boardViews;
         this.user = user;
-        this.boardImages = boardImages;
+        this.boardImageList = boardImageList;
         this.commentList = commentList;
+    }
+
+    /**
+     * 게시글 조회수 1 증가
+     */
+    public void increaseBoardViews(){
+        this.boardViews += 1;
     }
 
     /**
@@ -101,14 +108,17 @@ public class Board {
     public static class BoardTitleResponse{
         private Long boardId;
         private Long userId;
+        private String userNickname;
+        private String userProfileImage;
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime createTime;
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime updateTime;
         private String boardTitle;
         private String boardCategory;
-        private Boolean isImageExist;
+        private String boardFirstImage;
         private Integer boardViews;
+        private Integer commentCount;
     }
 
     /**
