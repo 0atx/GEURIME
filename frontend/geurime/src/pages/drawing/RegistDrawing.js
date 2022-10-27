@@ -1,3 +1,1 @@
-export default function RegistDrawing() { 
-    
-}
+export default function RegistDrawing() {}

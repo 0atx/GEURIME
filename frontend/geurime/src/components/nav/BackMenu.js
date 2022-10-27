@@ -1,6 +1,6 @@
 /*
 BackMenu 헤더
-속성 : isLeft(Boolean), title(String), isRight(String)
+속성 : isLeft(Boolean), title(String), clickTitle(타이틀클릭 함수), isRight(String), clickRight(오른쪽클릭 함수)
 @author 조혜안
 @since 2022.10.25
 */
@@ -12,7 +12,7 @@ import Toolbar from "@mui/material/Toolbar";
 import { Grid } from "@mui/material";
 import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
 
-export default function BackMenu({ isLeft, title, isRight }) {
+export default function BackMenu({ isLeft, title, clickTitle, isRight, clickRight }) {
   return (
     <Box
       sx={{
@@ -35,26 +35,28 @@ export default function BackMenu({ isLeft, title, isRight }) {
             }}
           >
             {/* isLeft */}
-            <Grid item sx={{ textAlign: "center" }} xs={4}>
+            <Grid item sx={{ textAlign: "center" }} xs={2}>
               {isLeft === true && <KeyboardArrowLeftRoundedIcon></KeyboardArrowLeftRoundedIcon>}
             </Grid>
             {/* title */}
-            <Grid item sx={{ textAlign: "center" }} xs={4}>
+            <Grid item sx={{ textAlign: "center" }} xs={8}>
               <span
                 style={{
                   fontSize: "23px",
                 }}
+                onClick={clickTitle}
               >
                 {title}
               </span>
             </Grid>
             {/* isRight */}
-            <Grid item sx={{ textAlign: "center" }} xs={4}>
+            <Grid item sx={{ textAlign: "center" }} xs={2}>
               <span
                 style={{
                   fontSize: "20px",
                   color: "#ffa000",
                 }}
+                onClick={clickRight}
               >
                 {isRight}
               </span>
