@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Grid, Typography } from "@mui/material";
 import Btn from "components/common/Btn";
+import BackMenu from "components/nav/BackMenu";
 
 export default function RegistKids() {
   const [kids, setKids] = useState([]);
 
   return (
     <Grid id="container">
+      <BackMenu isLeft="false" title="우리 아이 정보 등록" />
       <Grid
         direction="row"
         container

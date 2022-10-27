@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Grid, Paper, Avatar } from "@mui/material";
 import Masonry from "@mui/lab/Masonry";
 import { useNavigate } from "react-router-dom";
+import NavBar from "components/nav/NavBar";
+import SelectKids from "components/nav/SelectKids";
 
 export default function Main() {
   const [imgList, setImgList] = useState([0, 1, 2, 3, 4]);
@@ -9,6 +11,7 @@ export default function Main() {
 
   return (
     <div id="container">
+      <SelectKids />
       <Grid container justifyContent="center">
         <Grid item xs={10} sx={{ fontSize: "3vh", marginBottom: "2vh" }}>
           그림 갤러리
@@ -41,6 +44,7 @@ export default function Main() {
           </Paper>
         </Grid>
       </Grid>
+      <NavBar />
     </div>
   );
 }
