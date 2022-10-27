@@ -3,10 +3,10 @@
     color: #222;
     background-color: white;
     line-height: 1.125em;
-    border: 1px solid rgb(228, 225, 225);
+    /* border: 1px solid rgb(228, 225, 225); */
     border-radius: 15px;
     padding: 10px;
-    box-shadow: 1px 2px 5px #c7c7c7;
+    /* box-shadow: 1px 2px 5px #c7c7c7; */
     margin: auto;
     margin-top: 1vh;
     margin-bottom: 1vh;
@@ -50,10 +50,10 @@
   }
   /* 상단 날짜, <> 버튼 */
   .react-calendar__navigation button {
-    color: #9DA6F8;
+    color: #FFA000;
     min-width: 44px;
     background: none;
-    font-size: 16px;
+    font-size: 25px;
     margin-top: 8px;
     font-weight: bolder;
   }
@@ -68,7 +68,7 @@
     text-align: center;
     text-transform: uppercase;
     font-weight: bold;
-    font-size: 1em;
+    font-size: 1.3em;
     margin-bottom: 10px;
   }
 
@@ -101,21 +101,26 @@
   }
 
   .react-calendar__tile:enabled:hover > abbr{
-    background-color: #9DA6F8;
+    background-color: #FFA000;
     border-radius: 9999px;
-    border: solid 5px #9DA6F8;
+    border: solid 5px #FFA000;
     color: white;
+  }
+
+  /* 날짜들 */
+  .react-calendar__tile:enabled > abbr{
+    font-size: 25px;
   }
   
   /* 오늘 날짜 */
   .react-calendar__tile--now {
     border: 1px;
     font-weight: bolder;
-    font-size: 15px;
+    font-size: 20px;
   }
 
   .react-calendar__tile--now > abbr{
-    color: #9DA6F8;
+    color: #FFA000;
     font-weight: bolder;
   }
 
@@ -123,13 +128,13 @@
   .react-calendar__tile--active {
     border: 1px;
     font-weight: bolder;
-    font-size: 15px;
+    font-size: 20px;
   }
 
   .react-calendar__tile--active > abbr {
-    background-color: #9DA6F8;
+    background-color: #FFA000;
     border-radius: 9999px;
-    border: solid 5px #9DA6F8;
+    border: solid 5px #FFA000;
     color: white;
   }
 
@@ -156,49 +161,6 @@
     display: none;
   }
 
-  .goodDot {
-    height: 10px;
-    width: 10px;
-    background-color: #A9D5C7;
-    border-radius: 50%;
-    display: flex;
-    margin: auto;
-    margin-top: 6px;
-  }
-
-  .normalDot {
-    height: 10px;
-    width: 10px;
-    background-color: #FFEFC9;
-    border-radius: 50%;
-    display: flex;
-    margin: auto;
-    margin-top: 6px;
-  }
-
-  .badDot {
-    height: 10px;
-    width: 10px;
-    background-color: #f87171;
-    border-radius: 50%;
-    display: flex;
-    margin: auto;
-    margin-top: 6px;
-  }
-
-  .unDot {
-    height: 10px;
-    width: 10px;
-    background-color: white;
-    border-radius: 50%;
-    display: flex;
-    margin: auto;
-    margin-top: 6px;
-  }
-
-  .dotArea {
-    margin: auto;
-  }
 
 
 

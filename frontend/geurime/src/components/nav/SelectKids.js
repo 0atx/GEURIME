@@ -55,7 +55,7 @@ export default function SelectKids() {
         "& .css-hyum1k-MuiToolbar-root": {
           padding: "0px",
         },
-        "& .css-e1xqc2-MuiList-root": {
+        "& .css-1qg3ghx-MuiList-root": {
           paddingTop: "0px",
         },
       }}

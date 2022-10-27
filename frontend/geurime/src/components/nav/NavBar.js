@@ -22,7 +22,6 @@ import { useState, useEffect } from "react";
 import Button from "components/common/Btn.js";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Calendar from "components/nav/Calendar.js";
 
 export default function NavBar() {
   const location = useLocation();
@@ -31,11 +30,8 @@ export default function NavBar() {
 
   // 등록 메뉴
   const [menuOpen, setMenuOpen] = useState(false);
-  // 캘린더 열기
-  const [calOpen, setCalOpen] = useState(false);
 
   const handleClose = () => {
-    setCalOpen(false);
     setMenuOpen(false);
   };
 
@@ -59,28 +55,22 @@ export default function NavBar() {
               setMenuOpen(false);
             }}
           ></div>
-          <Dialog onClose={handleClose} open={calOpen}>
-            <DialogTitle>일기를 등록할 날짜를 선택해주세요!</DialogTitle>
-            <Calendar></Calendar>
-            <DialogActions></DialogActions>
-          </Dialog>
-          }
+
           <div style={{ textAlign: "center" }}>
-            <Button
-              data-aos="fade-up"
-              data-aos-delay="200"
-              sx={{
-                position: "fixed",
-                left: "33%",
-                width: "33%",
-                bottom: "140px",
-              }}
-              onClick={() => {
-                setCalOpen(true);
-              }}
-            >
-              일기 등록
-            </Button>
+            <Link to="/registdiary">
+              <Button
+                data-aos="fade-up"
+                data-aos-delay="200"
+                sx={{
+                  position: "fixed",
+                  left: "33%",
+                  width: "33%",
+                  bottom: "140px",
+                }}
+              >
+                일기 등록
+              </Button>
+            </Link>
           </div>
           <div style={{ textAlign: "center" }}>
             <Link to="/registdrawing">
