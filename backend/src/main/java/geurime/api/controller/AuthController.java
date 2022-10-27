@@ -58,13 +58,11 @@ public class AuthController {
         String nickname = user.getNickname() == null ? "" : user.getNickname();
 
         response.sendRedirect(UriComponentsBuilder.fromUriString("http://localhost:3000/logincheck")
-        // response.sendRedirect(UriComponentsBuilder.fromUriString("https://k7a506.p.ssafy.io/logincheck")
                 .queryParam("accessToken", token.getAccessToken())
                 .queryParam("refreshToken", token.getRefreshToken())
                 .queryParam("accessTokenExpiration", accessTokenExpiration)
                 .queryParam("refreshTokenExpiration", refreshTokenExpiration)
                 .queryParam("userId", user.getId().toString())
-                .queryParam("email", user.getEmail())
                 .queryParam("name", user.getUserName())
                 .queryParam("nickname", nickname)
                 .build()
