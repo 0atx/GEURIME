@@ -13,6 +13,9 @@ import "./Calendar.css";
 import moment from "moment";
 import Button from "components/common/Btn.js";
 
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import * as THREE from "three";
+
 export default function RegistDiary({}) {
   // 등록완료 모달
   const [open, setOpen] = useState(false);
@@ -61,6 +64,8 @@ export default function RegistDiary({}) {
     setTitle(month + "월 " + day + "일 일기");
     setCalOpen(false);
   };
+
+  let scene = new THREE.Scene();
 
   return (
     <div>
