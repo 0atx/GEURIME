@@ -34,7 +34,7 @@ public class BoardController {
     @GetMapping("/category")
     @ApiOperation(value = "게시글 분류조회", notes = "게시글 카테고리와 페이지 번호 page와 한번에 받아올 사이즈 size를 받아 게시글 목록을 반환한다.")
     public ResponseEntity<BasicResponse<List<Board.BoardTitleResponse>>> readBoardByCategory(@RequestParam Integer page, @RequestParam Integer size, @RequestParam String category) {
-        List<Board.BoardTitleResponse> responseList = boardService.readTitleByCategory(page, size, BoardType.valueOf(category));
+        List<Board.BoardTitleResponse> responseList = boardService.readTitleByCategory(page, size, category);
 
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseList), HttpStatus.OK);
     }
@@ -43,7 +43,7 @@ public class BoardController {
     @ApiOperation(value = "게시글 검색조회", notes = "게시글 카테고리와 검색어, 페이지 번호 page와 한번에 받아올 사이즈 size를 받아 게시글 목록을 반환한다.")
     public ResponseEntity<BasicResponse<List<Board.BoardTitleResponse>>> readBoardBySearch
             (@RequestParam Integer page, @RequestParam Integer size, @RequestParam String category, @RequestParam String keyword) {
-        List<Board.BoardTitleResponse> responseList = boardService.readTitleBySearch(page, size, BoardType.valueOf(category), keyword);
+        List<Board.BoardTitleResponse> responseList = boardService.readTitleBySearch(page, size, category, keyword);
 
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseList), HttpStatus.OK);
     }
@@ -60,6 +60,14 @@ public class BoardController {
     @ApiOperation(value = "게시글 등록", notes = "등록 정보를 받아 게시글을 등록한다")
     public ResponseEntity<BasicResponse<Long>> createBoard(@RequestBody Board.BoardPostRequest request) {
         Long boardId = boardService.createBoard(request);
+
+        return new ResponseEntity<>(makeBasicResponse(SUCCESS, boardId), HttpStatus.CREATED);
+    }
+
+    @PutMapping
+    @ApiOperation(value = "게시글 수정", notes = "수정 정보를 받아 수정하려는 유저가 작성자이면 게시글을 수정한다")
+    public ResponseEntity<BasicResponse<Long>> updateBoard(@RequestParam Long userId ,@RequestBody Board.BoardPutRequest request) {
+        Long boardId = boardService.updateBoard(userId, request);
 
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, boardId), HttpStatus.OK);
     }

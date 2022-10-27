@@ -2,6 +2,8 @@ package geurime.database.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import geurime.database.enums.BoardType;
+import geurime.exception.CustomException;
+import geurime.exception.CustomExceptionList;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Type;
@@ -71,6 +73,19 @@ public class Board {
      */
     public void increaseBoardViews(){
         this.boardViews += 1;
+    }
+
+    public void updateBoard(Board.BoardPutRequest request){
+        this.boardTitle = request.getBoardTitle();
+        this.boardContent = request.boardContent;
+        BoardType boardType = null;
+        try {
+            boardType = BoardType.valueOf(request.getBoardType());
+        }catch (IllegalArgumentException e){
+            throw new CustomException(CustomExceptionList.BOARD_TYPE_NOT_FOUND_ERROR);
+        }
+        this.boardCategory = boardType;
+        this.updateTime = LocalDateTime.now();
     }
 
     /**

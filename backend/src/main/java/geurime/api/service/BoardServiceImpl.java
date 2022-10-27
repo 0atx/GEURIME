@@ -108,12 +108,14 @@ public class BoardServiceImpl implements BoardService{
      * 게시글 카테고리, page와 size를 받아 게시글 리스트를 boardId로 정렬하여 반환한다.
      * @param page 몇 번째 페이지인지 표시
      * @param size 한번에 볼 게시글 수
-     * @param boardType 검색할 카테고리
+     * @param stringBoardType 검색할 카테고리
      * @return
      */
     @Override
-    public List<Board.BoardTitleResponse> readTitleByCategory(Integer page, Integer size, BoardType boardType) {
+    public List<Board.BoardTitleResponse> readTitleByCategory(Integer page, Integer size, String stringBoardType) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+        BoardType boardType = checkBoardType(stringBoardType);
 
         Slice<Board> boardSlice = boardRepository.findByBoardCategory(boardType ,pageRequest);
 
@@ -139,13 +141,15 @@ public class BoardServiceImpl implements BoardService{
      * 게시글 카테고리, 검색어를 포함하는 제목의 게시글을 page와 size를 받아 게시글 리스트를 boardId로 정렬하여 반환한다.
      * @param page 몇 번째 페이지인지 표시
      * @param size 한번에 볼 게시글 수
-     * @param boardType 게시글 카테고리
+     * @param stringBoardType 게시글 카테고리
      * @param keyword 검색어
      * @return
      */
     @Override
-    public List<Board.BoardTitleResponse> readTitleBySearch(Integer page, Integer size, BoardType boardType, String keyword) {
+    public List<Board.BoardTitleResponse> readTitleBySearch(Integer page, Integer size, String stringBoardType, String keyword) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+        BoardType boardType = checkBoardType(stringBoardType);
 
         Slice<Board> boardSlice = boardRepository.findByBoardCategoryAndBoardTitleContains(boardType , keyword, pageRequest);
 
@@ -177,14 +181,15 @@ public class BoardServiceImpl implements BoardService{
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
-        
+        //enum 유효성 검사
+        BoardType boardType = checkBoardType(request.getBoardCategory());
 
         Board board = Board.builder()
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
                 .boardTitle(request.getBoardTitle())
                 .boardContent(request.getBoardContent())
-                .boardCategory(BoardType.valueOf(request.getBoardCategory()))
+                .boardCategory(boardType)
                 .boardViews(0)
                 .user(user)
                 .build();
@@ -206,10 +211,38 @@ public class BoardServiceImpl implements BoardService{
         return board.getId();
     }
 
+    /**
+     * 입력받은 문자열을 enum으로 변환한다.
+     * 유효하지 않은 문자열은 에러를 발생시킨다
+     * @param stringBoardType 게시판 분류(string)
+     * @return 게시판 분류(enum)
+     */
+    private BoardType checkBoardType(String stringBoardType){
+        BoardType boardType = null;
+        try {
+            boardType = BoardType.valueOf(stringBoardType);
+        }catch (IllegalArgumentException e){
+            throw new CustomException(CustomExceptionList.BOARD_TYPE_NOT_FOUND_ERROR);
+        }
+        return boardType;
+    }
+
+    /**
+     * 유저 id와 수정정보를 받아 작성자인 경우에 수정하고 아니면 0을 반환한다
+     * @param userId 수정을 시도하는 유저 id
+     * @param request 게시글을 수정할 정보
+     * @return 게시글 id
+     */
     @Override
-    public Long updateBoard(Board.BoardPutRequest request) {
-        //updateTime 수정
-        return null;
+    public Long updateBoard(Long userId, Board.BoardPutRequest request) {
+        Board board = boardRepository.findById(request.getBoardId())
+                .orElseThrow(() -> new CustomException(CustomExceptionList.BOARD_NOT_FOUND_ERROR));
+        if(board.getUser().getId() == userId){
+            board.updateBoard(request);
+            return board.getId();
+        }else{
+            return 0L;
+        }
     }
 
     /**

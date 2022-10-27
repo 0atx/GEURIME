@@ -22,7 +22,8 @@ public enum CustomExceptionList {
     DRAWING_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E004", "존재하지 않는 그림 기록입니다."),
     DRAWING_BOX_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E005", "존재하지 않는 그림 보관함입니다."),
     KID_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E006", "존재하지 않는 자녀입니다."),
-    BOARD_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E007", "존재하지 않는 게시글입니다.");
+    BOARD_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E007", "존재하지 않는 게시글입니다."),
+    BOARD_TYPE_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E008", "존재하지 않는 게시글 분류입니다.");
 
     private final HttpStatus status;
     private final String code;

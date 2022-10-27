@@ -9,9 +9,9 @@ import java.util.List;
 public interface BoardService {
     List<Board.BoardTitleResponse> readAllTitle(Integer page, Integer size);
     Board.BoardInfoResponse readBoardDetail(Long boardId);
-    List<Board.BoardTitleResponse> readTitleByCategory(Integer page, Integer size, BoardType boardType);
-    List<Board.BoardTitleResponse> readTitleBySearch(Integer page, Integer size, BoardType boardType, String keyword);
+    List<Board.BoardTitleResponse> readTitleByCategory(Integer page, Integer size, String stringBoardType);
+    List<Board.BoardTitleResponse> readTitleBySearch(Integer page, Integer size, String stringBoardType, String keyword);
     Long createBoard(Board.BoardPostRequest request);
-    Long updateBoard(Board.BoardPutRequest request);
+    Long updateBoard(Long userId, Board.BoardPutRequest request);
     Boolean deleteBoard(Long userId, Long boardId);
 }
