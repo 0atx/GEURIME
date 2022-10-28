@@ -28,10 +28,10 @@ public class UserController {
     }
 
     @PostMapping("/{userId}")
-    @ApiOperation(value = "유저 회원가입", notes = "유저와 가족이름, 자녀 정보를 받아 새로운 가족을 만들어 등록한다")
+    @ApiOperation(value = "유저 회원가입", notes = "유저와 가족이름, 자녀 정보를 받아 새로운 가족을 만들어 등록하고 가족 id를 반환한다.")
     public ResponseEntity<BasicResponse<Long>> createUserInfo(@PathVariable("userId") Long userId, @RequestBody User.UserSignUpRequest request) {
-        userService.createNewUser(userId, request);
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, userId), HttpStatus.CREATED);
+        Long familyId = userService.createNewUser(userId, request);
+        return new ResponseEntity<>(makeBasicResponse(SUCCESS, familyId), HttpStatus.CREATED);
     }
 
     @PostMapping("/invite-code/{userId}")

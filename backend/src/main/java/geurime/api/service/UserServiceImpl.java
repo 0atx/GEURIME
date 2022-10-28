@@ -56,8 +56,14 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
+    /**
+     * 유저 회원가입을 하고 가족 id를 반환한다.
+     * @param userId
+     * @param request
+     * @return 가족 id
+     */
     @Override
-    public void createNewUser(Long userId, User.UserSignUpRequest request) {
+    public Long createNewUser(Long userId, User.UserSignUpRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
@@ -74,14 +80,7 @@ public class UserServiceImpl implements UserService {
         user.joinFamily(family);
         userRepository.save(user);
 
-        //자녀 생성
-        Kid kid = Kid.builder()
-                .kidName(request.getKidName())
-                .kidProfileImage(request.getKidProfileImage())
-                .kidBirth(LocalDate.parse(request.getKidBirth(), DateTimeFormatter.ISO_DATE))
-                .build();
-        kid.joinFamily(family);
-        kidRepository.save(kid);
+        return family.getId();
     }
 
     @Override
