@@ -7,7 +7,7 @@ import { useState, useEffect, useRef, Suspense } from "react";
 import BackMenu from "components/nav/BackMenu";
 import NavBar from "components/nav/NavBar";
 import RegistDiaryModal from "components/modal/RegistDiaryModal";
-import { Dialog, DialogTitle, DialogActions } from "@mui/material";
+import { Container, Dialog, DialogTitle, DialogActions } from "@mui/material";
 import Calendar from "react-calendar";
 import "./Calendar.css";
 import moment from "moment";
@@ -20,6 +20,8 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import * as THREE from "three";
 
 export default function RegistDiary({}) {
+  // 타입 (question, write, drawing)
+  const [type, setType] = useState("question");
   // 등록완료 모달
   const [open, setOpen] = useState(false);
   // 현재 날짜
@@ -128,15 +130,56 @@ export default function RegistDiary({}) {
           <Button onClick={changeDate}>확인</Button>
         </DialogActions>
       </Dialog>
-      {/* 헤더 */}
-      <BackMenu
-        type="registDiary"
-        isLeft={true}
-        title={title}
-        clickTitle={openCal}
-        isRight="등록"
-        clickRight={registDiary}
-      ></BackMenu>
+
+      {/* 기분, 날씨, 잠든 시간, 일어난 시간 질문 페이지 */}
+      {type === "question" && (
+        <Container id="container">
+          {/* 헤더 */}
+          <BackMenu
+            type="registDiary"
+            isLeft={true}
+            title={title}
+            clickTitle={openCal}
+          ></BackMenu>
+          <Button
+            onClick={() => {
+              setType("write");
+            }}
+          >
+            다음
+          </Button>
+        </Container>
+      )}
+
+      {/* 일기 작성 페이지 */}
+      {type === "write" && (
+        <Container id="container">
+          {/* 헤더 */}
+          <BackMenu
+            isLeft={true}
+            title={title}
+            clickTitle={openCal}
+            isRight="건너뛰기"
+            clickRight={() => {
+              setType("drawing");
+            }}
+          ></BackMenu>
+        </Container>
+      )}
+
+      {/* 그림 업로드 페이지 */}
+      {type === "drawing" && (
+        <Container id="container">
+          {/* 헤더 */}
+          <BackMenu
+            isLeft={true}
+            title={title}
+            clickTitle={openCal}
+            isRight="등록"
+            clickRight={registDiary}
+          ></BackMenu>
+        </Container>
+      )}
 
       {/* 네비 바 */}
       <NavBar></NavBar>
