@@ -1,9 +1,6 @@
 package geurime.database.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -44,5 +41,27 @@ public class Comment {
         this.updateTime = updateTime;
         this.commentContent = commentContent;
         this.board = board;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CommentPostRequest{
+        private Long boardId;
+        private Long commentUserId;
+        private String commentContent;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CommentPutRequest{
+        private Long userId;
+        private Long commentId;
+        private String commentContent;
+    }
+
+    public void updateComment(String commentContent){
+        this.commentContent = commentContent;
     }
 }
