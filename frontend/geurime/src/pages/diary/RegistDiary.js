@@ -3,7 +3,7 @@
 @author 조혜안
 @since 2022.10.25
 */
-import { useState } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import BackMenu from "components/nav/BackMenu";
 import NavBar from "components/nav/NavBar";
 import RegistDiaryModal from "components/modal/RegistDiaryModal";
@@ -12,6 +12,12 @@ import Calendar from "react-calendar";
 import "./Calendar.css";
 import moment from "moment";
 import Button from "components/common/Btn.js";
+// three.js
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, useGLTF } from "@react-three/drei";
+import { useLoader } from "@react-three/fiber";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import * as THREE from "three";
 
 export default function RegistDiary({}) {
   // 등록완료 모달
@@ -62,6 +68,38 @@ export default function RegistDiary({}) {
     setCalOpen(false);
   };
 
+  const mountRef = useRef(null);
+
+  //   useEffect(() => {
+  //     const canvas = document.querySelector("#canvas");
+
+  //     let scene = new THREE.Scene();
+  //     let camera = new THREE.PerspectiveCamera(30, 1);
+  //     let renderer = new THREE.WebGLRenderer({
+  //       canvas,
+  //     });
+
+  //     let loader = new GLTFLoader();
+  //     loader.load("assets/3D/scene.gltf", function (gltf) {
+  //       scene.add(gltf.scene);
+  //       renderer.render(scene, camera);
+  //     });
+  //   }, []);
+
+  //   let scene = new THREE.Scene();
+  //   let renderer = new THREE.WebGLRenderer({
+  //     canvas: document.querySelector("#canvas"),
+  //   });
+
+  //   // 카메라: PerspectiveCamera(원근법 적용된 카메라), OrthographicCamera(원근법 무시하는 카메라)
+  //   let camera = new THREE.PerspectiveCamera(30, 1);
+
+  //   let loader = new GLTFLoader();
+  //   loader.load("assets/3D/scene.gltf", function (gltf) {
+  //     scene.add(gltf.scene);
+  //     renderer.render(scene, camera);
+  //   });
+
   return (
     <div>
       {/* 캘린더 모달 */}
@@ -72,6 +110,9 @@ export default function RegistDiary({}) {
             onChange(e);
           }}
           calendarType="Hebrew" // 일요일시작
+          showNeighboringMonth={false} // 이전, 다음 달 없애는 코드
+          minDetail="month" // 최소 선택을 월 단위로 하는 코드
+          maxDetail="month" // 최대 선택을 월 단위로 하는 코드
           // 날짜의 일을 빼는 코드
           formatDay={(locale, date) => moment(date).format("DD")}
           value={value}
@@ -96,6 +137,7 @@ export default function RegistDiary({}) {
         isRight="등록"
         clickRight={registDiary}
       ></BackMenu>
+
       {/* 네비 바 */}
       <NavBar></NavBar>
       {/* 등록 완료 모달 */}
