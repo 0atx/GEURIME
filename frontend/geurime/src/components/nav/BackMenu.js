@@ -12,8 +12,16 @@ import Toolbar from "@mui/material/Toolbar";
 import { Grid } from "@mui/material";
 import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
+import AddIcon from "@mui/icons-material/Add";
 
-export default function BackMenu({ type, isLeft, title, clickTitle, isRight, clickRight }) {
+export default function BackMenu({
+  type,
+  isLeft,
+  title,
+  clickTitle,
+  isRight,
+  clickRight,
+}) {
   return (
     <Box
       sx={{
@@ -37,7 +45,9 @@ export default function BackMenu({ type, isLeft, title, clickTitle, isRight, cli
           >
             {/* isLeft */}
             <Grid item sx={{ textAlign: "center" }} xs={2}>
-              {isLeft === true && <KeyboardArrowLeftRoundedIcon></KeyboardArrowLeftRoundedIcon>}
+              {isLeft === true && (
+                <KeyboardArrowLeftRoundedIcon></KeyboardArrowLeftRoundedIcon>
+              )}
             </Grid>
             {/* title */}
             <Grid item sx={{ textAlign: "center" }} xs={8}>
@@ -48,7 +58,9 @@ export default function BackMenu({ type, isLeft, title, clickTitle, isRight, cli
                 onClick={clickTitle}
               >
                 {title}
-                {type === "registDiary" && <ArrowDropDownRoundedIcon></ArrowDropDownRoundedIcon>}
+                {type === "registDiary" && (
+                  <ArrowDropDownRoundedIcon></ArrowDropDownRoundedIcon>
+                )}
               </span>
             </Grid>
             {/* isRight */}
@@ -61,6 +73,7 @@ export default function BackMenu({ type, isLeft, title, clickTitle, isRight, cli
                 onClick={clickRight}
               >
                 {isRight}
+                {type === "registKids" && <AddIcon></AddIcon>}
               </span>
             </Grid>
           </Grid>
