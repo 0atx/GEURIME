@@ -5,15 +5,24 @@ BackMenu 헤더
 @since 2022.10.25
 */
 import { useState } from "react";
-
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import { Grid } from "@mui/material";
 import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
+import { Navigate, useNavigate } from "react-router-dom";
 
-export default function BackMenu({ type, isLeft, title, clickTitle, isRight, clickRight }) {
+export default function BackMenu({
+  type,
+  isLeft,
+  title,
+  clickTitle,
+  isRight,
+  clickRight,
+}) {
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -37,7 +46,14 @@ export default function BackMenu({ type, isLeft, title, clickTitle, isRight, cli
           >
             {/* isLeft */}
             <Grid item sx={{ textAlign: "center" }} xs={2}>
-              {isLeft === true && <KeyboardArrowLeftRoundedIcon></KeyboardArrowLeftRoundedIcon>}
+              {isLeft === true && (
+                <KeyboardArrowLeftRoundedIcon
+                  onClick={() => {
+                    // 뒤로 가기
+                    navigate(-1);
+                  }}
+                ></KeyboardArrowLeftRoundedIcon>
+              )}
             </Grid>
             {/* title */}
             <Grid item sx={{ textAlign: "center" }} xs={8}>
@@ -48,7 +64,9 @@ export default function BackMenu({ type, isLeft, title, clickTitle, isRight, cli
                 onClick={clickTitle}
               >
                 {title}
-                {type === "registDiary" && <ArrowDropDownRoundedIcon></ArrowDropDownRoundedIcon>}
+                {type === "registDiary" && (
+                  <ArrowDropDownRoundedIcon></ArrowDropDownRoundedIcon>
+                )}
               </span>
             </Grid>
             {/* isRight */}
