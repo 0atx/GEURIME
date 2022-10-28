@@ -1,13 +1,12 @@
 package geurime.database.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,5 +48,73 @@ public class Kid {
     }
     public void joinFamily(Family family){
         this.family = family;
+    }
+
+    public void updateKidInfo(Kid.KidPutRequest request){
+        this.kidName = request.getKidName();
+        this.kidProfileImage = request.getKidProfileImage();
+        this.kidBirth = LocalDate.parse(request.getKidBirth(), DateTimeFormatter.ISO_DATE);
+    }
+
+    /**
+     * 자녀 수정 DTO
+     */
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class KidPutRequest{
+        private Long kidId;
+        private String kidName;
+        private String kidProfileImage;
+        private String kidBirth;
+    }
+
+    /**
+     * 자녀 등록 DTO
+     */
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class KidPostRequest{
+        private Long familyId;
+        private String kidName;
+        private String kidProfileImage;
+        private String kidBirth;
+    }
+
+    /**
+     * 자녀 정보 조회 DTO
+     */
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class KidInfoResponse{
+        private Long kidId;
+        private String kidName;
+        private String kidProfileImage;
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDate kidBirth;
+        private List<DrawingBoxDto> drawingBoxDtoList;
+
+        @Builder
+        public KidInfoResponse(Long kidId, String kidName, String kidProfileImage, LocalDate kidBirth, List<DrawingBoxDto> drawingBoxDtoList) {
+            this.kidId = kidId;
+            this.kidName = kidName;
+            this.kidProfileImage = kidProfileImage;
+            this.kidBirth = kidBirth;
+            this.drawingBoxDtoList = drawingBoxDtoList;
+        }
+    }
+
+    /**
+     * 그림 보관함 DTO
+     */
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class DrawingBoxDto {
+        private Long drawingBoxId;
+        private String drawingBoxName;
+        private String drawingBoxCategory;
     }
 }

@@ -182,10 +182,6 @@ public class User {
         private String userGender;
 
         private String familyName;
-
-        private String kidName;
-        private String kidProfileImage;
-        private String kidBirth;
     }
 
     /**
