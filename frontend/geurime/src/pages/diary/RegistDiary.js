@@ -7,14 +7,31 @@ import { useState, useEffect, useRef, Suspense } from "react";
 import BackMenu from "components/nav/BackMenu";
 import NavBar from "components/nav/NavBar";
 import RegistDiaryModal from "components/modal/RegistDiaryModal";
-import { Container, Dialog, DialogTitle, DialogActions } from "@mui/material";
+import {
+  Container,
+  Grid,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  Paper,
+  Typography,
+  TextField,
+} from "@mui/material";
 import Calendar from "react-calendar";
 import "./Calendar.css";
 import moment from "moment";
 import Button from "components/common/Btn.js";
+import styled from "styled-components";
+// timepicker
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import TimePicker from "react-time-picker";
+import { DesktopTimePicker } from "@mui/x-date-pickers/DesktopTimePicker";
+import { CalendarPicker, koKR } from "@mui/x-date-pickers";
+import koLocale from "date-fns/locale/bg";
 // three.js
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, useGLTF } from "@react-three/drei";
+import { Center, OrbitControls, useGLTF } from "@react-three/drei";
 import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import * as THREE from "three";
@@ -32,6 +49,10 @@ export default function RegistDiary({}) {
   );
   // 캘린더 열기
   const [calOpen, setCalOpen] = useState(false);
+  // 어제 잠 든 시간
+  const [sleep, setSleep] = useState();
+  // 오늘 일어난 시간
+  const [getup, setGetup] = useState();
 
   // 등록완료 모달 닫기
   const handleClose = () => {
@@ -102,6 +123,24 @@ export default function RegistDiary({}) {
   //     renderer.render(scene, camera);
   //   });
 
+  // Paper css
+  const StyledPaper = styled(Paper)`
+    && {
+      padding: 3%;
+      margin-bottom: 5%;
+      background-color: #fff4ce;
+    }
+  `;
+
+  // Typography css
+  const StyledTypography = styled(Typography)`
+    && {
+      text-align: center;
+      margin-bottom: 5%;
+      font-size: 2.5vh;
+    }
+  `;
+
   return (
     <div>
       {/* 캘린더 모달 */}
@@ -141,7 +180,88 @@ export default function RegistDiary({}) {
             title={title}
             clickTitle={openCal}
           ></BackMenu>
+          {/* 기분 질문 */}
+          <StyledPaper elevation={0}>
+            <StyledTypography>오늘 하루는 어땠어?</StyledTypography>
+            <Grid container sx={{ textAlign: "center" }}>
+              <Grid item xs={2.4}>
+                <img src="assets/icon/default_profile.png" />
+              </Grid>
+              <Grid item xs={2.4}>
+                <img src="assets/icon/default_profile.png" />
+              </Grid>
+              <Grid item xs={2.4}>
+                <img src="assets/icon/default_profile.png" />
+              </Grid>
+              <Grid item xs={2.4}>
+                <img src="assets/icon/default_profile.png" />
+              </Grid>
+              <Grid item xs={2.4}>
+                <img src="assets/icon/default_profile.png" />
+              </Grid>
+            </Grid>
+          </StyledPaper>
+          {/* 날씨 질문 */}
+          <StyledPaper elevation={0}>
+            <StyledTypography>오늘 날씨는 어땠어?</StyledTypography>
+            <Grid container sx={{ textAlign: "center" }}>
+              <Grid item xs={2.4}>
+                <img src="assets/icon/default_profile.png" />
+              </Grid>
+              <Grid item xs={2.4}>
+                <img src="assets/icon/default_profile.png" />
+              </Grid>
+              <Grid item xs={2.4}>
+                <img src="assets/icon/default_profile.png" />
+              </Grid>
+              <Grid item xs={2.4}>
+                <img src="assets/icon/default_profile.png" />
+              </Grid>
+              <Grid item xs={2.4}>
+                <img src="assets/icon/default_profile.png" />
+              </Grid>
+            </Grid>
+          </StyledPaper>
+          {/* 잠든 시간  질문 */}
+          <StyledPaper elevation={0}>
+            <StyledTypography>어제 잠 든 시간은 몇 시였어?</StyledTypography>
+            <LocalizationProvider
+              dateAdapter={AdapterDayjs}
+              // adapterLocale={koLocale}
+              // localeText={
+              //   koKR.components.MuiLocalizationProvider.defaultProps.localeText
+              // }
+            >
+              <DesktopTimePicker
+                value={sleep}
+                onChange={(newValue) => {
+                  setSleep(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </StyledPaper>
+          {/* 일어난 시간 질문 */}
+          <StyledPaper elevation={0}>
+            <StyledTypography>오늘 일어난 시간은 몇 시였어?</StyledTypography>
+            <LocalizationProvider
+              dateAdapter={AdapterDayjs}
+              // adapterLocale={koLocale}
+              // localeText={
+              //   koKR.components.MuiLocalizationProvider.defaultProps.localeText
+              // }
+            >
+              <DesktopTimePicker
+                value={sleep}
+                onChange={(newValue) => {
+                  setSleep(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </StyledPaper>
           <Button
+            width="100px"
             onClick={() => {
               setType("write");
             }}
