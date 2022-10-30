@@ -14,10 +14,12 @@ import Select from '@mui/material/Select';
 
 export default function Board() { 
   const [test, setTest] = useState();
-  const [age, setAge] = React.useState('');
+  const [list, setList] = useState('');
+
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setList(event.target.value);
   };
+
   useEffect(() => {
     setTest(  [{
       "boardCategory": "string",
@@ -59,18 +61,17 @@ export default function Board() {
       >
       </BackMenu>
       </Grid> */}
+      
       <Grid>
-      <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-standard-label">Age</InputLabel>
+      <FormControl sx={{ m: 1, minWidth: 120 }}>
         <Select
-          labelId="demo-simple-select-standard-label"
-          id="demo-simple-select-standard"
-          value={age}
+          value={list}
           onChange={handleChange}
-          label="Age"
+          displayEmpty
+          inputProps={{ 'aria-label': 'Without label' }}
         >
           <MenuItem value="">
-            <em>None</em>
+            <em>제목</em>
           </MenuItem>
           <MenuItem value={10}>Ten</MenuItem>
           <MenuItem value={20}>Twenty</MenuItem>
