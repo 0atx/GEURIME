@@ -29,6 +29,11 @@ public class UserServiceImpl implements UserService {
     // DTO와 엔티티 변환
     ModelMapper modelMapper = new ModelMapper();
 
+    /**
+     * 유저에 연관된 가족, 자녀에 대한 정보를 함께 불러온다
+     * @param userId
+     * @return
+     */
     @Override
     public User.UserInfoResponse readUserInfo(Long userId) {
         User user = userRepository.findByIdFetch(userId)
@@ -66,6 +71,11 @@ public class UserServiceImpl implements UserService {
     public Long createNewUser(Long userId, User.UserSignUpRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
+
+        //이미 가족이 존재하면
+        if(user.getFamily() != null){
+            return user.getFamily().getId();
+        }
 
         //새 가족 생성
         user.singUpUpdate(request);
@@ -106,8 +116,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
-        user.disableUser();
+        //7일간 회원정보 유지하는 기능 추후 구현예정
+
+        userRepository.deleteById(userId);
+
     }
 }

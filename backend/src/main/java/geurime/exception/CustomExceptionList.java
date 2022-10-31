@@ -25,7 +25,8 @@ public enum CustomExceptionList {
     BOARD_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E007", "존재하지 않는 게시글입니다."),
     BOARD_TYPE_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E008", "존재하지 않는 게시글 분류입니다."),
     COMMENT_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E009", "존재하지 않는 댓글입니다."),
-    FAMILY_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E010", "존재하지 않는 가족입니다.");
+    FAMILY_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E010", "존재하지 않는 가족입니다."),
+    FAMILY_ALREADY_EXIST_ERROR(HttpStatus.NOT_FOUND, "E011", "이미 가족이 존재하는 회원입니다.");
 
     private final HttpStatus status;
     private final String code;
