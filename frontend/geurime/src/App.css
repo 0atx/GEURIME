@@ -48,6 +48,14 @@ body {
 }
 
 #container {
+  min-height: 732px;
+  background-color: #fffff8;
+  margin-top: 56px;
+  padding-bottom: 56px;
+}
+
+#container2 {
+  min-height: 788px;
   background-color: #fffff8;
   margin-top: 56px;
 }
