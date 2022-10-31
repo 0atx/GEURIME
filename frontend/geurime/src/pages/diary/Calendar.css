@@ -53,9 +53,9 @@
     color: #FFA000;
     min-width: 44px;
     background: none;
-    font-size: 25px;
+    font-size: 20px;
     margin-top: 8px;
-    /* font-weight: bolder; */
+    /* font-weight: bold; */
   }
 
   .react-calendar__navigation button:enabled:hover,
@@ -67,8 +67,8 @@
   .react-calendar__month-view__weekdays {
     text-align: center;
     text-transform: uppercase;
-    font-weight: bold;
-    font-size: 1.3em;
+    /* font-weight: bold; */
+    font-size: 1em;
     margin-bottom: 10px;
   }
 
@@ -109,7 +109,7 @@
 
   /* 날짜들 */
   .react-calendar__tile:enabled > abbr{
-    font-size: 25px;
+    font-size: 18px;
   }
   
   /* 오늘 날짜 */

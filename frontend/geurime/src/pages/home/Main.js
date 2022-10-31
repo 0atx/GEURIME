@@ -13,7 +13,7 @@ export default function Main() {
     <div id="container">
       <SelectKids />
       <Grid container justifyContent="center">
-        <Grid item xs={10} sx={{ fontSize: "3vh", marginBottom: "2vh" }}>
+        <Grid item xs={10} sx={{ fontSize: "2.5vh", marginBottom: "2vh" }}>
           그림 갤러리
         </Grid>
         <Grid item xs={10}>
@@ -34,7 +34,7 @@ export default function Main() {
         </Grid>
       </Grid>
       <Grid container justifyContent="center">
-        <Grid item xs={10} sx={{ fontSize: "3vh", marginBottom: "2vh" }}>
+        <Grid item xs={10} sx={{ fontSize: "2.5vh", marginBottom: "2vh" }}>
           우리 가족 정보
         </Grid>
         <Grid item xs={10}>

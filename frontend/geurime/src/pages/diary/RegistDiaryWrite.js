@@ -112,8 +112,9 @@ export default function RegistDiary({}) {
       ></BackMenu>
       <Container id="container">
         <Paper
+          elevation={3}
           sx={{
-            fontSize: "2.7vh",
+            fontSize: "2vh",
             color: "#6F6F6F",
             textAlign: "center",
             padding: "4% 0% 4% 0%",
@@ -131,16 +132,11 @@ export default function RegistDiary({}) {
               onChange={handleChangeTab}
               aria-label="basic tabs example"
               variant="fullWidth"
+              textColor="secondary"
               indicatorColor="primary"
             >
-              <Tab
-                label="직접 작성"
-                {...a11yProps(0)}
-                sx={{
-                  fontSize: "2.5vh",
-                }}
-              />
-              <Tab label="목소리로 작성" {...a11yProps(1)} sx={{ fontSize: "2.5vh" }} />
+              <Tab label="직접 작성" {...a11yProps(0)} />
+              <Tab label="목소리로 작성" {...a11yProps(1)} />
             </Tabs>
           </Box>
           {/* 직접 작성 탭 */}
@@ -148,7 +144,7 @@ export default function RegistDiary({}) {
             <Paper elevation={3}>
               <TextField
                 id="outlined-multiline-static"
-                inputProps={{ style: { fontSize: "3vh" } }}
+                inputProps={{ style: { fontSize: "2.5vh" } }}
                 sx={{ width: "100%" }}
                 multiline
                 rows={12}
@@ -156,6 +152,7 @@ export default function RegistDiary({}) {
                 onChange={handleWriting}
               />
             </Paper>
+            {/* 다시쓰기, 다음 버튼 */}
             <div style={{ textAlign: "right", marginTop: "5%" }}>
               <Button
                 bgcolor="#fff4ce"
@@ -166,7 +163,7 @@ export default function RegistDiary({}) {
               >
                 다시 쓰기
               </Button>
-              <Link to="/registdiary/write" style={{ textDecoration: "none" }}>
+              <Link to="/registdiary/drawing" style={{ textDecoration: "none" }}>
                 <Button width="100px">다음</Button>
               </Link>
             </div>
@@ -185,7 +182,7 @@ export default function RegistDiary({}) {
                     sx={{
                       color: "#FFA000",
                       backgroundColor: "#fff4ce",
-                      fontSize: "8vh",
+                      fontSize: "7vh",
                       borderRadius: "20px",
                     }}
                     onClick={() => {
@@ -193,7 +190,7 @@ export default function RegistDiary({}) {
                       setStartSpeech(false);
                     }}
                   />
-                  <Typography sx={{ fontSize: "3vh", color: "#6F6F6F" }}>끝내기</Typography>
+                  <Typography sx={{ fontSize: "2.3vh", color: "#6F6F6F" }}>끝내기</Typography>
                 </div>
               ) : (
                 // 음성 인식 해제된 상태 (음성인식 시작 버튼)
@@ -202,7 +199,7 @@ export default function RegistDiary({}) {
                     sx={{
                       color: "#FFA000",
                       backgroundColor: "#fff4ce",
-                      fontSize: "8vh",
+                      fontSize: "7vh",
                       borderRadius: "20px",
                     }}
                     onClick={() => {
@@ -210,14 +207,14 @@ export default function RegistDiary({}) {
                       setStartSpeech(true);
                     }}
                   />
-                  <Typography sx={{ fontSize: "3vh", color: "#6F6F6F" }}>시작하기</Typography>
+                  <Typography sx={{ fontSize: "2.3vh", color: "#6F6F6F" }}>시작하기</Typography>
                 </div>
               )}
             </div>
             <Paper elevation={3} sx={{ marginTop: "5%" }}>
               <TextField
                 inputProps={{
-                  style: { fontSize: "3vh", color: "#ffffff" },
+                  style: { fontSize: "2.5vh", color: "#ffffff" },
                 }}
                 id="outlined-multiline-static"
                 sx={{
@@ -229,6 +226,7 @@ export default function RegistDiary({}) {
                 value={transcript}
               />
             </Paper>
+            {/* 다시쓰기, 다음 버튼 */}
             <div style={{ textAlign: "right", marginTop: "5%" }}>
               <Button
                 bgcolor="#fff4ce"
@@ -237,7 +235,7 @@ export default function RegistDiary({}) {
               >
                 다시 쓰기
               </Button>
-              <Link to="/registdiary/write" style={{ textDecoration: "none" }}>
+              <Link to="/registdiary/drawing" style={{ textDecoration: "none" }}>
                 <Button width="100px">다음</Button>
               </Link>
             </div>

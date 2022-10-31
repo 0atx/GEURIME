@@ -15,7 +15,14 @@ export default function RegistDiaryModal({ open }) {
   return (
     <Dialog open={open}>
       <DialogContent>
-        <div style={{ fontSize: "23px" }}>그림일기 등록이 완료되었습니다.</div>
+        <div
+          style={{
+            fontSize: "2vh",
+            textAlign: "center",
+          }}
+        >
+          그림일기 등록이 완료되었습니다!
+        </div>
       </DialogContent>
       <DialogActions sx={{ display: "flex", justifyContent: "center", marginBottom: "10px" }}>
         <Button

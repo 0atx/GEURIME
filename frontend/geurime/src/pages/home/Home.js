@@ -27,7 +27,7 @@ export default function Home() {
       <Grid item xs={12}>
         <img src="assets/icon/topcrayon.png" width="100%" alt="crayon" />
       </Grid>
-      <Grid item xs={12} sx={{ fontSize: "5vh", marginTop: "4vh" }}>
+      <Grid item xs={12} sx={{ fontSize: "3vh", marginTop: "4vh" }}>
         그림일기 도우미
       </Grid>
       {/* 그리미 텍스트 로고 */}
@@ -37,7 +37,7 @@ export default function Home() {
       {/* 이젤 */}
       <div style={easelStyle}>
         <Grid container sx={{ marginTop: "10vh" }}>
-          <Grid item xs={12} sx={{ fontSize: "7vw", marginBottom: "3vh" }}>
+          <Grid item xs={12} sx={{ fontSize: "6vw", marginBottom: "3vh" }}>
             간편 로그인
           </Grid>
           <Grid item xs={12}>
