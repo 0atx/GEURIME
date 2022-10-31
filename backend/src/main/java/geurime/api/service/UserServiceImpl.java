@@ -1,5 +1,6 @@
 package geurime.api.service;
 
+import geurime.config.s3.S3Uploader;
 import geurime.database.entity.Family;
 import geurime.database.entity.Kid;
 import geurime.database.entity.User;
@@ -11,6 +12,7 @@ import geurime.exception.CustomExceptionList;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -25,6 +27,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final FamilyRepository familyRepository;
     private final KidRepository kidRepository;
+    private final S3Uploader s3Uploader;
 
     // DTO와 엔티티 변환
     ModelMapper modelMapper = new ModelMapper();
@@ -68,13 +71,21 @@ public class UserServiceImpl implements UserService {
      * @return 가족 id
      */
     @Override
-    public Long createNewUser(Long userId, User.UserSignUpRequest request) {
+    public Long createNewUser(Long userId, User.UserSignUpRequest request, MultipartFile profileImage) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         //이미 가족이 존재하면
         if(user.getFamily() != null){
             return user.getFamily().getId();
+        }
+
+        //이미지 업로드 후 반환된 이미지경로 db에 저장
+        if(!profileImage.isEmpty()){
+            String userProfileImage = s3Uploader.uploadAndGetUrl(profileImage);
+            user.updateProfileImage(userProfileImage);
+        }else{
+            user.updateProfileImage("");
         }
 
         //새 가족 생성
@@ -94,11 +105,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createInvitedUser(Long userId, User.UserInviteSignUpRequest request) {
+    public void createInvitedUser(Long userId, User.UserInviteSignUpRequest request, MultipartFile profileImage) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         user.inviteSingUpUpdate(request);
+        //이미지 업로드 후 반환된 이미지경로 db에 저장
+        if(!profileImage.isEmpty()){
+            String userProfileImage = s3Uploader.uploadAndGetUrl(profileImage);
+            user.updateProfileImage(userProfileImage);
+        }else{
+            user.updateProfileImage("");
+        }
 
         //초대코드에 해당하는 가족에 추가
         Family family = familyRepository.findByInviteCode(request.getInviteCode());
@@ -107,11 +125,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserInfo(Long userId, User.UserInfoUpdateRequest request) {
+    public void updateUserInfo(Long userId, User.UserInfoUpdateRequest request, MultipartFile profileImage) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         user.updateUserInfo(request);
+        //이미지 업로드 후 반환된 이미지경로 db에 저장
+        if(!profileImage.isEmpty()){
+            String userProfileImage = s3Uploader.uploadAndGetUrl(profileImage);
+            user.updateProfileImage(userProfileImage);
+        }else{
+            user.updateProfileImage("");
+        }
     }
 
     @Override
