@@ -72,8 +72,8 @@ export default function RegistDiary({}) {
             />
           </Grid>
         </Grid>
-        <Paper fullWidth sx={{ marginTop: "10%", height: "100px" }}>
-          <AddCircleIcon />
+        <Paper fullWidth sx={{ marginTop: "10%", height: "358px", textAlign: "center" }}>
+          <AddCircleIcon sx={{ color: "secondary.main", fontSize: "3.5em" }} />
         </Paper>
       </Container>
       {/* 네비 바 */}
