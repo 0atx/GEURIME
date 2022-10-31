@@ -22,12 +22,7 @@ export default function RegistKids() {
       <Dialog onClose={handleClose} open={open}>
         ㅎㅇ
       </Dialog>
-      <BackMenu
-        isLeft="false"
-        title="우리 아이 정보 등록"
-        type="registKids"
-        clickRight={addKids}
-      />
+      <BackMenu isLeft="false" title="우리 아이 정보 등록" type="registKids" clickRight={addKids} />
       <Grid
         direction="row"
         container
@@ -52,10 +47,7 @@ export default function RegistKids() {
         )}
       </Grid>
       <Grid container justifyContent="flex-end">
-        <Btn
-          onClick={{}}
-          sx={{ marginBottom: "3vh", marginTop: "3vh", marginRight: "3vh" }}
-        >
+        <Btn onClick={{}} sx={{ marginBottom: "3vh", marginTop: "3vh", marginRight: "3vh" }}>
           등록 완료
         </Btn>
       </Grid>

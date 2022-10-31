@@ -19,9 +19,10 @@ import BackMenu from "components/nav/BackMenu";
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
 // 달력
-import Calendar from "react-calendar";
-import "pages/diary/Calendar.css";
-import moment from "moment";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { ko } from "date-fns/locale";
 
 export default function UserInfo() {
   const [imageUrl, setImageUrl] = useState(null);
@@ -39,23 +40,14 @@ export default function UserInfo() {
   const [familyNameValue, setFamilyNameValue] = useState();
 
   // 생일
-  const birthInput = useRef();
-  const [birthValue, setBirthValue] = useState();
-  const [today, setToday] = useState();
-  // 캘린더 열기
-  const [calOpen, setCalOpen] = useState(false);
-  // 캘린더 날짜 변경
-  function onChange(e) {
-    setToday(e);
-  }
-
-  function changeDate() {
-    birthInput.current.value = dateFormat();
-    console.log(birthInput.current.value);
-    setBirthValue(birthInput.current.value);
-  }
+  const [date, setDate] = useState(new Date());
+  const changeDate = (newValue) => {
+    setDate(newValue);
+  };
+  const birthInput = useRef(null);
 
   function dateFormat() {
+    let today = new Date();
     let month = today.getMonth() + 1;
     let day = today.getDate();
     let year = today.getFullYear();
@@ -116,8 +108,8 @@ export default function UserInfo() {
   }));
   // todo: axios
   return (
-    <Grid id="container">
-      {/* 캘린더 모달 */}
+    <Grid>
+      {/* 캘린더 모달
       <Dialog
         onClose={() => {
           setCalOpen(false);
@@ -148,192 +140,157 @@ export default function UserInfo() {
             확인
           </Btn>
         </DialogActions>
-      </Dialog>
-      <BackMenu isLeft="false" title="정보 입력"></BackMenu>
-      <Grid
-        container
-        justifyContent="center"
-        textAlign="center"
-        sx={{ marginBottom: "3vh", marginTop: "9vh" }}
-      >
-        <Grid item xs={3} sx={{ marginBottom: "1vh", textAlign: "center" }}>
-          {imageUrl ? (
-            <Avatar src={imageUrl} sx={{ width: 100, height: 100 }} />
-          ) : (
-            <AccountCircleIcon color="action" sx={{ fontSize: 100 }} />
-          )}
+      </Dialog> */}
+      <BackMenu isLeft="false" title="정보 입력" />
+      <Grid id="container2">
+        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
+          <Grid item xs={3} sx={{ marginBottom: "1vh", textAlign: "center" }}>
+            {imageUrl ? (
+              <Avatar src={imageUrl} sx={{ width: 100, height: 100 }} />
+            ) : (
+              <AccountCircleIcon color="action" sx={{ fontSize: 100 }} />
+            )}
+          </Grid>
+          <Grid item xs={12} sx={{ fontSize: "2.7vh", color: "#FFA000" }}>
+            <label for="profile">
+              <div>프로필 사진 변경</div>
+            </label>
+            <div>
+              <form method="post" encType="multipart/form-data">
+                <input
+                  style={{ display: "none" }}
+                  type="file"
+                  ref={imgRef}
+                  onChange={(e) => {
+                    changeProfile(e);
+                  }}
+                  accept="img/*"
+                  id="profile"
+                />
+              </form>
+            </div>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sx={{ fontSize: "2.7vh", color: "#FFA000" }}>
-          <label for="profile">
-            <div>프로필 사진 변경</div>
-          </label>
-          <div>
-            <form method="post" encType="multipart/form-data">
-              <input
-                style={{ display: "none" }}
-                type="file"
-                ref={imgRef}
+        {/* 이름 */}
+        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "3vh", marginBottom: "1vh", color: "#6F6F6F" }}>
+            이름
+          </Grid>
+          <Grid item xs={10} sx={{ fontSize: "2.7vh" }}>
+            {userInfo.userName}
+          </Grid>
+        </Grid>
+        {/* 성별 */}
+        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "3vh", marginBottom: "1vh", color: "#6F6F6F" }}>
+            성별
+          </Grid>
+          <Grid item xs={10} sx={{ fontSize: "2.7vh" }}>
+            <FormControl>
+              <RadioGroup
+                row
+                aria-labelledby="demo-row-radio-buttons-group-label"
+                name="row-radio-buttons-group"
+                color="secondary"
                 onChange={(e) => {
-                  changeProfile(e);
+                  let copy = { ...userInfo };
+                  copy.userGender = e.target.value;
+                  setUserInfo(copy);
                 }}
-                accept="img/*"
-                id="profile"
+                sx={{
+                  fontSize: "3vh",
+                }}
+                value={userInfo.userGender == "F" ? "F" : userInfo.userGender == "M" ? "M" : null}
+              >
+                <FormControlLabel
+                  value="M"
+                  control={<Radio />}
+                  label={<Typography variant="h5">남</Typography>}
+                />
+                <FormControlLabel
+                  value="F"
+                  control={<Radio />}
+                  label={<Typography variant="h5">여</Typography>}
+                />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
+        </Grid>
+        {/* 닉네임 */}
+        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "3vh", marginBottom: "1vh", color: "#6F6F6F" }}>
+            닉네임
+          </Grid>
+          {/* todo: 캘린더 클릭 후 닉네임 바뀌는 것 수정 필요 */}
+          <Grid item xs={10}>
+            <StyledTextField
+              size="small"
+              inputRef={nickNameInput}
+              InputProps={{ style: { fontSize: "3vh" } }}
+            />
+          </Grid>
+        </Grid>
+        {/* 생년월일 */}
+        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "3vh", marginBottom: "1vh", color: "#6F6F6F" }}>
+            생년월일
+          </Grid>
+          <Grid item xs={10}>
+            {/* locale: 언어 설정 */}
+            <LocalizationProvider locale={ko} dateAdapter={AdapterDateFns}>
+              <DatePicker
+                inputFormat="yyyy-MM-dd" //input창 포맷
+                value={date}
+                onChange={changeDate}
+                renderInput={(params) => (
+                  <StyledTextField
+                    {...params}
+                    size="small"
+                    InputProps={{ style: { fontSize: "3vh" } }}
+                    inputRef={birthInput}
+                  />
+                )}
+                toolbarFormat="yyyy년 MM월 dd일"
+                mask="____-__-__"
               />
-            </form>
-          </div>
-        </Grid>
-      </Grid>
-      {/* 이름 */}
-      <Grid
-        container
-        justifyContent="center"
-        textAlign="center"
-        sx={{ marginBottom: "3vh" }}
-      >
-        <Grid
-          item
-          xs={10}
-          sx={{ fontSize: "3vh", marginBottom: "1vh", color: "#6F6F6F" }}
-        >
-          이름
-        </Grid>
-        <Grid item xs={10} sx={{ fontSize: "2.7vh" }}>
-          {userInfo.userName}
-        </Grid>
-      </Grid>
-      {/* 성별 */}
-      <Grid
-        container
-        justifyContent="center"
-        textAlign="center"
-        sx={{ marginBottom: "3vh" }}
-      >
-        <Grid
-          item
-          xs={10}
-          sx={{ fontSize: "3vh", marginBottom: "1vh", color: "#6F6F6F" }}
-        >
-          성별
-        </Grid>
-        <Grid item xs={10} sx={{ fontSize: "2.7vh" }}>
-          <FormControl>
-            <RadioGroup
-              row
-              aria-labelledby="demo-row-radio-buttons-group-label"
-              name="row-radio-buttons-group"
-              color="secondary"
-              onChange={(e) => {
-                let copy = { ...userInfo };
-                copy.userGender = e.target.value;
-                setUserInfo(copy);
+            </LocalizationProvider>
+            {/* <StyledTextField
+              type="date"
+              size="small"
+              inputRef={birthInput}
+              onClick={() => {
+                setNickNameValue(nickNameInput.current.value);
+                setFamilyNameValue(familyNameInput.current.value);
+                setCalOpen(true);
               }}
-              sx={{
-                fontSize: "3vh",
-              }}
-              value={
-                userInfo.userGender == "F"
-                  ? "F"
-                  : userInfo.userGender == "M"
-                  ? "M"
-                  : null
-              }
-            >
-              <FormControlLabel
-                value="M"
-                control={<Radio />}
-                label={<Typography variant="h5">남</Typography>}
-              />
-              <FormControlLabel
-                value="F"
-                control={<Radio />}
-                label={<Typography variant="h5">여</Typography>}
-              />
-            </RadioGroup>
-          </FormControl>
+              value={birthValue}
+              InputProps={{ style: { fontSize: "3vh" } }}
+            /> */}
+          </Grid>
         </Grid>
-      </Grid>
-      {/* 닉네임 */}
-      <Grid
-        container
-        justifyContent="center"
-        textAlign="center"
-        sx={{ marginBottom: "3vh" }}
-      >
-        <Grid
-          item
-          xs={10}
-          sx={{ fontSize: "3vh", marginBottom: "1vh", color: "#6F6F6F" }}
-        >
-          닉네임
+        {/* 가족이름 */}
+        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "3vh", marginBottom: "1vh", color: "#6F6F6F" }}>
+            가족 이름
+          </Grid>
+          <Grid item xs={10}>
+            <StyledTextField
+              size="small"
+              inputRef={familyNameInput}
+              InputProps={{ style: { fontSize: "3vh" } }}
+            />
+          </Grid>
         </Grid>
-        {/* todo: 캘린더 클릭 후 닉네임 바뀌는 것 수정 필요 */}
-        <Grid item xs={10}>
-          <StyledTextField
-            size="small"
-            inputRef={nickNameInput}
-            InputProps={{ style: { fontSize: "3vh" } }}
-          />
-        </Grid>
-      </Grid>
-      {/* 생년월일 */}
-      <Grid
-        container
-        justifyContent="center"
-        textAlign="center"
-        sx={{ marginBottom: "3vh" }}
-      >
-        <Grid
-          item
-          xs={10}
-          sx={{ fontSize: "3vh", marginBottom: "1vh", color: "#6F6F6F" }}
-        >
-          생년월일
-        </Grid>
-        <Grid item xs={10}>
-          <StyledTextField
-            size="small"
-            inputRef={birthInput}
+        <Grid container justifyContent="flex-end">
+          <Btn
             onClick={() => {
-              setNickNameValue(nickNameInput.current.value);
-              setFamilyNameValue(familyNameInput.current.value);
-              setCalOpen(true);
+              registUser();
             }}
-            value={birthValue}
-            InputProps={{ style: { fontSize: "3vh" } }}
-          />
+            sx={{ marginBottom: "2vh", marginTop: "1.5vh", marginRight: "3vh" }}
+          >
+            다음
+          </Btn>
         </Grid>
-      </Grid>
-      {/* 가족이름 */}
-      <Grid
-        container
-        justifyContent="center"
-        textAlign="center"
-        sx={{ marginBottom: "3vh" }}
-      >
-        <Grid
-          item
-          xs={10}
-          sx={{ fontSize: "3vh", marginBottom: "1vh", color: "#6F6F6F" }}
-        >
-          가족 이름
-        </Grid>
-        <Grid item xs={10}>
-          <StyledTextField
-            size="small"
-            inputRef={familyNameInput}
-            InputProps={{ style: { fontSize: "3vh" } }}
-          />
-        </Grid>
-      </Grid>
-      <Grid container justifyContent="flex-end">
-        <Btn
-          onClick={() => {
-            registUser();
-          }}
-          sx={{ marginBottom: "3vh", marginTop: "2vh", marginRight: "3vh" }}
-        >
-          다음
-        </Btn>
       </Grid>
     </Grid>
   );
