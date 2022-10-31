@@ -120,9 +120,9 @@ export default function RegistDiary({}) {
         </DialogActions>
       </Dialog>
 
+      {/* 헤더 */}
+      <BackMenu type="registDiary" isLeft={true} title={title} clickTitle={openCal}></BackMenu>
       <Container id="container">
-        {/* 헤더 */}
-        <BackMenu type="registDiary" isLeft={true} title={title} clickTitle={openCal}></BackMenu>
         {/* 기분 질문 */}
         <StyledPaper elevation={0}>
           <StyledTypography>오늘 하루는 어땠어?</StyledTypography>
