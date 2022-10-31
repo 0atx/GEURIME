@@ -22,5 +22,5 @@ def predict(url):
     prediction_probability = np.amax(prediction)
     prediction_idx = np.argmax(prediction)
     emotion = labels[prediction_idx]
-    # return {"emotion": emotion, "prediction": prediction_probability}
-    return emotion
+    data = {"emotion": emotion, "prediction": prediction_probability}
+    return data
