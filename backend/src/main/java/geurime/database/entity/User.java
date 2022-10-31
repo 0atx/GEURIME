@@ -223,6 +223,7 @@ public class User {
         private String familyName;
         private Long familyLeaderId;
         private String inviteCode;
+        private Boolean isActive;
 
         List<UserInfoKidDto> kidDtoList;
 
