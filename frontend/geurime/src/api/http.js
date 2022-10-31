@@ -1,14 +1,12 @@
 import axios, { AxiosRequestConfig } from "axios";
 
 function Instance() {
-  const axiosConfig = {
+  const http = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
     headers: {
-      "Content-type": "application/json",
+      "Content-Type": "application/json",
     },
-  };
-
-  const http = axios.create(axiosConfig);
+  });
 
   // request interceptor 요청 전 헤더에 토큰 등록
   http.interceptors.request.use(
@@ -50,8 +48,7 @@ function Instance() {
         localStorage.setItem("accessToken", newAccessToken);
         localStorage.setItem("accessTokenExpiration", accessTokenExpiration);
 
-        http.defaults.headers["refreshToken"] =
-          localStorage.getItem("refreshToken");
+        http.defaults.headers["refreshToken"] = localStorage.getItem("refreshToken");
         originalRequest.headers["accessToken"] = newAccessToken;
 
         // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청

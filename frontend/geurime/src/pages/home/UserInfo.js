@@ -1,28 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
-  Grid,
-  TextField,
   Avatar,
-  Dialog,
-  DialogActions,
   Radio,
+  Grid,
   RadioGroup,
   FormControlLabel,
   FormControl,
   Typography,
+  Input,
 } from "@mui/material";
 import Btn from "components/common/Btn";
-import styled from "styled-components";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
 import BackMenu from "components/nav/BackMenu";
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
-// 달력
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { ko } from "date-fns/locale";
+import { http } from "api/http";
 
 export default function UserInfo() {
   const [imageUrl, setImageUrl] = useState(null);
@@ -33,30 +26,12 @@ export default function UserInfo() {
 
   // 닉네임
   const nickNameInput = useRef(null);
-  const [nickNameValue, setNickNameValue] = useState();
 
   //가족이름
   const familyNameInput = useRef(null);
-  const [familyNameValue, setFamilyNameValue] = useState();
 
-  // 생일
-  const [date, setDate] = useState(new Date());
-  const changeDate = (newValue) => {
-    setDate(newValue);
-  };
-  const birthInput = useRef(null);
-
-  function dateFormat() {
-    let today = new Date();
-    let month = today.getMonth() + 1;
-    let day = today.getDate();
-    let year = today.getFullYear();
-
-    month = month >= 10 ? month : "0" + month;
-    day = day >= 10 ? day : "0" + day;
-
-    return year + "-" + month + "-" + day;
-  }
+  // 생년월일
+  const birthYearInput = useRef(null);
 
   function changeProfile(e) {
     const reader = new FileReader();
@@ -68,79 +43,95 @@ export default function UserInfo() {
       setImageUrl(reader.result);
     };
   }
+  // todo: 이미지 파일 더미 수정하기
+  async function registUser() {
+    // 닉네임 검사
+    if (nickNameInput.current.value == "") {
+      alert("닉네임을 입력해주세요.");
+      return;
+    }
+    // 가족이름 검사
+    if (familyNameInput.current.value == "") {
+      alert("가족이름을 입력해주세요.");
+      return;
+    }
+    // 생년월일 검사
+    if (isBirth(birthYearInput.current.value)) {
+      let birth = birthYearInput.current.value;
+      birth = birth.substr(0, 4) + "-" + birth.substr(4, 2) + "-" + birth.substr(6, 2);
+      console.log(birth);
+      console.log(familyNameInput.current.value);
+      console.log(nickNameInput.current.value);
+      console.log(userInfo.userGender);
+      // axios
+      const response = await http.post(`/users/${userInfo.userID}`, {
+        familyName: familyNameInput.current.value,
+        isChild: true,
+        nickName: nickNameInput.current.value,
+        userBirth: birth,
+        userGender: userInfo.userGender,
+        userProfileImage: "",
+      });
+      console.log(response.data);
 
-  function registUser() {
-    console.log(userInfo);
-    //todo: 사진 전송 변경 필요
-    // const formdata = new FormData();
-    // formdata.append("img", images[0]);
-    // const config = {
-    //   Headers: {
-    //     "content-type": "multipart/form-data",
-    //   },
-    // };
-    // const reesponse = axios.post('url', formdata, config);
-    // navigator("/registkids");
+      if (response.data.message == "success") {
+        let copy = { ...userInfo };
+        copy.familyId = response.data.data;
+        setUserInfo(copy);
+        navigator("/registkids");
+      } else {
+        alert("회원 정보 등록에 실패했습니다. 다시 입력해주세요.");
+      }
+    } else {
+      alert("올바른 생년월일을 입력하세요.");
+      return;
+    }
   }
 
-  const StyledTextField = styled(TextField)(() => ({
-    "& fieldset": {
-      borderRadius: "40px",
-      height: "7vh",
-    },
-    "& label.Mui-focused": {
-      color: "#FFCA28",
-    },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "#FFCA28",
-    },
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "black",
-      },
-      "&:hover fieldset": {
-        borderColor: "black",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "#FFCA28",
-      },
-    },
-  }));
-  // todo: axios
+  // 생년월일 검사 함수
+  function isBirth(date) {
+    if (date.length < 8) {
+      // 8자리가 아닌 경우 리턴
+      return false;
+    }
+
+    let year = Number(date.substr(0, 4));
+    let month = Number(date.substr(4, 2));
+    let day = Number(date.substr(6, 2));
+
+    let today = new Date();
+    let yearNow = today.getFullYear();
+
+    if (date.length <= 8) {
+      if (1900 > year || year > yearNow) {
+        // 1900년 이하 올해 이상인 경우
+        return false;
+      } else if (month < 1 || month > 12) {
+        // 1월 미만 12월 초과인 경우
+        return false;
+      } else if (day < 1 || day > 31) {
+        // 1일 미만 31일 초과인 경우
+        return false;
+      } else if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
+        // 4, 6, 9, 11월에 31일인경우
+        return false;
+      } else if (month == 2) {
+        // 2월일 때 윤년 계산
+        var isleap = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
+        if (day > 29 || (day == 29 && !isleap)) {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
   return (
     <Grid>
-      {/* 캘린더 모달
-      <Dialog
-        onClose={() => {
-          setCalOpen(false);
-        }}
-        open={calOpen}
-      >
-        <Calendar
-          onChange={(e) => {
-            onChange(e);
-          }}
-          calendarType="Hebrew" // 일요일시작
-          showNeighboringMonth={false} // 이전, 다음 달 없애는 코드
-          minDetail="month" // 최소 선택을 월 단위로 하는 코드
-          maxDetail="month" // 최대 선택을 월 단위로 하는 코드
-          // 날짜의 일을 빼는 코드
-          formatDay={(locale, date) => moment(date).format("DD")}
-          value={today}
-        />
-        <DialogActions sx={{ marginBottom: "10px" }}>
-          <Btn
-            onClick={() => {
-              changeDate();
-              console.log(nickNameValue);
-              console.log(familyNameValue);
-              setCalOpen(false);
-            }}
-          >
-            확인
-          </Btn>
-        </DialogActions>
-      </Dialog> */}
       <BackMenu isLeft="false" title="정보 입력" />
       <Grid id="container2">
         <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
@@ -173,19 +164,19 @@ export default function UserInfo() {
         </Grid>
         {/* 이름 */}
         <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
-          <Grid item xs={10} sx={{ fontSize: "3vh", marginBottom: "1vh", color: "#6F6F6F" }}>
+          <Grid item xs={10} sx={{ fontSize: "3vh", marginBottom: "2vh", color: "#6F6F6F" }}>
             이름
           </Grid>
-          <Grid item xs={10} sx={{ fontSize: "2.7vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "3vh" }}>
             {userInfo.userName}
           </Grid>
         </Grid>
         {/* 성별 */}
         <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
-          <Grid item xs={10} sx={{ fontSize: "3vh", marginBottom: "1vh", color: "#6F6F6F" }}>
+          <Grid item xs={10} sx={{ fontSize: "3vh", marginBottom: "2vh", color: "#6F6F6F" }}>
             성별
           </Grid>
-          <Grid item xs={10} sx={{ fontSize: "2.7vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "3vh" }}>
             <FormControl>
               <RadioGroup
                 row
@@ -216,6 +207,23 @@ export default function UserInfo() {
             </FormControl>
           </Grid>
         </Grid>
+        {/* 생년월일 */}
+        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "4vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "3vh", marginBottom: "3vh", color: "#6F6F6F" }}>
+            생년월일
+          </Grid>
+          <Grid item xs={10} sx={{ fontSize: "3vh" }} justifyContent="center">
+            <Input
+              inputRef={birthYearInput}
+              placeholder="ex) 19970717"
+              inputProps={{
+                style: {
+                  fontSize: "3vh",
+                },
+              }}
+            />
+          </Grid>
+        </Grid>
         {/* 닉네임 */}
         <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
           <Grid item xs={10} sx={{ fontSize: "3vh", marginBottom: "1vh", color: "#6F6F6F" }}>
@@ -223,61 +231,30 @@ export default function UserInfo() {
           </Grid>
           {/* todo: 캘린더 클릭 후 닉네임 바뀌는 것 수정 필요 */}
           <Grid item xs={10}>
-            <StyledTextField
-              size="small"
+            <Input
               inputRef={nickNameInput}
-              InputProps={{ style: { fontSize: "3vh" } }}
+              inputProps={{
+                style: {
+                  fontSize: "3vh",
+                },
+              }}
             />
           </Grid>
         </Grid>
-        {/* 생년월일 */}
-        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
-          <Grid item xs={10} sx={{ fontSize: "3vh", marginBottom: "1vh", color: "#6F6F6F" }}>
-            생년월일
-          </Grid>
-          <Grid item xs={10}>
-            {/* locale: 언어 설정 */}
-            <LocalizationProvider locale={ko} dateAdapter={AdapterDateFns}>
-              <DatePicker
-                inputFormat="yyyy-MM-dd" //input창 포맷
-                value={date}
-                onChange={changeDate}
-                renderInput={(params) => (
-                  <StyledTextField
-                    {...params}
-                    size="small"
-                    InputProps={{ style: { fontSize: "3vh" } }}
-                    inputRef={birthInput}
-                  />
-                )}
-                toolbarFormat="yyyy년 MM월 dd일"
-                mask="____-__-__"
-              />
-            </LocalizationProvider>
-            {/* <StyledTextField
-              type="date"
-              size="small"
-              inputRef={birthInput}
-              onClick={() => {
-                setNickNameValue(nickNameInput.current.value);
-                setFamilyNameValue(familyNameInput.current.value);
-                setCalOpen(true);
-              }}
-              value={birthValue}
-              InputProps={{ style: { fontSize: "3vh" } }}
-            /> */}
-          </Grid>
-        </Grid>
+
         {/* 가족이름 */}
         <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
           <Grid item xs={10} sx={{ fontSize: "3vh", marginBottom: "1vh", color: "#6F6F6F" }}>
             가족 이름
           </Grid>
           <Grid item xs={10}>
-            <StyledTextField
-              size="small"
+            <Input
               inputRef={familyNameInput}
-              InputProps={{ style: { fontSize: "3vh" } }}
+              inputProps={{
+                style: {
+                  fontSize: "3vh",
+                },
+              }}
             />
           </Grid>
         </Grid>
