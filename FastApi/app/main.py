@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from predict import predict
+from .predict import predict
 from pydantic import BaseModel
 
 
@@ -11,11 +11,11 @@ class Data(BaseModel):
 
 app = FastAPI()
 
-@app.get("/")
+@app.get("/ai")
 async def root():
     return {"message": "Hello World"}
 
-@app.post("/predict/",  response_model=Data)
+@app.post("/ai/predict/",  response_model=Data)
 async def root(image: Image):
     prediction = predict(image.url)
     data = {"emotion": prediction["emotion"], "prediction": prediction["prediction"]}

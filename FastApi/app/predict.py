@@ -2,11 +2,10 @@ import tensorflow as tf
 import numpy as np
 import cv2
 import imageio
-import cv2
 # from tensorflow.keras.preprocessing import image
 
 def predict(url):
-    model_path = 'efficientnet_v2_s_childdata.h5'
+    model_path = "/code/app/efficientnet_v2_s_childdata.h5"
     # model = load_model(model_path)
     model = tf.keras.models.load_model(model_path)
     train_input_shape = (224, 224, 3)
