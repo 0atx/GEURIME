@@ -20,8 +20,24 @@ code {
     url('./assets/fonts/THE_HongChawangjanemo.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'TmoneyRoundWind';
+  font-weight: 300;
+  src: url('./assets/fonts/TmoneyRoundWindRegular.ttf') format('woff2'),
+    url('./assets/fonts/TmoneyRoundWindRegular.ttf') format('woff'),
+    url('./assets/fonts/TmoneyRoundWindRegular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'TmoneyRoundWind';
+  font-weight: 700;
+  src: url('./assets/fonts/TmoneyRoundWindExtraBold.ttf') format('woff2'),
+    url('./assets/fonts/TmoneyRoundWindExtraBold.ttf') format('woff'),
+    url('./assets/fonts/TmoneyRoundWindExtraBold.ttf') format('truetype');
+}
+
 * {
   box-sizing: border-box;
-  font-family: 'THEHongChawangjanemo', sans-serif;
+  font-family: 'TmoneyRoundWind', sans-serif;
   font-size: "2vh";
 }

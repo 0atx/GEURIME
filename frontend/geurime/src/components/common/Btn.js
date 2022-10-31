@@ -15,7 +15,6 @@ const StyledButton = styled(Button)`
     color: ${(props) => props.fontcolor || "#000000"};
     border-radius: 25px;
     height: 37px;
-    font-size: 2.5vh;
     box-shadow: 1px 1px 5px #c7c7c2;
   }
 

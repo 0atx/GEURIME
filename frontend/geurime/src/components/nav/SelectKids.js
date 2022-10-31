@@ -72,9 +72,6 @@ export default function SelectKids() {
           <List
             sx={{
               width: "100%",
-              "& .MuiListItemText-primary": {
-                fontSize: "23px",
-              },
             }}
             component="nav"
             aria-labelledby="nested-list-subheader"

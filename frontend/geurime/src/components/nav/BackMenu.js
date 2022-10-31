@@ -5,7 +5,6 @@ BackMenu 헤더
 @since 2022.10.25
 */
 import { useState } from "react";
-
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,15 +12,11 @@ import { Grid } from "@mui/material";
 import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
 
-export default function BackMenu({
-  type,
-  isLeft,
-  title,
-  clickTitle,
-  isRight,
-  clickRight,
-}) {
+export default function BackMenu({ type, isLeft, title, clickTitle, isRight, clickRight }) {
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -29,8 +24,8 @@ export default function BackMenu({
       }}
     >
       <AppBar
-        color="transparent"
         style={{
+          background: "#FFFFFF",
           position: "fixed",
           boxShadow: "none",
         }}
@@ -46,28 +41,25 @@ export default function BackMenu({
             {/* isLeft */}
             <Grid item sx={{ textAlign: "center" }} xs={2}>
               {isLeft === true && (
-                <KeyboardArrowLeftRoundedIcon></KeyboardArrowLeftRoundedIcon>
+                <KeyboardArrowLeftRoundedIcon
+                  onClick={() => {
+                    // 뒤로 가기
+                    navigate(-1);
+                  }}
+                ></KeyboardArrowLeftRoundedIcon>
               )}
             </Grid>
             {/* title */}
             <Grid item sx={{ textAlign: "center" }} xs={8}>
-              <span
-                style={{
-                  fontSize: "23px",
-                }}
-                onClick={clickTitle}
-              >
+              <span onClick={clickTitle}>
                 {title}
-                {type === "registDiary" && (
-                  <ArrowDropDownRoundedIcon></ArrowDropDownRoundedIcon>
-                )}
+                {type === "registDiary" && <ArrowDropDownRoundedIcon></ArrowDropDownRoundedIcon>}
               </span>
             </Grid>
             {/* isRight */}
-            <Grid item sx={{ textAlign: "center" }} xs={2}>
+            <Grid item sx={{ fontSize: "1.8vh", textAlign: "center" }} xs={2}>
               <span
                 style={{
-                  fontSize: "20px",
                   color: "#ffa000",
                 }}
                 onClick={clickRight}

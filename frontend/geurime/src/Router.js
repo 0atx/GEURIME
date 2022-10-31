@@ -11,7 +11,9 @@ import ModifyDetailGallery from "pages/gallery/ModifyDetailGallery";
 import RegistDrawing from "pages/drawing/RegistDrawing";
 import Diary from "pages/diary/Diary";
 import DetailDiary from "pages/diary/DetailDiary";
-import RegistDiary from "pages/diary/RegistDiary";
+import RegistDiaryQuestion from "pages/diary/RegistDiaryQuestion";
+import RegistDiaryWrite from "pages/diary/RegistDiaryWrite";
+import RegistDiaryDrawing from "pages/diary/RegistDiaryDrawing";
 import Board from "pages/board/Board";
 import DetailBoard from "pages/board/DetailBoard";
 import RegistBoard from "pages/board/RegistBoard";
@@ -41,7 +43,9 @@ function Router() {
         <Route path="/registdrawing" element={<RegistDrawing />} />
         <Route path="/diary" element={<Diary />} />
         <Route path="/detaildiary" element={<DetailDiary />} />
-        <Route path="/registdiary" element={<RegistDiary />} />
+        <Route path="/registdiary/question" element={<RegistDiaryQuestion />} />
+        <Route path="/registdiary/write" element={<RegistDiaryWrite />} />
+        <Route path="/registdiary/drawing" element={<RegistDiaryDrawing />} />
         <Route path="/board" element={<Board />} />
         <Route path="/detailboard" element={<DetailBoard />} />
         <Route path="/registboard" element={<RegistBoard />} />
