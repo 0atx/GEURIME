@@ -24,8 +24,8 @@ export default function BackMenu({ type, isLeft, title, clickTitle, isRight, cli
       }}
     >
       <AppBar
-        color="transparent"
         style={{
+          background: "#FFFFFF",
           position: "fixed",
           boxShadow: "none",
         }}
@@ -51,21 +51,15 @@ export default function BackMenu({ type, isLeft, title, clickTitle, isRight, cli
             </Grid>
             {/* title */}
             <Grid item sx={{ textAlign: "center" }} xs={8}>
-              <span
-                style={{
-                  fontSize: "23px",
-                }}
-                onClick={clickTitle}
-              >
+              <span onClick={clickTitle}>
                 {title}
                 {type === "registDiary" && <ArrowDropDownRoundedIcon></ArrowDropDownRoundedIcon>}
               </span>
             </Grid>
             {/* isRight */}
-            <Grid item sx={{ textAlign: "center" }} xs={2}>
+            <Grid item sx={{ fontSize: "1.8vh", textAlign: "center" }} xs={2}>
               <span
                 style={{
-                  fontSize: "20px",
                   color: "#ffa000",
                 }}
                 onClick={clickRight}

@@ -51,7 +51,8 @@ body {
   min-height: 732px;
   background-color: #fffff8;
   margin-top: 56px;
-  padding-bottom: 56px;
+  padding-top: 20px;
+  padding-bottom: 80px;
 }
 
 #container2 {

@@ -5,14 +5,7 @@
 */
 import BackMenu from "components/nav/BackMenu";
 import { useState, useRef } from "react";
-import {
-  Container,
-  Grid,
-  Paper,
-  InputBase,
-  IconButton,
-  Typography,
-} from "@mui/material";
+import { Container, Grid, Paper, InputBase, IconButton, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
@@ -176,7 +169,7 @@ export default function Diary() {
                       borderRadius: "5px",
                     }}
                   ></img>
-                  <Typography>제목: {diary.title}</Typography>
+                  <Typography sx={{ textAlign: "center" }}>{diary.title}</Typography>
                 </Container>
               </Paper>
             </Grid>

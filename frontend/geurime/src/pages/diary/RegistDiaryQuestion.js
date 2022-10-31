@@ -87,7 +87,7 @@ export default function RegistDiary({}) {
     && {
       text-align: center;
       margin-bottom: 5%;
-      font-size: 2.8vh;
+      font-size: 2.3vh;
     }
   `;
 
@@ -177,7 +177,7 @@ export default function RegistDiary({}) {
                 setSleepTime(e.target.value);
               }}
               inputProps={{
-                style: { fontSize: "2.3vh", color: "#FFA000" },
+                style: { color: "#FFA000" },
                 step: 300, // 5 min
               }}
               sx={{ width: 150 }}
@@ -196,7 +196,7 @@ export default function RegistDiary({}) {
                 setGetupTime(e.target.value);
               }}
               inputProps={{
-                style: { fontSize: "2.3vh", color: "#FFA000" },
+                style: { color: "#FFA000" },
                 step: 300, // 5 min
               }}
               sx={{ width: 150 }}

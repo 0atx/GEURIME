@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import Calendar from "react-calendar";
 import "./Calendar.css";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 export default function RegistDiary({}) {
   // 등록완료 모달
@@ -40,9 +41,40 @@ export default function RegistDiary({}) {
 
   return (
     <div>
+      {/* 헤더 */}
+      <BackMenu isLeft={true} title={title} isRight="등록" clickRight={registDiary}></BackMenu>
       <Container id="container">
-        {/* 헤더 */}
-        <BackMenu isLeft={true} title={title} isRight="등록" clickRight={registDiary}></BackMenu>
+        <Paper
+          elevation={3}
+          sx={{
+            fontSize: "2vh",
+            color: "#6F6F6F",
+            textAlign: "center",
+            padding: "4% 0% 4% 0%",
+            marginBottom: "5%",
+            backgroundColor: "#fff4ce",
+            borderRadius: "40px",
+          }}
+        >
+          그림을 올려봐요!
+        </Paper>
+        {/* 제목 */}
+        <Grid container sx={{ alignItems: "center", pl: 5, pr: 5 }}>
+          <Grid item xs={2}>
+            <Typography>제목</Typography>
+          </Grid>
+          <Grid item xs={10}>
+            <TextField
+              fullWidth
+              id="standard-basic"
+              placeholder="제목을 써주세요"
+              variant="standard"
+            />
+          </Grid>
+        </Grid>
+        <Paper fullWidth sx={{ marginTop: "10%", height: "100px" }}>
+          <AddCircleIcon />
+        </Paper>
       </Container>
       {/* 네비 바 */}
       <NavBar></NavBar>
