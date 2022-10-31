@@ -12,8 +12,11 @@ import { Grid } from "@mui/material";
 import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
 
 export default function BackMenu({ type, isLeft, title, clickTitle, isRight, clickRight }) {
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
