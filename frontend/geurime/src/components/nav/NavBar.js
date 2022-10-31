@@ -57,7 +57,7 @@ export default function NavBar() {
           ></div>
 
           <div style={{ textAlign: "center" }}>
-            <Link to="/registdiary">
+            <Link to="/registdiary/question">
               <Button
                 data-aos="fade-up"
                 data-aos-delay="200"
