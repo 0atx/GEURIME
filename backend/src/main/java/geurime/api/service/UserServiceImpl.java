@@ -1,5 +1,6 @@
 package geurime.api.service;
 
+import geurime.config.s3.S3Uploader;
 import geurime.database.entity.Family;
 import geurime.database.entity.Kid;
 import geurime.database.entity.User;
@@ -11,6 +12,7 @@ import geurime.exception.CustomExceptionList;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -25,10 +27,16 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final FamilyRepository familyRepository;
     private final KidRepository kidRepository;
+    private final S3Uploader s3Uploader;
 
     // DTO와 엔티티 변환
     ModelMapper modelMapper = new ModelMapper();
 
+    /**
+     * 유저에 연관된 가족, 자녀에 대한 정보를 함께 불러온다
+     * @param userId
+     * @return
+     */
     @Override
     public User.UserInfoResponse readUserInfo(Long userId) {
         User user = userRepository.findByIdFetch(userId)
@@ -63,9 +71,22 @@ public class UserServiceImpl implements UserService {
      * @return 가족 id
      */
     @Override
-    public Long createNewUser(Long userId, User.UserSignUpRequest request) {
+    public Long createNewUser(Long userId, User.UserSignUpRequest request, MultipartFile profileImage) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
+
+        //이미 가족이 존재하면
+        if(user.getFamily() != null){
+            return user.getFamily().getId();
+        }
+
+        //이미지 업로드 후 반환된 이미지경로 db에 저장
+        if(!profileImage.isEmpty()){
+            String userProfileImage = s3Uploader.uploadAndGetUrl(profileImage);
+            user.updateProfileImage(userProfileImage);
+        }else{
+            user.updateProfileImage("");
+        }
 
         //새 가족 생성
         user.singUpUpdate(request);
@@ -83,12 +104,25 @@ public class UserServiceImpl implements UserService {
         return family.getId();
     }
 
+    /**
+     * 유저 회원가입을 하고 기존에 있는 가족에 추가한다.
+     * @param userId
+     * @param request
+     * @param profileImage
+     */
     @Override
-    public void createInvitedUser(Long userId, User.UserInviteSignUpRequest request) {
+    public void createInvitedUser(Long userId, User.UserInviteSignUpRequest request, MultipartFile profileImage) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         user.inviteSingUpUpdate(request);
+        //이미지 업로드 후 반환된 이미지경로 db에 저장
+        if(!profileImage.isEmpty()){
+            String userProfileImage = s3Uploader.uploadAndGetUrl(profileImage);
+            user.updateProfileImage(userProfileImage);
+        }else{
+            user.updateProfileImage("");
+        }
 
         //초대코드에 해당하는 가족에 추가
         Family family = familyRepository.findByInviteCode(request.getInviteCode());
@@ -97,17 +131,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserInfo(Long userId, User.UserInfoUpdateRequest request) {
+    public void updateUserInfo(Long userId, User.UserInfoUpdateRequest request, MultipartFile profileImage) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         user.updateUserInfo(request);
+        //이미지 업로드 후 반환된 이미지경로 db에 저장
+        if(!profileImage.isEmpty()){
+            String userProfileImage = s3Uploader.uploadAndGetUrl(profileImage);
+            user.updateProfileImage(userProfileImage);
+        }else{
+            user.updateProfileImage("");
+        }
     }
 
     @Override
     public void deleteUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
-        user.disableUser();
+        //7일간 회원정보 유지하는 기능 추후 구현예정
+
+        userRepository.deleteById(userId);
+
     }
 }

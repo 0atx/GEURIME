@@ -7,8 +7,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,17 +27,17 @@ public class KidController {
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, kidInfoResponse), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "자녀 등록", notes = "자녀를 등록하고 기본보관함, 그림일기 보관함을 생성한다. 생성된 자녀의 id를 반환한다")
-    public ResponseEntity<BasicResponse<Long>> createKidInfo(@RequestBody Kid.KidPostRequest kidPostRequest) {
-        Long kidId = kidService.createKid(kidPostRequest);
+    public ResponseEntity<BasicResponse<Long>> createKidInfo(@RequestPart Kid.KidPostRequest kidPostRequest, @RequestPart MultipartFile profileImage) {
+        Long kidId = kidService.createKid(kidPostRequest, profileImage);
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, kidId), HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "자녀 정보수정", notes = "자녀 정보를 수정한다. 수정된 자녀의 id를 반환한다")
-    public ResponseEntity<BasicResponse<Long>> updateKidInfo(@RequestBody Kid.KidPutRequest kidPutRequest) {
-        Long updateKidId = kidService.updateKid(kidPutRequest);
+    public ResponseEntity<BasicResponse<Long>> updateKidInfo(@RequestPart Kid.KidPutRequest kidPutRequest, @RequestPart MultipartFile profileImage) {
+        Long updateKidId = kidService.updateKid(kidPutRequest, profileImage);
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, updateKidId), HttpStatus.CREATED);
     }
 
