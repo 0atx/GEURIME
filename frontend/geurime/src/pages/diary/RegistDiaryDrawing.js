@@ -20,6 +20,7 @@ import {
 import Calendar from "react-calendar";
 import "./Calendar.css";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import Button from "components/common/Btn";
 
 export default function RegistDiary({}) {
   // 등록완료 모달
@@ -72,9 +73,27 @@ export default function RegistDiary({}) {
             />
           </Grid>
         </Grid>
-        <Paper fullWidth sx={{ marginTop: "10%", height: "358px", textAlign: "center" }}>
-          <AddCircleIcon sx={{ color: "secondary.main", fontSize: "3.5em" }} />
-        </Paper>
+        <div style={{ marginTop: "10%", marginBottom: "10%", width: "100%", display: "table" }}>
+          <Paper
+            fullWidth
+            sx={{
+              height: "358px",
+              textAlign: "center",
+              verticalAlign: "middle",
+              display: "table-cell",
+            }}
+          >
+            <AddCircleIcon
+              sx={{
+                color: "secondary.main",
+                fontSize: "3.5em",
+              }}
+            />
+          </Paper>
+        </div>
+        <div style={{ textAlign: "center" }}>
+          <Button width="45%">일기 등록</Button>
+        </div>
       </Container>
       {/* 네비 바 */}
       <NavBar></NavBar>
