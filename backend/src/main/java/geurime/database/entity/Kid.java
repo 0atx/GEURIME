@@ -52,8 +52,11 @@ public class Kid {
 
     public void updateKidInfo(Kid.KidPutRequest request){
         this.kidName = request.getKidName();
-        this.kidProfileImage = request.getKidProfileImage();
         this.kidBirth = LocalDate.parse(request.getKidBirth(), DateTimeFormatter.ISO_DATE);
+    }
+
+    public void updateProfile(String kidProfileImage){
+        this.kidProfileImage = kidProfileImage;
     }
 
     /**
@@ -65,7 +68,6 @@ public class Kid {
     public static class KidPutRequest{
         private Long kidId;
         private String kidName;
-        private String kidProfileImage;
         private String kidBirth;
     }
 
@@ -78,7 +80,6 @@ public class Kid {
     public static class KidPostRequest{
         private Long familyId;
         private String kidName;
-        private String kidProfileImage;
         private String kidBirth;
     }
 

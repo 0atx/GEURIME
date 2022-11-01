@@ -44,4 +44,8 @@ public class DrawingBox {
         this.drawingList = drawingList;
         this.kid = kid;
     }
+
+    public void updateName(String drawingBoxName){
+        this.drawingBoxName = drawingBoxName;
+    }
 }

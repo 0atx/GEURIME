@@ -77,7 +77,7 @@ public class Board {
 
     public void updateBoard(Board.BoardPutRequest request){
         this.boardTitle = request.getBoardTitle();
-        this.boardContent = request.boardContent;
+        this.boardContent = request.getBoardContent();
         BoardType boardType = null;
         try {
             boardType = BoardType.valueOf(request.getBoardType());
@@ -113,8 +113,6 @@ public class Board {
         private String boardTitle;
         private String boardContent;
         private String boardCategory;
-
-        List<String> boardImagePathList;
     }
 
     @Getter
