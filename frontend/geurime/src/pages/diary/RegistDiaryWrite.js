@@ -31,6 +31,9 @@ import ToggleButton from "@mui/material/ToggleButton";
 import Button from "components/common/Btn";
 import { useNavigate, Link } from "react-router-dom";
 
+import { diaryState } from "states/DiaryState";
+import { useRecoilState, useRecoilValue } from "recoil";
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -67,17 +70,14 @@ function a11yProps(index) {
 export default function RegistDiary({}) {
   const navigate = useNavigate();
 
-  // 선택 날짜 타이틀 - recoil에서 받아온 날짜로 변경 필요!!!
-  const [title, setTitle] = useState(
-    new Date().getMonth() + 1 + "월 " + new Date().getDate() + "일 일기"
-  );
+  // 전역에 담긴 일기 정보
+  const [diaryInfo, setDiaryInfo] = useRecoilState(diaryState);
 
   // 탭 (직접 작성, 목소리로 작성) value
   const [tab, setTab] = useState(0);
 
   // 음성인식 시작
   const [startSpeech, setStartSpeech] = useState(false);
-
   // 음성인식 결과
   const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } =
     useSpeechRecognition();
@@ -99,12 +99,36 @@ export default function RegistDiary({}) {
     setTab(newValue);
   };
 
+  // 직접 작성 후 다음 버튼 클릭 시
+  const addWriting = () => {
+    navigate("/registdiary/drawing");
+
+    setDiaryInfo((diary) => {
+      const copyDiary = { ...diary };
+      copyDiary.writing = writing;
+      console.log(copyDiary);
+      return { ...copyDiary };
+    });
+  };
+
+  // 목소리로 작성 후 다음 버튼 클릭 시
+  const addTranscript = () => {
+    navigate("/registdiary/drawing");
+
+    setDiaryInfo((diary) => {
+      const copyDiary = { ...diary };
+      copyDiary.writing = transcript;
+      console.log(copyDiary);
+      return { ...copyDiary };
+    });
+  };
+
   return (
     <div>
       {/* 헤더 */}
       <BackMenu
         isLeft={true}
-        title={title}
+        title={diaryInfo.dateTitle}
         isRight="건너뛰기"
         clickRight={() => {
           navigate("/registdiary/drawing");
@@ -153,7 +177,7 @@ export default function RegistDiary({}) {
               />
             </Paper>
             {/* 다시쓰기, 다음 버튼 */}
-            <div style={{ textAlign: "right", marginTop: "5%" }}>
+            <div style={{ textAlign: "right", marginTop: "10%" }}>
               <Button
                 bgcolor="#fff4ce"
                 onClick={() => {
@@ -163,9 +187,10 @@ export default function RegistDiary({}) {
               >
                 다시 쓰기
               </Button>
-              <Link to="/registdiary/drawing" style={{ textDecoration: "none" }}>
-                <Button width="100px">다음</Button>
-              </Link>
+
+              <Button width="100px" onClick={addWriting}>
+                다음
+              </Button>
             </div>
           </TabPanel>
           {/* 목소리로 작성 탭 */}
@@ -227,7 +252,7 @@ export default function RegistDiary({}) {
               />
             </Paper>
             {/* 다시쓰기, 다음 버튼 */}
-            <div style={{ textAlign: "right", marginTop: "5%" }}>
+            <div style={{ textAlign: "right", marginTop: "10%" }}>
               <Button
                 bgcolor="#fff4ce"
                 onClick={resetTranscript}
@@ -235,9 +260,10 @@ export default function RegistDiary({}) {
               >
                 다시 쓰기
               </Button>
-              <Link to="/registdiary/drawing" style={{ textDecoration: "none" }}>
-                <Button width="100px">다음</Button>
-              </Link>
+
+              <Button width="100px" onClick={addTranscript}>
+                다음
+              </Button>
             </div>
           </TabPanel>
         </Box>
