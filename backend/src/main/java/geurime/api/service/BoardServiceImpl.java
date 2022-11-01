@@ -1,5 +1,6 @@
 package geurime.api.service;
 
+import geurime.config.s3.S3Uploader;
 import geurime.database.entity.Board;
 import geurime.database.entity.BoardImage;
 import geurime.database.entity.Comment;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -35,6 +37,7 @@ public class BoardServiceImpl implements BoardService{
     private final CommentRepository commentRepository;
     private final BoardImageRepository boardImageRepository;
     private final UserRepository userRepository;
+    private final S3Uploader s3Uploader;
 
     // DTO와 엔티티 변환
     ModelMapper modelMapper = new ModelMapper();
@@ -177,7 +180,7 @@ public class BoardServiceImpl implements BoardService{
      * @return 생성된 게시글의 id
      */
     @Override
-    public Long createBoard(Board.BoardPostRequest request) {
+    public Long createBoard(Board.BoardPostRequest request, List<MultipartFile> imageFileList) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
@@ -196,9 +199,10 @@ public class BoardServiceImpl implements BoardService{
 
         boardRepository.save(board);
 
-        List<BoardImage> boardImageList = new ArrayList<>();
+        List<String> imagePathList = s3Uploader.uploadMultiAndGetUrl(imageFileList);
+        List<BoardImage> boardImageList = new ArrayList<>(imagePathList.size());
 
-        for(String imagePath : request.getBoardImagePathList()){
+        for(String imagePath : imagePathList){
             BoardImage boardImage = BoardImage.builder()
                     .boardImagePath(imagePath)
                     .board(board)

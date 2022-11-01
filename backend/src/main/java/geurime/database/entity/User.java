@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.nio.channels.AsynchronousChannelGroup;
@@ -113,7 +114,6 @@ public class User {
     public User singUpUpdate(User.UserSignUpRequest request){
         this.createDate = LocalDate.now();
         this.nickname = request.getNickName();
-        this.userProfileImage = request.getUserProfileImage();
         this.isChild = request.getIsChild();
         this.userBirth = LocalDate.parse(request.getUserBirth(), DateTimeFormatter.ISO_DATE);
         this.userGender = request.getUserGender();
@@ -130,7 +130,6 @@ public class User {
     public User inviteSingUpUpdate(User.UserInviteSignUpRequest request){
         this.createDate = LocalDate.now();
         this.nickname = request.getNickName();
-        this.userProfileImage = request.getUserProfileImage();
         this.isChild = request.getIsChild();
         this.userBirth = LocalDate.parse(request.getUserBirth(), DateTimeFormatter.ISO_DATE);
         this.userGender = request.getUserGender();
@@ -145,13 +144,16 @@ public class User {
      */
     public void updateUserInfo(User.UserInfoUpdateRequest request){
         this.nickname = request.getNickname();
-        this.userProfileImage = request.getUserProfileImage();
         this.userBirth = LocalDate.parse(request.getUserBirth(), DateTimeFormatter.ISO_DATE);
         this.userGender = request.getUserGender();
     }
 
-    public void disableUser(){
-        this.isActive = false;
+    /**
+     * 회원프로필 변경
+     * @param userProfileImage
+     */
+    public void updateProfileImage(String userProfileImage){
+        this.userProfileImage = userProfileImage;
     }
 
     /**
@@ -163,7 +165,6 @@ public class User {
     public static class UserInfoUpdateRequest{
         private Long userId;
         private String nickname;
-        private String userProfileImage;
         private String userBirth;
         private String userGender;
     }
@@ -176,7 +177,6 @@ public class User {
     @NoArgsConstructor
     public static class UserSignUpRequest{
         private String nickName;
-        private String userProfileImage;
         private Boolean isChild;
         private String userBirth;
         private String userGender;
@@ -192,7 +192,6 @@ public class User {
     @NoArgsConstructor
     public static class UserInviteSignUpRequest{
         private String nickName;
-        private String userProfileImage;
         private Boolean isChild;
         private String userBirth;
         private String userGender;
@@ -223,6 +222,7 @@ public class User {
         private String familyName;
         private Long familyLeaderId;
         private String inviteCode;
+        private Boolean isActive;
 
         List<UserInfoKidDto> kidDtoList;
 

@@ -1,5 +1,6 @@
 package geurime.api.service;
 
+import geurime.config.s3.S3Uploader;
 import geurime.database.entity.DrawingBox;
 import geurime.database.entity.Family;
 import geurime.database.entity.Kid;
@@ -12,6 +13,7 @@ import geurime.exception.CustomExceptionList;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -26,6 +28,7 @@ public class KidServiceImpl implements KidService{
     private final KidRepository kidRepository;
     private final FamilyRepository familyRepository;
     private final DrawingBoxRepository drawingBoxRepository;
+    private final S3Uploader s3Uploader;
 
     // DTO와 엔티티 변환
     ModelMapper modelMapper = new ModelMapper();
@@ -55,14 +58,20 @@ public class KidServiceImpl implements KidService{
      * @return 자녀 id
      */
     @Override
-    public Long createKid(Kid.KidPostRequest request) {
+    public Long createKid(Kid.KidPostRequest request, MultipartFile profileImage) {
         Family family = familyRepository.findById(request.getFamilyId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.FAMILY_NOT_FOUND_ERROR));
+
+        String kidProfileImage = "";
+        //이미지 업로드 후 반환된 이미지경로 db에 저장
+        if(!profileImage.isEmpty()){
+            kidProfileImage = s3Uploader.uploadAndGetUrl(profileImage);
+        }
 
         Kid kid = Kid.builder()
                 .family(family)
                 .kidName(request.getKidName())
-                .kidProfileImage(request.getKidProfileImage())
+                .kidProfileImage(kidProfileImage)
                 .kidBirth(LocalDate.parse(request.getKidBirth(), DateTimeFormatter.ISO_DATE))
                 .build();
         kidRepository.save(kid);
@@ -89,10 +98,17 @@ public class KidServiceImpl implements KidService{
      * @return
      */
     @Override
-    public Long updateKid(Kid.KidPutRequest request) {
+    public Long updateKid(Kid.KidPutRequest request, MultipartFile profileImage) {
         Kid kid = kidRepository.findById(request.getKidId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.KID_NOT_FOUND_ERROR));
         kid.updateKidInfo(request);
+
+        String kidProfileImage = "";
+        //이미지 업로드 후 반환된 이미지경로 db에 저장
+        if(!profileImage.isEmpty()){
+            kidProfileImage = s3Uploader.uploadAndGetUrl(profileImage);
+        }
+        kid.updateProfile(kidProfileImage);
 
         return kid.getId();
     }

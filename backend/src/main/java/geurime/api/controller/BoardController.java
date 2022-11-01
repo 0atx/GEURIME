@@ -3,14 +3,14 @@ package geurime.api.controller;
 import geurime.api.dto.common.BasicResponse;
 import geurime.api.service.BoardServiceImpl;
 import geurime.database.entity.Board;
-import geurime.database.enums.BoardType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -56,10 +56,10 @@ public class BoardController {
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "게시글 등록", notes = "등록 정보를 받아 게시글을 등록한다")
-    public ResponseEntity<BasicResponse<Long>> createBoard(@RequestBody Board.BoardPostRequest request) {
-        Long boardId = boardService.createBoard(request);
+    public ResponseEntity<BasicResponse<Long>> createBoard(@RequestPart Board.BoardPostRequest request, @RequestPart List<MultipartFile> imageFileList) {
+        Long boardId = boardService.createBoard(request, imageFileList);
 
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, boardId), HttpStatus.CREATED);
     }
