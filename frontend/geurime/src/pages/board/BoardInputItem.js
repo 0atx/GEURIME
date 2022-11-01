@@ -1,90 +1,148 @@
-import { Grid, Paper } from "@mui/material";
-import { useEffect } from "react";
+import { Grid, Paper, TextField } from "@mui/material";
+import { useEffect, useState } from "react";
 import Visibility from '@mui/icons-material/Visibility';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import { fontWeight } from "@mui/system";
+import MenuItem from '@mui/material/MenuItem';
 
 
-export default function BoardInputItem({ item }) { 
-  useEffect(() => {
-    console.log({아이템: item})
-  }, [])
-  const time = item.createTime.substring(0,10);
+export default function BoardInputItem() { 
+
+  const boardCategories = [
+    // {
+    //   value: 'USD',
+    //   label: '$',
+    // },
+    {
+      value: '자유',
+      label: '자유',
+    },
+    {
+      value: '질문',
+      label: '질문',
+    },
+  ];
+  
+
+  const [boardCategory, setBoardCategory] = useState('자유');
+  const [title, setTitle] = useState();
+
+  const handleChange = (event) => {
+    setBoardCategory(event.target.value);
+  };
+  const titleChange = (event) => {
+    setTitle(event.target.value);
+    // console.log({제목: title})
+  };
+
   return (
-    <Paper
-      style={{ margin: '3%', marginBottom: '5%' }}
-      variant="outlined"
-      sx={{
-        borderColor: '#FFE082',
-        borderWidth: 3
-      }}
-      
-    >
-      {/* 제목 부분 */}
-      <Grid
+  <Grid>
+      {/* <Paper
         sx={{
-          margin: '4%',
-          fontWeight:"bold"
+          Color: '#FFE082',
+          borderWidth: 3,
+          borderRadius: 3
         }}
       >
-        {item.boardTitle}
+      </Paper> */}
+  
+      <Grid>
+        이미지 인풋
       </Grid>
-      
+
+      {/* 분류 */}
       <Grid
         container
-        sx={{alignItems: 'center', display: 'flex'}}
         direction="row"
-        flexWrap={'nowrap'}
+        alignItems='center'
+        sx={{marginTop: '5%'}}
       >
         <Grid
           item
-          sx={{ justifyContent: 'center', textAlign: 'center' }}
-          xs={8}
-          
+          xs={2.5}
+          textAlign='center'
         >
-        <img
-          src={item.boardFirstImage}
-          loading="lazy"
-          style={{ height: '20vh', width: '25vh', margin: '3%' }}
-          />
-
-      </Grid>
-
+          분류
+        </Grid>
         <Grid
-          justifyContent="center"
-          sx={{ marginTop: '3%'}}
+          item
+          xs={9.5}
+          alignItems='center'
         >
-          <Grid>
-            작성자 : {item.userNickname}
-         </Grid>
-          <Grid
-            sx={{ marginTop: '6%' }}
-          >
-            작성일 : {time}
-          </Grid>
-          <Grid
-            sx={{ marginTop: '6%'}}
-            justifyContent="center"
-          >
-            <Grid
-                container
-                direction="row"
-            >
-              <Grid
-                sx={{marginRight: '10%'}}
-              >
-              <Visibility fontSize="8"/>
-                  {item.boardViews}
-              </Grid>
-              <Grid>
-              <QuestionAnswerOutlinedIcon fontSize="8" />
-                {item.commentCount}
-              </Grid>
-          </Grid>
-          </Grid>
-          
+        <TextField
+          id="standard-select-currency"
+          select
+          value={boardCategory}
+          onChange={handleChange}
+          variant="standard"
+            sx={{ width: '31vh', marginLeft: '3%' }}
+        >
+          {boardCategories.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+          </TextField>
+        </Grid>
+
+        {/* 제목 */}
+        <Grid
+          container
+          direction="row"
+          alignItems='center'
+          sx={{marginTop: '5%'}}
+        >
+        <Grid
+          item
+          xs={2.5}
+          textAlign='center'
+        >
+          제목
+        </Grid>
+        <Grid
+          item
+          xs={9.5}
+          alignItems='center'
+        >
+            <TextField
+              sx={{ width: '31vh', marginLeft: '3%' }}
+              variant="standard"
+              placeholder="제목을 입력하세요"
+              onChange={titleChange}
+            />
         </Grid>
       </Grid>
-  </Paper>
+
+      {/* 내용 */}
+      <Grid
+        container
+        direction="column"
+      >
+        <Grid
+          xs={2.5}
+          textAlign='center'
+          sx={{ marginTop: '5%' }}
+        >
+          내용
+        </Grid>
+        
+          <Grid
+            sx={{marginLeft: '7%', marginTop: '2%'}}
+          >
+            <TextField
+              multiline
+              minRows={5}
+              maxRows={5}
+              sx={{ width: '80vw', borderBlockColor: '#FFE082', borderRadius: 10, borderColor: '#FFE082' }}
+              
+            />
+      </Grid>
+      </Grid>
+      {/* 등록 버튼 */}
+      <Grid>
+
+      </Grid>
+    </Grid>
+  </Grid>
   )
 }

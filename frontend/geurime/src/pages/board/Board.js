@@ -3,18 +3,17 @@
 @since 2022.10.28
 */
 import * as React from 'react';
-import { Grid, InputAdornment, InputBase, Paper, TextField } from "@mui/material";
+import { Grid,TextField } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import BackMenu from "components/nav/BackMenu";
 import { useState, useEffect, useRef } from "react";
-import BoardInputItem from "./BoardInputItem";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import SearchIcon from '@mui/icons-material/Search';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import BoardItem from './BoardItem';
+import BackMenu from 'components/nav/BackMenu';
 
 export default function Board() { 
   const [test, setTest] = useState();
@@ -66,16 +65,17 @@ export default function Board() {
 
   return (
     <Grid>
-      {/* <Grid>
+      <Grid>
       <BackMenu
           isLeft={true}
           title='커뮤니티'
           isRight="+"
       >
       </BackMenu>
-      </Grid> */}
+      </Grid>
       
       <Grid
+        id='container'
         container
         direction="row"
         justifyContent="center"
@@ -83,15 +83,14 @@ export default function Board() {
         flexWrap={'nowrap'}
         marginLeft='5%'
       >
-      <FormControl sx={{ minWidth: '25%' }}>
+      <FormControl sx={{ height: '8vh', width: '16vh', Color: '#FFCA28'}}>
         <Select
           value={list}
           onChange={handleChange}
           displayEmpty
             inputProps={{ 'aria-label': 'Without label' }}
-
         >
-            <MenuItem value={"제목"}>
+          <MenuItem value={"제목"}>
             <em>제목</em>
           </MenuItem>
           <MenuItem value={10}>Ten</MenuItem>
@@ -106,20 +105,15 @@ export default function Board() {
         style={{ padding: "2vw" }}
         alignItems="center"
           justifyContent="center"
-          marginLeft={'5%'}
+          marginLeft={'3%'}
       >
           <Grid 
             container
             direction="row"
-            justifyContent='space-between'
-          >
-          <Paper
-            elevation={0}
-            component="form"
-              id="search"
+            // justifyContent='space-between'
           >
             {/* 검색어 입력 부분 */}
-            <Input
+            {/* <Input
               placeholder="검색어를 입력하세요..."
               onChange={(e) => {
                 setSearchKeyWord(e.target.value);
@@ -129,7 +123,15 @@ export default function Board() {
               onKeyDown={(e) => {
                 // search(e);
                 }} // enter시 검색하는 함수
-            />
+            /> */}
+          <TextField
+          id="standard-search"
+          placeholder='검색어를 입력하세요...'
+          type="search"
+          variant="standard"
+              sx={{ color: '##FFCA28', width: '75%' }}
+              onKeyUp={search}
+          />
             {/* 검색어 삭제 버튼 */}
             {searchKeyWord == null || searchKeyWord == "" ? null : (
               <IconButton
@@ -144,7 +146,6 @@ export default function Board() {
                 <HighlightOffIcon />
               </IconButton>
             )}
-            </Paper>
             <Grid>
             {/* 돋보기 버튼 */}
             <IconButton
@@ -169,7 +170,7 @@ export default function Board() {
         height={'25%'}
       >
       {test?.map((store, idx) => {
-        return <BoardInputItem key={idx} item={store}/>;
+        return <BoardItem key={idx} item={store}/>;
       })}
     </Grid>
     </Grid>
