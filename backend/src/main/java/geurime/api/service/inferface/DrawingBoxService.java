@@ -1,4 +1,4 @@
-package geurime.api.service;
+package geurime.api.service.inferface;
 
 public interface DrawingBoxService {
     Long createDrawingBox(Long kidId, String drawingBoxName);

@@ -1,5 +1,6 @@
 package geurime.api.service;
 
+import geurime.api.service.inferface.UserService;
 import geurime.config.s3.S3Uploader;
 import geurime.database.entity.Family;
 import geurime.database.entity.Kid;
