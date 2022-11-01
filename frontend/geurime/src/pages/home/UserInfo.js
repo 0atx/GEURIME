@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import BackMenu from "components/nav/BackMenu";
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
-import { http } from "api/http";
+import { http2 } from "api/http2";
 import axios from "axios";
 
 export default function UserInfo() {
@@ -66,6 +66,7 @@ export default function UserInfo() {
 
       // 사진
       let file = imgRef.current.files[0];
+      console.log(file);
       let formData = new FormData();
       formData.append("imageFile", file);
 
@@ -79,28 +80,14 @@ export default function UserInfo() {
         userGender: userInfo.userGender,
       };
 
-      formData.append("request", null);
-      // url: `https://k7a506.p.ssafy.io/api/users/${userInfo.userID}`,
-      // axios.post('주소', formData, { header... }) 형식
+      formData.append(
+        "request",
+        new Blob([JSON.stringify(user)], {
+          type: "application/json",
+        })
+      );
 
-      const response = await axios({
-        method: "POST",
-        url: `https://k7a506.p.ssafy.io/api/users/${userInfo.userID}`,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        data: formData,
-      });
-
-      console.log(response);
-
-      // const response = await http.post(`/users/${userInfo.userID}`, {
-      //   familyName: familyNameInput.current.value,
-      //   isChild: true,
-      //   nickName: nickNameInput.current.value,
-      //   userBirth: birth,
-      //   userGender: userInfo.userGender,
-      // });
+      const response = await http2.post(`/users/${userInfo.userID}`, formData);
 
       // 성공하면 state에 가족 아이디를 저장
       if (response.data.message == "success") {

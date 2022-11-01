@@ -1,3 +1,9 @@
+/*
+일반 json 객체 axios
+@author 여예원
+@since 2022.11.01
+*/
+
 import axios, { AxiosRequestConfig } from "axios";
 
 function Instance() {

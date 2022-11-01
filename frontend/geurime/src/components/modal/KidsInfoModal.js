@@ -21,24 +21,23 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { http2 } from "api/http2";
 import { useRef, useState } from "react";
 import Btn from "components/common/Btn";
-import axios from "axios";
 
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
-import RegistKids from "pages/home/RegistKids";
 
 export default function KidsInfoModal(props) {
   const [userInfo, setUserInfo] = useRecoilState(userState);
 
   const kidsNameInput = useRef(null); // 아이이름
   const kidsBirthInput = useRef(null); // 생년월일
-  const [kidsGender, setKidsGender] = useState("F"); // 성별
+  const [kidsGender, setKidsGender] = useState(null); // 성별
 
   // 프로필
   const [imageUrl, setImageUrl] = useState(null);
   const imgRef = useRef();
   const [images, setImages] = useState();
 
+  // 프로필 미리보기
   function changeProfile(e) {
     const reader = new FileReader();
     const img = imgRef.current.files[0];
@@ -62,38 +61,44 @@ export default function KidsInfoModal(props) {
       birth = birth.substr(0, 4) + "-" + birth.substr(4, 2) + "-" + birth.substr(6, 2);
       console.log(userInfo.familyId);
       console.log(imgRef.current.files[0]);
+
       // 파일 전송
       let file = imgRef.current.files[0];
       let formData = new FormData();
       formData.append("imageFile", file);
 
       // 아이 정보 전송
+      //todo: 아이 성별 추가 필요
       let kidsInfo = {
         familyId: userInfo.familyId,
         kidBirth: birth,
         kidName: kidsNameInput.current.value,
       };
 
-      formData.append("request", JSON.stringify(kidsInfo));
+      formData.append(
+        "request",
+        new Blob([JSON.stringify(kidsInfo)], { type: "application/json" })
+      );
 
-      const response = await axios({
-        method: "POST",
-        url: `https://k7a506.p.ssafy.io/api/kids`,
-        mode: "cors",
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        data: formData,
-      });
+      const response = await http2.post(`/kids`, formData);
 
-      console.log(response);
+      // 등록 성공 하면 userInfo 의 kids 배열 업데이트
+      // todo: response로 온 이미지url 넣기
+      if (response.data.message == "success") {
+        let copy = { ...userInfo };
+        let copyKid = [...userInfo.kidDtoList];
+        copyKid.push({
+          kidBirth: birth,
+          kidName: kidsNameInput.current.value,
+        });
+        copy.kidDtoList = copyKid;
+        setUserInfo(copy);
+        setImageUrl("");
+        props.setOpen(false);
+      } else {
+        alert("아이 등록에 실패하였습니다.");
+      }
 
-      // 등록 성공 하면 props.kids 복제 후 props.setKids로 업데이트
-      const kid = {
-        kidBirth: "",
-        kidName: "",
-        kidProfilImage: "",
-      };
       // axios
     } else {
       alert("올바른 생년월일을 입력하세요.");
@@ -235,6 +240,9 @@ export default function KidsInfoModal(props) {
                   aria-labelledby="demo-row-radio-buttons-group-label"
                   name="row-radio-buttons-group"
                   color="secondary"
+                  onChange={(e) => {
+                    setKidsGender(e.target.value);
+                  }}
                   sx={{
                     fontSize: "2.3vh",
                   }}

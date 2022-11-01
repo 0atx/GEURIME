@@ -1,3 +1,9 @@
+/*
+axios 사진 전송시 사용하는 객체
+@author 여예원
+@since 2022.11.01
+*/
+
 import axios, { AxiosRequestConfig } from "axios";
 
 function Instance() {
