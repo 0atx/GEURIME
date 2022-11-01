@@ -20,21 +20,26 @@ import {
 import Calendar from "react-calendar";
 import "./Calendar.css";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import Button from "components/common/Btn";
+
+import { diaryState } from "states/DiaryState";
+import { useRecoilState } from "recoil";
 
 export default function RegistDiary({}) {
   // 등록완료 모달
   const [open, setOpen] = useState(false);
 
-  // 선택 날짜 타이틀 - recoil에서 받아온 날짜로 변경 필요!!!
-  const [title, setTitle] = useState(
-    new Date().getMonth() + 1 + "월 " + new Date().getDate() + "일 일기"
-  );
+  // 일기 제목
+  const [title, setTitle] = useState("");
+
+  // 전역에 담긴 일기 정보
+  const [diaryInfo, setDiaryInfo] = useRecoilState(diaryState);
 
   // 등록완료 모달 닫기
   const handleClose = () => {
     setOpen(false);
   };
-  // 등록 완료 모달 열기
+  // 등록 완료 모달 열기 -- 일기 등록 api 연동 필요!!!
   const registDiary = () => {
     setOpen(true);
   };
@@ -42,7 +47,12 @@ export default function RegistDiary({}) {
   return (
     <div>
       {/* 헤더 */}
-      <BackMenu isLeft={true} title={title} isRight="등록" clickRight={registDiary}></BackMenu>
+      <BackMenu
+        isLeft={true}
+        title={diaryInfo.dateTitle}
+        isRight="등록"
+        clickRight={registDiary}
+      ></BackMenu>
       <Container id="container">
         <Paper
           elevation={3}
@@ -69,12 +79,36 @@ export default function RegistDiary({}) {
               id="standard-basic"
               placeholder="제목을 써주세요"
               variant="standard"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+                console.log(title);
+              }}
             />
           </Grid>
         </Grid>
-        <Paper fullWidth sx={{ marginTop: "10%", height: "100px" }}>
-          <AddCircleIcon />
-        </Paper>
+        <div style={{ marginTop: "10%", marginBottom: "10%", width: "100%", display: "table" }}>
+          <Paper
+            sx={{
+              height: "358px",
+              textAlign: "center",
+              verticalAlign: "middle",
+              display: "table-cell",
+            }}
+          >
+            <AddCircleIcon
+              sx={{
+                color: "secondary.main",
+                fontSize: "3.5em",
+              }}
+            />
+          </Paper>
+        </div>
+        <div style={{ textAlign: "center" }}>
+          <Button width="45%" onClick={registDiary}>
+            일기 등록
+          </Button>
+        </div>
       </Container>
       {/* 네비 바 */}
       <NavBar></NavBar>

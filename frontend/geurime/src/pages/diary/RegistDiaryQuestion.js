@@ -20,10 +20,34 @@ import {
 import Calendar from "react-calendar";
 import "./Calendar.css";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "components/common/Btn.js";
 import styled from "styled-components";
-import img1 from "assets/icon/default_profile.png";
+// 날씨 이미지 import
+import sunnyUnclicked from "assets/icon/weather/sunnyUnclicked.png";
+import sunnyClicked from "assets/icon/weather/sunnyClicked.png";
+import cloudyUnclicked from "assets/icon/weather/cloudyUnclicked.png";
+import cloudyClicked from "assets/icon/weather/cloudyClicked.png";
+import rainyUnclicked from "assets/icon/weather/rainyUnclicked.png";
+import rainyClicked from "assets/icon/weather/rainyClicked.png";
+import snowyUnclicked from "assets/icon/weather/snowyUnclicked.png";
+import snowyClicked from "assets/icon/weather/snowyClicked.png";
+import windyUnclicked from "assets/icon/weather/windyUnclicked.png";
+import windyClicked from "assets/icon/weather/windyClicked.png";
+// 기분 이미지 import
+import happyUnclicked from "assets/icon/feeling/happyUnclicked.png";
+import happyClicked from "assets/icon/feeling/happyClicked.png";
+import sadUnclicked from "assets/icon/feeling/sadUnclicked.png";
+import sadClicked from "assets/icon/feeling/sadClicked.png";
+import surpriseUnclicked from "assets/icon/feeling/surpriseUnclicked.png";
+import surpriseClicked from "assets/icon/feeling/surpriseClicked.png";
+import scaryUnclicked from "assets/icon/feeling/scaryUnclicked.png";
+import scaryClicked from "assets/icon/feeling/scaryClicked.png";
+import angryUnclicked from "assets/icon/feeling/angryUnclicked.png";
+import angryClicked from "assets/icon/feeling/angryClicked.png";
+
+import { diaryState } from "states/DiaryState";
+import { useRecoilState } from "recoil";
 
 export default function RegistDiary({}) {
   // 현재 날짜
@@ -32,12 +56,40 @@ export default function RegistDiary({}) {
   const [title, setTitle] = useState(
     new Date().getMonth() + 1 + "월 " + new Date().getDate() + "일 일기"
   );
+  // 선택된 날짜 (yyyy-mm-dd 형식)
+  const [date, setDate] = useState("2000-01-01");
   // 캘린더 열기
   const [calOpen, setCalOpen] = useState(false);
+  // 클릭된 기분
+  const [clickedFeeling, setClickedFeeling] = useState();
+  // 클릭된 날씨
+  const [clickedWeather, setClickedWeather] = useState();
   // 어제 잠 든 시간
   const [sleepTime, setSleepTime] = useState("22:00");
   // 오늘 일어난 시간
   const [getupTime, setGetupTime] = useState("08:00");
+
+  // 전역에 담긴 일기 정보
+  const [diaryInfo, setDiaryInfo] = useRecoilState(diaryState);
+
+  const navigate = useNavigate();
+  // 다음 버튼 클릭 시
+  const goWriting = () => {
+    navigate("/registdiary/write");
+
+    setDiaryInfo((diary) => {
+      const copyDiary = { ...diary };
+      copyDiary.dateTitle = title;
+      copyDiary.feeling = clickedFeeling;
+      copyDiary.weather = clickedWeather;
+
+      copyDiary.sleepTime = new Date(date + " " + sleepTime);
+      copyDiary.getupTime = new Date(date + " " + getupTime);
+
+      console.log(copyDiary);
+      return { ...copyDiary };
+    });
+  };
 
   // 캘린더 모달 닫기
   const handleClose = () => {
@@ -67,7 +119,7 @@ export default function RegistDiary({}) {
       day = "0" + day;
     }
     let date = year + "-" + month + "-" + day;
-    console.log(date);
+    setDate(date);
     setTitle(month + "월 " + day + "일 일기");
     setCalOpen(false);
   };
@@ -128,19 +180,74 @@ export default function RegistDiary({}) {
           <StyledTypography>오늘 하루는 어땠어?</StyledTypography>
           <Grid container sx={{ textAlign: "center" }}>
             <Grid item xs={2.4}>
-              <img src={img1} />
+              {clickedFeeling === 0 ? (
+                <img src={happyClicked} width="90%" />
+              ) : (
+                <img
+                  src={happyUnclicked}
+                  width="90%"
+                  onClick={() => {
+                    setClickedFeeling(0);
+                  }}
+                />
+              )}
+              <Typography>기쁨</Typography>
             </Grid>
             <Grid item xs={2.4}>
-              <img src={img1} />
+              {clickedFeeling === 1 ? (
+                <img src={sadClicked} width="90%" />
+              ) : (
+                <img
+                  src={sadUnclicked}
+                  width="90%"
+                  onClick={() => {
+                    setClickedFeeling(1);
+                  }}
+                />
+              )}
+              <Typography>슬픔</Typography>
             </Grid>
             <Grid item xs={2.4}>
-              <img src={img1} />
+              {clickedFeeling === 2 ? (
+                <img src={surpriseClicked} width="90%" />
+              ) : (
+                <img
+                  src={surpriseUnclicked}
+                  width="90%"
+                  onClick={() => {
+                    setClickedFeeling(2);
+                  }}
+                />
+              )}
+              <Typography>놀람</Typography>
             </Grid>
             <Grid item xs={2.4}>
-              <img src={img1} />
+              {clickedFeeling === 3 ? (
+                <img src={scaryClicked} width="90%" />
+              ) : (
+                <img
+                  src={scaryUnclicked}
+                  width="90%"
+                  onClick={() => {
+                    setClickedFeeling(3);
+                  }}
+                />
+              )}
+              <Typography>공포</Typography>
             </Grid>
             <Grid item xs={2.4}>
-              <img src={img1} />
+              {clickedFeeling === 4 ? (
+                <img src={angryClicked} width="90%" />
+              ) : (
+                <img
+                  src={angryUnclicked}
+                  width="90%"
+                  onClick={() => {
+                    setClickedFeeling(4);
+                  }}
+                />
+              )}
+              <Typography>화남</Typography>
             </Grid>
           </Grid>
         </StyledPaper>
@@ -149,19 +256,74 @@ export default function RegistDiary({}) {
           <StyledTypography>오늘 날씨는 어땠어?</StyledTypography>
           <Grid container sx={{ textAlign: "center" }}>
             <Grid item xs={2.4}>
-              <img src={img1} />
+              {clickedWeather === 0 ? (
+                <img src={sunnyClicked} width="90%" />
+              ) : (
+                <img
+                  src={sunnyUnclicked}
+                  width="90%"
+                  onClick={() => {
+                    setClickedWeather(0);
+                  }}
+                />
+              )}
+              <Typography>맑음</Typography>
             </Grid>
             <Grid item xs={2.4}>
-              <img src={img1} />
+              {clickedWeather === 1 ? (
+                <img src={cloudyClicked} width="90%" />
+              ) : (
+                <img
+                  src={cloudyUnclicked}
+                  width="90%"
+                  onClick={() => {
+                    setClickedWeather(1);
+                  }}
+                />
+              )}
+              <Typography>흐림</Typography>
             </Grid>
             <Grid item xs={2.4}>
-              <img src={img1} />
+              {clickedWeather === 2 ? (
+                <img src={rainyClicked} width="90%" />
+              ) : (
+                <img
+                  src={rainyUnclicked}
+                  width="90%"
+                  onClick={() => {
+                    setClickedWeather(2);
+                  }}
+                />
+              )}
+              <Typography>비</Typography>
             </Grid>
             <Grid item xs={2.4}>
-              <img src={img1} />
+              {clickedWeather === 3 ? (
+                <img src={snowyClicked} width="90%" />
+              ) : (
+                <img
+                  src={snowyUnclicked}
+                  width="90%"
+                  onClick={() => {
+                    setClickedWeather(3);
+                  }}
+                />
+              )}
+              <Typography>눈</Typography>
             </Grid>
             <Grid item xs={2.4}>
-              <img src={img1} />
+              {clickedWeather === 4 ? (
+                <img src={windyClicked} width="90%" />
+              ) : (
+                <img
+                  src={windyUnclicked}
+                  width="90%"
+                  onClick={() => {
+                    setClickedWeather(4);
+                  }}
+                />
+              )}
+              <Typography>바람</Typography>
             </Grid>
           </Grid>
         </StyledPaper>
@@ -203,9 +365,11 @@ export default function RegistDiary({}) {
             />
           </div>
         </StyledPaper>
-        <Link to="/registdiary/write" style={{ textDecoration: "none" }}>
-          <Button width="100px">다음</Button>
-        </Link>
+        <div style={{ textAlign: "right" }}>
+          <Button width="100px" onClick={goWriting}>
+            다음
+          </Button>
+        </div>
       </Container>
       {/* 네비 바 */}
       <NavBar></NavBar>
