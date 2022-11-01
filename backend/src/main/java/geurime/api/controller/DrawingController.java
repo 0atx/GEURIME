@@ -44,13 +44,6 @@ public class DrawingController {
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingGalleryResponses), HttpStatus.OK);
     }
 
-    @GetMapping("/box/{drawingBoxId}")
-    @ApiOperation(value = "그림보관함 그림기록 리스트 조회", notes = "자녀 id로 그림보관함의 주인인지 검증하고 그림보관함 id를 받아 좋아요한 그림이미지를 조회한다")
-    public ResponseEntity<BasicResponse<List<Drawing.DrawingGalleryResponse>>> readDrawingBoxDrawingList(@PathVariable("drawingBoxId") Long drawingBoxId, @RequestParam Long kidId){
-        List<Drawing.DrawingGalleryResponse> drawingGalleryResponses = drawingService.readBoxDrawingList(kidId, drawingBoxId);
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingGalleryResponses), HttpStatus.OK);
-    }
-
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "그림기록 등록", notes = "그림 보관함과 그림 제목, 이미지 파일을 받아 그림기록을 등록한다.")
     public ResponseEntity<BasicResponse<Long>> createDrawing(@RequestPart Drawing.DrawingPostRequest request, @RequestPart MultipartFile imageFile){
@@ -77,14 +70,6 @@ public class DrawingController {
     public ResponseEntity<BasicResponse<String>> deleteDrawing(@RequestParam Long kidId, @RequestParam Long drawingId){
         Boolean isDelete = drawingService.deleteDrawing(kidId, drawingId);
         String result = isDelete == true ? "삭제완료" : "삭제실패";
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, result), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/box")
-    @ApiOperation(value = "그림기록 삭제", notes = "유저 id로 주인인지 검증하고 그림기록을 삭제한다.")
-    public ResponseEntity<BasicResponse<String>> deleteDrawingBox(@RequestParam Long kidId, @RequestParam Long drawingBoxId, @RequestParam Boolean isDelete){
-        Boolean deleteResult = drawingService.deleteDrawingBox(kidId, drawingBoxId, isDelete);
-        String result = deleteResult == true ? "삭제완료" : "삭제실패";
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, result), HttpStatus.OK);
     }
 
