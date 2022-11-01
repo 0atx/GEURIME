@@ -46,7 +46,7 @@ public class DrawingController {
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "그림기록 등록", notes = "그림 보관함과 그림 제목, 이미지 파일을 받아 그림기록을 등록한다.")
-    public ResponseEntity<BasicResponse<Long>> createDrawing(@RequestPart Drawing.DrawingPostRequest request, @RequestPart MultipartFile imageFile){
+    public ResponseEntity<BasicResponse<Long>> createDrawing(@RequestPart Drawing.DrawingPostRequest request, @RequestPart(required = false) MultipartFile imageFile){
         Long drawingId = drawingService.createDrawing(request, imageFile);
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingId), HttpStatus.OK);
     }

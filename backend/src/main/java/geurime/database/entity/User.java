@@ -113,7 +113,7 @@ public class User {
      */
     public User singUpUpdate(User.UserSignUpRequest request){
         this.createDate = LocalDate.now();
-        this.nickname = request.getNickName();
+        this.nickname = request.getNickname();
         this.isChild = request.getIsChild();
         this.userBirth = LocalDate.parse(request.getUserBirth(), DateTimeFormatter.ISO_DATE);
         this.userGender = request.getUserGender();
@@ -129,7 +129,7 @@ public class User {
      */
     public User inviteSingUpUpdate(User.UserInviteSignUpRequest request){
         this.createDate = LocalDate.now();
-        this.nickname = request.getNickName();
+        this.nickname = request.getNickname();
         this.isChild = request.getIsChild();
         this.userBirth = LocalDate.parse(request.getUserBirth(), DateTimeFormatter.ISO_DATE);
         this.userGender = request.getUserGender();
@@ -176,7 +176,7 @@ public class User {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class UserSignUpRequest{
-        private String nickName;
+        private String nickname;
         private Boolean isChild;
         private String userBirth;
         private String userGender;
@@ -191,7 +191,7 @@ public class User {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class UserInviteSignUpRequest{
-        private String nickName;
+        private String nickname;
         private Boolean isChild;
         private String userBirth;
         private String userGender;
@@ -211,7 +211,7 @@ public class User {
         private String userName;
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDate createDate;
-        private String nickName;
+        private String nickname;
         private String userProfileImage;
         private String provider;
         @JsonFormat(pattern = "yyyy-MM-dd")
@@ -227,12 +227,12 @@ public class User {
         List<UserInfoKidDto> kidDtoList;
 
         @Builder
-        public UserInfoResponse(Long userId, String email, String userName, LocalDate createDate, String nickName, String userProfileImage, String provider, LocalDate userBirth, String userGender, Long familyId, String familyName, Long familyLeaderId, String inviteCode, List<UserInfoKidDto> kidDtoList) {
+        public UserInfoResponse(Long userId, String email, String userName, LocalDate createDate, String nickname, String userProfileImage, String provider, LocalDate userBirth, String userGender, Long familyId, String familyName, Long familyLeaderId, String inviteCode, List<UserInfoKidDto> kidDtoList) {
             this.userId = userId;
             this.email = email;
             this.userName = userName;
             this.createDate = createDate;
-            this.nickName = nickName;
+            this.nickname = nickname;
             this.userProfileImage = userProfileImage;
             this.provider = provider;
             this.userBirth = userBirth;
