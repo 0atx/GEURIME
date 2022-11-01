@@ -74,8 +74,7 @@ public class DrawingServiceImpl implements DrawingService{
      */
     @Override
     public List<Drawing.DrawingGalleryResponse> readBoxDrawingList(Long kidId, Long drawingBoxId) {
-        DrawingBox drawingBox = drawingBoxRepository.findByIdFetch(drawingBoxId)
-                .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_BOX_NOT_FOUND_ERROR));
+        DrawingBox drawingBox = getDrawingBox(drawingBoxId);
 
         //조회하는 자녀의 아이디가 일치하면
         if(drawingBox.getKid().getId() == kidId){
@@ -109,6 +108,8 @@ public class DrawingServiceImpl implements DrawingService{
                 .drawingTitle(request.getDrawingTitle())
                 .drawingImagePath(drawingImagePath)
                 .createTime(LocalDateTime.now())
+                .isDiary(false)
+                .isLike(false)
                 .build();
         drawingRepository.save(drawing);
 
@@ -158,12 +159,12 @@ public class DrawingServiceImpl implements DrawingService{
      */
     @Override
     public Boolean deleteDrawingBox(Long kidId, Long drawingBoxId, Boolean isDelete) {
-        DrawingBox deleteDrawingBox = drawingBoxRepository.findByIdFetch(drawingBoxId)
-                .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_BOX_NOT_FOUND_ERROR));
+        DrawingBox deleteDrawingBox = getDrawingBox(drawingBoxId);
         Kid kid = getKid(kidId);
 
+        //커스텀 보관함이 아니거나
         //삭제하려는 자녀가 보관함의 주인이 아니면 false 반환
-        if(deleteDrawingBox.getKid().getId() != kid.getId()){
+        if(deleteDrawingBox.getDrawingBoxCategory() != BoxType.커스텀 || deleteDrawingBox.getKid().getId() != kid.getId()){
             return false;
         }
 
