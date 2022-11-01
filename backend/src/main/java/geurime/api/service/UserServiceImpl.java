@@ -104,6 +104,12 @@ public class UserServiceImpl implements UserService {
         return family.getId();
     }
 
+    /**
+     * 유저 회원가입을 하고 기존에 있는 가족에 추가한다.
+     * @param userId
+     * @param request
+     * @param profileImage
+     */
     @Override
     public void createInvitedUser(Long userId, User.UserInviteSignUpRequest request, MultipartFile profileImage) {
         User user = userRepository.findById(userId)
