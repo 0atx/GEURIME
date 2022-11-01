@@ -102,7 +102,7 @@ export default function NavBar() {
               "& .MuiBottomNavigationAction-label": {
                 transition: "none",
                 lineHeight: "20px",
-                fontSize: "2vh",
+                fontSize: "1.8vh",
               },
               "& .MuiSvgIcon-root, & .MuiBottomNavigationAction-label": {
                 color: "#FFCA28",
