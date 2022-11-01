@@ -161,13 +161,43 @@ public class Drawing {
         private String drawingTitle;
     }
 
-    public void updateDrawing(DrawingBox drawingBox, String drawingTitle){
+    /**
+     * 그림보관함, 그림제목 수정
+     * @param drawingBox
+     * @param drawingTitle
+     */
+    public void changeDrawingInfo(DrawingBox drawingBox, String drawingTitle){
         this.drawingBox = drawingBox;
         this.drawingTitle = drawingTitle;
     }
 
+    /**
+     * 그림보관함 수정
+     * @param drawingBox
+     */
     public void migrationDrawing(DrawingBox drawingBox){
         this.drawingBox = drawingBox;
+    }
+    public void changeDrawingImagePath(String imagePath){
+        this.drawingImagePath = imagePath;
+    }
+
+    /**
+     * 그림일기 수정
+     * @param drawingTitle
+     * @param drawingDiary
+     * @param drawingDiaryWeather
+     * @param drawingDiaryFeeling
+     * @param drawingDiaryWakeUp
+     * @param drawingDiarySleep
+     */
+    public void changeDrawingDiaryInfo(String drawingTitle, String drawingDiary, Integer drawingDiaryWeather, Integer drawingDiaryFeeling, LocalDateTime drawingDiaryWakeUp, LocalDateTime drawingDiarySleep){
+        this.drawingTitle = drawingTitle;
+        this.drawingDiary = drawingDiary;
+        this.drawingDiaryWeather = drawingDiaryWeather;
+        this.drawingDiaryFeeling = drawingDiaryFeeling;
+        this.drawingDiaryWakeUp = drawingDiaryWakeUp;
+        this.drawingDiarySleep = drawingDiarySleep;
     }
 
     /**
@@ -180,4 +210,78 @@ public class Drawing {
         private List<Long> drawingIdList;
         private Long drawingBoxId;
     }
+
+    /**
+     * 그림일기 수정 DTO
+     */
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class DrawingDiaryPutRequest{
+        private Long drawingId;
+        private String drawingTitle;
+        private String drawingDiary;
+        private Integer drawingDiaryWeather;
+        private Integer drawingDiaryFeeling;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+        private LocalDateTime drawingDiaryWakeUp;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+        private LocalDateTime drawingDiarySleep;
+    }
+
+    /**
+     * 그림일기 등록 DTO
+     */
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class DrawingDiaryPostRequest{
+        private Long drawingBoxId;
+        private String drawingTitle;
+        private String drawingDiary;
+        private Integer drawingDiaryWeather;
+        private Integer drawingDiaryFeeling;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+        private LocalDateTime drawingDiaryWakeUp;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+        private LocalDateTime drawingDiarySleep;
+    }
+
+    /**
+     * 그림일기 상세조회 DTO
+     */
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class DrawingDiaryInfoResponse{
+        private Long drawingId;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+        private LocalDateTime createTime;
+        private String drawingTitle;
+        private Float emotionHappy;
+        private Float emotionSad;
+        private Float emotionAngry;
+        private String drawingImagePath;
+        private Integer drawingDiaryWeather;
+        private Integer drawingDiaryFeeling;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+        private LocalDateTime drawingDiaryWakeUp;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+        private LocalDateTime drawingDiarySleep;
+    }
+
+    /**
+     * 그림일기 목록조회, 제목검색, 날짜검색 DTO
+     */
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class DrawingDiaryListResponse{
+        private Long drawingId;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+        private LocalDateTime createTime;
+        private String drawingTitle;
+        private String drawingImagePath;
+    }
+
 }

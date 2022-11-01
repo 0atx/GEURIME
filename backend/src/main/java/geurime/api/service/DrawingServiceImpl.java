@@ -127,7 +127,7 @@ public class DrawingServiceImpl implements DrawingService{
         DrawingBox drawingBox = getDrawingBox(request.getDrawingBoxId());
 
         if(drawingBox.getKid().getId() == request.getKidId()){
-            drawing.updateDrawing(drawingBox, request.getDrawingTitle());
+            drawing.changeDrawingInfo(drawingBox, request.getDrawingTitle());
             return drawing.getId();
         }
 
