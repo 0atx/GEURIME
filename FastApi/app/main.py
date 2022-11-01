@@ -6,17 +6,21 @@ from pydantic import BaseModel
 class Image(BaseModel):
     url: str
 class Data(BaseModel):
-    emotion: str
-    prediction: float
+    depression: float
+    violence: float
+    happiness: float
 
 app = FastAPI()
 
-@app.get("/ai")
+@app.get("/ai/")
 async def root():
     return {"message": "Hello World"}
 
 @app.post("/ai/predict/",  response_model=Data)
 async def root(image: Image):
+    labels = ['depression', 'violence', 'happiness']
     prediction = predict(image.url)
-    data = {"emotion": prediction["emotion"], "prediction": prediction["prediction"]}
+    data = {}
+    for i in range(3):
+        data[f'{labels[i]}'] = prediction[i]
     return data
