@@ -12,11 +12,13 @@ import {
   DialogTitle,
   DialogActions,
 } from "@mui/material";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import PhotoOutlinedIcon from "@mui/icons-material/PhotoOutlined";
-import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+import HomeOutlinedIcon from "@mui/icons-material/Home";
+import PhotoOutlinedIcon from "@mui/icons-material/Collections";
+import GroupsOutlinedIcon from "@mui/icons-material/Groups";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import SettingsIcon from "@mui/icons-material/Settings";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import { useLocation, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Button from "components/common/Btn.js";
@@ -26,7 +28,29 @@ import "aos/dist/aos.css";
 export default function NavBar() {
   const location = useLocation();
 
-  const [value, setValue] = useState(0);
+  function getPageIndex(route) {
+    switch (route) {
+      case "/main":
+        return 0;
+      case "/gallery":
+      case "/detailgallery":
+      case "/modifydetailgallery":
+      case "/modifygallery":
+        return 1;
+      case "/diary":
+        // case "/detaildiary/:diaryid":
+        return 3;
+      case "/board":
+      case "/detailboard":
+      case "/registboard":
+      case "/modifyboard":
+        return 4;
+      default:
+        return -1;
+    }
+  }
+
+  const [value, setValue] = useState(getPageIndex(location.pathname));
 
   // 등록 메뉴
   const [menuOpen, setMenuOpen] = useState(false);
@@ -37,6 +61,10 @@ export default function NavBar() {
 
   useEffect(() => {
     AOS.init();
+
+    if (location.pathname.includes("/detaildiary")) {
+      setValue(3);
+    }
   }, []);
 
   return (
@@ -94,15 +122,15 @@ export default function NavBar() {
         <BottomNavigation
           showLabels
           value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
+          // onChange={(event, newValue) => {
+          //   setValue(newValue);
+          // }}
           sx={{
             "& .Mui-selected": {
               "& .MuiBottomNavigationAction-label": {
                 transition: "none",
                 lineHeight: "20px",
-                fontSize: "2vh",
+                fontSize: "1.8vh",
               },
               "& .MuiSvgIcon-root, & .MuiBottomNavigationAction-label": {
                 color: "#FFCA28",
@@ -117,6 +145,7 @@ export default function NavBar() {
             label="홈"
             icon={<HomeOutlinedIcon />}
           />
+
           {/* 갤러리 */}
           <BottomNavigationAction
             component={Link}
@@ -131,19 +160,19 @@ export default function NavBar() {
               setMenuOpen(true);
             }}
           />
+          {/* 설정 */}
+          <BottomNavigationAction
+            component={Link}
+            to="/diary"
+            label="일기장"
+            icon={<AutoStoriesIcon />}
+          />
           {/* 커뮤니티 */}
           <BottomNavigationAction
             component={Link}
             to="/board"
             label="커뮤니티"
             icon={<GroupsOutlinedIcon />}
-          />
-          {/* 설정 */}
-          <BottomNavigationAction
-            component={Link}
-            to="/settings"
-            label="설정"
-            icon={<SettingsIcon />}
           />
         </BottomNavigation>
       </Paper>
