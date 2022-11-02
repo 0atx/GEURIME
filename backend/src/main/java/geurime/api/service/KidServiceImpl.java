@@ -59,7 +59,7 @@ public class KidServiceImpl implements KidService {
      * @return 자녀 id
      */
     @Override
-    public Long createKid(Kid.KidPostRequest request, MultipartFile profileImage) {
+    public Kid.KidInfoResponse createKid(Kid.KidPostRequest request, MultipartFile profileImage) {
         Family family = familyRepository.findById(request.getFamilyId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.FAMILY_NOT_FOUND_ERROR));
 
@@ -90,7 +90,9 @@ public class KidServiceImpl implements KidService {
         drawingBoxRepository.save(basicDrawingBox);
         drawingBoxRepository.save(diaryDrawingBox);
 
-        return kid.getId();
+        Kid.KidInfoResponse response = modelMapper.map(kid, Kid.KidInfoResponse.class);
+
+        return response;
     }
 
     /**
@@ -99,7 +101,7 @@ public class KidServiceImpl implements KidService {
      * @return
      */
     @Override
-    public Long updateKid(Kid.KidPutRequest request, MultipartFile profileImage) {
+    public Kid.KidInfoResponse updateKid(Kid.KidPutRequest request, MultipartFile profileImage) {
         Kid kid = kidRepository.findById(request.getKidId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.KID_NOT_FOUND_ERROR));
         kid.updateKidInfo(request);
@@ -111,7 +113,9 @@ public class KidServiceImpl implements KidService {
         }
         kid.updateProfile(kidProfileImage);
 
-        return kid.getId();
+        Kid.KidInfoResponse response = modelMapper.map(kid, Kid.KidInfoResponse.class);
+
+        return response;
     }
 
     /**
