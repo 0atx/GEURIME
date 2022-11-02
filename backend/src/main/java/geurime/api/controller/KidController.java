@@ -29,14 +29,16 @@ public class KidController {
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "자녀 등록", notes = "자녀를 등록하고 기본보관함, 그림일기 보관함을 생성한다. 생성된 자녀의 id를 반환한다")
-    public ResponseEntity<BasicResponse<Long>> createKidInfo(@RequestPart Kid.KidPostRequest request, @RequestPart(required = false) MultipartFile imageFile) {
+    public ResponseEntity<BasicResponse<Long>> createKidInfo(@RequestPart(value = "request") Kid.KidPostRequest request,
+                                                             @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
         Long kidId = kidService.createKid(request, imageFile);
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, kidId), HttpStatus.CREATED);
     }
 
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "자녀 정보수정", notes = "자녀 정보를 수정한다. 수정된 자녀의 id를 반환한다")
-    public ResponseEntity<BasicResponse<Long>> updateKidInfo(@RequestPart Kid.KidPutRequest request, @RequestPart(required = false) MultipartFile imageFile) {
+    public ResponseEntity<BasicResponse<Long>> updateKidInfo(@RequestPart(value = "request") Kid.KidPutRequest request,
+                                                             @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
         Long updateKidId = kidService.updateKid(request, imageFile);
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, updateKidId), HttpStatus.CREATED);
     }

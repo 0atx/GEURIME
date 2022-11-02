@@ -1,5 +1,6 @@
 package geurime.api.service;
 
+import geurime.api.service.inferface.DrawingDiaryService;
 import geurime.config.s3.S3Uploader;
 import geurime.database.entity.Drawing;
 import geurime.database.entity.DrawingBox;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class DrawingDiaryServiceImpl implements DrawingDiaryService{
+public class DrawingDiaryServiceImpl implements DrawingDiaryService {
 
     private final DrawingRepository drawingRepository;
     private final DrawingBoxRepository drawingBoxRepository;

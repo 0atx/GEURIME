@@ -1,12 +1,12 @@
 package geurime.api.service;
 
+import geurime.api.service.inferface.BoardService;
 import geurime.config.s3.S3Uploader;
 import geurime.database.entity.Board;
 import geurime.database.entity.BoardImage;
 import geurime.database.entity.Comment;
 import geurime.database.entity.User;
 import geurime.database.enums.BoardType;
-import geurime.database.enums.BoxType;
 import geurime.database.repository.BoardImageRepository;
 import geurime.database.repository.BoardRepository;
 import geurime.database.repository.CommentRepository;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class BoardServiceImpl implements BoardService{
+public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
