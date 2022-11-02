@@ -58,18 +58,21 @@ public class BoardController {
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "게시글 등록", notes = "등록 정보를 받아 게시글을 등록한다")
-    public ResponseEntity<BasicResponse<Long>> createBoard(@RequestPart Board.BoardPostRequest request, @RequestPart List<MultipartFile> imageFileList) {
-        Long boardId = boardService.createBoard(request, imageFileList);
+    public ResponseEntity<BasicResponse<Board.BoardInfoResponse>> createBoard(@RequestPart(value = "request") Board.BoardPostRequest request,
+                                                           @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
+        Board.BoardInfoResponse response = boardService.createBoard(request, imageFile);
 
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, boardId), HttpStatus.CREATED);
+        return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.CREATED);
     }
 
     @PutMapping
     @ApiOperation(value = "게시글 수정", notes = "수정 정보를 받아 수정하려는 유저가 작성자이면 게시글을 수정한다")
-    public ResponseEntity<BasicResponse<Long>> updateBoard(@RequestParam Long userId ,@RequestBody Board.BoardPutRequest request) {
-        Long boardId = boardService.updateBoard(userId, request);
+    public ResponseEntity<BasicResponse<Board.BoardInfoResponse>> updateBoard(@RequestPart(value = "request") Board.BoardPutRequest request,
+                                                           @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
 
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, boardId), HttpStatus.OK);
+        Board.BoardInfoResponse response = boardService.updateBoard(request, imageFile);
+
+        return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
     }
 
     @DeleteMapping

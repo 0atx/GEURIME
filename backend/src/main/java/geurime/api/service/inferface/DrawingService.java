@@ -10,7 +10,7 @@ public interface DrawingService {
     List<Drawing.DrawingBoxPreviewResponse> readDrawingBoxPreviewList(Long kidId);
     List<Drawing.DrawingGalleryResponse> readLikeDrawingList(Long kidId);
     List<Drawing.DrawingGalleryResponse> readBoxDrawingList(Long kidId, Long drawingBoxId);
-    Long createDrawing(Drawing.DrawingPostRequest request, MultipartFile imageFile);
+    Drawing.DrawingInfoResponse createDrawing(Drawing.DrawingPostRequest request, MultipartFile imageFile);
     Long updateDrawing(Drawing.DrawingPutRequest request);
     Long drawingBoxMigration(Drawing.DrawingMigrationPutRequest request);
     Boolean deleteDrawingBox(Long kidId, Long drawingBoxId, Boolean isDelete);

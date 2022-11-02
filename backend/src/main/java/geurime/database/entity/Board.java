@@ -76,8 +76,6 @@ public class Board {
     }
 
     public void updateBoard(Board.BoardPutRequest request){
-        this.boardTitle = request.getBoardTitle();
-        this.boardContent = request.getBoardContent();
         BoardType boardType = null;
         try {
             boardType = BoardType.valueOf(request.getBoardType());
@@ -85,7 +83,13 @@ public class Board {
             throw new CustomException(CustomExceptionList.BOARD_TYPE_NOT_FOUND_ERROR);
         }
         this.boardCategory = boardType;
+        this.boardTitle = request.getBoardTitle();
+        this.boardContent = request.getBoardContent();
         this.updateTime = LocalDateTime.now();
+    }
+
+    public void changeBoardImage(List<BoardImage> boardImageList){
+        this.boardImageList = boardImageList;
     }
 
     /**
