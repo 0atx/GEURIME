@@ -70,13 +70,16 @@ public class UserServiceImpl implements UserService {
      * @return 가족 id
      */
     @Override
-    public Long createNewUser(Long userId, User.UserSignUpRequest request, MultipartFile profileImage) {
+    public User.UserInfoResponse createNewUser(Long userId, User.UserSignUpRequest request, MultipartFile profileImage) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
+        User.UserInfoResponse response = null;
+
         //이미 가족이 존재하면
         if(user.getFamily() != null){
-            return user.getFamily().getId();
+            response = modelMapper.map(user, User.UserInfoResponse.class);
+            return response;
         }
 
         //이미지 업로드 후 반환된 이미지경로 db에 저장
@@ -100,7 +103,9 @@ public class UserServiceImpl implements UserService {
         user.joinFamily(family);
         userRepository.save(user);
 
-        return family.getId();
+        response = modelMapper.map(user, User.UserInfoResponse.class);
+
+        return response;
     }
 
     /**
@@ -110,7 +115,7 @@ public class UserServiceImpl implements UserService {
      * @param profileImage
      */
     @Override
-    public void createInvitedUser(Long userId, User.UserInviteSignUpRequest request, MultipartFile profileImage) {
+    public User.UserInfoResponse createInvitedUser(Long userId, User.UserInviteSignUpRequest request, MultipartFile profileImage) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
@@ -127,10 +132,12 @@ public class UserServiceImpl implements UserService {
         Family family = familyRepository.findByInviteCode(request.getInviteCode());
         user.joinFamily(family);
         userRepository.save(user);
+
+        return modelMapper.map(user, User.UserInfoResponse.class);
     }
 
     @Override
-    public void updateUserInfo(Long userId, User.UserInfoUpdateRequest request, MultipartFile imageFile) {
+    public User.UserInfoResponse updateUserInfo(Long userId, User.UserInfoUpdateRequest request, MultipartFile imageFile) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
@@ -142,6 +149,7 @@ public class UserServiceImpl implements UserService {
         }else{
             user.updateProfileImage("");
         }
+        return modelMapper.map(user, User.UserInfoResponse.class);
     }
 
     @Override

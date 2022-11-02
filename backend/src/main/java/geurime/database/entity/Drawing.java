@@ -95,6 +95,12 @@ public class Drawing {
         this.drawingBox = drawingBox;
     }
 
+    public void changeDrawingEmotion(float happy, float sad, float angry){
+        this.emotionHappy = happy;
+        this.emotionSad = sad;
+        this.emotionAngry = angry;
+    }
+
     /**
      * 그림기록 상세조회 DTO
      */
