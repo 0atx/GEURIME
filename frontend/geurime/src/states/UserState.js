@@ -26,13 +26,6 @@ export const userState = atom({
     familyName: "",
     familyLeaderId: "",
     isChild: false,
-    kidDtoList: [
-      {
-        kidId: "",
-        kidBirth: "",
-        kidName: "",
-        kidProfileImage: "",
-      },
-    ],
+    kidDtoList: [],
   },
 });

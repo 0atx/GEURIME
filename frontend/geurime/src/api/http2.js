@@ -1,5 +1,5 @@
 /*
-일반 json 객체 axios
+axios 사진 전송시 사용하는 객체
 @author 여예원
 @since 2022.11.01
 */
@@ -10,7 +10,7 @@ function Instance() {
   const http = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL,
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
     },
   });
 
@@ -68,4 +68,4 @@ function Instance() {
   return http;
 }
 
-export const http = Instance();
+export const http2 = Instance();
