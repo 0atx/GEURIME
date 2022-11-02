@@ -118,6 +118,8 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
                 .drawingDiaryFeeling(request.getDrawingDiaryFeeling())
                 .drawingDiaryWakeUp(request.getDrawingDiaryWakeUp())
                 .drawingDiarySleep(request.getDrawingDiarySleep())
+                .isDiary(true)
+                .isLike(false)
                 .build();
         drawingRepository.save(drawing);
 
