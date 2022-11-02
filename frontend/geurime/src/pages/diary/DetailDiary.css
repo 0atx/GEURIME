@@ -1,0 +1,19 @@
+.notes {
+  background-image: repeating-linear-gradient(white 0px, white 24px, #FFCA28 25px);
+}
+
+.content {
+    line-height: 25px;
+    letter-spacing: 1px;
+    /* word-spacing: 5px; */
+  }  
+
+.content *{
+    font-family: 'THEHongChawangjanemo' !important;
+    font-size: 3.3vh;
+  }
+
+.kidswriting *{
+    font-family: 'THEHongChawangjanemo' !important;
+    font-size: 3vh;
+}

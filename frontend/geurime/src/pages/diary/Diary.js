@@ -12,6 +12,7 @@ import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import NavBar from "components/nav/NavBar";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 export default function Diary() {
   // 검색
@@ -141,21 +142,20 @@ export default function Diary() {
                 <Link to={"/detaildiary/" + diary.id} style={{ textDecoration: "none" }}>
                   <Paper elevation={3}>
                     <div style={{ padding: "5%" }}>
-                      <Grid container sx={{ marginBottom: "5px" }}>
-                        <Grid item xs={10}>
-                          {diary.date}
-                        </Grid>
-                      </Grid>
+                      <Typography>{moment(diary.date).format("YYYY.MM.D")}</Typography>
+
                       <img
                         src={diary.image}
                         width="100%"
                         height="100px"
                         style={{
+                          marginTop: "3%",
+
                           border: "3px solid #FFCA28",
                           borderRadius: "5px",
                         }}
                       ></img>
-                      <Typography sx={{ textAlign: "center" }}>{diary.title}</Typography>
+                      <Typography>제목: {diary.title}</Typography>
                     </div>
                   </Paper>
                 </Link>
