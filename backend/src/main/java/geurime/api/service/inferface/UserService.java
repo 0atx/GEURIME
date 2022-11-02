@@ -1,4 +1,4 @@
-package geurime.api.service;
+package geurime.api.service.inferface;
 
 import geurime.database.entity.User;
 import org.springframework.web.multipart.MultipartFile;

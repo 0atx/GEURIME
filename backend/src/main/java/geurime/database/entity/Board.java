@@ -109,7 +109,6 @@ public class Board {
     @NoArgsConstructor
     public static class BoardPostRequest{
         private Long userId;
-        private LocalDateTime createTime;
         private String boardTitle;
         private String boardContent;
         private String boardCategory;

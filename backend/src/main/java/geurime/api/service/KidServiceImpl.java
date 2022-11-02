@@ -1,5 +1,6 @@
 package geurime.api.service;
 
+import geurime.api.service.inferface.KidService;
 import geurime.config.s3.S3Uploader;
 import geurime.database.entity.DrawingBox;
 import geurime.database.entity.Family;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class KidServiceImpl implements KidService{
+public class KidServiceImpl implements KidService {
     private final KidRepository kidRepository;
     private final FamilyRepository familyRepository;
     private final DrawingBoxRepository drawingBoxRepository;

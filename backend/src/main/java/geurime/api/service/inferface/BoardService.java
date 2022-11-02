@@ -1,4 +1,4 @@
-package geurime.api.service;
+package geurime.api.service.inferface;
 
 import geurime.database.entity.Board;
 import geurime.database.enums.BoardType;

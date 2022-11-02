@@ -1,5 +1,6 @@
 package geurime.api.service;
 
+import geurime.api.service.inferface.UserService;
 import geurime.config.s3.S3Uploader;
 import geurime.database.entity.Family;
 import geurime.database.entity.Kid;
@@ -129,14 +130,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserInfo(Long userId, User.UserInfoUpdateRequest request, MultipartFile profileImage) {
+    public void updateUserInfo(Long userId, User.UserInfoUpdateRequest request, MultipartFile imageFile) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         user.updateUserInfo(request);
         //이미지 업로드 후 반환된 이미지경로 db에 저장
-        if(!profileImage.isEmpty()){
-            String userProfileImage = s3Uploader.uploadAndGetUrl(profileImage);
+        if(imageFile != null && !imageFile.isEmpty()){
+            String userProfileImage = s3Uploader.uploadAndGetUrl(imageFile);
             user.updateProfileImage(userProfileImage);
         }else{
             user.updateProfileImage("");

@@ -1,5 +1,6 @@
 package geurime.api.service;
 
+import geurime.api.service.inferface.DrawingService;
 import geurime.config.s3.S3Uploader;
 import geurime.database.entity.Drawing;
 import geurime.database.entity.DrawingBox;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class DrawingServiceImpl implements DrawingService{
+public class DrawingServiceImpl implements DrawingService {
 
     private final DrawingRepository drawingRepository;
     private final DrawingBoxRepository drawingBoxRepository;
@@ -97,7 +98,7 @@ public class DrawingServiceImpl implements DrawingService{
 
         //이미지 업로드 후 반환된 이미지경로
         String drawingImagePath = "";
-        if(!imageFile.isEmpty()){
+        if(imageFile != null && !imageFile.isEmpty()){
             drawingImagePath = s3Uploader.uploadAndGetUrl(imageFile);
         }
 
