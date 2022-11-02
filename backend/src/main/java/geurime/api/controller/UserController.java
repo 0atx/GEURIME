@@ -31,26 +31,26 @@ public class UserController {
 
     @PostMapping(value = "/{userId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "유저 회원가입", notes = "유저와 가족이름, 자녀 정보를 받아 새로운 가족을 만들어 등록하고 가족 id를 반환한다.")
-    public ResponseEntity<BasicResponse<Long>> createUserInfo(@PathVariable("userId") Long userId, @RequestPart(value = "request") User.UserSignUpRequest request,
+    public ResponseEntity<BasicResponse<User.UserInfoResponse>> createUserInfo(@PathVariable("userId") Long userId, @RequestPart(value = "request") User.UserSignUpRequest request,
                                                               @RequestPart(value = "imageFile", required = false)  MultipartFile imageFile) {
-        Long familyId = userService.createNewUser(userId, request, imageFile);
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, familyId), HttpStatus.CREATED);
+        User.UserInfoResponse response = userService.createNewUser(userId, request, imageFile);
+        return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/invite-code/{userId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "초대된 유저 회원가입", notes = "유저와 가족 초대코드를 받아 등록한다")
-    public ResponseEntity<BasicResponse<Long>> createInviteUserInfo(@PathVariable("userId") Long userId, @RequestPart(value = "request") User.UserInviteSignUpRequest request,
+    public ResponseEntity<BasicResponse<User.UserInfoResponse>> createInviteUserInfo(@PathVariable("userId") Long userId, @RequestPart(value = "request") User.UserInviteSignUpRequest request,
                                                                     @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
-        userService.createInvitedUser(userId, request, imageFile);
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, userId), HttpStatus.CREATED);
+        User.UserInfoResponse response = userService.createInvitedUser(userId, request, imageFile);
+        return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{userId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "유저 회원정보 수정", notes = "유저의 정보를 수정한다")
-    public ResponseEntity<BasicResponse<Long>> updateUserInfo(@PathVariable("userId") Long userId, @RequestPart(value = "request") User.UserInfoUpdateRequest request,
+    public ResponseEntity<BasicResponse<User.UserInfoResponse>> updateUserInfo(@PathVariable("userId") Long userId, @RequestPart(value = "request") User.UserInfoUpdateRequest request,
                                                               @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
-        userService.updateUserInfo(userId, request, imageFile);
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, userId), HttpStatus.CREATED);
+        User.UserInfoResponse response = userService.updateUserInfo(userId, request, imageFile);
+        return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{userId}")

@@ -61,7 +61,7 @@ public class S3Uploader {
         if(!os.contains("win")){
             pathname = "\\home\\ubuntu\\static\\" + file.getOriginalFilename();
         }
-        log.info(pathname);
+        log.debug(pathname);
         File convertFile = new File(pathname);
 
         if (convertFile.createNewFile()) { // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
@@ -70,7 +70,7 @@ public class S3Uploader {
             }
             return Optional.of(convertFile);
         }
-        log.info("파일이 생성되지 않음");
+        log.debug("파일이 생성되지 않음");
         return Optional.empty();
     }
 

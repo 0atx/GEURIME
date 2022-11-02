@@ -94,7 +94,7 @@ public class DrawingServiceImpl implements DrawingService {
      * @return
      */
     @Override
-    public Long createDrawing(Drawing.DrawingPostRequest request, MultipartFile imageFile) {
+    public Drawing.DrawingInfoResponse createDrawing(Drawing.DrawingPostRequest request, MultipartFile imageFile) {
 
         //이미지 업로드 후 반환된 이미지경로
         String drawingImagePath = "";
@@ -114,7 +114,9 @@ public class DrawingServiceImpl implements DrawingService {
                 .build();
         drawingRepository.save(drawing);
 
-        return drawing.getId();
+        Drawing.DrawingInfoResponse response = modelMapper.map(drawing, Drawing.DrawingInfoResponse.class);
+
+        return response;
     }
 
     /**

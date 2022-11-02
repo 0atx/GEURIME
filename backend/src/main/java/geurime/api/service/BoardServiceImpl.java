@@ -180,7 +180,7 @@ public class BoardServiceImpl implements BoardService {
      * @return 생성된 게시글의 id
      */
     @Override
-    public Long createBoard(Board.BoardPostRequest request, List<MultipartFile> imageFileList) {
+    public Board.BoardInfoResponse createBoard(Board.BoardPostRequest request, MultipartFile imageFile) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
@@ -199,54 +199,41 @@ public class BoardServiceImpl implements BoardService {
 
         boardRepository.save(board);
 
-        List<String> imagePathList = s3Uploader.uploadMultiAndGetUrl(imageFileList);
-        List<BoardImage> boardImageList = new ArrayList<>(imagePathList.size());
+        String imagePath = s3Uploader.uploadAndGetUrl(imageFile);
+        BoardImage boardImage = BoardImage.builder()
+                .boardImagePath(imagePath)
+                .board(board)
+                .build();
 
-        for(String imagePath : imagePathList){
-            BoardImage boardImage = BoardImage.builder()
-                    .boardImagePath(imagePath)
-                    .board(board)
-                    .build();
+        boardImageRepository.save(boardImage);
 
-            boardImageList.add(boardImage);
-        }
-        boardImageRepository.saveAll(boardImageList);
+        Board.BoardInfoResponse response = modelMapper.map(board, Board.BoardInfoResponse.class);
 
-        return board.getId();
+        //작성자
+        response.setWriterId(user.getId());
+        response.setWriterProfile(user.getUserProfileImage());
+        response.setWriterNickname(user.getNickname());
+
+        //이미지
+        List<String> stringImageList = new ArrayList<>();
+        stringImageList.add(boardImage.getBoardImagePath());
+
+        response.setBoardImagePathList(stringImageList);
+
+        return response;
     }
 
-    /**
-     * 입력받은 문자열을 enum으로 변환한다.
-     * 유효하지 않은 문자열은 에러를 발생시킨다
-     * @param stringBoardType 게시판 분류(string)
-     * @return 게시판 분류(enum)
-     */
-    private BoardType checkBoardType(String stringBoardType){
-        BoardType boardType = null;
-        try {
-            boardType = BoardType.valueOf(stringBoardType);
-        }catch (IllegalArgumentException e){
-            throw new CustomException(CustomExceptionList.BOARD_TYPE_NOT_FOUND_ERROR);
-        }
-        return boardType;
-    }
 
-    /**
-     * 유저 id와 수정정보를 받아 작성자인 경우에 수정하고 아니면 0을 반환한다
-     * @param userId 수정을 시도하는 유저 id
-     * @param request 게시글을 수정할 정보
-     * @return 게시글 id
-     */
+
     @Override
-    public Long updateBoard(Long userId, Board.BoardPutRequest request) {
+    public Board.BoardInfoResponse updateBoard(Board.BoardPutRequest request, MultipartFile imageFile) {
         Board board = boardRepository.findById(request.getBoardId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.BOARD_NOT_FOUND_ERROR));
-        if(board.getUser().getId() == userId){
-            board.updateBoard(request);
-            return board.getId();
-        }else{
-            return 0L;
-        }
+        board.updateBoard(request);
+
+        Board.BoardInfoResponse response = modelMapper.map(board, Board.BoardInfoResponse.class);
+
+        return response;
     }
 
     /**
@@ -268,6 +255,22 @@ public class BoardServiceImpl implements BoardService {
             return false;
         }
 
+    }
+
+    /**
+     * 입력받은 문자열을 enum으로 변환한다.
+     * 유효하지 않은 문자열은 에러를 발생시킨다
+     * @param stringBoardType 게시판 분류(string)
+     * @return 게시판 분류(enum)
+     */
+    private BoardType checkBoardType(String stringBoardType){
+        BoardType boardType = null;
+        try {
+            boardType = BoardType.valueOf(stringBoardType);
+        }catch (IllegalArgumentException e){
+            throw new CustomException(CustomExceptionList.BOARD_TYPE_NOT_FOUND_ERROR);
+        }
+        return boardType;
     }
 
     /**

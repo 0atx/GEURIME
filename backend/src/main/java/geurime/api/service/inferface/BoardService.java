@@ -12,7 +12,7 @@ public interface BoardService {
     Board.BoardInfoResponse readBoardDetail(Long boardId);
     List<Board.BoardTitleResponse> readTitleByCategory(Integer page, Integer size, String stringBoardType);
     List<Board.BoardTitleResponse> readTitleBySearch(Integer page, Integer size, String stringBoardType, String keyword);
-    Long createBoard(Board.BoardPostRequest request, List<MultipartFile> imageFileList);
-    Long updateBoard(Long userId, Board.BoardPutRequest request);
+    Board.BoardInfoResponse createBoard(Board.BoardPostRequest request, MultipartFile imageFile);
+    Board.BoardInfoResponse updateBoard(Board.BoardPutRequest request, MultipartFile imageFile);
     Boolean deleteBoard(Long userId, Long boardId);
 }
