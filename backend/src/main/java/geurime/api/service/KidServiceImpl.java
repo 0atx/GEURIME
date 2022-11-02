@@ -65,7 +65,7 @@ public class KidServiceImpl implements KidService {
 
         String kidProfileImage = "";
         //이미지 업로드 후 반환된 이미지경로 db에 저장
-        if(!profileImage.isEmpty()){
+        if(profileImage != null && !profileImage.isEmpty()){
             kidProfileImage = s3Uploader.uploadAndGetUrl(profileImage);
         }
 
