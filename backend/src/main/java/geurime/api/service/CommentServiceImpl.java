@@ -1,5 +1,6 @@
 package geurime.api.service;
 
+import geurime.api.service.inferface.CommentService;
 import geurime.database.entity.Board;
 import geurime.database.entity.Comment;
 import geurime.database.repository.BoardRepository;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CommentServiceImpl implements CommentService{
+public class CommentServiceImpl implements CommentService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
