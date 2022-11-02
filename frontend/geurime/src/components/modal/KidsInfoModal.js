@@ -58,7 +58,12 @@ export default function KidsInfoModal(props) {
     // 생년월일 검사
     if (isBirth(kidsBirthInput.current.value)) {
       let birth = kidsBirthInput.current.value;
-      birth = birth.substr(0, 4) + "-" + birth.substr(4, 2) + "-" + birth.substr(6, 2);
+      birth =
+        birth.substr(0, 4) +
+        "-" +
+        birth.substr(4, 2) +
+        "-" +
+        birth.substr(6, 2);
       console.log(userInfo.familyId);
       console.log(imgRef.current.files[0]);
 
@@ -69,11 +74,16 @@ export default function KidsInfoModal(props) {
 
       // 아이 정보 전송
       //todo: 아이 성별 추가 필요
+      console.log("여여기기");
+      console.log(userInfo.familyId);
+
       let kidsInfo = {
         familyId: userInfo.familyId,
         kidBirth: birth,
         kidName: kidsNameInput.current.value,
       };
+
+      console.log(kidsInfo);
 
       formData.append(
         "request",
@@ -130,7 +140,10 @@ export default function KidsInfoModal(props) {
       } else if (day < 1 || day > 31) {
         // 1일 미만 31일 초과인 경우
         return false;
-      } else if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
+      } else if (
+        (month == 4 || month == 6 || month == 9 || month == 11) &&
+        day == 31
+      ) {
         // 4, 6, 9, 11월에 31일인경우
         return false;
       } else if (month == 2) {
@@ -165,7 +178,12 @@ export default function KidsInfoModal(props) {
               아이 정보 입력
             </Grid>
           </Grid>
-          <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
+          <Grid
+            container
+            justifyContent="center"
+            textAlign="center"
+            sx={{ marginBottom: "3vh" }}
+          >
             <Grid item xs={5} sx={{ marginBottom: "1vh", textAlign: "center" }}>
               {imageUrl ? (
                 <Avatar src={imageUrl} sx={{ width: 100, height: 100 }} />
@@ -194,8 +212,17 @@ export default function KidsInfoModal(props) {
             </Grid>
           </Grid>
           {/* 이름 */}
-          <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
-            <Grid item xs={10} sx={{ fontSize: "2.3vh", marginBottom: "1vh", color: "#6F6F6F" }}>
+          <Grid
+            container
+            justifyContent="center"
+            textAlign="center"
+            sx={{ marginBottom: "3vh" }}
+          >
+            <Grid
+              item
+              xs={10}
+              sx={{ fontSize: "2.3vh", marginBottom: "1vh", color: "#6F6F6F" }}
+            >
               이름
             </Grid>
             {/* todo: 캘린더 클릭 후 이름 바뀌는 것 수정 필요 */}
@@ -212,11 +239,25 @@ export default function KidsInfoModal(props) {
           </Grid>
 
           {/* 생년월일 */}
-          <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "4vh" }}>
-            <Grid item xs={10} sx={{ fontSize: "2.3vh", marginBottom: "3vh", color: "#6F6F6F" }}>
+          <Grid
+            container
+            justifyContent="center"
+            textAlign="center"
+            sx={{ marginBottom: "4vh" }}
+          >
+            <Grid
+              item
+              xs={10}
+              sx={{ fontSize: "2.3vh", marginBottom: "3vh", color: "#6F6F6F" }}
+            >
               생년월일
             </Grid>
-            <Grid item xs={10} sx={{ fontSize: "2.3vh" }} justifyContent="center">
+            <Grid
+              item
+              xs={10}
+              sx={{ fontSize: "2.3vh" }}
+              justifyContent="center"
+            >
               <Input
                 inputRef={kidsBirthInput}
                 placeholder="ex) 20100717"
@@ -229,8 +270,17 @@ export default function KidsInfoModal(props) {
             </Grid>
           </Grid>
           {/* 성별 */}
-          <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
-            <Grid item xs={10} sx={{ fontSize: "2.3vh", marginBottom: "2vh", color: "#6F6F6F" }}>
+          <Grid
+            container
+            justifyContent="center"
+            textAlign="center"
+            sx={{ marginBottom: "3vh" }}
+          >
+            <Grid
+              item
+              xs={10}
+              sx={{ fontSize: "2.3vh", marginBottom: "2vh", color: "#6F6F6F" }}
+            >
               성별
             </Grid>
             <Grid item xs={10} sx={{ fontSize: "2.3vh" }}>
@@ -260,7 +310,12 @@ export default function KidsInfoModal(props) {
                   />
                 </RadioGroup>
               </FormControl>
-              <Grid container justifyContent="center" textAlign="center" sx={{ marginTop: "4vh" }}>
+              <Grid
+                container
+                justifyContent="center"
+                textAlign="center"
+                sx={{ marginTop: "4vh" }}
+              >
                 <Btn
                   onClick={() => {
                     registKid();
