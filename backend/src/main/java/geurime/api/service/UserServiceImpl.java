@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -64,6 +65,21 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 닉네임 중복체크
+     * @param nickname
+     * @return
+     */
+    @Override
+    public Boolean checkNicknameExist(String nickname) {
+        Optional<User> user = userRepository.findByNickname(nickname);
+        if(user.isPresent()){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
      * 유저 회원가입을 하고 가족 id를 반환한다.
      * @param userId
      * @param request
@@ -73,6 +89,12 @@ public class UserServiceImpl implements UserService {
     public User.UserInfoResponse createNewUser(Long userId, User.UserSignUpRequest request, MultipartFile profileImage) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
+
+        //중복닉네임 검사
+        Optional<User> duplicateNickname = userRepository.findByNickname(request.getNickname());
+        if(duplicateNickname.isPresent()){
+            return null;
+        }
 
         User.UserInfoResponse response = null;
 
