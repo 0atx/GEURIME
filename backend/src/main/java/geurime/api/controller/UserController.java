@@ -29,11 +29,22 @@ public class UserController {
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
     }
 
+    @GetMapping("/nickname")
+    @ApiOperation(value = "유저 닉네임 중복체크", notes = "닉네임을 받아 중복된 닉네임이 있는지 조회한다")
+    public ResponseEntity<BasicResponse<Boolean>> nicknameCheck(@RequestParam("nickname") String nickname) {
+        Boolean isExist = userService.checkNicknameExist(nickname);
+        return new ResponseEntity<>(makeBasicResponse(SUCCESS, isExist), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/{userId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "유저 회원가입", notes = "유저와 가족이름, 자녀 정보를 받아 새로운 가족을 만들어 등록하고 가족 id를 반환한다.")
     public ResponseEntity<BasicResponse<User.UserInfoResponse>> createUserInfo(@PathVariable("userId") Long userId, @RequestPart(value = "request") User.UserSignUpRequest request,
                                                               @RequestPart(value = "imageFile", required = false)  MultipartFile imageFile) {
         User.UserInfoResponse response = userService.createNewUser(userId, request, imageFile);
+        if(response == null){
+            return new ResponseEntity<>(makeBasicResponse("중복된 닉네임입니다.", null), HttpStatus.NOT_ACCEPTABLE);
+        }
+
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.CREATED);
     }
 
