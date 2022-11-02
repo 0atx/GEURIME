@@ -1,42 +1,23 @@
-import { Grid, Paper, TextField } from "@mui/material";
+import { Avatar, Grid, Paper, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import Visibility from '@mui/icons-material/Visibility';
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import { fontWeight } from "@mui/system";
 import MenuItem from '@mui/material/MenuItem';
 
 
-export default function BoardInputItem() { 
+export default function BoardInputItem({titleChange, handleChange, boardCategory, boardCategories, textChange, changeProfile, imgRef, imageUrl}) { 
+  // const [title, setTitle] = useState();
 
-  const boardCategories = [
-    // {
-    //   value: 'USD',
-    //   label: '$',
-    // },
-    {
-      value: '자유',
-      label: '자유',
-    },
-    {
-      value: '질문',
-      label: '질문',
-    },
-  ];
-  
 
-  const [boardCategory, setBoardCategory] = useState('자유');
-  const [title, setTitle] = useState();
-
-  const handleChange = (event) => {
-    setBoardCategory(event.target.value);
-  };
-  const titleChange = (event) => {
-    setTitle(event.target.value);
-    // console.log({제목: title})
-  };
+  // const titleChange = (event) => {
+  //   setTitle(event.target.value);
+  //   // console.log({제목: title})
+  // };
 
   return (
-  <Grid>
+    <Grid>
       {/* <Paper
         sx={{
           Color: '#FFE082',
@@ -46,9 +27,47 @@ export default function BoardInputItem() {
       >
       </Paper> */}
   
-      <Grid>
-        이미지 인풋
-      </Grid>
+      <Grid container justifyContent="center">
+        <form method="post" encType="multipart/form-data">
+        <label for="profile" >
+            <Grid item xs={12} sx={{ width: "300px",height: '300px', display: "table", textAlign: 'center'}}>
+              {imageUrl ? (
+                <img src={imageUrl} style={{ height: '100%', width: '100%', margin: '2%', objectFit: "cover" }} />
+              ) : (
+                <Paper
+                  sx={{
+                    height: "40vh",
+                    width: "40vh",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                    display: "flex",
+              
+                  }}
+                >
+                  <AddCircleIcon
+                      sx={{
+                        margin: "auto",
+                      color: "secondary.main",
+                      fontSize: "3.5em",
+                    }}
+                  />
+                </Paper>)}
+        </Grid>
+
+
+     </label>
+      <input
+        style={{ display: "none" }}
+        type="file"
+        ref={imgRef}
+        onChange={(e) => {
+          changeProfile(e);
+        }}
+        accept="img/*"
+        id="profile"
+      />
+      </form>
+    </Grid>
 
       {/* 분류 */}
       <Grid
@@ -75,7 +94,7 @@ export default function BoardInputItem() {
           value={boardCategory}
           onChange={handleChange}
           variant="standard"
-            sx={{ width: '31vh', marginLeft: '3%' }}
+            sx={{ width: '31vh'}}
         >
           {boardCategories.map((option) => (
             <MenuItem key={option.value} value={option.value}>
@@ -105,7 +124,7 @@ export default function BoardInputItem() {
           alignItems='center'
         >
             <TextField
-              sx={{ width: '31vh', marginLeft: '3%' }}
+              sx={{ width: '31vh' }}
               variant="standard"
               placeholder="제목을 입력하세요"
               onChange={titleChange}
@@ -127,14 +146,14 @@ export default function BoardInputItem() {
         </Grid>
         
           <Grid
-            sx={{marginLeft: '7%', marginTop: '2%'}}
+            sx={{marginTop: '3%'}}
           >
             <TextField
               multiline
               minRows={5}
               maxRows={5}
-              sx={{ width: '80vw', borderBlockColor: '#FFE082', borderRadius: 10, borderColor: '#FFE082' }}
-              
+              sx={{ width: '85vw', borderBlockColor: '#FFE082', borderRadius: 10, borderColor: '#FFE082' }}
+              onChange={textChange}
             />
       </Grid>
       </Grid>

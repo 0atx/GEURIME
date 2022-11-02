@@ -14,6 +14,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import BoardItem from './BoardItem';
 import BackMenu from 'components/nav/BackMenu';
+import { http } from "api/http";
 
 export default function Board() { 
   const [test, setTest] = useState();
@@ -26,7 +27,7 @@ export default function Board() {
 
   useEffect(() => {
     setTest(  [{
-      "boardCategory": "string",
+      "boardCategory": "질문",
       "boardFirstImage": "https://en.pimg.jp/031/716/685/1/31716685.jpg",
       "boardId": 0,
       "boardTitle": "1번글",
@@ -39,7 +40,7 @@ export default function Board() {
       "userProfileImage": "string"
     },
     {
-      "boardCategory": "string",
+      "boardCategory": "질문",
       "boardFirstImage": "https://en.pimg.jp/031/716/685/1/31716685.jpg",
       "boardId": 1,
       "boardTitle": "2번글",
@@ -55,6 +56,34 @@ export default function Board() {
   useEffect(() => {
     console.log({테스트: test})
   }, [test])
+
+
+  // const getData = async () => {
+  //   const response = await axios.get(
+  //     'http://j7a104.p.ssafy.io:8080/categories',
+  //   );
+  //   console.log('서버에서 카페, 드링크가져왔음.');
+
+  const getBoard = async () => {
+    const response = await http.get(`/boards`, {
+      params: {
+        page: 0,
+        size: 2
+      }
+    });
+    console.log({전체게시글: response.data });
+
+    if (response.data.message == "success") {
+
+    } else {
+      alert("게시글을 불러오지 못했습니다");
+    }
+  } 
+  useEffect(() => {
+    console.log('전체 게시글 조회')
+    getBoard()
+
+  },[])
   async function search(e) {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -129,8 +158,8 @@ export default function Board() {
           placeholder='검색어를 입력하세요...'
           type="search"
           variant="standard"
-              sx={{ color: '##FFCA28', width: '75%' }}
-              onKeyUp={search}
+          sx={{ color: '##FFCA28', width: '75%' }}
+          onKeyUp={search}
           />
             {/* 검색어 삭제 버튼 */}
             {searchKeyWord == null || searchKeyWord == "" ? null : (
@@ -154,6 +183,7 @@ export default function Board() {
               aria-label="search"
               onClick={(e) => {
                 // searchClick(e);
+                search(e);
               }}
             >
               <SearchIcon />

@@ -6,10 +6,10 @@ import { fontWeight } from "@mui/system";
 
 
 export default function BoardItem({ item }){ 
-  useEffect(() => {
-    console.log({아이템: item})
-  }, [])
-  const time = item.createTime.substring(0,10);
+  // useEffect(() => {
+  //   console.log({아이템: item})
+  // }, [])
+  const time = item.createTime.substring(0, 10);
   return (
     <Paper
       style={{ margin: '3%', marginBottom: '5%' }}
@@ -25,11 +25,11 @@ export default function BoardItem({ item }){
       <Grid
         sx={{
           margin: '4%',
-          marginLeft: '7%',
+          marginLeft: '5%',
           fontWeight:"bold"
         }}
       >
-        {item.boardTitle}
+       [{item.boardCategory}] {item.boardTitle}
       </Grid>
       
       <Grid
