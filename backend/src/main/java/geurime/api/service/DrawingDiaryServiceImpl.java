@@ -99,7 +99,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
      * @return
      */
     @Override
-    public Long createDrawingDiary(Drawing.DrawingDiaryPostRequest request, MultipartFile imageFile) {
+    public Drawing.DrawingDiaryInfoResponse createDrawingDiary(Drawing.DrawingDiaryPostRequest request, MultipartFile imageFile) {
         DrawingBox drawingBox = getDrawingBox(request.getDrawingBoxId());
 
         //이미지 업로드 후 반환된 이미지경로
@@ -121,7 +121,9 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
                 .build();
         drawingRepository.save(drawing);
 
-        return drawing.getId();
+        Drawing.DrawingDiaryInfoResponse response = modelMapper.map(drawing, Drawing.DrawingDiaryInfoResponse.class);
+
+        return response;
     }
 
     /**
@@ -131,7 +133,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
      * @return
      */
     @Override
-    public Long updateDrawingDiary(Drawing.DrawingDiaryPutRequest request, MultipartFile imageFile) {
+    public Drawing.DrawingDiaryInfoResponse updateDrawingDiary(Drawing.DrawingDiaryPutRequest request, MultipartFile imageFile) {
         Drawing drawing = getDrawing(request.getDrawingId());
 
         //이미지 업로드 후 반환된 이미지경로 업데이트
@@ -144,7 +146,9 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
                 request.getDrawingDiaryWeather(), request.getDrawingDiaryFeeling(),
                 request.getDrawingDiaryWakeUp(), request.getDrawingDiarySleep());
 
-        return drawing.getId();
+        Drawing.DrawingDiaryInfoResponse response = modelMapper.map(drawing, Drawing.DrawingDiaryInfoResponse.class);
+
+        return response;
     }
 
     /**

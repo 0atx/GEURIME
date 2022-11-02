@@ -11,7 +11,7 @@ public interface DrawingDiaryService {
     List<Drawing.DrawingDiaryListResponse> readAllDrawingDiaryList(Long kidId);
     List<Drawing.DrawingDiaryListResponse> readByDateDrawingDiaryList(Long kidId, LocalDate date);
     List<Drawing.DrawingDiaryListResponse> readByTitleSearchDrawingDiaryList(Long kidId, String keyword);
-    Long createDrawingDiary(Drawing.DrawingDiaryPostRequest request, MultipartFile imageFile);
-    Long updateDrawingDiary(Drawing.DrawingDiaryPutRequest request, MultipartFile imageFile);
+    Drawing.DrawingDiaryInfoResponse createDrawingDiary(Drawing.DrawingDiaryPostRequest request, MultipartFile imageFile);
+    Drawing.DrawingDiaryInfoResponse updateDrawingDiary(Drawing.DrawingDiaryPutRequest request, MultipartFile imageFile);
     Boolean deleteDrawingDiary(Long drawingId);
 }
