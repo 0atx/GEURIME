@@ -16,11 +16,13 @@ import {
   Paper,
   Typography,
   TextField,
+  IconButton,
 } from "@mui/material";
 import Calendar from "react-calendar";
 import "./Calendar.css";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Button from "components/common/Btn";
+import { http } from "api/http";
 
 import { diaryState } from "states/DiaryState";
 import { useRecoilState } from "recoil";
@@ -35,10 +37,28 @@ export default function RegistDiary({}) {
   // 전역에 담긴 일기 정보
   const [diaryInfo, setDiaryInfo] = useRecoilState(diaryState);
 
+  // 이미지 업로드
+  const [imageUrl, setImageUrl] = useState(null);
+  const imgRef = useRef();
+  const [images, setImages] = useState();
+
+  function changeImage(e) {
+    const reader = new FileReader();
+    const img = imgRef.current.files[0];
+    setImages(e.target.files);
+
+    reader.readAsDataURL(img);
+    reader.onloadend = () => {
+      // 화면에 읽힐 수 있는 url로 변경
+      setImageUrl(reader.result);
+    };
+  }
+
   // 등록 완료 모달 열기 -- 일기 등록 api 연동 필요!!!
-  const registDiary = () => {
+  async function registDiary() {
+    // const response = await http.post(``);
     setOpen(true);
-  };
+  }
 
   return (
     <div>
@@ -92,12 +112,25 @@ export default function RegistDiary({}) {
               display: "table-cell",
             }}
           >
-            <AddCircleIcon
-              sx={{
-                color: "secondary.main",
-                fontSize: "3.5em",
-              }}
-            />
+            <form method="post" encType="multipart/form-data">
+              <IconButton aria-label="upload picture" component="label">
+                <input
+                  hidden
+                  accept="image/*"
+                  type="file"
+                  ref={imgRef}
+                  onChange={(e) => {
+                    changeImage(e);
+                  }}
+                />
+                <AddCircleIcon
+                  sx={{
+                    color: "secondary.main",
+                    fontSize: "3em",
+                  }}
+                />
+              </IconButton>
+            </form>
           </Paper>
         </div>
         <div style={{ textAlign: "center" }}>
