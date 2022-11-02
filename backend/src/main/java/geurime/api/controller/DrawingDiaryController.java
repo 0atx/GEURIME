@@ -52,12 +52,31 @@ public class DrawingDiaryController {
         return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseList), HttpStatus.OK);
     }
 
-//    @PostMapping
-//    @ApiOperation(value = "자녀의 그림일기 제목검색", notes = "자녀의 그림일기 제목으로 검색하여 조회한다.")
-//    public ResponseEntity<BasicResponse<Long>> createDrawingDiary(@RequestPart Drawing.DrawingDiaryPostRequest request, @RequestPart MultipartFile imageFile) {
-//
-//        return new ResponseEntity<>(makeBasicResponse(SUCCESS, null), HttpStatus.OK);
-//    }
+    @PostMapping
+    @ApiOperation(value = "자녀의 그림일기 등록", notes = "자녀의 그림일기를 등록한다.")
+    public ResponseEntity<BasicResponse<Drawing.DrawingDiaryInfoResponse>> createDrawingDiary(@RequestPart(value = "request") Drawing.DrawingDiaryPostRequest request,
+                                                                                              @RequestPart(value = "imageFile", required = true) MultipartFile imageFile) {
+        Drawing.DrawingDiaryInfoResponse response = drawingDiaryService.createDrawingDiary(request, imageFile);
+
+        return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
+    }
+
+    @PutMapping
+    @ApiOperation(value = "자녀의 그림일기 수정", notes = "자녀의 그림일기를 수정한다.")
+    public ResponseEntity<BasicResponse<Drawing.DrawingDiaryInfoResponse>> updateDrawingDiary(@RequestPart(value = "request") Drawing.DrawingDiaryPutRequest request,
+                                                                                              @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
+        Drawing.DrawingDiaryInfoResponse response = drawingDiaryService.updateDrawingDiary(request, imageFile);
+
+        return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    @ApiOperation(value = "자녀의 그림일기 삭제", notes = "자녀의 그림일기를 삭제한다.")
+    public ResponseEntity<BasicResponse<Boolean>> deleteDrawingDiary(@PathVariable Long drawingId) {
+        Boolean isDelete = drawingDiaryService.deleteDrawingDiary(drawingId);
+
+        return new ResponseEntity<>(makeBasicResponse(SUCCESS, isDelete), HttpStatus.OK);
+    }
 
     /**
      * 기본 Response 형식 DTO
