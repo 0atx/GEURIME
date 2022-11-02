@@ -142,20 +142,35 @@ export default function Diary() {
                 <Link to={"/detaildiary/" + diary.id} style={{ textDecoration: "none" }}>
                   <Paper elevation={3}>
                     <div style={{ padding: "5%" }}>
-                      <Typography>{moment(diary.date).format("YYYY.MM.D")}</Typography>
-
                       <img
                         src={diary.image}
                         width="100%"
-                        height="100px"
+                        height="120px"
                         style={{
                           marginTop: "3%",
-
                           border: "3px solid #FFCA28",
                           borderRadius: "5px",
+                          objectFit: "cover",
                         }}
                       ></img>
-                      <Typography>제목: {diary.title}</Typography>
+                      <Typography
+                        sx={{
+                          textAlign: "center",
+                          fontFamily: "THEHongChawangjanemo",
+                          fontSize: "2.5vh",
+                        }}
+                      >
+                        {diary.title}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          textAlign: "center",
+                          fontFamily: "THEHongChawangjanemo",
+                          fontSize: "2.2vh",
+                        }}
+                      >
+                        {moment(diary.date).format("YYYY년 M월 D일")}
+                      </Typography>
                     </div>
                   </Paper>
                 </Link>

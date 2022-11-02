@@ -35,10 +35,6 @@ export default function RegistDiary({}) {
   // 전역에 담긴 일기 정보
   const [diaryInfo, setDiaryInfo] = useRecoilState(diaryState);
 
-  // 등록완료 모달 닫기
-  const handleClose = () => {
-    setOpen(false);
-  };
   // 등록 완료 모달 열기 -- 일기 등록 api 연동 필요!!!
   const registDiary = () => {
     setOpen(true);

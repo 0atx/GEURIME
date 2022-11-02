@@ -11,6 +11,7 @@ import moment from "moment";
 import "moment/locale/ko";
 import "./DetailDiary.css";
 import Button from "components/common/Btn.js";
+import DeleteDiaryModal from "components/modal/DeleteDiaryModal";
 // 날씨 이미지 import
 import sunny from "assets/icon/weather/sunnyClicked.png";
 import cloudy from "assets/icon/weather/cloudyClicked.png";
@@ -23,8 +24,14 @@ import sad from "assets/icon/feeling/sadClicked.png";
 import surprise from "assets/icon/feeling/surpriseClicked.png";
 import scary from "assets/icon/feeling/scaryClicked.png";
 import angry from "assets/icon/feeling/angryClicked.png";
+import AnalysisModal from "components/modal/AnalysisModal";
 
 export default function DetailDiary() {
+  // 삭제완료 모달
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  // 분석결과 모달
+  const [openAnalysisModal, setOpenAnalysisModal] = useState(false);
+
   // 일기 정보
   const [diary, setDiary] = useState({});
 
@@ -34,9 +41,24 @@ export default function DetailDiary() {
   const [date, setDate] = useState("");
   const [days, setDays] = useState(""); // 요일
 
+  // 삭제 모달 닫기
+  const closeDeleteModal = () => {
+    setOpenDeleteModal(false);
+  };
+
+  // 분석 모달 닫기
+  const closeAnalysisModal = () => {
+    setOpenAnalysisModal(false);
+  };
+
   // 일기장 삭제 함수
   const deleteDiary = () => {
-    console.log("일기장 삭제");
+    setOpenDeleteModal(true);
+  };
+
+  // 분석결과 함수
+  const showAnalysisModal = () => {
+    setOpenAnalysisModal(true);
   };
 
   const mounted = useRef(false);
@@ -59,9 +81,9 @@ export default function DetailDiary() {
       setDiary({
         id: 1,
         title: "가족 여행 간 날",
-        emotion_happy: "60",
-        emotion_sad: "20",
-        emotion_angry: "20",
+        emotion_happy: 0.6,
+        emotion_sad: 0.3,
+        emotion_angry: 0.1,
         drawing_image_path: "http://placeimg.com/300/200/people",
         weather: 3,
         feeling: 0,
@@ -189,13 +211,27 @@ export default function DetailDiary() {
           </Grid>
         </Grid>
         <div style={{ textAlign: "center" }}>
-          <Button sx={{ marginTop: "8%" }} width="20vh">
+          <Button sx={{ marginTop: "8%" }} width="20vh" onClick={showAnalysisModal}>
             분석결과 보기
           </Button>
         </div>
       </Container>
       {/* 네비 바 */}
       <NavBar></NavBar>
+      {/* 삭제 완료 모달 */}
+      <DeleteDiaryModal
+        open={openDeleteModal}
+        handleClose={closeDeleteModal}
+        diaryid={diary.id}
+      ></DeleteDiaryModal>
+      {/* 분석 결과 모달 */}
+      <AnalysisModal
+        open={openAnalysisModal}
+        handleClose={closeAnalysisModal}
+        happy={diary.emotion_happy}
+        sad={diary.emotion_sad}
+        angry={diary.emotion_angry}
+      ></AnalysisModal>
     </div>
   );
 }
