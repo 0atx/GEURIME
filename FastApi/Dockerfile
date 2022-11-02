@@ -1,4 +1,4 @@
-FROM python:3.9.13
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
 
 WORKDIR /code
 
@@ -11,4 +11,4 @@ RUN apt-get -y install libgl1-mesa-glx
 
 COPY ./app /code/app
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8010"]
