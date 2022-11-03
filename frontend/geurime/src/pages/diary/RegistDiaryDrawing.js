@@ -16,11 +16,13 @@ import {
   Paper,
   Typography,
   TextField,
+  IconButton,
 } from "@mui/material";
 import Calendar from "react-calendar";
 import "./Calendar.css";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Button from "components/common/Btn";
+import { http2 } from "api/http2";
 
 import { diaryState } from "states/DiaryState";
 import { useRecoilState } from "recoil";
@@ -35,10 +37,60 @@ export default function RegistDiary({}) {
   // 전역에 담긴 일기 정보
   const [diaryInfo, setDiaryInfo] = useRecoilState(diaryState);
 
-  // 등록 완료 모달 열기 -- 일기 등록 api 연동 필요!!!
-  const registDiary = () => {
+  // 이미지 업로드
+  const [imageUrl, setImageUrl] = useState(null);
+  const imgRef = useRef();
+  const [images, setImages] = useState();
+
+  function changeImage(e) {
+    const reader = new FileReader();
+    const img = imgRef.current.files[0];
+    setImages(e.target.files);
+
+    reader.readAsDataURL(img);
+    reader.onloadend = () => {
+      // 화면에 읽힐 수 있는 url로 변경
+      setImageUrl(reader.result);
+    };
+  }
+
+  // 등록 완료 모달 열기
+  async function registDiary() {
+    // 사진
+    let file = imgRef.current.files[0];
+    // console.log(file);
+    let formData = new FormData();
+    formData.append("imageFile", file);
+
+    let info = {
+      kidId: 2, // kidId 변경 필요!!!
+      drawingTitle: title,
+      drawingDiary: diaryInfo.writing,
+      createTime: diaryInfo.date,
+      drawingDiaryWeather: diaryInfo.weather,
+      drawingDiaryFeeling: diaryInfo.feeling,
+      drawingDiaryWakeUp: diaryInfo.getupTime,
+      drawingDiarySleep: diaryInfo.sleepTime,
+    };
+
+    formData.append(
+      "request",
+      new Blob([JSON.stringify(info)], {
+        type: "application/json",
+      })
+    );
+
+    // console.log(info);
+    const response = await http2.post(`/diaries`, formData);
+    console.log("이거야이거");
+    console.log(response.data);
+
+    if (response.data.message == "success") {
+      // 그림분석 api 연동 필요!!!
+    } else {
+    }
     setOpen(true);
-  };
+  }
 
   return (
     <div>
@@ -78,33 +130,68 @@ export default function RegistDiary({}) {
               value={title}
               onChange={(e) => {
                 setTitle(e.target.value);
-                console.log(title);
               }}
             />
           </Grid>
         </Grid>
         <div style={{ marginTop: "10%", marginBottom: "10%", width: "100%", display: "table" }}>
-          <Paper
-            sx={{
-              height: "358px",
-              textAlign: "center",
-              verticalAlign: "middle",
-              display: "table-cell",
-            }}
-          >
-            <AddCircleIcon
+          <div>
+            <form method="post" encType="multipart/form-data">
+              <input
+                id="input"
+                hidden
+                accept="image/*"
+                type="file"
+                ref={imgRef}
+                onChange={(e) => {
+                  changeImage(e);
+                }}
+              />
+            </form>
+          </div>
+          {imageUrl ? (
+            <label htmlFor="input">
+              <img src={imageUrl} width="100%" height="358px" style={{ objectFit: "cover" }} />
+            </label>
+          ) : (
+            <Paper
               sx={{
-                color: "secondary.main",
-                fontSize: "3.5em",
+                width: "100%",
+                height: "358px",
+                textAlign: "center",
+                verticalAlign: "middle",
+                display: "table-cell",
               }}
-            />
-          </Paper>
+            >
+              <label htmlFor="input">
+                <AddCircleIcon
+                  sx={{
+                    color: "secondary.main",
+                    fontSize: "4em",
+                  }}
+                />
+              </label>
+            </Paper>
+          )}
         </div>
-        <div style={{ textAlign: "center" }}>
-          <Button width="45%" onClick={registDiary}>
-            일기 등록
-          </Button>
-        </div>
+        {imageUrl ? (
+          <div style={{ textAlign: "center" }}>
+            {/* 그림 변경 버튼 */}
+            <Button sx={{ marginRight: "5%" }} width="30%">
+              <label htmlFor="input">그림 변경</label>
+            </Button>
+
+            <Button bgcolor="#FFCA28" width="30%" onClick={registDiary}>
+              일기 등록
+            </Button>
+          </div>
+        ) : (
+          <div style={{ textAlign: "center" }}>
+            <Button bgcolor="#FFCA28" width="45%" onClick={registDiary}>
+              일기 등록
+            </Button>
+          </div>
+        )}
       </Container>
       {/* 네비 바 */}
       <NavBar></NavBar>

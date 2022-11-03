@@ -64,7 +64,7 @@ export default function RegistDiary({}) {
   const [clickedFeeling, setClickedFeeling] = useState();
   // 클릭된 날씨
   const [clickedWeather, setClickedWeather] = useState();
-  // 어제 잠 든 시간
+  // 어제 잠든 시간
   const [sleepTime, setSleepTime] = useState("22:00");
   // 오늘 일어난 시간
   const [getupTime, setGetupTime] = useState("08:00");
@@ -82,9 +82,9 @@ export default function RegistDiary({}) {
       copyDiary.dateTitle = title;
       copyDiary.feeling = clickedFeeling;
       copyDiary.weather = clickedWeather;
-
-      copyDiary.sleepTime = new Date(date + " " + sleepTime);
-      copyDiary.getupTime = new Date(date + " " + getupTime);
+      copyDiary.date = date;
+      copyDiary.sleepTime = date + " " + sleepTime;
+      copyDiary.getupTime = date + " " + getupTime;
 
       console.log(copyDiary);
       return { ...copyDiary };
@@ -329,7 +329,7 @@ export default function RegistDiary({}) {
         </StyledPaper>
         {/* 잠든 시간  질문 */}
         <StyledPaper elevation={0}>
-          <StyledTypography>어제 잠 든 시간은 몇 시였어?</StyledTypography>
+          <StyledTypography>어제 잠든 시간은 몇 시였어?</StyledTypography>
           <div style={{ textAlign: "center" }}>
             <TextField
               id="time"
