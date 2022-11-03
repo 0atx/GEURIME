@@ -39,6 +39,12 @@ export default function SelectKids() {
         setKids(response.data.data.kidDtoList);
         setCurrentKid(response.data.data.kidDtoList[0]);
       }
+    } else {
+      const response = await http.get(`/users/${userInfo.userId}`);
+      if (response.data.message === "success") {
+        setUserInfo(response.data.data);
+        setKids(response.data.data.kidDtoList);
+      }
     }
   }
 
