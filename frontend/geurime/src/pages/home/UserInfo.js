@@ -126,7 +126,7 @@ export default function UserInfo() {
     } else {
       setOpenBirth(true);
       return;
-    } 
+    }
   }
 
   // 생년월일 검사 함수
@@ -221,11 +221,11 @@ export default function UserInfo() {
           <Grid
             item
             xs={10}
-            sx={{ fontSize: "2.5vh", marginBottom: "2vh", color: "#6F6F6F" }}
+            sx={{ fontSize: "2.3vh", marginBottom: "2vh", color: "#6F6F6F" }}
           >
             이름
           </Grid>
-          <Grid item xs={10} sx={{ fontSize: "3vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "2.5vh" }}>
             {userInfo.userName}
           </Grid>
         </Grid>
@@ -239,7 +239,7 @@ export default function UserInfo() {
           <Grid
             item
             xs={10}
-            sx={{ fontSize: "2.5vh", marginBottom: "2vh", color: "#6F6F6F" }}
+            sx={{ fontSize: "2.3vh", marginBottom: "2vh", color: "#6F6F6F" }}
           >
             성별
           </Grid>
@@ -256,7 +256,7 @@ export default function UserInfo() {
                   setUserInfo(copy);
                 }}
                 sx={{
-                  fontSize: "3vh",
+                  fontSize: "2.5vh",
                 }}
                 value={
                   userInfo.userGender === "F"
@@ -269,12 +269,12 @@ export default function UserInfo() {
                 <FormControlLabel
                   value="M"
                   control={<Radio />}
-                  label={<Typography variant="h5">남</Typography>}
+                  label={<Typography variant="body">남</Typography>}
                 />
                 <FormControlLabel
                   value="F"
                   control={<Radio />}
-                  label={<Typography variant="h5">여</Typography>}
+                  label={<Typography variant="body">여</Typography>}
                 />
               </RadioGroup>
             </FormControl>
@@ -290,7 +290,7 @@ export default function UserInfo() {
           <Grid
             item
             xs={10}
-            sx={{ fontSize: "2.5vh", marginBottom: "3vh", color: "#6F6F6F" }}
+            sx={{ fontSize: "2.3vh", marginBottom: "3vh", color: "#6F6F6F" }}
           >
             생년월일
           </Grid>
@@ -300,7 +300,7 @@ export default function UserInfo() {
               placeholder="ex) 19970717"
               inputProps={{
                 style: {
-                  fontSize: "3vh",
+                  fontSize: "2.5vh",
                 },
               }}
             />
@@ -316,7 +316,7 @@ export default function UserInfo() {
           <Grid
             item
             xs={10}
-            sx={{ fontSize: "2.5vh", marginBottom: "1vh", color: "#6F6F6F" }}
+            sx={{ fontSize: "2.3vh", marginBottom: "1vh", color: "#6F6F6F" }}
           >
             닉네임
           </Grid>
@@ -326,7 +326,7 @@ export default function UserInfo() {
               inputRef={nickNameInput}
               inputProps={{
                 style: {
-                  fontSize: "3vh",
+                  fontSize: "2.5vh",
                 },
               }}
             />
@@ -343,7 +343,7 @@ export default function UserInfo() {
           <Grid
             item
             xs={10}
-            sx={{ fontSize: "2.5vh", marginBottom: "1vh", color: "#6F6F6F" }}
+            sx={{ fontSize: "2.3vh", marginBottom: "1vh", color: "#6F6F6F" }}
           >
             가족 이름
           </Grid>
@@ -352,7 +352,7 @@ export default function UserInfo() {
               inputRef={familyNameInput}
               inputProps={{
                 style: {
-                  fontSize: "3vh",
+                  fontSize: "2.5vh",
                 },
               }}
             />

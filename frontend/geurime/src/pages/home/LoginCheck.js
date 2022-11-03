@@ -38,7 +38,7 @@ export default function Logincheck() {
     email = new URL(window.location.href).searchParams.get("email");
 
     // 신규 유저 성인
-    if (accessToken && nickname == "") {
+    if (accessToken && nickname === "") {
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("accessTokenExpiration", accessTokenExpiration);
@@ -55,7 +55,7 @@ export default function Logincheck() {
     }
 
     // 나이와 성별이 있으면 기존 유저이므로 main으로
-    if (accessToken && nickname != "") {
+    if (accessToken && nickname !== "") {
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("accessTokenExpiration", accessTokenExpiration);
