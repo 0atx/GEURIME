@@ -8,6 +8,7 @@
 @since 2022.10.28
 */
 
+import axios from "axios";
 import { atom } from "recoil";
 
 export const userState = atom({
@@ -15,7 +16,7 @@ export const userState = atom({
   default: {
     userID: localStorage.getItem("userId"),
     userName: localStorage.getItem("name"),
-    nickName: "",
+    nickname: "",
     email: localStorage.getItem("email"),
     userBirth: "",
     userGender: "",

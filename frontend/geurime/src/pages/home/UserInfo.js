@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+/*
+회원가입 시 유저의 정보를 담는 페이지
+@author 여예원
+@since 2022.11.01
+*/
+
+import React, { useRef, useState } from "react";
 import {
   Avatar,
   Radio,
@@ -22,7 +28,6 @@ import Modal from "components/common/Modal";
 export default function UserInfo() {
   const [imageUrl, setImageUrl] = useState(null);
   const imgRef = useRef();
-  const [images, setImages] = useState();
   const navigator = useNavigate();
   const [userInfo, setUserInfo] = useRecoilState(userState);
 
@@ -41,18 +46,18 @@ export default function UserInfo() {
   // 생년월일
   const birthYearInput = useRef(null);
 
+  // 이미지 미리보기를 위한 함수
   function changeProfile(e) {
     const reader = new FileReader();
     const img = imgRef.current.files[0];
-    setImages(e.target.files);
 
     reader.readAsDataURL(img);
     reader.onloadend = () => {
-      // 화면에 읽힐 수 있는 url로 변경
       setImageUrl(reader.result);
     };
   }
-  // todo: 이미지 파일 더미 수정하기
+
+  // 회원가입 axios 함수
   async function registUser() {
     // 닉네임 검사
     if (nickNameInput.current.value == "") {
@@ -67,9 +72,22 @@ export default function UserInfo() {
     // 생년월일 검사
     if (isBirth(birthYearInput.current.value)) {
       let birth = birthYearInput.current.value;
-      birth = birth.substr(0, 4) + "-" + birth.substr(4, 2) + "-" + birth.substr(6, 2);
-      // todo: isChild 계산하기
-      // axios
+      let inputYear = birth.substr(0, 4);
+      birth =
+        birth.substr(0, 4) +
+        "-" +
+        birth.substr(4, 2) +
+        "-" +
+        birth.substr(6, 2);
+
+      // isChild 계산하기
+      let today = new Date();
+      let isAdult = true;
+      if (Number(today.getFullYear()) - Number(inputYear) > 20) {
+        isAdult = true;
+      } else {
+        isAdult = false;
+      }
 
       // 사진
       let file = imgRef.current.files[0];
@@ -78,10 +96,9 @@ export default function UserInfo() {
       formData.append("imageFile", file);
 
       // 유저정보
-      // todo: nickNname 으로 변경하기
       let user = {
         familyName: familyNameInput.current.value,
-        isChild: true,
+        isChild: isAdult,
         nickname: nickNameInput.current.value,
         userBirth: birth,
         userGender: userInfo.userGender,
@@ -94,12 +111,13 @@ export default function UserInfo() {
         })
       );
 
+      // axios
       const response = await http2.post(`/users/${userInfo.userID}`, formData);
 
       // 성공하면 state에 가족 아이디를 저장
-      if (response.data.message == "success") {
+      if (response.data.message === "success") {
         let copy = { ...userInfo };
-        copy.familyId = response.data.data;
+        copy.familyId = response.data.data.familyId;
         setUserInfo(copy);
         navigator("/registkids");
       } else {
@@ -108,7 +126,7 @@ export default function UserInfo() {
     } else {
       setOpenBirth(true);
       return;
-    }
+    } 
   }
 
   // 생년월일 검사 함수
@@ -135,13 +153,16 @@ export default function UserInfo() {
       } else if (day < 1 || day > 31) {
         // 1일 미만 31일 초과인 경우
         return false;
-      } else if ((month == 4 || month == 6 || month == 9 || month == 11) && day == 31) {
+      } else if (
+        (month === 4 || month === 6 || month === 9 || month === 11) &&
+        day === 31
+      ) {
         // 4, 6, 9, 11월에 31일인경우
         return false;
-      } else if (month == 2) {
+      } else if (month === 2) {
         // 2월일 때 윤년 계산
-        var isleap = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
-        if (day > 29 || (day == 29 && !isleap)) {
+        var isleap = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+        if (day > 29 || (day === 29 && !isleap)) {
           return false;
         } else {
           return true;
@@ -157,7 +178,12 @@ export default function UserInfo() {
     <Grid>
       <BackMenu isLeft="false" title="정보 입력" />
       <Grid id="container2">
-        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "4vh" }}>
+        <Grid
+          container
+          justifyContent="center"
+          textAlign="center"
+          sx={{ marginBottom: "4vh" }}
+        >
           <Grid item xs={3} sx={{ marginBottom: "1vh", textAlign: "center" }}>
             {imageUrl ? (
               <Avatar src={imageUrl} sx={{ width: 100, height: 100 }} />
@@ -166,7 +192,7 @@ export default function UserInfo() {
             )}
           </Grid>
           <Grid item xs={12} sx={{ fontSize: "2vh", color: "#FFA000" }}>
-            <label for="profile">
+            <label htmlFor="profile">
               <div>프로필 사진 변경</div>
             </label>
             <div>
@@ -186,20 +212,38 @@ export default function UserInfo() {
           </Grid>
         </Grid>
         {/* 이름 */}
-        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
-          <Grid item xs={10} sx={{ fontSize: "2.5vh", marginBottom: "2vh", color: "#6F6F6F" }}>
+        <Grid
+          container
+          justifyContent="center"
+          textAlign="center"
+          sx={{ marginBottom: "3vh" }}
+        >
+          <Grid
+            item
+            xs={10}
+            sx={{ fontSize: "2.5vh", marginBottom: "2vh", color: "#6F6F6F" }}
+          >
             이름
           </Grid>
-          <Grid item xs={10} sx={{ fontSize: "2.5vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "3vh" }}>
             {userInfo.userName}
           </Grid>
         </Grid>
         {/* 성별 */}
-        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
-          <Grid item xs={10} sx={{ fontSize: "2.5vh", marginBottom: "2vh", color: "#6F6F6F" }}>
+        <Grid
+          container
+          justifyContent="center"
+          textAlign="center"
+          sx={{ marginBottom: "3vh" }}
+        >
+          <Grid
+            item
+            xs={10}
+            sx={{ fontSize: "2.5vh", marginBottom: "2vh", color: "#6F6F6F" }}
+          >
             성별
           </Grid>
-          <Grid item xs={10} sx={{ fontSize: "2.5vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "3vh" }}>
             <FormControl>
               <RadioGroup
                 row
@@ -212,9 +256,15 @@ export default function UserInfo() {
                   setUserInfo(copy);
                 }}
                 sx={{
-                  fontSize: "2.5vh",
+                  fontSize: "3vh",
                 }}
-                value={userInfo.userGender == "F" ? "F" : userInfo.userGender == "M" ? "M" : null}
+                value={
+                  userInfo.userGender === "F"
+                    ? "F"
+                    : userInfo.userGender === "M"
+                    ? "M"
+                    : null
+                }
               >
                 <FormControlLabel
                   value="M"
@@ -231,25 +281,43 @@ export default function UserInfo() {
           </Grid>
         </Grid>
         {/* 생년월일 */}
-        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "4vh" }}>
-          <Grid item xs={10} sx={{ fontSize: "2.5vh", marginBottom: "3vh", color: "#6F6F6F" }}>
+        <Grid
+          container
+          justifyContent="center"
+          textAlign="center"
+          sx={{ marginBottom: "4vh" }}
+        >
+          <Grid
+            item
+            xs={10}
+            sx={{ fontSize: "2.5vh", marginBottom: "3vh", color: "#6F6F6F" }}
+          >
             생년월일
           </Grid>
-          <Grid item xs={10} sx={{ fontSize: "2.5vh" }} justifyContent="center">
+          <Grid item xs={10} sx={{ fontSize: "3vh" }} justifyContent="center">
             <Input
               inputRef={birthYearInput}
               placeholder="ex) 19970717"
               inputProps={{
                 style: {
-                  fontSize: "2.5vh",
+                  fontSize: "3vh",
                 },
               }}
             />
           </Grid>
         </Grid>
         {/* 닉네임 */}
-        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
-          <Grid item xs={10} sx={{ fontSize: "2.5vh", marginBottom: "1vh", color: "#6F6F6F" }}>
+        <Grid
+          container
+          justifyContent="center"
+          textAlign="center"
+          sx={{ marginBottom: "3vh" }}
+        >
+          <Grid
+            item
+            xs={10}
+            sx={{ fontSize: "2.5vh", marginBottom: "1vh", color: "#6F6F6F" }}
+          >
             닉네임
           </Grid>
           {/* todo: 캘린더 클릭 후 닉네임 바뀌는 것 수정 필요 */}
@@ -258,7 +326,7 @@ export default function UserInfo() {
               inputRef={nickNameInput}
               inputProps={{
                 style: {
-                  fontSize: "2.5vh",
+                  fontSize: "3vh",
                 },
               }}
             />
@@ -266,8 +334,17 @@ export default function UserInfo() {
         </Grid>
 
         {/* 가족이름 */}
-        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
-          <Grid item xs={10} sx={{ fontSize: "2.5vh", marginBottom: "1vh", color: "#6F6F6F" }}>
+        <Grid
+          container
+          justifyContent="center"
+          textAlign="center"
+          sx={{ marginBottom: "3vh" }}
+        >
+          <Grid
+            item
+            xs={10}
+            sx={{ fontSize: "2.5vh", marginBottom: "1vh", color: "#6F6F6F" }}
+          >
             가족 이름
           </Grid>
           <Grid item xs={10}>
@@ -275,7 +352,7 @@ export default function UserInfo() {
               inputRef={familyNameInput}
               inputProps={{
                 style: {
-                  fontSize: "2.5vh",
+                  fontSize: "3vh",
                 },
               }}
             />
