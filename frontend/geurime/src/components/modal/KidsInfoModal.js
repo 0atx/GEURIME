@@ -21,6 +21,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { http2 } from "api/http2";
 import { useRef, useState } from "react";
 import Btn from "components/common/Btn";
+import Modal from "components/common/Modal";
 
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
@@ -31,6 +32,11 @@ export default function KidsInfoModal(props) {
   const kidsNameInput = useRef(null); // 아이이름
   const kidsBirthInput = useRef(null); // 생년월일
   const [kidsGender, setKidsGender] = useState(null); // 성별
+
+  // 모달
+  const [openKidName, setOpenKidName] = useState(false);
+  const [openFail, setOpenFail] = useState(false);
+  const [openBirth, setOpenBirth] = useState(false);
 
   // 프로필
   const [imageUrl, setImageUrl] = useState(null);
@@ -52,7 +58,7 @@ export default function KidsInfoModal(props) {
   async function registKid() {
     // 닉네임 검사
     if (kidsNameInput.current.value == "") {
-      alert("아이 이름을 입력해주세요.");
+      setOpenKidName(true);
       return;
     }
     // 생년월일 검사
@@ -96,12 +102,12 @@ export default function KidsInfoModal(props) {
         setImageUrl("");
         props.setOpen(false);
       } else {
-        alert("아이 등록에 실패하였습니다.");
+        setOpenFail(true);
       }
 
       // axios
     } else {
-      alert("올바른 생년월일을 입력하세요.");
+      setOpenBirth(true);
       return;
     }
   }
@@ -270,6 +276,42 @@ export default function KidsInfoModal(props) {
                 </Btn>
               </Grid>
             </Grid>
+            {/* 아이이름 입력부탁 모달 */}
+            <Modal
+              open={openKidName}
+              close={() => {
+                setOpenKidName(false);
+              }}
+              onClick={() => {
+                setOpenKidName(false);
+              }}
+              text="아이 이름을 입력해주세요!"
+              icon="error"
+            ></Modal>
+            {/* 아이 등록실패 모달 */}
+            <Modal
+              open={openFail}
+              close={() => {
+                setOpenFail(false);
+              }}
+              onClick={() => {
+                setOpenFail(false);
+              }}
+              text="아이 등록에 실패했습니다."
+              icon="error"
+            ></Modal>
+            {/* 올바른 생년월일 입력 부탁 모달 */}
+            <Modal
+              open={openBirth}
+              close={() => {
+                setOpenBirth(false);
+              }}
+              onClick={() => {
+                setOpenBirth(false);
+              }}
+              text="올바른 생년월일을 입력해주세요!"
+              icon="error"
+            ></Modal>
           </Grid>
         </DialogContent>
       </Dialog>
