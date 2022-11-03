@@ -63,7 +63,7 @@ export default function RegistDiary({}) {
     formData.append("imageFile", file);
 
     let info = {
-      kidId: 2, // kidId 변경 필요!!!
+      kidId: 37, // kidId 변경 필요!!!
       drawingTitle: title,
       drawingDiary: diaryInfo.writing,
       createTime: diaryInfo.date,
@@ -80,7 +80,7 @@ export default function RegistDiary({}) {
       })
     );
 
-    // console.log(info);
+    console.log(info);
     const response = await http2.post(`/diaries`, formData);
     console.log("이거야이거");
     console.log(response.data);
@@ -134,46 +134,67 @@ export default function RegistDiary({}) {
             />
           </Grid>
         </Grid>
-        <div style={{ marginTop: "10%", marginBottom: "10%", width: "100%", display: "table" }}>
-          <div>
-            <form method="post" encType="multipart/form-data">
-              <input
-                id="input"
-                hidden
-                accept="image/*"
-                type="file"
-                ref={imgRef}
-                onChange={(e) => {
-                  changeImage(e);
-                }}
-              />
-            </form>
-          </div>
-          {imageUrl ? (
-            <label htmlFor="input">
-              <img src={imageUrl} width="100%" height="358px" style={{ objectFit: "cover" }} />
-            </label>
-          ) : (
-            <Paper
-              sx={{
-                width: "100%",
-                height: "358px",
-                textAlign: "center",
-                verticalAlign: "middle",
-                display: "table-cell",
-              }}
-            >
+        <Grid container justifyContent="center">
+          <Grid
+            item
+            style={{
+              marginTop: "10%",
+              marginBottom: "10%",
+              width: "90vw",
+              height: "90vw",
+              display: "table",
+            }}
+          >
+            <div>
+              <form method="post" encType="multipart/form-data">
+                <input
+                  id="input"
+                  hidden
+                  accept="image/*"
+                  type="file"
+                  ref={imgRef}
+                  onChange={(e) => {
+                    changeImage(e);
+                  }}
+                />
+              </form>
+            </div>
+            {imageUrl ? (
               <label htmlFor="input">
-                <AddCircleIcon
+                <Paper
+                  elevation={0}
                   sx={{
-                    color: "secondary.main",
-                    fontSize: "4em",
+                    width: "100%",
+                    height: "100%",
+                    backgroundImage: `url(${imageUrl})`,
+                    backgroundSize: "contain",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
                   }}
                 />
               </label>
-            </Paper>
-          )}
-        </div>
+            ) : (
+              <Paper
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  textAlign: "center",
+                  verticalAlign: "middle",
+                  display: "table-cell",
+                }}
+              >
+                <label htmlFor="input">
+                  <AddCircleIcon
+                    sx={{
+                      color: "secondary.main",
+                      fontSize: "4em",
+                    }}
+                  />
+                </label>
+              </Paper>
+            )}
+          </Grid>
+        </Grid>
         {imageUrl ? (
           <div style={{ textAlign: "center" }}>
             {/* 그림 변경 버튼 */}

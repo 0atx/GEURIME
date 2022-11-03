@@ -14,7 +14,9 @@ import { atom } from "recoil";
 export const userState = atom({
   key: "user",
   default: {
-    userID: localStorage.getItem("userId"),
+    // userID: localStorage.getItem("userId"),
+    // 테스트용 ID
+    userID: 20,
     userName: localStorage.getItem("name"),
     nickname: "",
     email: localStorage.getItem("email"),
