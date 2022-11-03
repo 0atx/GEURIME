@@ -3,15 +3,24 @@ import { useEffect } from "react";
 import Visibility from '@mui/icons-material/Visibility';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import { fontWeight } from "@mui/system";
+import { Link, useNavigate } from "react-router-dom";
+import DetailBoard from "./DetailBoard";
 
 
-export default function BoardItem({ item }){ 
+
+export default function BoardItem({ item }) { 
+  const navigator = useNavigate();
   // useEffect(() => {
   //   console.log({아이템: item})
   // }, [])
   const time = item.createTime.substring(0, 10);
   return (
+    <Link
+      to={"/detailboard/:item.boardId" }
+      style={{  textDecoration: 'none' }}
+    >
     <Paper
+      
       style={{ margin: '3%', marginBottom: '5%' }}
       variant="outlined"
       sx={{
@@ -19,7 +28,6 @@ export default function BoardItem({ item }){
         borderWidth: 3,
         borderRadius: 3
       }}
-      
     >
       {/* 제목 부분 */}
       <Grid
@@ -87,6 +95,7 @@ export default function BoardItem({ item }){
           
         </Grid>
       </Grid>
-  </Paper>
+      </Paper>
+      </Link>
   )
 }

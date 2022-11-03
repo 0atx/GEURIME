@@ -2,9 +2,10 @@ import { Button, Grid } from "@mui/material";
 import { http2 } from "api/http2";
 import { useRef, useState } from "react";
 import BoardInputItem from "./BoardInputItem";
+import { useNavigate } from "react-router-dom";
 
 export default function RegistBoard() { 
-
+  const navigator = useNavigate();
   const [title, setTitle] = useState();
   const titleRef = useRef();
   const [text, setText] = useState();
@@ -64,7 +65,7 @@ export default function RegistBoard() {
     const response = await http2.post(`/boards`, formData);
     if (response.data.message == "success") {
       console.log('등록 완료!')
-
+      navigator("/Board");
     } else {
       alert("게시글을 등록하지 못했습니다");
       return;

@@ -47,7 +47,7 @@ function Router() {
         <Route path="/registdiary/write" element={<RegistDiaryWrite />} />
         <Route path="/registdiary/drawing" element={<RegistDiaryDrawing />} />
         <Route path="/board" element={<Board />} />
-        <Route path="/detailboard" element={<DetailBoard />} />
+        <Route path="/detailboard/:boardid" element={<DetailBoard />} />
         <Route path="/registboard" element={<RegistBoard />} />
         <Route path="/modifyboard" element={<ModifyBoard />} />
         <Route path="/settings" element={<Settings />} />
