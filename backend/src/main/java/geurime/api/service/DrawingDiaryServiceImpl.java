@@ -100,7 +100,9 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
      */
     @Override
     public Drawing.DrawingDiaryInfoResponse createDrawingDiary(Drawing.DrawingDiaryPostRequest request, MultipartFile imageFile) {
-        DrawingBox drawingBox = getDrawingBox(request.getDrawingBoxId());
+        Kid kid = getKid(request.getKidId());
+        DrawingBox drawingBox = drawingBoxRepository.findByKidAndDrawingBoxCategory(kid, BoxType.일기)
+                .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_BOX_NOT_FOUND_ERROR));
 
         //이미지 업로드 후 반환된 이미지경로
         String drawingImagePath = "";
