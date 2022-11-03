@@ -7,7 +7,7 @@ export default function DetailBoard( ) {
   const [board, setBoard] = useState()
   const navigator = useNavigate();
   useEffect(() => {
-    console.log(rou)
+
     // const response = await http.post(`/boards/${boardid}`);
     // if (response.data.message == "success") {
     //   console.log('등록 완료!')
@@ -21,7 +21,7 @@ export default function DetailBoard( ) {
 
   
   return (
-    <div>{boardid}</div>
+    <div>ㅎㅇ</div>
 //   <Paper
       
 //   style={{ margin: '3%', marginBottom: '5%' }}
