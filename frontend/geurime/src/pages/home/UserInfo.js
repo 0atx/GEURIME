@@ -45,7 +45,6 @@ export default function UserInfo() {
 
     reader.readAsDataURL(img);
     reader.onloadend = () => {
-      // 화면에 읽힐 수 있는 url로 변경
       setImageUrl(reader.result);
     };
   }
@@ -119,7 +118,7 @@ export default function UserInfo() {
     } else {
       alert("올바른 생년월일을 입력하세요.");
       return;
-    }
+    } 
   }
 
   // 생년월일 검사 함수
@@ -218,7 +217,7 @@ export default function UserInfo() {
           >
             이름
           </Grid>
-          <Grid item xs={10} sx={{ fontSize: "2.5vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "3vh" }}>
             {userInfo.userName}
           </Grid>
         </Grid>
@@ -236,7 +235,7 @@ export default function UserInfo() {
           >
             성별
           </Grid>
-          <Grid item xs={10} sx={{ fontSize: "2.5vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "3vh" }}>
             <FormControl>
               <RadioGroup
                 row
@@ -249,7 +248,7 @@ export default function UserInfo() {
                   setUserInfo(copy);
                 }}
                 sx={{
-                  fontSize: "2.5vh",
+                  fontSize: "3vh",
                 }}
                 value={
                   userInfo.userGender === "F"
@@ -287,13 +286,13 @@ export default function UserInfo() {
           >
             생년월일
           </Grid>
-          <Grid item xs={10} sx={{ fontSize: "2.5vh" }} justifyContent="center">
+          <Grid item xs={10} sx={{ fontSize: "3vh" }} justifyContent="center">
             <Input
               inputRef={birthYearInput}
               placeholder="ex) 19970717"
               inputProps={{
                 style: {
-                  fontSize: "2.5vh",
+                  fontSize: "3vh",
                 },
               }}
             />
@@ -319,7 +318,7 @@ export default function UserInfo() {
               inputRef={nickNameInput}
               inputProps={{
                 style: {
-                  fontSize: "2.5vh",
+                  fontSize: "3vh",
                 },
               }}
             />
@@ -345,7 +344,7 @@ export default function UserInfo() {
               inputRef={familyNameInput}
               inputProps={{
                 style: {
-                  fontSize: "2.5vh",
+                  fontSize: "3vh",
                 },
               }}
             />
