@@ -95,10 +95,10 @@ public class Drawing {
         this.drawingBox = drawingBox;
     }
 
-    public void changeDrawingEmotion(float happy, float sad, float angry){
-        this.emotionHappy = happy;
-        this.emotionSad = sad;
-        this.emotionAngry = angry;
+    public void changeDrawingEmotion(float depression, float violence ,float happniess){
+        this.emotionSad = depression;
+        this.emotionAngry = violence;
+        this.emotionHappy = happniess;
     }
 
     /**
