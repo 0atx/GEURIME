@@ -52,7 +52,8 @@ export default function KidsInfoModal(props) {
       setImageUrl(reader.result);
     };
   }
-  // todo: axios 체크하기
+
+  // 자녀 등록 axios
   async function registKid() {
     // 닉네임 검사
     if (kidsNameInput.current.value == "") {
@@ -75,7 +76,6 @@ export default function KidsInfoModal(props) {
       formData.append("imageFile", file);
 
       // 아이 정보 전송
-      //todo: 아이 성별 추가 필요
 
       let kidsInfo = {
         familyId: userInfo.familyId,

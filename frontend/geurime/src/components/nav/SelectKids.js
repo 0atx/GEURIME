@@ -37,7 +37,7 @@ export default function SelectKids() {
       if (response.data.message === "success") {
         setUserInfo(response.data.data);
         setKids(response.data.data.kidDtoList);
-        setCurrentKid(response.data.data.kidDtoList[0]);
+        getKidInfo(response.data.data.kidDtoList[0].kidId);
       }
     } else {
       const response = await http.get(`/users/${userInfo.userId}`);
@@ -56,6 +56,12 @@ export default function SelectKids() {
       getUserInfo();
     }
   }, []);
+
+  // 아이 정보 가져오는 함수
+  async function getKidInfo(kidId) {
+    const response = await http.get(`kids/${kidId}`);
+    setCurrentKid(response.data.data);
+  }
 
   const navigater = useNavigate();
 
@@ -137,7 +143,7 @@ export default function SelectKids() {
                     <MenuItem
                       key={i}
                       onClick={() => {
-                        setCurrentKid(kid);
+                        getKidInfo(kid.kidId);
                         handleClose();
                       }}
                     >

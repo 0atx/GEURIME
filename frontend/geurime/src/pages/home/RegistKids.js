@@ -38,8 +38,7 @@ export default function RegistKids() {
 
   // 회원 정보 등록 완료
   function registUser() {
-    // state에 기본으로 1개가 들어가 있음
-    if (userInfo.kidDtoList.length == 0) {
+    if (userInfo.kidDtoList.length === 0) {
       setOpenKids(true);
     } else {
       setOpenSuccess(true);
