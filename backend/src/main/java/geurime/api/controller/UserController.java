@@ -3,6 +3,7 @@ package geurime.api.controller;
 import geurime.api.dto.common.BasicResponse;
 import geurime.api.service.UserServiceImpl;
 import geurime.database.entity.User;
+import geurime.exception.CustomException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -25,50 +26,74 @@ public class UserController {
     @GetMapping("/{userId}")
     @ApiOperation(value = "유저 정보 조회", notes = "유저 Id 정보를 받아 유저와 유저의 가족, 자녀 정보를 조회한다")
     public ResponseEntity<BasicResponse<User.UserInfoResponse>> readUserInfo(@PathVariable("userId") Long userId) {
-        User.UserInfoResponse response = userService.readUserInfo(userId);
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
+        try {
+            User.UserInfoResponse response = userService.readUserInfo(userId);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
+        } catch (CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/nickname")
     @ApiOperation(value = "유저 닉네임 중복체크", notes = "닉네임을 받아 중복된 닉네임이 있는지 조회한다")
     public ResponseEntity<BasicResponse<Boolean>> nicknameCheck(@RequestParam("nickname") String nickname) {
-        Boolean isExist = userService.checkNicknameExist(nickname);
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, isExist), HttpStatus.OK);
+        try {
+            Boolean isExist = userService.checkNicknameExist(nickname);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, isExist), HttpStatus.OK);
+        } catch (CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping(value = "/{userId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "유저 회원가입", notes = "유저와 가족이름, 자녀 정보를 받아 새로운 가족을 만들어 등록하고 가족 id를 반환한다.")
     public ResponseEntity<BasicResponse<User.UserInfoResponse>> createUserInfo(@PathVariable("userId") Long userId, @RequestPart(value = "request") User.UserSignUpRequest request,
                                                               @RequestPart(value = "imageFile", required = false)  MultipartFile imageFile) {
-        User.UserInfoResponse response = userService.createNewUser(userId, request, imageFile);
-        if(response == null){
-            return new ResponseEntity<>(makeBasicResponse("중복된 닉네임입니다.", null), HttpStatus.NOT_ACCEPTABLE);
-        }
+        try {
+            User.UserInfoResponse response = userService.createNewUser(userId, request, imageFile);
+            if(response == null){
+                return new ResponseEntity<>(makeBasicResponse("중복된 닉네임입니다.", null), HttpStatus.NOT_ACCEPTABLE);
+            }
 
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.CREATED);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.CREATED);
+        } catch (CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping(value = "/invite-code/{userId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "초대된 유저 회원가입", notes = "유저와 가족 초대코드를 받아 등록한다")
     public ResponseEntity<BasicResponse<User.UserInfoResponse>> createInviteUserInfo(@PathVariable("userId") Long userId, @RequestPart(value = "request") User.UserInviteSignUpRequest request,
                                                                     @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
-        User.UserInfoResponse response = userService.createInvitedUser(userId, request, imageFile);
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.CREATED);
+        try {
+            User.UserInfoResponse response = userService.createInvitedUser(userId, request, imageFile);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.CREATED);
+        } catch (CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping(value = "/{userId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "유저 회원정보 수정", notes = "유저의 정보를 수정한다")
     public ResponseEntity<BasicResponse<User.UserInfoResponse>> updateUserInfo(@PathVariable("userId") Long userId, @RequestPart(value = "request") User.UserInfoUpdateRequest request,
                                                               @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
-        User.UserInfoResponse response = userService.updateUserInfo(userId, request, imageFile);
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.CREATED);
+        try {
+            User.UserInfoResponse response = userService.updateUserInfo(userId, request, imageFile);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.CREATED);
+        } catch (CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/{userId}")
     @ApiOperation(value = "유저 회원탈퇴", notes = "유저id를 받아 회원탈퇴를 진행한다")
     public ResponseEntity<BasicResponse<Long>> deleteUserInfo(@PathVariable("userId") Long userId) {
-        userService.deleteUser(userId);
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, userId), HttpStatus.CREATED);
+        try {
+            userService.deleteUser(userId);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, userId), HttpStatus.CREATED);
+        } catch (CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**
