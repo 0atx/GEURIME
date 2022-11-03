@@ -56,9 +56,11 @@ public class AuthController {
         String refreshTokenExpiration = jwtService.dateToString(token.getRefreshToken());
 
         String nickname = user.getNickname() == null ? "" : user.getNickname();
+        
+//        String uri = "http://localhost:3000/logincheck";
+        String uri = "https://k7a506.p.ssafy.io/logincheck";
 
-        response.sendRedirect(UriComponentsBuilder.fromUriString("http://localhost:3000/logincheck")
-                // response.sendRedirect(UriComponentsBuilder.fromUriString("https://k7a506.p.ssafy.io/logincheck")
+        response.sendRedirect(UriComponentsBuilder.fromUriString(uri)
                 .queryParam("accessToken", token.getAccessToken())
                 .queryParam("refreshToken", token.getRefreshToken())
                 .queryParam("accessTokenExpiration", accessTokenExpiration)
