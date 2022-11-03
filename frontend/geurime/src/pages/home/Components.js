@@ -4,7 +4,7 @@
 @since 2022.10.25
 */
 import { Container } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Button from "components/common/Btn.js";
 import NavBar from "components/nav/NavBar";
@@ -25,9 +25,9 @@ export default function Components() {
       <h2>버튼</h2>
       <Button>버튼</Button>
       <h2>BackMenu(상단에 있음)</h2>
-      <BackMenu isLeft={true} title="타이틀적는곳" isRight="오른쪽"></BackMenu>
+      {/* <BackMenu isLeft={true} title="타이틀적는곳" isRight="오른쪽"></BackMenu> */}
       <h2>SelectKids (상단에 있음)</h2>
-      {/* <SelectKids></SelectKids> */}
+      <SelectKids></SelectKids>
       <h2>Navbar(하단에 있음)</h2>
       <NavBar></NavBar>
     </div>

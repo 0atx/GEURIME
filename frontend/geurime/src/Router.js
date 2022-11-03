@@ -11,15 +11,17 @@ import ModifyDetailGallery from "pages/gallery/ModifyDetailGallery";
 import RegistDrawing from "pages/drawing/RegistDrawing";
 import Diary from "pages/diary/Diary";
 import DetailDiary from "pages/diary/DetailDiary";
-import RegistDiary from "pages/diary/Registdiary";
+import RegistDiaryQuestion from "pages/diary/RegistDiaryQuestion";
+import RegistDiaryWrite from "pages/diary/RegistDiaryWrite";
+import RegistDiaryDrawing from "pages/diary/RegistDiaryDrawing";
 import Board from "pages/board/Board";
 import DetailBoard from "pages/board/DetailBoard";
 import RegistBoard from "pages/board/RegistBoard";
 import ModifyBoard from "pages/board/ModifyBoard";
-import MyPage from "pages/myPage/MyPage";
-import ResetPass from "pages/myPage/ResetPass";
-import ModifyKidsInfo from "pages/myPage/ModifyKidsInfo";
-import ModifyUserInfo from "pages/myPage/ModifyUserInfo";
+import Settings from "pages/settings/Settings";
+import ResetPass from "pages/settings/ResetPass";
+import ModifyKidsInfo from "pages/settings/ModifyKidsInfo";
+import ModifyUserInfo from "pages/settings/ModifyUserInfo";
 import LoginCheck from "pages/home/LoginCheck";
 import Components from "pages/home/Components";
 
@@ -40,13 +42,15 @@ function Router() {
         <Route path="/modifydetailgallery" element={<ModifyDetailGallery />} />
         <Route path="/registdrawing" element={<RegistDrawing />} />
         <Route path="/diary" element={<Diary />} />
-        <Route path="/detaildiary" element={<DetailDiary />} />
-        <Route path="/registdiary" element={<RegistDiary />} />
+        <Route path="/detaildiary/:diaryid" element={<DetailDiary />} />
+        <Route path="/registdiary/question" element={<RegistDiaryQuestion />} />
+        <Route path="/registdiary/write" element={<RegistDiaryWrite />} />
+        <Route path="/registdiary/drawing" element={<RegistDiaryDrawing />} />
         <Route path="/board" element={<Board />} />
-        <Route path="/detailboard" element={<DetailBoard />} />
+        <Route path="/detailboard/:boardid" element={<DetailBoard />} />
         <Route path="/registboard" element={<RegistBoard />} />
         <Route path="/modifyboard" element={<ModifyBoard />} />
-        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/settings" element={<Settings />} />
         <Route path="/resetpass" element={<ResetPass />} />
         <Route path="/modifykidsinfo" element={<ModifyKidsInfo />} />
         <Route path="/modifyuserinfo" element={<ModifyUserInfo />} />
