@@ -193,6 +193,17 @@ public class Board {
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime updateTime;
         private String commentContent;
+
+        @Builder
+        public BoardCommentDto(Long commentId, Long commentUserId, String commentUserProfile, String commentUserNickname, LocalDateTime createTime, LocalDateTime updateTime, String commentContent) {
+            this.commentId = commentId;
+            this.commentUserId = commentUserId;
+            this.commentUserProfile = commentUserProfile;
+            this.commentUserNickname = commentUserNickname;
+            this.createTime = createTime;
+            this.updateTime = updateTime;
+            this.commentContent = commentContent;
+        }
     }
 
 }

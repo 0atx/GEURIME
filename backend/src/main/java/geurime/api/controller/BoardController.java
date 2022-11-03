@@ -3,6 +3,8 @@ package geurime.api.controller;
 import geurime.api.dto.common.BasicResponse;
 import geurime.api.service.BoardServiceImpl;
 import geurime.database.entity.Board;
+import geurime.exception.CustomException;
+import geurime.exception.CustomExceptionList;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -51,9 +53,12 @@ public class BoardController {
     @GetMapping("/{boardId}")
     @ApiOperation(value = "게시글 상세조회", notes = "게시글의 조회수를 1 올리고 상세 정보를 불러온다.")
     public ResponseEntity<BasicResponse<Board.BoardInfoResponse>> readBoardDetail(@PathVariable("boardId") Long boardId) {
-        Board.BoardInfoResponse response = boardService.readBoardDetail(boardId);
-
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
+        try {
+            Board.BoardInfoResponse response = boardService.readBoardDetail(boardId);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
+        } catch (CustomException e){
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.OK);
+        }
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
