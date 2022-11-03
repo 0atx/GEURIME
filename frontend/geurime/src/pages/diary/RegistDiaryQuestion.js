@@ -82,9 +82,9 @@ export default function RegistDiary({}) {
       copyDiary.dateTitle = title;
       copyDiary.feeling = clickedFeeling;
       copyDiary.weather = clickedWeather;
-
-      copyDiary.sleepTime = new Date(date + " " + sleepTime);
-      copyDiary.getupTime = new Date(date + " " + getupTime);
+      copyDiary.date = date;
+      copyDiary.sleepTime = date + " " + sleepTime;
+      copyDiary.getupTime = date + " " + getupTime;
 
       console.log(copyDiary);
       return { ...copyDiary };

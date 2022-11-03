@@ -9,6 +9,7 @@ import { atom } from "recoil";
 export const diaryState = atom({
   key: "diary",
   default: {
+    date: "", // 일기 날짜 (ex. 2022-11-01)
     dateTitle: "", // 일기 날짜 타이틀 (ex. 11월 1일 일기)
     feeling: null, // 기분
     weather: null, // 날씨
