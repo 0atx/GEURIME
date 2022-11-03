@@ -20,25 +20,41 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
+import { CurrentKidState } from "states/CurrentKidState";
 import { http } from "api/http";
 
-export default function SelectKids(props) {
+export default function SelectKids() {
   const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [currentKid, setCurrentKid] = useRecoilState(CurrentKidState);
 
   // 아이 목록 담는 변수
   const [kids, setKids] = useState([]);
 
   // 처음 로딩시 유저정보 가져오기
   async function getUserInfo() {
-    const response = await http.get(`/users/${userInfo.userID}`);
-    if (response.data.message === "success") {
-      setUserInfo(response.data.data);
-      setKids(response.data.data.kidDtoList);
+    if (currentKid.kidId === 0) {
+      const response = await http.get(`/users/${userInfo.userId}`);
+      if (response.data.message === "success") {
+        setUserInfo(response.data.data);
+        setKids(response.data.data.kidDtoList);
+        setCurrentKid(response.data.data.kidDtoList[0]);
+      }
+    } else {
+      const response = await http.get(`/users/${userInfo.userId}`);
+      if (response.data.message === "success") {
+        setUserInfo(response.data.data);
+        setKids(response.data.data.kidDtoList);
+      }
     }
   }
 
+  const mounted = useRef(false);
   useEffect(() => {
-    getUserInfo();
+    if (!mounted.current) {
+      mounted.current = true;
+    } else {
+      getUserInfo();
+    }
   }, []);
 
   const navigater = useNavigate();
@@ -84,9 +100,9 @@ export default function SelectKids(props) {
               >
                 {/* 상단바 */}
                 <Grid item xs={3} sx={{ marginLeft: "20px" }}>
-                  {props.clicked.kidProfileImage !== "" ? (
+                  {currentKid.kidProfileImage !== "" ? (
                     <Avatar
-                      src={props.clicked.kidProfileImage}
+                      src={currentKid.kidProfileImage}
                       sx={{ marginRight: "10px" }}
                     />
                   ) : (
@@ -96,7 +112,7 @@ export default function SelectKids(props) {
                     />
                   )}
                 </Grid>
-                {props.clicked.kidName}
+                {currentKid.kidName}
                 <KeyboardArrowDownIcon />
               </Grid>
               {/* 클릭 후 보이는 메뉴 */}
@@ -121,7 +137,7 @@ export default function SelectKids(props) {
                     <MenuItem
                       key={i}
                       onClick={() => {
-                        props.setClicked(kid);
+                        setCurrentKid(kid);
                         handleClose();
                       }}
                     >
