@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //이미지 업로드 후 반환된 이미지경로 db에 저장
-        if(!profileImage.isEmpty()){
+        if(profileImage != null && !profileImage.isEmpty()){
             String userProfileImage = s3Uploader.uploadAndGetUrl(profileImage);
             user.updateProfileImage(userProfileImage);
         }else{
@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
 
         user.inviteSingUpUpdate(request);
         //이미지 업로드 후 반환된 이미지경로 db에 저장
-        if(!profileImage.isEmpty()){
+        if(profileImage != null && !profileImage.isEmpty()){
             String userProfileImage = s3Uploader.uploadAndGetUrl(profileImage);
             user.updateProfileImage(userProfileImage);
         }else{

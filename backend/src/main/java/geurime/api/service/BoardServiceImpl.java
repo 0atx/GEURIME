@@ -199,13 +199,18 @@ public class BoardServiceImpl implements BoardService {
 
         boardRepository.save(board);
 
-        String imagePath = s3Uploader.uploadAndGetUrl(imageFile);
-        BoardImage boardImage = BoardImage.builder()
-                .boardImagePath(imagePath)
-                .board(board)
-                .build();
+        BoardImage boardImage = null;
 
-        boardImageRepository.save(boardImage);
+        //이미지가 있는 경우
+        if(imageFile != null && !imageFile.isEmpty()){
+            String imagePath = s3Uploader.uploadAndGetUrl(imageFile);
+            boardImage = BoardImage.builder()
+                    .boardImagePath(imagePath)
+                    .board(board)
+                    .build();
+
+            boardImageRepository.save(boardImage);
+        }
 
         Board.BoardInfoResponse response = modelMapper.map(board, Board.BoardInfoResponse.class);
 
@@ -216,7 +221,9 @@ public class BoardServiceImpl implements BoardService {
 
         //이미지
         List<String> stringImageList = new ArrayList<>();
-        stringImageList.add(boardImage.getBoardImagePath());
+        if(boardImage != null){
+            stringImageList.add(boardImage.getBoardImagePath());
+        }
 
         response.setBoardImagePathList(stringImageList);
 
@@ -231,7 +238,26 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new CustomException(CustomExceptionList.BOARD_NOT_FOUND_ERROR));
         board.updateBoard(request);
 
+        BoardImage boardImage = null;
+
+        //이미지가 있는 경우
+        if(imageFile != null && !imageFile.isEmpty()){
+            String imagePath = s3Uploader.uploadAndGetUrl(imageFile);
+            boardImage = BoardImage.builder()
+                    .boardImagePath(imagePath)
+                    .board(board)
+                    .build();
+
+            boardImageRepository.save(boardImage);
+        }
+        //이미지
+        List<String> stringImageList = new ArrayList<>();
+        if(boardImage != null){
+            stringImageList.add(boardImage.getBoardImagePath());
+        }
+
         Board.BoardInfoResponse response = modelMapper.map(board, Board.BoardInfoResponse.class);
+        response.setBoardImagePathList(stringImageList);
 
         return response;
     }
