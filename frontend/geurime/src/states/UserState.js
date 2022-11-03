@@ -8,7 +8,6 @@
 @since 2022.10.28
 */
 
-import axios from "axios";
 import { atom } from "recoil";
 
 export const userState = atom({
@@ -21,7 +20,6 @@ export const userState = atom({
     userBirth: "",
     userGender: "",
     userProfileImage: "",
-
     inviteCode: "",
     familyId: "",
     familyName: "",
