@@ -20,12 +20,17 @@ import { useRecoilValue } from "recoil";
 import { userState } from "states/UserState";
 import KidsInfoModal from "components/modal/KidsInfoModal";
 import { useNavigate } from "react-router-dom";
+import Modal from "components/common/Modal";
 
 export default function RegistKids() {
   const navigator = useNavigate();
 
   const [open, setOpen] = useState(false); // 아이 등록 모달 관리 변수
   const userInfo = useRecoilValue(userState);
+
+  // 모달
+  const [openKids, setOpenKids] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
 
   function addKids() {
     setOpen(true);
@@ -34,11 +39,10 @@ export default function RegistKids() {
   // 회원 정보 등록 완료
   function registUser() {
     // state에 기본으로 1개가 들어가 있음
-    if (userInfo.kidDtoList.length === 0) {
-      alert("자녀를 한 명 이상 등록해주세요.");
+    if (userInfo.kidDtoList.length == 0) {
+      setOpenKids(true);
     } else {
-      alert("회원 가입이 완료되었습니다.");
-      navigator("/main");
+      setOpenSuccess(true);
     }
   }
 
@@ -106,6 +110,31 @@ export default function RegistKids() {
           </Btn>
         </Grid>
       </Grid>
+      {/* 자녀 한 명이상 부탁 모달 */}
+      <Modal
+        open={openKids}
+        close={() => {
+          setOpenKids(false);
+        }}
+        onClick={() => {
+          setOpenKids(false);
+        }}
+        text="자녀를 한 명이상 등록해주세요!"
+        icon="error"
+      ></Modal>
+      {/* 회원가입 완료 모달 */}
+      {/* 닉네임 입력부탁 모달 */}
+      <Modal
+        open={openSuccess}
+        close={() => {
+          setOpenSuccess(false);
+        }}
+        onClick={() => {
+          navigator("/main");
+        }}
+        text="회원가입이 완료되었습니다😀"
+        icon="ok"
+      ></Modal>
     </Grid>
   );
 }
