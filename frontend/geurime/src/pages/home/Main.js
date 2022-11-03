@@ -6,10 +6,21 @@ import NavBar from "components/nav/NavBar";
 import SelectKids from "components/nav/SelectKids";
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
+import { CurrentKidState } from "states/CurrentKidState";
 import { http } from "api/http";
 
 export default function Main() {
+  // 유저 state
   const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [currentKid, setCurrentKid] = useRecoilState(CurrentKidState);
+
+  // 클릭된 아이
+  const [clicked, setClicked] = useState({
+    kidId: "",
+    kidName: "",
+    kidProfileImage: "",
+    kidBirth: "",
+  });
 
   // 처음 로딩시 유저정보 가져오기
   async function getUserInfo() {
@@ -21,25 +32,29 @@ export default function Main() {
     }
   }
 
-  const mounted = useRef(false);
   useEffect(() => {
-    if (!mounted.current) {
-      mounted.current = true;
-    } else {
-      getUserInfo();
-    }
+    getUserInfo();
   }, []);
+
+  // 선택된 아이가 바뀔때마다 아이의 정보를 state에 담기
+  async function getKidInfo() {
+    const response = await http.get(`kids/${clicked.kidId}`);
+    if (response.data.message === "success") {
+      setCurrentKid(response.data.data);
+    }
+  }
+
+  const mounted1 = useRef(false);
+  useEffect(() => {
+    if (!mounted1.current) {
+      mounted1.current = true;
+    } else {
+      getKidInfo();
+    }
+  }, [clicked]);
 
   const [imgList, setImgList] = useState([0, 1, 2, 3, 4]);
   const navigator = useNavigate();
-
-  // 클릭된 아이
-  const [clicked, setClicked] = useState({
-    kidId: "",
-    kidName: "",
-    kidProfileImage: "",
-    kidBirth: "",
-  });
 
   return (
     <div>

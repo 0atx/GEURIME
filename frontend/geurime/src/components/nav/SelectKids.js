@@ -9,19 +9,11 @@ import {
   Box,
   Toolbar,
   Avatar,
-  List,
-  ListItemButton,
-  ListItemText,
-  Collapse,
-  ListItemAvatar,
   Grid,
   IconButton,
-  Typography,
   Menu,
   MenuItem,
 } from "@mui/material";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -33,26 +25,20 @@ import { http } from "api/http";
 export default function SelectKids(props) {
   const [userInfo, setUserInfo] = useRecoilState(userState);
 
+  // 아이 목록 담는 변수
   const [kids, setKids] = useState([]);
 
   // 처음 로딩시 유저정보 가져오기
   async function getUserInfo() {
     const response = await http.get(`/users/${userInfo.userID}`);
-    console.log(response.data);
-    if (response.data.message == "success") {
+    if (response.data.message === "success") {
       setUserInfo(response.data.data);
       setKids(response.data.data.kidDtoList);
     }
-    console.log(kids);
   }
 
-  const mounted = useRef(false);
   useEffect(() => {
-    if (!mounted.current) {
-      mounted.current = true;
-    } else {
-      getUserInfo();
-    }
+    getUserInfo();
   }, []);
 
   const navigater = useNavigate();
@@ -64,12 +50,6 @@ export default function SelectKids(props) {
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const [open, setOpen] = useState(false);
-
-  const handleClick = () => {
-    setOpen(!open);
   };
 
   return (
@@ -104,7 +84,7 @@ export default function SelectKids(props) {
               >
                 {/* 상단바 */}
                 <Grid item xs={3} sx={{ marginLeft: "20px" }}>
-                  {props.clicked.kidProfileImage != "" ? (
+                  {props.clicked.kidProfileImage !== "" ? (
                     <Avatar
                       src={props.clicked.kidProfileImage}
                       sx={{ marginRight: "10px" }}
@@ -145,7 +125,7 @@ export default function SelectKids(props) {
                         handleClose();
                       }}
                     >
-                      {kid.kidProfileImage != "" ? (
+                      {kid.kidProfileImage !== "" ? (
                         <Avatar
                           src={kid.kidProfileImage}
                           sx={{ marginRight: "10px" }}

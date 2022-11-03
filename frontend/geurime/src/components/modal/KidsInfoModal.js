@@ -35,13 +35,11 @@ export default function KidsInfoModal(props) {
   // 프로필
   const [imageUrl, setImageUrl] = useState(null);
   const imgRef = useRef();
-  const [images, setImages] = useState();
 
   // 프로필 미리보기
   function changeProfile(e) {
     const reader = new FileReader();
     const img = imgRef.current.files[0];
-    setImages(e.target.files);
 
     reader.readAsDataURL(img);
     reader.onloadend = () => {
@@ -51,7 +49,7 @@ export default function KidsInfoModal(props) {
   // todo: axios 체크하기
   async function registKid() {
     // 닉네임 검사
-    if (kidsNameInput.current.value == "") {
+    if (kidsNameInput.current.value === "") {
       alert("아이 이름을 입력해주세요.");
       return;
     }
@@ -74,16 +72,12 @@ export default function KidsInfoModal(props) {
 
       // 아이 정보 전송
       //todo: 아이 성별 추가 필요
-      console.log("여여기기");
-      console.log(userInfo.familyId);
 
       let kidsInfo = {
         familyId: userInfo.familyId,
         kidBirth: birth,
         kidName: kidsNameInput.current.value,
       };
-
-      console.log(kidsInfo);
 
       formData.append(
         "request",
@@ -92,14 +86,16 @@ export default function KidsInfoModal(props) {
 
       const response = await http2.post(`/kids`, formData);
 
-      // 등록 성공 하면 userInfo 의 kids 배열 업데이트
-      // todo: response로 온 이미지url 넣기
-      if (response.data.message == "success") {
+      let kidInfo = response.data.data;
+
+      if (response.data.message === "success") {
         let copy = { ...userInfo };
         let copyKid = [...userInfo.kidDtoList];
         copyKid.push({
-          kidBirth: birth,
+          kidBirth: kidInfo.kidBirth,
+          kidProfileImage: kidInfo.kidProfileImage,
           kidName: kidsNameInput.current.value,
+          kidid: kidInfo.kidId,
         });
         copy.kidDtoList = copyKid;
         setUserInfo(copy);
@@ -141,15 +137,15 @@ export default function KidsInfoModal(props) {
         // 1일 미만 31일 초과인 경우
         return false;
       } else if (
-        (month == 4 || month == 6 || month == 9 || month == 11) &&
-        day == 31
+        (month === 4 || month === 6 || month === 9 || month === 11) &&
+        day === 31
       ) {
         // 4, 6, 9, 11월에 31일인경우
         return false;
-      } else if (month == 2) {
+      } else if (month === 2) {
         // 2월일 때 윤년 계산
-        var isleap = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
-        if (day > 29 || (day == 29 && !isleap)) {
+        var isleap = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+        if (day > 29 || (day === 29 && !isleap)) {
           return false;
         } else {
           return true;

@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+/*
+회원가입 시 유저의 정보를 담는 페이지
+@author 여예원
+@since 2022.11.01
+*/
+
+import React, { useRef, useState } from "react";
 import {
   Avatar,
   Radio,
@@ -16,12 +22,10 @@ import BackMenu from "components/nav/BackMenu";
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
 import { http2 } from "api/http2";
-import axios from "axios";
 
 export default function UserInfo() {
   const [imageUrl, setImageUrl] = useState(null);
   const imgRef = useRef();
-  const [images, setImages] = useState();
   const navigator = useNavigate();
   const [userInfo, setUserInfo] = useRecoilState(userState);
 
@@ -34,10 +38,10 @@ export default function UserInfo() {
   // 생년월일
   const birthYearInput = useRef(null);
 
+  // 이미지 미리보기를 위한 함수
   function changeProfile(e) {
     const reader = new FileReader();
     const img = imgRef.current.files[0];
-    setImages(e.target.files);
 
     reader.readAsDataURL(img);
     reader.onloadend = () => {
@@ -45,29 +49,38 @@ export default function UserInfo() {
       setImageUrl(reader.result);
     };
   }
-  // todo: 이미지 파일 더미 수정하기
+
+  // 회원가입 axios 함수
   async function registUser() {
     // 닉네임 검사
-    if (nickNameInput.current.value == "") {
+    if (nickNameInput.current.value === "") {
       alert("닉네임을 입력해주세요.");
       return;
     }
     // 가족이름 검사
-    if (familyNameInput.current.value == "") {
+    if (familyNameInput.current.value === "") {
       alert("가족이름을 입력해주세요.");
       return;
     }
     // 생년월일 검사
     if (isBirth(birthYearInput.current.value)) {
       let birth = birthYearInput.current.value;
+      let inputYear = birth.substr(0, 4);
       birth =
         birth.substr(0, 4) +
         "-" +
         birth.substr(4, 2) +
         "-" +
         birth.substr(6, 2);
-      // todo: isChild 계산하기
-      // axios
+
+      // isChild 계산하기
+      let today = new Date();
+      let isAdult = true;
+      if (Number(today.getFullYear()) - Number(inputYear) > 20) {
+        isAdult = true;
+      } else {
+        isAdult = false;
+      }
 
       // 사진
       let file = imgRef.current.files[0];
@@ -76,10 +89,9 @@ export default function UserInfo() {
       formData.append("imageFile", file);
 
       // 유저정보
-      // todo: nickNname 으로 변경하기
       let user = {
         familyName: familyNameInput.current.value,
-        isChild: true,
+        isChild: isAdult,
         nickname: nickNameInput.current.value,
         userBirth: birth,
         userGender: userInfo.userGender,
@@ -92,10 +104,11 @@ export default function UserInfo() {
         })
       );
 
+      // axios
       const response = await http2.post(`/users/${userInfo.userID}`, formData);
 
       // 성공하면 state에 가족 아이디를 저장
-      if (response.data.message == "success") {
+      if (response.data.message === "success") {
         let copy = { ...userInfo };
         copy.familyId = response.data.data.familyId;
         setUserInfo(copy);
@@ -134,15 +147,15 @@ export default function UserInfo() {
         // 1일 미만 31일 초과인 경우
         return false;
       } else if (
-        (month == 4 || month == 6 || month == 9 || month == 11) &&
-        day == 31
+        (month === 4 || month === 6 || month === 9 || month === 11) &&
+        day === 31
       ) {
         // 4, 6, 9, 11월에 31일인경우
         return false;
-      } else if (month == 2) {
+      } else if (month === 2) {
         // 2월일 때 윤년 계산
-        var isleap = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
-        if (day > 29 || (day == 29 && !isleap)) {
+        var isleap = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+        if (day > 29 || (day === 29 && !isleap)) {
           return false;
         } else {
           return true;
@@ -172,7 +185,7 @@ export default function UserInfo() {
             )}
           </Grid>
           <Grid item xs={12} sx={{ fontSize: "2vh", color: "#FFA000" }}>
-            <label for="profile">
+            <label htmlFor="profile">
               <div>프로필 사진 변경</div>
             </label>
             <div>
@@ -239,9 +252,9 @@ export default function UserInfo() {
                   fontSize: "2.5vh",
                 }}
                 value={
-                  userInfo.userGender == "F"
+                  userInfo.userGender === "F"
                     ? "F"
-                    : userInfo.userGender == "M"
+                    : userInfo.userGender === "M"
                     ? "M"
                     : null
                 }
