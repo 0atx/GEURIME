@@ -101,7 +101,23 @@ public class BoardServiceImpl implements BoardService {
 
         //댓글
         List<Comment> commentList = board.getCommentList();
-        List<Board.BoardCommentDto> boardCommentDtoList = mapList(commentList, Board.BoardCommentDto.class);
+        List<Board.BoardCommentDto> boardCommentDtoList = new ArrayList<>(commentList.size());
+
+        for (Comment comment : commentList){
+            User commentUser = userRepository.findById(comment.getCommentUserId())
+                    .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
+
+            Board.BoardCommentDto commentDto = Board.BoardCommentDto.builder()
+                    .commentId(comment.getId())
+                    .commentUserId(comment.getCommentUserId())
+                    .commentUserProfile(commentUser.getUserProfileImage())
+                    .commentUserNickname(commentUser.getNickname())
+                    .createTime(comment.getCreateTime())
+                    .updateTime(comment.getUpdateTime())
+                    .commentContent(comment.getCommentContent())
+                    .build();
+            boardCommentDtoList.add(commentDto);
+        }
         boardInfoResponse.setBoardCommentDtoList(boardCommentDtoList);
 
         return boardInfoResponse;
