@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +80,19 @@ public class DrawingServiceImpl implements DrawingService {
 
         //조회하는 자녀의 아이디가 일치하면
         if(drawingBox.getKid().getId() == kidId){
-            return mapList(drawingBox.getDrawingList(), Drawing.DrawingGalleryResponse.class);
+            List<Drawing> drawingList = drawingBox.getDrawingList();
+            List<Drawing.DrawingGalleryResponse> responseList = new ArrayList<>(drawingList.size());
+
+            //DTO에 매핑
+            for (Drawing drawing : drawingList){
+                Drawing.DrawingGalleryResponse response = new Drawing.DrawingGalleryResponse();
+                response.setDrawingId(drawing.getId());
+                response.setDrawingImagePath(drawing.getDrawingImagePath());
+
+                responseList.add(response);
+            }
+
+            return responseList;
         }
 
         //불일치하면 빈 list 반환
@@ -108,7 +121,7 @@ public class DrawingServiceImpl implements DrawingService {
                 .drawingBox(drawingBox)
                 .drawingTitle(request.getDrawingTitle())
                 .drawingImagePath(drawingImagePath)
-                .createTime(LocalDateTime.now())
+                .createTime(LocalDate.now())
                 .isDiary(false)
                 .isLike(false)
                 .build();

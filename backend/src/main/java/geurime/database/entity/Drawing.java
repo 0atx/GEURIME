@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class Drawing {
     private Long id;
 
     @Column(name = "create_time")
-    private LocalDateTime createTime;
+    private LocalDate createTime;
 
     @Column(name = "drawing_title", nullable = false, length = 40)
     private String drawingTitle;
@@ -67,7 +68,7 @@ public class Drawing {
     private LocalDateTime drawingDiarySleep;
 
     @Builder
-    public Drawing(Long id, LocalDateTime createTime, String drawingTitle, Float emotionHappy, Float emotionSad, Float emotionAngry, String drawingImagePath, Boolean isLike, Boolean isDiary, String drawingDiary, DrawingBox drawingBox, Integer drawingDiaryWeather, Integer drawingDiaryFeeling, LocalDateTime drawingDiaryWakeUp, LocalDateTime drawingDiarySleep) {
+    public Drawing(Long id, LocalDate createTime, String drawingTitle, Float emotionHappy, Float emotionSad, Float emotionAngry, String drawingImagePath, Boolean isLike, Boolean isDiary, String drawingDiary, DrawingBox drawingBox, Integer drawingDiaryWeather, Integer drawingDiaryFeeling, LocalDateTime drawingDiaryWakeUp, LocalDateTime drawingDiarySleep) {
         this.id = id;
         this.createTime = createTime;
         this.drawingTitle = drawingTitle;
@@ -110,8 +111,8 @@ public class Drawing {
     public static class DrawingInfoResponse{
         private Long drawingId;
         private Long drawingBoxId;
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        private LocalDateTime createTime;
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDate createTime;
         private String drawingTitle;
         private Float emotionHappy;
         private Float emotionSad;
@@ -245,6 +246,7 @@ public class Drawing {
         private Long kidId;
         private String drawingTitle;
         private String drawingDiary;
+        private String createTime;
         private Integer drawingDiaryWeather;
         private Integer drawingDiaryFeeling;
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -261,8 +263,8 @@ public class Drawing {
     @NoArgsConstructor
     public static class DrawingDiaryInfoResponse{
         private Long drawingId;
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-        private LocalDateTime createTime;
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDate createTime;
         private String drawingTitle;
         private Float emotionHappy;
         private Float emotionSad;
@@ -284,8 +286,8 @@ public class Drawing {
     @NoArgsConstructor
     public static class DrawingDiaryListResponse{
         private Long drawingId;
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-        private LocalDateTime createTime;
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDate createTime;
         private String drawingTitle;
         private String drawingImagePath;
     }

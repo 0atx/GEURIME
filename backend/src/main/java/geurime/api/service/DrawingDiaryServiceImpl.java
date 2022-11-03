@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -113,7 +114,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
         Drawing drawing = Drawing.builder()
                 .drawingBox(drawingBox)
                 .drawingImagePath(drawingImagePath)
-                .createTime(LocalDateTime.now())
+                .createTime(LocalDate.parse(request.getCreateTime(), DateTimeFormatter.ISO_DATE))
                 .drawingTitle(request.getDrawingTitle())
                 .drawingDiary(request.getDrawingDiary())
                 .drawingDiaryWeather(request.getDrawingDiaryWeather())
