@@ -31,6 +31,10 @@ dependencies {
     // Fast API REST 서비스 호출
     implementation group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.15'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+    //Fast Api web client
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '2.7.5'
+    // json
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
 
     // 소셜 로그인 관련 설정
@@ -48,6 +52,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 }
 
 tasks.named('test') {
