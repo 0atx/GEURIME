@@ -11,11 +11,7 @@ export default function DetailBoard( ) {
   const [commentDtoList, setCommentDtoList] = useState([
     { 'commentId': 1, 'commentUserId': 20, 'commentUserProfile': 'https://geurime-a506.s3.ap-northeast-2.amazonaws.c…86a5a%5Chome%5Cubuntu%5Cstatic%5CsunnyClicked.png', 'commentUserNickname': '해안', 'createTime': '2022-11-03 14:41:00', 'updateTime': null },
     { 'commentId': 2, 'commentUserId': 20, 'commentUserProfile': 'https://geurime-a506.s3.ap-northeast-2.amazonaws.c…86a5a%5Chome%5Cubuntu%5Cstatic%5CsunnyClicked.png', 'commentUserNickname': '해안', 'createTime': '2022-11-03 14:41:01', 'updateTime': null}
-    ])
-  const [commentDtoList2, setCommentDtoList2] = useState([
-    { commentId: 1, commentUserId: 20, commentUserProfile: 'https://geurime-a506.s3.ap-northeast-2.amazonaws.c…86a5a%5Chome%5Cubuntu%5Cstatic%5CsunnyClicked.png', commentUserNickname: '해안', createTime: '2022-11-03 14:41:00', updateTime: null },
-    { commentId: 2, commentUserId: 20, commentUserProfile: 'https://geurime-a506.s3.ap-northeast-2.amazonaws.c…86a5a%5Chome%5Cubuntu%5Cstatic%5CsunnyClicked.png', commentUserNickname: '해안', createTime: '2022-11-03 14:41:01', updateTime: null}
-    ])
+    ])  
   const [board, setBoard] = useState({
     boardCategory: "자유",
     boardCommentDtoList: [],
@@ -43,10 +39,23 @@ export default function DetailBoard( ) {
       alert("게시글을 불러오지 못했습니다");
     }
   }
+  // const [initialized, setInitialized] = useState(false);
 
+  // useEffect(() => {
+  //   if (initialized) return;
+  //   getDetail();
+  //   setInitialized(true);
+  // }, [initialized]);
+  let [check, setCheck] = useState(false);
   useEffect(() => { 
-    getDetail();
-  }, [])
+    if (check == false){
+      setCheck(true)
+    }
+    else{
+      getDetail();
+    }
+
+  }, [check])
   useEffect(() => {
     console.log({ 보드아이템: commentDtoList })
   }, [board])
@@ -82,38 +91,40 @@ export default function DetailBoard( ) {
       <Grid
         container
         direction='row'
-
         sx={{ justifyContent: 'space-between' }}
       >
-      <Grid
-        item
-        sx={{marginLeft: '5%', marginTop: '2.5%'}}
-        >
-            작성자 : {board.writerNickname}
+        <Grid
+          item
+          sx={{marginLeft: '5%', marginTop: '2%'}}
+          >
+              작성자 : {board.writerNickname}
         </Grid>
         
         <Grid
-          container
-          direction='row'
+          item
+          xs={3.5}
+          sx={{marginRight: '2%', marginTop: '2%'}}
         >
           <Grid
-            
-                sx={{marginRight: '10%'}}
-              >
-              <Visibility fontSize="8"/>
-                  {board.boardViews}
-              </Grid>
-          <Grid
-            
+          container
+          direction='row'
           >
-              <QuestionAnswerOutlinedIcon fontSize="8" />
-                {board.boardCommentDtoList.length}
+              <Grid
+                    sx={{marginRight: '10%'}}
+                  >
+                  <Visibility fontSize="8"/>
+                      {board.boardViews}
+              </Grid> 
+              <Grid>
+                  <QuestionAnswerOutlinedIcon fontSize="8" />
+                    {board.boardCommentDtoList.length}
+              </Grid>
           </Grid>
         </Grid>
-    </Grid>
+      </Grid>
       <Paper
           variant="outlined"
-          sx={{  borderBlockColor: '#FFE082', borderRadius: 2, borderColor: '#FFE082', borderWidth: 2.5,  height: '18vh', width:'90%',marginLeft:'5%'}}
+          sx={{ marginTop:'3%', borderBlockColor: '#FFE082', borderRadius: 2, borderColor: '#FFE082', borderWidth: 2.5,  height: '18vh', width:'94%',marginLeft:'3%'}}
       >
         <Grid sx={{marginTop:'2.5%', marginLeft: '3%'}}>{board.boardContent}</Grid>
           
@@ -138,15 +149,9 @@ export default function DetailBoard( ) {
       {/* 댓글 */}
       <Grid
       >
-        {/* {JSON.stringify(board.boardCommentDtoList)} */}
-        {/* {commentDtoList.map((store, idx) => {
-          return <CommentInputItem key={idx} item={store}/>;
-        })} */}
-        {JSON.stringify(commentDtoList2)}
-
-      {/* {board.boardCommentDtoList?.map((store, idx) => {
+      {board.boardCommentDtoList?.map((store, idx) => {
         return <CommentInputItem key={idx} item={store}/>;
-      })} */}
+      })}
     </Grid>
 </Grid>
   )
