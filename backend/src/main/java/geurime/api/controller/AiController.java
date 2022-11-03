@@ -2,12 +2,10 @@ package geurime.api.controller;
 
 import geurime.api.dto.common.BasicResponse;
 import geurime.api.service.AiPredictServiceImpl;
-import geurime.database.entity.Drawing;
 import geurime.exception.CustomException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
