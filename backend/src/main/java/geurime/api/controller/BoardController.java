@@ -28,26 +28,35 @@ public class BoardController {
     @GetMapping
     @ApiOperation(value = "게시글 리스트 조회", notes = "페이지 번호 page와 한번에 받아올 사이즈 size를 받아 게시글 목록을 반환한다.")
     public ResponseEntity<BasicResponse<List<Board.BoardTitleResponse>>> readBoardTitle(@RequestParam Integer page, @RequestParam Integer size) {
-        List<Board.BoardTitleResponse> responseSlice = boardService.readAllTitle(page, size);
-
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseSlice), HttpStatus.OK);
+        try{
+            List<Board.BoardTitleResponse> responseSlice = boardService.readAllTitle(page, size);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseSlice), HttpStatus.OK);
+        }catch (CustomException e){
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/category")
     @ApiOperation(value = "게시글 분류조회", notes = "게시글 카테고리와 페이지 번호 page와 한번에 받아올 사이즈 size를 받아 게시글 목록을 반환한다.")
     public ResponseEntity<BasicResponse<List<Board.BoardTitleResponse>>> readBoardByCategory(@RequestParam Integer page, @RequestParam Integer size, @RequestParam String category) {
-        List<Board.BoardTitleResponse> responseList = boardService.readTitleByCategory(page, size, category);
-
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseList), HttpStatus.OK);
+        try{
+            List<Board.BoardTitleResponse> responseList = boardService.readTitleByCategory(page, size, category);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseList), HttpStatus.OK);
+        }catch (CustomException e){
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/search")
     @ApiOperation(value = "게시글 검색조회", notes = "게시글 카테고리와 검색어, 페이지 번호 page와 한번에 받아올 사이즈 size를 받아 게시글 목록을 반환한다.")
     public ResponseEntity<BasicResponse<List<Board.BoardTitleResponse>>> readBoardBySearch
             (@RequestParam Integer page, @RequestParam Integer size, @RequestParam String category, @RequestParam String keyword) {
-        List<Board.BoardTitleResponse> responseList = boardService.readTitleBySearch(page, size, category, keyword);
-
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseList), HttpStatus.OK);
+        try{
+            List<Board.BoardTitleResponse> responseList = boardService.readTitleBySearch(page, size, category, keyword);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseList), HttpStatus.OK);
+        }catch(CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{boardId}")
@@ -57,7 +66,7 @@ public class BoardController {
             Board.BoardInfoResponse response = boardService.readBoardDetail(boardId);
             return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
         } catch (CustomException e){
-            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.OK);
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -65,9 +74,12 @@ public class BoardController {
     @ApiOperation(value = "게시글 등록", notes = "등록 정보를 받아 게시글을 등록한다")
     public ResponseEntity<BasicResponse<Board.BoardInfoResponse>> createBoard(@RequestPart(value = "request") Board.BoardPostRequest request,
                                                            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
-        Board.BoardInfoResponse response = boardService.createBoard(request, imageFile);
-
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.CREATED);
+        try{
+            Board.BoardInfoResponse response = boardService.createBoard(request, imageFile);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.CREATED);
+        }catch (CustomException e){
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping
@@ -75,17 +87,24 @@ public class BoardController {
     public ResponseEntity<BasicResponse<Board.BoardInfoResponse>> updateBoard(@RequestPart(value = "request") Board.BoardPutRequest request,
                                                            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
 
-        Board.BoardInfoResponse response = boardService.updateBoard(request, imageFile);
-
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
+        try{
+            Board.BoardInfoResponse response = boardService.updateBoard(request, imageFile);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
+        }catch (CustomException e){
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping
     @ApiOperation(value = "게시글 삭제", notes = "삭제하고자 하는 유저의 id를 비교하고 글작성자와 일치하면 삭제 후 true를 반환한다.")
     public ResponseEntity<BasicResponse<Boolean>> deleteBoard(@RequestParam Long userId, @RequestParam Long boardId) {
-        Boolean isDelete = boardService.deleteBoard(userId, boardId);
 
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, isDelete), HttpStatus.OK);
+        try{
+            Boolean isDelete = boardService.deleteBoard(userId, boardId);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, isDelete), HttpStatus.OK);
+        }catch (CustomException e){
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
 

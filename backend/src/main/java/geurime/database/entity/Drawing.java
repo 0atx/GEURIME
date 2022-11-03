@@ -270,6 +270,7 @@ public class Drawing {
         private Float emotionSad;
         private Float emotionAngry;
         private String drawingImagePath;
+        private String drawingDiary;
         private Integer drawingDiaryWeather;
         private Integer drawingDiaryFeeling;
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
