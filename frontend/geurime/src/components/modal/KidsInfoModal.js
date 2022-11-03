@@ -62,8 +62,6 @@ export default function KidsInfoModal(props) {
         birth.substr(4, 2) +
         "-" +
         birth.substr(6, 2);
-      console.log(userInfo.familyId);
-      console.log(imgRef.current.files[0]);
 
       // 파일 전송
       let file = imgRef.current.files[0];
