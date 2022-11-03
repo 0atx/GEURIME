@@ -111,11 +111,16 @@ export default function RegistDrawing() {
               </form>
             </div>
             {imageUrl ? (
-              <img
-                src={imageUrl}
-                width="100%"
-                height="100%"
-                style={{ objectFit: "cover" }}
+              <Paper
+                elevation={0}
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  backgroundImage: `url(${imageUrl})`,
+                  backgroundSize: "contain",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center",
+                }}
               />
             ) : (
               <Paper
