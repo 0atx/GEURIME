@@ -22,12 +22,20 @@ import BackMenu from "components/nav/BackMenu";
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
 import { http2 } from "api/http2";
+import axios from "axios";
+import Modal from "components/common/Modal";
 
 export default function UserInfo() {
   const [imageUrl, setImageUrl] = useState(null);
   const imgRef = useRef();
   const navigator = useNavigate();
   const [userInfo, setUserInfo] = useRecoilState(userState);
+
+  // 모달
+  const [openNick, setOpenNick] = useState(false);
+  const [openFam, setOpenFam] = useState(false);
+  const [openFail, setOpenFail] = useState(false);
+  const [openBirth, setOpenBirth] = useState(false);
 
   // 닉네임
   const nickNameInput = useRef(null);
@@ -52,13 +60,13 @@ export default function UserInfo() {
   // 회원가입 axios 함수
   async function registUser() {
     // 닉네임 검사
-    if (nickNameInput.current.value === "") {
-      alert("닉네임을 입력해주세요.");
+    if (nickNameInput.current.value == "") {
+      setOpenNick(true);
       return;
     }
     // 가족이름 검사
-    if (familyNameInput.current.value === "") {
-      alert("가족이름을 입력해주세요.");
+    if (familyNameInput.current.value == "") {
+      setOpenFam(true);
       return;
     }
     // 생년월일 검사
@@ -113,10 +121,10 @@ export default function UserInfo() {
         setUserInfo(copy);
         navigator("/registkids");
       } else {
-        alert("회원 정보 등록에 실패했습니다. 다시 입력해주세요.");
+        setOpenFail(true);
       }
     } else {
-      alert("올바른 생년월일을 입력하세요.");
+      setOpenBirth(true);
       return;
     } 
   }
@@ -361,6 +369,54 @@ export default function UserInfo() {
           </Btn>
         </Grid>
       </Grid>
+      {/* 닉네임 입력부탁 모달 */}
+      <Modal
+        open={openNick}
+        close={() => {
+          setOpenNick(false);
+        }}
+        onClick={() => {
+          setOpenNick(false);
+        }}
+        text="닉네임을 입력해주세요!"
+        icon="error"
+      ></Modal>
+      {/* 가족이름 입력부탁 모달 */}
+      <Modal
+        open={openFam}
+        close={() => {
+          setOpenFam(false);
+        }}
+        onClick={() => {
+          setOpenFam(false);
+        }}
+        text="가족이름을 입력해주세요!"
+        icon="error"
+      ></Modal>
+      {/* 회원정보 등록 실패 모달 */}
+      <Modal
+        open={openFail}
+        close={() => {
+          setOpenFail(false);
+        }}
+        onClick={() => {
+          setOpenFail(false);
+        }}
+        text="회원정보 등록에 실패했습니다. 다시 입력해주세요!"
+        icon="error"
+      ></Modal>
+      {/* 생년월일 입력부탁 모달 */}
+      <Modal
+        open={openBirth}
+        close={() => {
+          setOpenBirth(false);
+        }}
+        onClick={() => {
+          setOpenBirth(false);
+        }}
+        text="올바른 생년월일을 입력해주세요!"
+        icon="error"
+      ></Modal>
     </Grid>
   );
 }
