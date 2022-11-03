@@ -242,7 +242,7 @@ public class Drawing {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class DrawingDiaryPostRequest{
-        private Long drawingBoxId;
+        private Long kidId;
         private String drawingTitle;
         private String drawingDiary;
         private Integer drawingDiaryWeather;
