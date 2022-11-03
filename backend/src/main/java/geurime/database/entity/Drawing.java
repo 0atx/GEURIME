@@ -290,6 +290,14 @@ public class Drawing {
         private LocalDate createTime;
         private String drawingTitle;
         private String drawingImagePath;
+
+        @Builder
+        public DrawingDiaryListResponse(Long drawingId, LocalDate createTime, String drawingTitle, String drawingImagePath) {
+            this.drawingId = drawingId;
+            this.createTime = createTime;
+            this.drawingTitle = drawingTitle;
+            this.drawingImagePath = drawingImagePath;
+        }
     }
 
 }
