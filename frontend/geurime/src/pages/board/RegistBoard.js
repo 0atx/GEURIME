@@ -1,12 +1,14 @@
 import { Button, Grid } from "@mui/material";
-import { http } from "api/http";
+import { http2 } from "api/http2";
 import { useRef, useState } from "react";
 import BoardInputItem from "./BoardInputItem";
 
 export default function RegistBoard() { 
 
   const [title, setTitle] = useState();
+  const titleRef = useRef();
   const [text, setText] = useState();
+  const textRef = useRef();
   const boardCategories = [
     // {
     //   value: 'USD',
@@ -37,33 +39,39 @@ export default function RegistBoard() {
     setBoardCategory(event.target.value);
   };
 
+  // 게시글 등록 함수
   const regist = async () => {
-    // setTitle(event.target.value);
-    console.log('등록중')
-    console.log({카테고리: boardCategory})
-    console.log({제목: title })
-    console.log({ 내용: text })
-    console.log({이미지url: imgRef.current.files[0]})
-    const response = await http.post(`/boards`, {
-      request: {
-        userId: 1,
-        boardTitle: title,
-        boardContent: text,
-        boardCategory: boardCategory,
-      },
-      imageFile: {
-        imageFile: imgRef.current.files[0]
-      },
+    
+    let formData = new FormData();
+    formData.append("imageFile", imgRef.current.files[0]);
+    
 
-    });
-    // console.log({전체게시글: response.data });
+    // 유저 아이디 리코일에서 가져오게 해야됨
+    let request = {
+      userId: 1,
 
+      boardTitle: titleRef.current.value,
+      boardContent: textRef.current.value,
+      boardCategory: boardCategory,
+    };
+    formData.append(
+      "request",
+      new Blob([JSON.stringify(request)], {
+        type: "application/json",
+      })
+    );
+    // 엑시오스 요청
+    const response = await http2.post(`/boards`, formData);
     if (response.data.message == "success") {
+      console.log('등록 완료!')
 
     } else {
       alert("게시글을 등록하지 못했습니다");
+      return;
     }
-  };
+    console.log({ref: textRef.current.value})
+  }
+  
 
   function changeProfile(e) {
     const reader = new FileReader();
@@ -77,7 +85,6 @@ export default function RegistBoard() {
     };
   }
 
-
   return (
     <Grid
     id='container'
@@ -87,21 +94,23 @@ export default function RegistBoard() {
     >
       <BoardInputItem
         titleChange={titleChange}
+        textChange={textChange}
         handleChange={handleChange}
         boardCategory={boardCategory}
         boardCategories={boardCategories}
-        textChange={textChange}
         changeProfile={changeProfile}
         imgRef={imgRef}
         imageUrl={imageUrl}
+        textRef={textRef}
+        titleRef={titleRef}
       ></BoardInputItem>
       <Grid>
         <Button
         variant="contained"
           sx={{ width: '40vw', borderRadius: 5 }}
-          onClick={regist}
+          onClick={() => { regist(); }}
         >게시글 등록</Button>
       </Grid>
     </Grid>
     )
-}
+};

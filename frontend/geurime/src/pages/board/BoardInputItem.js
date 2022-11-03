@@ -7,7 +7,7 @@ import { fontWeight } from "@mui/system";
 import MenuItem from '@mui/material/MenuItem';
 
 
-export default function BoardInputItem({titleChange, handleChange, boardCategory, boardCategories, textChange, changeProfile, imgRef, imageUrl}) { 
+export default function BoardInputItem({handleChange, boardCategory, boardCategories, changeProfile, imgRef, textRef, titleRef, imageUrl}) { 
   // const [title, setTitle] = useState();
 
 
@@ -127,7 +127,7 @@ export default function BoardInputItem({titleChange, handleChange, boardCategory
               sx={{ width: '31vh' }}
               variant="standard"
               placeholder="제목을 입력하세요"
-              onChange={titleChange}
+              inputRef={titleRef}
             />
         </Grid>
       </Grid>
@@ -152,8 +152,8 @@ export default function BoardInputItem({titleChange, handleChange, boardCategory
               multiline
               minRows={5}
               maxRows={5}
+              inputRef={textRef}
               sx={{ width: '85vw', borderBlockColor: '#FFE082', borderRadius: 10, borderColor: '#FFE082' }}
-              onChange={textChange}
             />
       </Grid>
       </Grid>
