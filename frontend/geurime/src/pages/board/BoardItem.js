@@ -16,7 +16,7 @@ export default function BoardItem({ item }) {
   const time = item.createTime.substring(0, 10);
   return (
     <Link
-      to={"/detailboard/:item.boardId" }
+      to={"/detailboard/" + item.boardId}
       style={{  textDecoration: 'none' }}
     >
     <Paper

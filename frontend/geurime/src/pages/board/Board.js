@@ -17,46 +17,37 @@ import BackMenu from 'components/nav/BackMenu';
 import { http } from "api/http";
 
 export default function Board() { 
-  const [test, setTest] = useState();
+  const [boards, setBoards] = useState([{
+    "boardCategory": "질문",
+    "boardFirstImage": "https://en.pimg.jp/031/716/685/1/31716685.jpg",
+    "boardId": 0,
+    "boardTitle": "1번글",
+    "boardViews": 0,
+    "commentCount": 0,
+    "createTime": "2022-10-28T06:37:58.611Z",
+    "updateTime": "2022-10-28T06:37:58.611Z",
+    "userId": 0,
+    "userNickname": "1번유저",
+    "userProfileImage": "string"
+  },{
+    "boardCategory": "질문",
+    "boardFirstImage": "https://en.pimg.jp/031/716/685/1/31716685.jpg",
+    "boardId": 0,
+    "boardTitle": "1번글",
+    "boardViews": 0,
+    "commentCount": 0,
+    "createTime": "2022-10-28T06:37:58.611Z",
+    "updateTime": "2022-10-28T06:37:58.611Z",
+    "userId": 0,
+    "userNickname": "1번유저",
+    "userProfileImage": "string"
+  }]);
   const [list, setList] = useState('');
   const [searchKeyWord, setSearchKeyWord] = useState();
   const searchInput = useRef(null); // 검색바 input 객체
   const handleChange = (event) => {
     setList(event.target.value);
   };
-
-  useEffect(() => {
-    setTest(  [{
-      "boardCategory": "질문",
-      "boardFirstImage": "https://en.pimg.jp/031/716/685/1/31716685.jpg",
-      "boardId": 0,
-      "boardTitle": "1번글",
-      "boardViews": 0,
-      "commentCount": 0,
-      "createTime": "2022-10-28T06:37:58.611Z",
-      "updateTime": "2022-10-28T06:37:58.611Z",
-      "userId": 0,
-      "userNickname": "1번유저",
-      "userProfileImage": "string"
-    },
-    {
-      "boardCategory": "질문",
-      "boardFirstImage": "https://en.pimg.jp/031/716/685/1/31716685.jpg",
-      "boardId": 1,
-      "boardTitle": "2번글",
-      "boardViews": 0,
-      "commentCount": 0,
-      "createTime": "2022-10-28T06:37:58.611Z",
-      "updateTime": "2022-10-28T06:37:58.611Z",
-      "userId": 0,
-      "userNickname": "2번유저",
-      "userProfileImage": "string"
-    }])
-  },[])
-  useEffect(() => {
-    console.log({테스트: test})
-  }, [test])
-
 
   // const getData = async () => {
   //   const response = await axios.get(
@@ -68,13 +59,13 @@ export default function Board() {
     const response = await http.get(`/boards`, {
       params: {
         page: 0,
-        size: 2
+        size: 10
       }
     });
     console.log({전체게시글: response.data });
 
     if (response.data.message == "success") {
-
+      setBoards(response.data.data)
     } else {
       alert("게시글을 불러오지 못했습니다");
     }
@@ -192,14 +183,11 @@ export default function Board() {
         </Grid>
       </Grid>
 
-    {/* <div>
-      <h1>{test[0].boardTitle}</h1>
-    </div> */}
       </Grid>
       <Grid
         height={'25%'}
       >
-      {test?.map((store, idx) => {
+      {boards?.map((store, idx) => {
         return <BoardItem key={idx} item={store}/>;
       })}
     </Grid>
