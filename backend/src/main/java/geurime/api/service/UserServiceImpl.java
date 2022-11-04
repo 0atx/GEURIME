@@ -163,6 +163,10 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
+        Family family = familyRepository.findById(user.getFamily().getId())
+                .orElseThrow(() -> new CustomException(CustomExceptionList.FAMILY_NOT_FOUND_ERROR));
+        family.changeName(request.getFamilyName());
+
         user.updateUserInfo(request);
         //이미지 업로드 후 반환된 이미지경로 db에 저장
         if(imageFile != null && !imageFile.isEmpty()){
