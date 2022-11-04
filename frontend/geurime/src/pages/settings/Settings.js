@@ -15,10 +15,13 @@ import WorkIcon from "@mui/icons-material/Work";
 import BeachAccessIcon from "@mui/icons-material/BeachAccess";
 import { useState } from "react";
 import DeleteUserModal from "components/modal/DeleteUserModal";
+import InviteFamilyModal from "components/modal/InviteFamillyModal";
 
 export default function Settings() {
   // 탈퇴 모달
   const [openDeleteUser, setOpenDeleteUser] = useState(false);
+  // 초대 모달
+  const [openInvite, setOpenInvite] = useState(false);
 
   return (
     <div>
@@ -44,7 +47,11 @@ export default function Settings() {
             <ListItemText primary="자녀 프로필 변경" />
           </ListItemButton>
           <Divider />
-          <ListItemButton>
+          <ListItemButton
+            onClick={() => {
+              setOpenInvite(true);
+            }}
+          >
             <ListItemAvatar>
               <Avatar>
                 <BeachAccessIcon />
@@ -76,6 +83,13 @@ export default function Settings() {
           setOpenDeleteUser(false);
         }}
       ></DeleteUserModal>
+      {/* 초대 모달 */}
+      <InviteFamilyModal
+        open={openInvite}
+        close={() => {
+          setOpenInvite(false);
+        }}
+      ></InviteFamilyModal>
     </div>
   );
 }
