@@ -29,38 +29,7 @@ export default function Diary() {
   const searchInput = useRef(null); // 검색바 input 객체
 
   // 일기 목록 - 실제 데이터로 변경 필요!!!
-  const [diaries, setDiaries] = useState([
-    // {
-    //   id: 1,
-    //   date: "2022-10-20",
-    //   image: "assets/sample/0.png",
-    //   title: "에버랜드 간 날",
-    // },
-    // {
-    //   id: 2,
-    //   date: "2022-10-21",
-    //   image: "assets/sample/1.png",
-    //   title: "롯데월드 간 날",
-    // },
-    // {
-    //   id: 3,
-    //   date: "2022-10-22",
-    //   image: "assets/sample/2.png",
-    //   title: "서울랜드 간 날",
-    // },
-    // {
-    //   id: 4,
-    //   date: "2022-10-23",
-    //   image: "assets/sample/3.png",
-    //   title: "한강 간 날",
-    // },
-    // {
-    //   id: 5,
-    //   date: "2022-10-24",
-    //   image: "assets/sample/4.png",
-    //   title: "설악산 간 날",
-    // },
-  ]);
+  const [diaries, setDiaries] = useState([]);
 
   const mounted = useRef(false);
   useEffect(() => {
@@ -178,15 +147,29 @@ export default function Diary() {
                           objectFit: "cover",
                         }}
                       ></img>
-                      <Typography
-                        sx={{
-                          textAlign: "center",
-                          fontFamily: "THEHongChawangjanemo",
-                          fontSize: "2.5vh",
-                        }}
-                      >
-                        {diary.drawingTitle}
-                      </Typography>
+                      {diary.drawingTitle.length >= 9 ? (
+                        <Typography
+                          sx={{
+                            textAlign: "center",
+                            fontFamily: "THEHongChawangjanemo",
+                            fontSize: "2.5vh",
+                            lineHeight: "3vh",
+                          }}
+                        >
+                          {diary.drawingTitle.substr(0, 9)}...
+                        </Typography>
+                      ) : (
+                        <Typography
+                          sx={{
+                            textAlign: "center",
+                            fontFamily: "THEHongChawangjanemo",
+                            fontSize: "2.5vh",
+                            lineHeight: "3vh",
+                          }}
+                        >
+                          {diary.drawingTitle}
+                        </Typography>
+                      )}
                       <Typography
                         sx={{
                           textAlign: "center",
