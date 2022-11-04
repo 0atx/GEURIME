@@ -59,6 +59,10 @@ public class Family {
         return sb.toString();
     }
 
+    public void changeName(String familyName){
+        this.familyName = familyName;
+    }
+
     public void setInviteCode(String inviteCode){
         this.inviteCode = inviteCode;
     }

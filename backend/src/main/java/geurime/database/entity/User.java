@@ -167,6 +167,7 @@ public class User {
         private String nickname;
         private String userBirth;
         private String userGender;
+        private String familyName;
     }
 
     /**
