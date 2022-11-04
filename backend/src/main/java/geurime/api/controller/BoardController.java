@@ -26,7 +26,7 @@ public class BoardController {
     static final String SUCCESS = "success";
 
     @GetMapping
-    @ApiOperation(value = "게시글 리스트 조회", notes = "페이지 번호 page와 한번에 받아올 사이즈 size를 받아 게시글 목록을 반환한다.")
+    @ApiOperation(value = "게시글 리스트 조회", notes = "페이지 번호 page와 한번에 받아올 사이즈 size를 받아 전체 게시글 목록을 반환한다.")
     public ResponseEntity<BasicResponse<List<Board.BoardTitleResponse>>> readBoardTitle(@RequestParam Integer page, @RequestParam Integer size) {
         try{
             List<Board.BoardTitleResponse> responseSlice = boardService.readAllTitle(page, size);
@@ -37,7 +37,7 @@ public class BoardController {
     }
 
     @GetMapping("/category")
-    @ApiOperation(value = "게시글 분류조회", notes = "게시글 카테고리와 페이지 번호 page와 한번에 받아올 사이즈 size를 받아 게시글 목록을 반환한다.")
+    @ApiOperation(value = "게시글 분류조회", notes = "게시글 카테고리와 페이지 번호 page와 한번에 받아올 사이즈 size를 받아 분류된 게시글 목록을 반환한다.")
     public ResponseEntity<BasicResponse<List<Board.BoardTitleResponse>>> readBoardByCategory(@RequestParam Integer page, @RequestParam Integer size, @RequestParam String category) {
         try{
             List<Board.BoardTitleResponse> responseList = boardService.readTitleByCategory(page, size, category);
