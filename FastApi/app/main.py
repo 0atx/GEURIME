@@ -12,12 +12,17 @@ class Data(BaseModel):
 
 app = FastAPI()
 
-@app.get("/ai/")
-async def root():
-    return {"message": "Hello World"}
+@app.get("/ai",  response_model=Data)
+async def query(url: str):
+    labels = ['depression', 'violence', 'happiness']
+    prediction = predict(url)
+    data = {}
+    for i in range(3):
+        data[f'{labels[i]}'] = prediction[i]
+    return data
 
-@app.post("/ai/predict/",  response_model=Data)
-async def root(image: Image):
+@app.post("/ai/predict",  response_model=Data)
+async def predict(image: Image):
     labels = ['depression', 'violence', 'happiness']
     prediction = predict(image.url)
     data = {}
