@@ -12,7 +12,7 @@ def predict(url):
     labels = ['depression', 'violence', 'happiness']
 
     web_image = imageio.imread(url)
-    web_image = web_image[:,:,:3]
+    web_image = cv2.cvtColor(web_image, cv2.COLOR_RGBA2RGB)
     web_image = cv2.resize(web_image, dsize=train_input_shape[0:2], )
     # web_image = image.img_to_array(web_image)
     web_image = tf.keras.preprocessing.image.img_to_array(web_image)
