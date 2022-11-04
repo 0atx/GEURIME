@@ -58,7 +58,7 @@ export default function BackMenu({ type, isLeft, title, clickTitle, isRight, cli
             </Grid>
             {/* isRight */}
             <Grid item sx={{ fontSize: "1.8vh", textAlign: "center" }} xs={2}>
-              <span
+              <div
                 style={{
                   color: "#ffa000",
                 }}
@@ -66,7 +66,7 @@ export default function BackMenu({ type, isLeft, title, clickTitle, isRight, cli
               >
                 {isRight}
                 {type === "registKids" && <AddIcon></AddIcon>}
-              </span>
+              </div>
             </Grid>
           </Grid>
         </Toolbar>
