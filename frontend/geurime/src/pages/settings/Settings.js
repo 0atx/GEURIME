@@ -20,8 +20,16 @@ import invite from "assets/icon/settings/settings_invite.png";
 import kids from "assets/icon/settings/settings_kids.png";
 import resign from "assets/icon/settings/settings_resign.png";
 import user from "assets/icon/settings/settings_user.png";
+import { useNavigate } from "react-router-dom";
+import { userState } from "states/UserState";
+import { useRecoilState } from "recoil";
 
 export default function Settings() {
+  // userinfo
+  const [userInfo, setUserInfo] = useRecoilState(userState);
+
+  const navigate = useNavigate();
+
   // 탈퇴 모달
   const [openDeleteUser, setOpenDeleteUser] = useState(false);
   // 초대 모달
@@ -33,7 +41,12 @@ export default function Settings() {
       <BackMenu title="설정"></BackMenu>
       <Container id="container">
         <List sx={{ width: "100%" }}>
-          <ListItemButton>
+          {/* 내 프로필 변경 */}
+          <ListItemButton
+            onClick={() => {
+              navigate("/modifyuserinfo");
+            }}
+          >
             <ListItemAvatar>
               <Avatar>
                 <img src={user} width="100%" />
@@ -42,15 +55,26 @@ export default function Settings() {
             <ListItemText primary="내 프로필 변경" />
           </ListItemButton>
           <Divider />
-          <ListItemButton>
-            <ListItemAvatar>
-              <Avatar>
-                <img src={kids} width="100%" />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary="자녀 프로필 변경" />
-          </ListItemButton>
-          <Divider />
+          {/* 아이 프로필 변경 - 아이일 때는 보이지 않음 */}
+          {!userInfo.isChild && (
+            <div>
+              <ListItemButton
+                onClick={() => {
+                  navigate("/modifykidsinfo");
+                }}
+              >
+                <ListItemAvatar>
+                  <Avatar>
+                    <img src={kids} width="100%" />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary="아이 프로필 변경" />
+              </ListItemButton>
+              <Divider />
+            </div>
+          )}
+
+          {/* 가족 초대하기 */}
           <ListItemButton
             onClick={() => {
               setOpenInvite(true);
@@ -64,6 +88,7 @@ export default function Settings() {
             <ListItemText primary="가족 초대하기" />
           </ListItemButton>
           <Divider />
+          {/* 회원 탈퇴 */}
           <ListItemButton
             onClick={() => {
               setOpenDeleteUser(true);

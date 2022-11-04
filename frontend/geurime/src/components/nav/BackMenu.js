@@ -68,7 +68,7 @@ export default function BackMenu({
             </Grid>
             {/* isRight */}
             <Grid item sx={{ fontSize: "1.8vh", textAlign: "center" }} xs={2}>
-              <span
+              <div
                 style={{
                   color: "#ffa000",
                 }}
