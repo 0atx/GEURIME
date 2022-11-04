@@ -4,6 +4,7 @@ import geurime.api.dto.common.BasicResponse;
 import geurime.api.service.DrawingBoxServiceImpl;
 import geurime.api.service.DrawingServiceImpl;
 import geurime.database.entity.Drawing;
+import geurime.database.entity.Kid;
 import geurime.exception.CustomException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,10 +37,10 @@ public class DrawingBoxController {
 
     @PostMapping
     @ApiOperation(value = "그림보관함 추가", notes = "커스텀 그림보관함을 생성한다.")
-    public ResponseEntity<BasicResponse<Long>> createDrawingBox(@RequestParam Long kidId, @RequestParam String drawingBoxName){
+    public ResponseEntity<BasicResponse<Kid.KidInfoResponse>> createDrawingBox(@RequestParam Long kidId, @RequestParam String drawingBoxName){
         try {
-            Long drawingBoxId = drawingBoxService.createDrawingBox(kidId, drawingBoxName);
-            return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingBoxId), HttpStatus.OK);
+            Kid.KidInfoResponse response = drawingBoxService.createDrawingBox(kidId, drawingBoxName);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
         } catch (CustomException e) {
             return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
         }
