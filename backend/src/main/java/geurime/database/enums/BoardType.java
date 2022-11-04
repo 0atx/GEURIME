@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum BoardType {
-    자유, 질문
+    전체, 자유, 질문, 정보
 }

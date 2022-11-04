@@ -136,7 +136,14 @@ public class BoardServiceImpl implements BoardService {
 
         BoardType boardType = checkBoardType(stringBoardType);
 
-        Slice<Board> boardSlice = boardRepository.findByBoardCategory(boardType ,pageRequest);
+        Slice<Board> boardSlice = null;
+
+        // 전체인 경우에는 모두 조회
+        if(boardType == BoardType.전체){
+            boardSlice = boardRepository.findAllJPQLFetch(pageRequest);
+        }else{
+            boardSlice = boardRepository.findByBoardCategory(boardType ,pageRequest);
+        }
 
         List<Board.BoardTitleResponse> responseList = new ArrayList<>(size);
         for (Board board : boardSlice){
@@ -170,7 +177,14 @@ public class BoardServiceImpl implements BoardService {
 
         BoardType boardType = checkBoardType(stringBoardType);
 
-        Slice<Board> boardSlice = boardRepository.findByBoardCategoryAndBoardTitleContains(boardType , keyword, pageRequest);
+        Slice<Board> boardSlice = null;
+
+        // 전체인 경우에는 모두 조회
+        if(boardType == BoardType.전체){
+            boardSlice = boardRepository.findByBoardTitleContains(keyword, pageRequest);
+        }else{
+            boardSlice = boardRepository.findByBoardCategoryAndBoardTitleContains(boardType , keyword, pageRequest);
+        }
 
         List<Board.BoardTitleResponse> responseList = new ArrayList<>(size);
         for (Board board : boardSlice){
@@ -202,7 +216,10 @@ public class BoardServiceImpl implements BoardService {
 
         //enum 유효성 검사
         BoardType boardType = checkBoardType(request.getBoardCategory());
-
+        
+        if(boardType == BoardType.전체){
+            boardType = BoardType.자유;
+        }
         Board board = Board.builder()
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
