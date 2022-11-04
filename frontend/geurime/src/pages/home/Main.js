@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Grid, Paper, Avatar } from "@mui/material";
+import { Grid } from "@mui/material";
 import Masonry from "@mui/lab/Masonry";
 import { useNavigate } from "react-router-dom";
 import NavBar from "components/nav/NavBar";
@@ -15,7 +15,7 @@ export default function Main() {
   // 처음 로딩시 유저정보 가져오기
   async function getUserInfo() {
     const response = await http.get(`/users/${userInfo.userId}`);
-    if (response.data.message == "success") {
+    if (response.data.message === "success") {
       setUserInfo(response.data.data);
     }
   }
@@ -56,6 +56,7 @@ export default function Main() {
                   onClick={() => {
                     navigator("/gallery");
                   }}
+                  alt="drawing"
                 />
               );
             })}
