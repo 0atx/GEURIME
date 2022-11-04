@@ -134,12 +134,23 @@ public class Drawing {
     }
 
     /**
+     * 그림 갤러리 응답 DTO
+     */
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class DrawingGalleryResponse{
+        private String drawingBoxName;
+        private List<DrawingGalleryDto> dtoList;
+    }
+
+    /**
      * 그림 갤러리 DTO
      */
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class DrawingGalleryResponse {
+    public static class DrawingGalleryDto {
         private Long drawingId;
         private String drawingImagePath;
     }
