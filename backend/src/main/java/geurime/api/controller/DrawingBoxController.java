@@ -25,11 +25,14 @@ public class DrawingBoxController {
     static final String SUCCESS = "success";
 
     @GetMapping("/{drawingBoxId}")
-    @ApiOperation(value = "그림보관함 그림기록 리스트 조회", notes = "자녀 id로 그림보관함의 주인인지 검증하고 그림보관함 id를 받아 좋아요한 그림이미지를 조회한다")
-    public ResponseEntity<BasicResponse<List<Drawing.DrawingGalleryResponse>>> readDrawingBoxDrawingList(@PathVariable("drawingBoxId") Long drawingBoxId, @RequestParam Long kidId){
+    @ApiOperation(value = "그림보관함 그림기록 리스트 조회", notes = "자녀 id로 그림보관함의 주인인지 검증하고 그림보관함 id를 받아 그림이미지를 조회한다")
+    public ResponseEntity<BasicResponse<Drawing.DrawingGalleryResponse>> readDrawingBoxDrawingList(@PathVariable("drawingBoxId") Long drawingBoxId, @RequestParam Long kidId){
         try {
-            List<Drawing.DrawingGalleryResponse> drawingGalleryResponses = drawingService.readBoxDrawingList(kidId, drawingBoxId);
-            return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingGalleryResponses), HttpStatus.OK);
+            Drawing.DrawingGalleryResponse response = drawingService.readBoxDrawingList(kidId, drawingBoxId);
+            if(response == null){
+                return new ResponseEntity<>(makeBasicResponse("접근 권한이 없는 보관함입니다.", null), HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
         } catch (CustomException e) {
             return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
         }
