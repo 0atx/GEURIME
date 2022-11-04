@@ -44,10 +44,10 @@ public class DrawingController {
 
     @GetMapping("/like/{kidId}")
     @ApiOperation(value = "좋아요 그림기록 리스트 조회", notes = "자녀 id를 받아 좋아요한 그림이미지를 조회한다")
-    public ResponseEntity<BasicResponse<List<Drawing.DrawingGalleryResponse>>> readLikeDrawingList(@PathVariable("kidId") Long kidId){
+    public ResponseEntity<BasicResponse<List<Drawing.DrawingGalleryDto>>> readLikeDrawingList(@PathVariable("kidId") Long kidId){
         try {
-            List<Drawing.DrawingGalleryResponse> drawingGalleryResponses = drawingService.readLikeDrawingList(kidId);
-            return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingGalleryResponses), HttpStatus.OK);
+            List<Drawing.DrawingGalleryDto> drawingGalleryRespons = drawingService.readLikeDrawingList(kidId);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingGalleryRespons), HttpStatus.OK);
         } catch (CustomException e) {
             return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
         }

@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,22 +50,17 @@ public class DrawingServiceImpl implements DrawingService {
         return response;
     }
 
-    @Override
-    public List<Drawing.DrawingBoxPreviewResponse> readDrawingBoxPreviewList(Long kidId) {
-        return null;
-    }
-
     /**
      * 좋아요 그림리스트 조회
      * @param kidId
      * @return
      */
     @Override
-    public List<Drawing.DrawingGalleryResponse> readLikeDrawingList(Long kidId) {
+    public List<Drawing.DrawingGalleryDto> readLikeDrawingList(Long kidId) {
         Kid kid = getKid(kidId);
         List<Drawing> drawingList = drawingRepository.findByDrawingBox_KidAndIsLikeTrue(kid);
 
-        return mapList(drawingList, Drawing.DrawingGalleryResponse.class);
+        return mapList(drawingList, Drawing.DrawingGalleryDto.class);
     }
 
     /**
@@ -75,29 +69,33 @@ public class DrawingServiceImpl implements DrawingService {
      * @return
      */
     @Override
-    public List<Drawing.DrawingGalleryResponse> readBoxDrawingList(Long kidId, Long drawingBoxId) {
+    public Drawing.DrawingGalleryResponse readBoxDrawingList(Long kidId, Long drawingBoxId) {
         DrawingBox drawingBox = getDrawingBox(drawingBoxId);
+
+        Drawing.DrawingGalleryResponse response = new Drawing.DrawingGalleryResponse();
+        response.setDrawingBoxName(drawingBox.getDrawingBoxName());
 
         //조회하는 자녀의 아이디가 일치하면
         if(drawingBox.getKid().getId() == kidId){
             List<Drawing> drawingList = drawingBox.getDrawingList();
-            List<Drawing.DrawingGalleryResponse> responseList = new ArrayList<>(drawingList.size());
+            List<Drawing.DrawingGalleryDto> dtoList = new ArrayList<>(drawingList.size());
 
             //DTO에 매핑
             for (Drawing drawing : drawingList){
-                Drawing.DrawingGalleryResponse response = new Drawing.DrawingGalleryResponse();
-                response.setDrawingId(drawing.getId());
-                response.setDrawingImagePath(drawing.getDrawingImagePath());
+                Drawing.DrawingGalleryDto dto = new Drawing.DrawingGalleryDto();
+                dto.setDrawingId(drawing.getId());
+                dto.setDrawingImagePath(drawing.getDrawingImagePath());
 
-                responseList.add(response);
+                dtoList.add(dto);
             }
 
-            return responseList;
+            response.setDtoList(dtoList);
+
+            return response;
         }
 
-        //불일치하면 빈 list 반환
-        List<Drawing.DrawingGalleryResponse> emptyList = new ArrayList<>();
-        return emptyList;
+        //불일치하면 null 반환
+        return null;
     }
 
     /**

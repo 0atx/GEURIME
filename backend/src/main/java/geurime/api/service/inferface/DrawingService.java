@@ -7,9 +7,8 @@ import java.util.List;
 
 public interface DrawingService {
     Drawing.DrawingInfoResponse readDrawingInfo(Long drawingId);
-    List<Drawing.DrawingBoxPreviewResponse> readDrawingBoxPreviewList(Long kidId);
-    List<Drawing.DrawingGalleryResponse> readLikeDrawingList(Long kidId);
-    List<Drawing.DrawingGalleryResponse> readBoxDrawingList(Long kidId, Long drawingBoxId);
+    List<Drawing.DrawingGalleryDto> readLikeDrawingList(Long kidId);
+    Drawing.DrawingGalleryResponse readBoxDrawingList(Long kidId, Long drawingBoxId);
     Drawing.DrawingInfoResponse createDrawing(Drawing.DrawingPostRequest request, MultipartFile imageFile);
     Long updateDrawing(Drawing.DrawingPutRequest request);
     Long drawingBoxMigration(Drawing.DrawingMigrationPutRequest request);
