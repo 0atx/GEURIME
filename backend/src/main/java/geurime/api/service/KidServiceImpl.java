@@ -2,11 +2,13 @@ package geurime.api.service;
 
 import geurime.api.service.inferface.KidService;
 import geurime.config.s3.S3Uploader;
+import geurime.database.entity.Drawing;
 import geurime.database.entity.DrawingBox;
 import geurime.database.entity.Family;
 import geurime.database.entity.Kid;
 import geurime.database.enums.BoxType;
 import geurime.database.repository.DrawingBoxRepository;
+import geurime.database.repository.DrawingRepository;
 import geurime.database.repository.FamilyRepository;
 import geurime.database.repository.KidRepository;
 import geurime.exception.CustomException;
@@ -19,7 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +33,7 @@ public class KidServiceImpl implements KidService {
     private final KidRepository kidRepository;
     private final FamilyRepository familyRepository;
     private final DrawingBoxRepository drawingBoxRepository;
+    private final DrawingRepository drawingRepository;
     private final S3Uploader s3Uploader;
 
     // DTO와 엔티티 변환
@@ -46,8 +51,23 @@ public class KidServiceImpl implements KidService {
         Kid.KidInfoResponse response = modelMapper.map(kid, Kid.KidInfoResponse.class);
 
         List<DrawingBox> drawingBoxList = kid.getDrawingBoxList();
+        List<Kid.DrawingBoxDto> drawingBoxDtoList = new ArrayList<>(drawingBoxList.size());
 
-        List<Kid.DrawingBoxDto> drawingBoxDtoList = mapList(drawingBoxList, Kid.DrawingBoxDto.class);
+        for (DrawingBox drawingBox : drawingBoxList){
+            Optional<Drawing> firstDrawing = drawingRepository.findFirstByDrawingBox(drawingBox);
+            String thumbnailImage = firstDrawing.isPresent() ? firstDrawing.get().getDrawingImagePath() : null;
+            long drawingCount = drawingRepository.countByDrawingBox(drawingBox);
+
+            Kid.DrawingBoxDto drawingBoxDto = Kid.DrawingBoxDto.builder()
+                    .drawingBoxId(drawingBox.getId())
+                    .drawingBoxName(drawingBox.getDrawingBoxName())
+                    .drawingBoxCategory(drawingBox.getDrawingBoxCategory().toString())
+                    .thumbnailImage(thumbnailImage)
+                    .drawingCount(drawingCount)
+                    .build();
+            drawingBoxDtoList.add(drawingBoxDto);
+        }
+
         response.setDrawingBoxDtoList(drawingBoxDtoList);
         
         return response;

@@ -117,5 +117,16 @@ public class Kid {
         private Long drawingBoxId;
         private String drawingBoxName;
         private String drawingBoxCategory;
+        private String thumbnailImage;
+        private Long drawingCount;
+
+        @Builder
+        public DrawingBoxDto(Long drawingBoxId, String drawingBoxName, String drawingBoxCategory, String thumbnailImage, Long drawingCount) {
+            this.drawingBoxId = drawingBoxId;
+            this.drawingBoxName = drawingBoxName;
+            this.drawingBoxCategory = drawingBoxCategory;
+            this.thumbnailImage = thumbnailImage;
+            this.drawingCount = drawingCount;
+        }
     }
 }
