@@ -172,8 +172,6 @@ public class UserServiceImpl implements UserService {
         if(imageFile != null && !imageFile.isEmpty()){
             String userProfileImage = s3Uploader.uploadAndGetUrl(imageFile);
             user.updateProfileImage(userProfileImage);
-        }else{
-            user.updateProfileImage("");
         }
         return modelMapper.map(user, User.UserInfoResponse.class);
     }
