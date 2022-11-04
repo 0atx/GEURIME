@@ -36,8 +36,8 @@ function Router() {
         <Route path="/userinfo" element={<UserInfo />} />
         <Route path="/registkids" element={<RegistKids />} />
         <Route path="/gallery" element={<Gallery />} />
-        <Route path="/detailgallery" element={<DetailGallery />} />
-        <Route path="/detaildrawing" element={<DetailDrawing />} />
+        <Route path="/detailgallery/:galleryid" element={<DetailGallery />} />
+        <Route path="/detaildrawing/:drawingid" element={<DetailDrawing />} />
         <Route path="/modifydrawing" element={<ModifyDrawing />} />
         <Route path="/modifydetailgallery" element={<ModifyDetailGallery />} />
         <Route path="/registdrawing" element={<RegistDrawing />} />

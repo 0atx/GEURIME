@@ -1,6 +1,11 @@
+/*
+그림 등록 완료 모달
+@author 여예원
+@since 2022.11.04
+*/
+
 import Button from "components/common/Btn.js";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import { Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
