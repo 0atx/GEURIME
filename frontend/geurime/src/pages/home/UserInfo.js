@@ -22,7 +22,6 @@ import BackMenu from "components/nav/BackMenu";
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
 import { http2 } from "api/http2";
-import axios from "axios";
 import Modal from "components/common/Modal";
 
 export default function UserInfo() {
@@ -60,12 +59,12 @@ export default function UserInfo() {
   // 회원가입 axios 함수
   async function registUser() {
     // 닉네임 검사
-    if (nickNameInput.current.value == "") {
+    if (nickNameInput.current.value === "") {
       setOpenNick(true);
       return;
     }
     // 가족이름 검사
-    if (familyNameInput.current.value == "") {
+    if (familyNameInput.current.value === "") {
       setOpenFam(true);
       return;
     }
