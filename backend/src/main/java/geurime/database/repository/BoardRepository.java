@@ -3,6 +3,7 @@ package geurime.database.repository;
 import geurime.database.entity.Board;
 import geurime.database.enums.BoardType;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,6 +21,9 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @EntityGraph(attributePaths = {"commentList"}, type = EntityGraph.EntityGraphType.LOAD)
     Slice<Board> findByBoardCategoryAndBoardTitleContains(BoardType boardCategory, String keyword, PageRequest pageRequest);
+
+    @EntityGraph(attributePaths = {"commentList"}, type = EntityGraph.EntityGraphType.LOAD)
+    Slice<Board> findByBoardTitleContains(String boardTitle, Pageable pageable);
 
     @Override
     @EntityGraph(attributePaths = {"commentList"}, type = EntityGraph.EntityGraphType.LOAD)
