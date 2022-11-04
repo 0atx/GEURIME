@@ -8,22 +8,18 @@
 @since 2022.10.28
 */
 
-import axios from "axios";
 import { atom } from "recoil";
 
 export const userState = atom({
   key: "user",
   default: {
-    // userID: localStorage.getItem("userId"),
-    // 테스트용 ID
-    userID: 20,
+    userId: localStorage.getItem("userId"),
     userName: localStorage.getItem("name"),
     nickname: "",
     email: localStorage.getItem("email"),
     userBirth: "",
     userGender: "",
     userProfileImage: "",
-
     inviteCode: "",
     familyId: "",
     familyName: "",
