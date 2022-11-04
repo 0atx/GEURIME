@@ -138,6 +138,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
         drawingRepository.save(drawing);
 
         Drawing.DrawingDiaryInfoResponse response = modelMapper.map(drawing, Drawing.DrawingDiaryInfoResponse.class);
+        response.setDrawingId(drawing.getId());
 
         return response;
     }
