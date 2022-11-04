@@ -7,6 +7,7 @@ import {
   TextField,
   Select,
   MenuItem,
+  IconButton,
 } from "@mui/material";
 import { useRecoilValue } from "recoil";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -14,6 +15,7 @@ import { CurrentKidState } from "states/CurrentKidState";
 import Btn from "components/common/Btn";
 import { http2 } from "api/http2";
 import RegistDrawingModal from "components/modal/RegistDrawingModal";
+import RotateRightIcon from "@mui/icons-material/RotateRight";
 
 export default function RegistDrawing() {
   const currentKid = useRecoilValue(CurrentKidState);
@@ -47,10 +49,47 @@ export default function RegistDrawing() {
       setImageUrl(reader.result);
     };
   }
+
+  // 이미지 회전 함수
+  function rotateImage() {
+    let temp = new Image();
+    temp.src = imageUrl;
+    temp.onload = () => {
+      let canvas = document.getElementById("canvas");
+      let canvasContext = canvas.getContext("2d");
+
+      canvas.width = temp.height;
+      canvas.height = temp.width;
+
+      canvasContext.rotate(Math.PI / 2);
+
+      canvasContext.drawImage(temp, 0, temp.height * -1);
+
+      let dataURI = canvas.toDataURL("image/jpeg");
+      // 회전딘 url로 변경
+      setImageUrl(dataURI);
+    };
+  }
+
+  // base64를 이미지 파일로 바꿔주는 함수
+  function dataURLtoFile(dataurl, fileName) {
+    var arr = dataurl.split(","),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], fileName, { type: mime });
+  }
   // 그림 등록 axios
   async function registDrawing() {
     // 파일 전송
-    let file = imgRef.current.files[0];
+    // url을 파일로 변경 후 formdata에 넣는다.
+    let file = dataURLtoFile(imageUrl, "image.png");
     let formData = new FormData();
     formData.append("imageFile", file);
 
@@ -81,7 +120,7 @@ export default function RegistDrawing() {
       <BackMenu isLeft={true} title="그림 등록" isRight="등록" />
       <Grid
         container
-        id="container"
+        id="container2"
         alignItems="center"
         justifyContent="center"
       >
@@ -111,17 +150,31 @@ export default function RegistDrawing() {
               </form>
             </div>
             {imageUrl ? (
-              <Paper
-                elevation={0}
-                sx={{
-                  width: "100%",
-                  height: "100%",
-                  backgroundImage: `url(${imageUrl})`,
-                  backgroundSize: "contain",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "center",
-                }}
-              />
+              <>
+                <Paper
+                  id="img"
+                  elevation={0}
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundImage: `url(${imageUrl})`,
+                    backgroundSize: "contain",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                  }}
+                />
+                <canvas id="canvas" style={{ display: "none" }} />
+                {/* 회전 버튼 */}
+                <IconButton
+                  onClick={() => {
+                    rotateImage();
+                  }}
+                  sx={{ fontSize: "2vh", marginLeft: "75%" }}
+                >
+                  회전
+                  <RotateRightIcon sx={{ fontSize: "3vh" }} />
+                </IconButton>
+              </>
             ) : (
               <Paper
                 sx={{
