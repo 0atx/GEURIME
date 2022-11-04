@@ -1,5 +1,6 @@
 package geurime.database.repository;
 
+import geurime.database.entity.Drawing;
 import geurime.database.entity.DrawingBox;
 import geurime.database.entity.Kid;
 import geurime.database.enums.BoxType;
