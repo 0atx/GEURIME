@@ -26,6 +26,7 @@ import { http2 } from "api/http2";
 
 import { diaryState } from "states/DiaryState";
 import { useRecoilState } from "recoil";
+import { http } from "api/http";
 
 export default function RegistDiary({}) {
   // 등록완료 모달
@@ -52,6 +53,13 @@ export default function RegistDiary({}) {
       // 화면에 읽힐 수 있는 url로 변경
       setImageUrl(reader.result);
     };
+  }
+
+  // 그림 분석하기
+  async function analyzeDrawing(id) {
+    const response = await http.get(`/ai/${id}`);
+    // console.log("분석한다");
+    console.log(response.data);
   }
 
   // 등록 완료 모달 열기
@@ -87,6 +95,7 @@ export default function RegistDiary({}) {
 
     if (response.data.message == "success") {
       // 그림분석 api 연동 필요!!!
+      analyzeDrawing(response.data.data.drawingId);
     } else {
     }
     setOpen(true);
