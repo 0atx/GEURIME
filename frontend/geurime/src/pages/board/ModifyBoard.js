@@ -1,9 +1,13 @@
 import { Button, Grid } from "@mui/material";
 import { http } from "api/http";
-import { useState } from "react";
+import BackMenu from "components/nav/BackMenu";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { boardState } from "states/BoardState";
 import BoardInputItem from "./BoardInputItem";
 
 export default function ModifyBoard() { 
+  const [boardInfo, setBoardInfo] = useRecoilState(boardState);
   const [title, setTitle] = useState();
   const boardCategories = [
     // {
@@ -46,11 +50,23 @@ export default function ModifyBoard() {
     //   alert("게시글을 등록하지 못했습니다");
     // }
   };
+  useEffect(() => {
+    console.log({디테일정보: boardInfo})
+  },[])
   return (
+    <div>
+    <BackMenu
+      isLeft={true}
+      title="제목"
+      isRight="완료"
+    clickRight={() => {
+      navigator("/modifyBoard");
+      }}
+    >
+    </BackMenu>
     <Grid
     id='container'
-      container
-      
+    container
     sx={{textAlign: "center", justifyContent: 'center'}}
     >
       <BoardInputItem
@@ -58,14 +74,24 @@ export default function ModifyBoard() {
         handleChange={handleChange}
         boardCategory={boardCategory}
         boardCategories={boardCategories}
-      ></BoardInputItem>
-      <Grid>
+        ></BoardInputItem>
+        {/* 버튼 */}
+      <Grid
+        container
+        sx={{ marginTop:'5%'}}
+      >
         <Button
         variant="contained"
-          sx={{ width: '40vw', borderRadius: 5 }}
-          onClick={regist}
-        >게시글 등록</Button>
+          sx={{ width: '25vw', borderRadius: 5, marginLeft: '10%' }}
+          onClick={() => { console.log('hi')}}
+        >삭제</Button>
+        <Button
+        variant="contained"
+          sx={{ width: '25vw', borderRadius: 5, marginLeft: '30%'}}
+          onClick={() => { console.log('hi')}}
+        >등록</Button>
       </Grid>
     </Grid>
+    </div>
   )
 }

@@ -3,8 +3,12 @@ import { http2 } from "api/http2";
 import { useRef, useState } from "react";
 import BoardInputItem from "./BoardInputItem";
 import { useNavigate } from "react-router-dom";
+import BackMenu from "components/nav/BackMenu";
+import { useRecoilState } from "recoil";
+import { userState } from "states/UserState";
 
 export default function RegistBoard() { 
+  const [userInfo, setUserInfo] = useRecoilState(userState);
   const navigator = useNavigate();
   const [title, setTitle] = useState();
   const titleRef = useRef();
@@ -45,12 +49,11 @@ export default function RegistBoard() {
     
     let formData = new FormData();
     formData.append("imageFile", imgRef.current.files[0]);
-    
+    console.log({이미지: imgRef.current.files[0]})
 
     // 유저 아이디 리코일에서 가져오게 해야됨
     let request = {
-      userId: 1,
-
+      userId: userInfo.userID,
       boardTitle: titleRef.current.value,
       boardContent: textRef.current.value,
       boardCategory: boardCategory,
@@ -62,6 +65,8 @@ export default function RegistBoard() {
       })
     );
     // 엑시오스 요청
+    console.log('등록중')
+    console.log({폼데이터: formData})
     const response = await http2.post(`/boards`, formData);
     if (response.data.message == "success") {
       console.log('등록 완료!')
@@ -72,7 +77,7 @@ export default function RegistBoard() {
     }
     console.log({ref: textRef.current.value})
   }
-  
+
 
   function changeProfile(e) {
     const reader = new FileReader();
@@ -93,6 +98,15 @@ export default function RegistBoard() {
       
     sx={{textAlign: "center", justifyContent: 'center'}}
     >
+    <BackMenu
+      isLeft={true}
+      title='게시글 등록'
+      isRight="등록"
+    clickRight={() => {
+      regist();
+      }}
+    >
+    </BackMenu>
       <BoardInputItem
         titleChange={titleChange}
         textChange={textChange}
@@ -105,7 +119,8 @@ export default function RegistBoard() {
         textRef={textRef}
         titleRef={titleRef}
       ></BoardInputItem>
-      <Grid>
+      <Grid
+      sx={{marginTop: '5%'}}>
         <Button
         variant="contained"
           sx={{ width: '40vw', borderRadius: 5 }}

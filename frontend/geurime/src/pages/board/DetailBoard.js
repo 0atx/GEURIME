@@ -1,31 +1,52 @@
-import { Button, Grid, Paper } from "@mui/material";
+import { Avatar, Button, Grid, Paper, TextField } from "@mui/material";
 import { http } from "api/http";
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom";
 import Visibility from '@mui/icons-material/Visibility';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import CommentInputItem from "./CommentInputItem";
+import NavBar from "components/nav/NavBar";
+import BackMenu from "components/nav/BackMenu";
+import { boardState } from "states/BoardState";
+import { useRecoilState } from "recoil";
+import { userState } from "states/UserState";
 
 export default function DetailBoard( ) { 
   const location = useLocation()
   const [commentDtoList, setCommentDtoList] = useState([
     { 'commentId': 1, 'commentUserId': 20, 'commentUserProfile': 'https://geurime-a506.s3.ap-northeast-2.amazonaws.c…86a5a%5Chome%5Cubuntu%5Cstatic%5CsunnyClicked.png', 'commentUserNickname': '해안', 'createTime': '2022-11-03 14:41:00', 'updateTime': null },
-    { 'commentId': 2, 'commentUserId': 20, 'commentUserProfile': 'https://geurime-a506.s3.ap-northeast-2.amazonaws.c…86a5a%5Chome%5Cubuntu%5Cstatic%5CsunnyClicked.png', 'commentUserNickname': '해안', 'createTime': '2022-11-03 14:41:01', 'updateTime': null}
     ])  
   const [board, setBoard] = useState({
-    boardCategory: "자유",
+    boardCategory: "",
     boardCommentDtoList: [],
-    boardContent: "아기가 운동하고 그림을 그렸어요!",
+    boardContent: "",
     boardId: 1,
     boardImagePathList: [],
-    boardTitle: "현욱아기 탄생",
-    boardViews: 23,
+    boardTitle: "",
+    boardViews: 0,
     createTime: "2022-10-27 09:55:05",
     updateTime: "2022-10-27 09:55:05",
-    writerId: 1,
-    writerNickname: "프로틴사랑",
+    writerId: 0,
+    writerNickname: "",
     writerProfile: ''
   })
+  
+  const [user, setUser] = useState({
+    userProfile: 'https://geurime-a506.s3.ap-northeast-2.amazonaws.c…86a5a%5Chome%5Cubuntu%5Cstatic%5CsunnyClicked.png'
+  })
+
+  const [boardInfo, setBoardInfo] = useRecoilState(boardState);
+  const [userInfo, setUserInfo] = useRecoilState(userState);
+
+  // 네브바 우측용
+  const [rightNav, setRightNav] = useState('')
+  useEffect(() => {
+    if (boardInfo.writerId == userInfo.userID) {
+      setRightNav('편집')
+    } else {
+      setRightNav('')
+    }
+  },[boardInfo])
   
   const navigator = useNavigate();
   const getDetail = async () => {
@@ -34,6 +55,7 @@ export default function DetailBoard( ) {
     const response = await http.get(`/boards/${boardid}`);
     if (response.data.message == "success") {
       setBoard(response.data.data)
+      setBoardInfo(response.data.data)
       setCommentDtoList(response.data.data.boardCommentDtoList)
     } else {
       alert("게시글을 불러오지 못했습니다");
@@ -46,6 +68,7 @@ export default function DetailBoard( ) {
   //   getDetail();
   //   setInitialized(true);
   // }, [initialized]);
+
   let [check, setCheck] = useState(false);
   useEffect(() => { 
     if (check == false){
@@ -56,30 +79,74 @@ export default function DetailBoard( ) {
     }
 
   }, [check])
+
+  const [comment, setComment] = useState()
   useEffect(() => {
     console.log({ 보드아이템: commentDtoList })
-  }, [board])
+    // setComment(board.boardCommentDtoList?.map((store, idx) => {
+    //   return <CommentInputItem key={idx} item={store}/>;
+    // }))
+    console.log({댓글: comment})
+  }, [commentDtoList])
 
+  // const [commentText, setCommentText] = useState();
+  const commentRef = useRef(null);
 
   
+
+  const postComment = async () => {
+    // commentUserId 리코일에서 가져오기
+    const boardid = location.pathname.slice(13,);
+    console.log({현재댓글: commentRef.current.value });
+    const response = await http.post(`/comments`, 
+      {
+        boardId: boardid,
+        commentContent: commentRef.current.value,
+        commentUserId: userInfo.userID
+      }
+    );
+
+    if (response.data.message == "success") {
+      alert("댓글 등록 완료!")
+      setCommentDtoList([...commentDtoList, {
+        boardId: boardid,
+        commentContent: commentRef.current.value,
+        commentUserId: userInfo.userID
+      }])
+    } else {
+      alert("댓글을 등록하지 못했습니다");
+    }
+  } 
+  
   return (
-<Grid>
-  <Grid
-    sx={{
-      margin: '4%',
-      marginLeft: '5%',
-      fontWeight:"bold"
-    }}
-  >
-       [{board.boardCategory}] {board.boardTitle}
+    <div>
+    <BackMenu
+            isLeft={true}
+            title={'['+ board.boardCategory +'] ' + board.boardTitle}
+            isRight={rightNav}
+            clickRight={() => {
+              navigator("/modifyBoard");
+            }}
+        >
+    </BackMenu>
+    <Grid id="container"
+      sx={{width: '95vw', marginLeft: '2%'}}>
+      <Grid
+        sx={{
+        marginRight: '4%',
+        marginLeft: '5%',
+        fontWeight:"bold"
+        }}
+         >
+          [{board.boardCategory}] {board.boardTitle}
       </Grid>
       <Paper
         variant="outlined"
         sx={{
-          alignItems: 'center', textAlign: 'center', margin: '3%', borderRadius: 3,
-          borderColor: '#FFE082', borderWidth: 5}}
-          xs={7}
-        >
+        alignItems: 'center', textAlign: 'center', margin: '3%', borderRadius: 3,
+        borderColor: '#FFE082', borderWidth: 5}}
+        xs={7}  
+      >
         <img
           src={board.boardImagePathList}
           loading="lazy"
@@ -93,9 +160,10 @@ export default function DetailBoard( ) {
         direction='row'
         sx={{ justifyContent: 'space-between' }}
       >
+        
         <Grid
           item
-          sx={{marginLeft: '5%', marginTop: '2%'}}
+          sx={{marginLeft: '5%', marginTop: '1%'}}
           >
               작성자 : {board.writerNickname}
         </Grid>
@@ -103,7 +171,7 @@ export default function DetailBoard( ) {
         <Grid
           item
           xs={3.5}
-          sx={{marginRight: '2%', marginTop: '2%'}}
+          sx={{ marginTop: '1%'}}
         >
           <Grid
           container
@@ -130,29 +198,40 @@ export default function DetailBoard( ) {
           
       </Paper>
 
-      {/* 버튼 */}
-      <Grid
-        sx={{ marginTop:'3%', textAlign:'center'}}
-      >
-        <Button
-        variant="contained"
-          sx={{ width: '25vw', borderRadius: 5, marginRight: '12%' }}
-          onClick={() => { console.log('hi')}}
-        >삭제</Button>
-        <Button
-        variant="contained"
-          sx={{ width: '25vw', borderRadius: 5, marginLeft: '12%'}}
-          onClick={() => { console.log('hi')}}
-        >등록</Button>
-      </Grid>
 
+      {/* 유저 아이디, 사진정보 리코일에서 가져오기 */}
+      <Grid
+      sx={{marginTop: '5%', marginLeft: '3%',alignItems: 'center'}}
+      container
+      direction='row'
+    >
+      {/* 아이콘 */}
+      <Grid
+          item
+      >
+        <Avatar src={userInfo.userProfileImage} sx={{ width: '15vw', height: '15vw' }} />
+      </Grid>
+     {/* 작성 내용 */}
+      <Grid
+          item
+        sx={{marginLeft:'5%', justifyContent: 'space-between'}}
+      >
+          <TextField placeholder="댓글을 등록하세요..." variant="standard" sx={{width: '57vw'}} inputRef={commentRef} />
+          <Button onClick={postComment}>확인</Button>
+     </Grid>
+    </Grid>
       {/* 댓글 */}
       <Grid
       >
       {board.boardCommentDtoList?.map((store, idx) => {
         return <CommentInputItem key={idx} item={store}/>;
       })}
-    </Grid>
-</Grid>
+
+      </Grid>
+      
+
+      </Grid> 
+      <NavBar/>
+      </div>
   )
 }

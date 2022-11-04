@@ -15,8 +15,12 @@ import Select from '@mui/material/Select';
 import BoardItem from './BoardItem';
 import BackMenu from 'components/nav/BackMenu';
 import { http } from "api/http";
+import { useNavigate } from "react-router-dom";
+import NavBar from 'components/nav/NavBar';
 
 export default function Board() { 
+  const navigator = useNavigate();
+  
   const [boards, setBoards] = useState([{
     "boardCategory": "질문",
     "boardFirstImage": "https://en.pimg.jp/031/716/685/1/31716685.jpg",
@@ -48,7 +52,6 @@ export default function Board() {
   const handleChange = (event) => {
     setList(event.target.value);
   };
-
   // const getData = async () => {
   //   const response = await axios.get(
   //     'http://j7a104.p.ssafy.io:8080/categories',
@@ -84,89 +87,87 @@ export default function Board() {
   }
 
   return (
-    <Grid>
+    <Grid
+    >
+    
+      {/* 상단바 */}
       <Grid>
-      <BackMenu
-          isLeft={true}
-          title='커뮤니티'
-          isRight="+"
-      >
-      </BackMenu>
+        <BackMenu
+            isLeft={true}
+            title='커뮤니티'
+            isRight="+"
+          clickRight={() => {
+            navigator("/registBoard");
+            }}
+        >
+        </BackMenu>
       </Grid>
-      
+      {/* 상단바 끝 */}
       <Grid
         id='container'
-        container
-        direction="row"
-        justifyContent="center"
-        alignItems="flex-end"
-        flexWrap={'nowrap'}
-        marginLeft='5%'
-      >
-      <FormControl sx={{ height: '8vh', width: '16vh', Color: '#FFCA28'}}>
-        <Select
-          value={list}
-          onChange={handleChange}
-          displayEmpty
-            inputProps={{ 'aria-label': 'Without label' }}
+        sx={{width: '92vw', marginLeft:'3%'}}
         >
-          <MenuItem value={"제목"}>
-            <em>제목</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-        </FormControl>
-      {/* 검색바 영역 */}
-      <Grid
-        container
-        direction="row"
-        style={{ padding: "2vw" }}
-        alignItems="center"
+
+        {/* 검색바 영역 */}
+
+        <Grid
+          container
+          direction="row"
           justifyContent="center"
-          marginLeft={'3%'}
-      >
+          alignItems="flex-end"
+          flexWrap={'nowrap'}
+          marginLeft='5%'
+        >
+          <FormControl sx={{ height: '8vh', width: '16vh', Color: '#FFCA28', justifyContent:'center', textAlign: 'center'}} size='small'>
+            <Select
+              value={list}
+              onChange={handleChange}
+              displayEmpty
+              inputProps={{ 'aria-label': 'Without label' }}
+            >
+              <MenuItem value={""}>
+                <em>선택</em>
+              </MenuItem>
+              <MenuItem value={"전체"}>전체</MenuItem>
+              <MenuItem value={"자유"}>자유</MenuItem>
+              <MenuItem value={'질문'}>질문</MenuItem>
+          </Select>
+          </FormControl>
+
+        <Grid
+          container
+          direction="row"
+          style={{ padding: "2vw" }}
+            justifyContent="center"
+            marginLeft={'3%'}
+        >
+
           <Grid 
             container
             direction="row"
             // justifyContent='space-between'
           >
-            {/* 검색어 입력 부분 */}
-            {/* <Input
-              placeholder="검색어를 입력하세요..."
-              onChange={(e) => {
-                setSearchKeyWord(e.target.value);
-              }} // 검색 키워드 변경
-              id="searchValue"
-              inputRef={searchInput} // input 객체를 반환
-              onKeyDown={(e) => {
-                // search(e);
-                }} // enter시 검색하는 함수
-            /> */}
-          <TextField
-          id="standard-search"
-          placeholder='검색어를 입력하세요...'
-          type="search"
-          variant="standard"
-          sx={{ color: '##FFCA28', width: '75%' }}
-          onKeyUp={search}
-          />
-            {/* 검색어 삭제 버튼 */}
-            {searchKeyWord == null || searchKeyWord == "" ? null : (
-              <IconButton
-                type="button"
-                sx={{ p: "8px" }}
-                aria-label="search"
-                onClick={() => {
-                  searchInput.current.value = null; // input 객체의 값을 비운다.
-                  setSearchKeyWord(null);
-                }}
-              >
-                <HighlightOffIcon />
-              </IconButton>
-            )}
-            <Grid>
+              {/* 검색어 입력 부분 */}
+              {/* <Input
+                placeholder="검색어를 입력하세요..."
+                onChange={(e) => {
+                  setSearchKeyWord(e.target.value);
+                }} // 검색 키워드 변경
+                id="searchValue"
+                inputRef={searchInput} // input 객체를 반환
+                onKeyDown={(e) => {
+                  // search(e);
+                  }} // enter시 검색하는 함수
+                /> */}
+            <TextField
+            id="standard-search"
+            placeholder='검색어를 입력하세요...'
+            type="search"
+            variant="standard"
+            sx={{ color: '##FFCA28', width: '75%' }}
+            onKeyUp={search}
+            />
+            
             {/* 돋보기 버튼 */}
             <IconButton
               type="button"
@@ -177,21 +178,21 @@ export default function Board() {
                 search(e);
               }}
             >
-              <SearchIcon />
-              </IconButton>
-            </Grid>
+              <SearchIcon/>
+            </IconButton>
+          </Grid>
+        </Grid>
+        {/* 검색바 끝 */}
+      </Grid>
+    <Grid
+      height={'25%'}
+    >
+    {boards?.map((store, idx) => {
+      return <BoardItem key={idx} item={store}/>;
+    })}
         </Grid>
       </Grid>
-
-      </Grid>
-      <Grid
-        height={'25%'}
-      >
-      {boards?.map((store, idx) => {
-        return <BoardItem key={idx} item={store}/>;
-      })}
-    </Grid>
+      <NavBar/>
     </Grid>
   )
-
 } 
