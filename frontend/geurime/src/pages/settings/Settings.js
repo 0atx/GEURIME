@@ -16,6 +16,10 @@ import BeachAccessIcon from "@mui/icons-material/BeachAccess";
 import { useState } from "react";
 import DeleteUserModal from "components/modal/DeleteUserModal";
 import InviteFamilyModal from "components/modal/InviteFamillyModal";
+import invite from "assets/icon/settings/settings_invite.png";
+import kids from "assets/icon/settings/settings_kids.png";
+import resign from "assets/icon/settings/settings_resign.png";
+import user from "assets/icon/settings/settings_user.png";
 
 export default function Settings() {
   // 탈퇴 모달
@@ -32,7 +36,7 @@ export default function Settings() {
           <ListItemButton>
             <ListItemAvatar>
               <Avatar>
-                <ImageIcon />
+                <img src={user} width="100%" />
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary="내 프로필 변경" />
@@ -41,7 +45,7 @@ export default function Settings() {
           <ListItemButton>
             <ListItemAvatar>
               <Avatar>
-                <WorkIcon />
+                <img src={kids} width="100%" />
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary="자녀 프로필 변경" />
@@ -54,7 +58,7 @@ export default function Settings() {
           >
             <ListItemAvatar>
               <Avatar>
-                <BeachAccessIcon />
+                <img src={invite} width="100%" />
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary="가족 초대하기" />
@@ -67,7 +71,7 @@ export default function Settings() {
           >
             <ListItemAvatar>
               <Avatar>
-                <BeachAccessIcon />
+                <img src={resign} width="100%" />
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary="회원 탈퇴" />
