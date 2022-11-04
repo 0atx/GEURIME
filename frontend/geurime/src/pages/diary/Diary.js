@@ -4,7 +4,7 @@
 @since 2022.10.28
 */
 import BackMenu from "components/nav/BackMenu";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Container, Grid, Paper, InputBase, IconButton, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
@@ -13,45 +13,70 @@ import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded
 import NavBar from "components/nav/NavBar";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { http } from "api/http";
+import { useRecoilState } from "recoil";
+import { userState } from "states/UserState";
+import { CurrentKidState } from "states/CurrentKidState";
 
 export default function Diary() {
+  // userInfo
+  const [userInfo, setUserInfo] = useRecoilState(userState);
+  // kidsInfo
+  const [kidInfo, setKidInfo] = useRecoilState(CurrentKidState);
+
   // 검색
   const [searchKeyWord, setSearchKeyWord] = useState();
   const searchInput = useRef(null); // 검색바 input 객체
 
   // 일기 목록 - 실제 데이터로 변경 필요!!!
   const [diaries, setDiaries] = useState([
-    {
-      id: 1,
-      date: "2022-10-20",
-      image: "assets/sample/0.png",
-      title: "에버랜드 간 날",
-    },
-    {
-      id: 2,
-      date: "2022-10-21",
-      image: "assets/sample/1.png",
-      title: "롯데월드 간 날",
-    },
-    {
-      id: 3,
-      date: "2022-10-22",
-      image: "assets/sample/2.png",
-      title: "서울랜드 간 날",
-    },
-    {
-      id: 4,
-      date: "2022-10-23",
-      image: "assets/sample/3.png",
-      title: "한강 간 날",
-    },
-    {
-      id: 5,
-      date: "2022-10-24",
-      image: "assets/sample/4.png",
-      title: "설악산 간 날",
-    },
+    // {
+    //   id: 1,
+    //   date: "2022-10-20",
+    //   image: "assets/sample/0.png",
+    //   title: "에버랜드 간 날",
+    // },
+    // {
+    //   id: 2,
+    //   date: "2022-10-21",
+    //   image: "assets/sample/1.png",
+    //   title: "롯데월드 간 날",
+    // },
+    // {
+    //   id: 3,
+    //   date: "2022-10-22",
+    //   image: "assets/sample/2.png",
+    //   title: "서울랜드 간 날",
+    // },
+    // {
+    //   id: 4,
+    //   date: "2022-10-23",
+    //   image: "assets/sample/3.png",
+    //   title: "한강 간 날",
+    // },
+    // {
+    //   id: 5,
+    //   date: "2022-10-24",
+    //   image: "assets/sample/4.png",
+    //   title: "설악산 간 날",
+    // },
   ]);
+
+  const mounted = useRef(false);
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+    } else {
+      getDiaries();
+    }
+  }, []);
+
+  // 자녀의 그림일기 전체조회
+  async function getDiaries() {
+    const response = await http.get(`/diaries/${kidInfo.kidId}`);
+    // console.log(response.data.data);
+    setDiaries(response.data.data);
+  }
 
   // 일기장 날짜로 검색하는 함수 -- 실제 데이터 연동 변경필요!!!
   async function search(e) {
@@ -139,11 +164,11 @@ export default function Diary() {
           <Grid container rowSpacing={2} columnSpacing={{ xs: 2, sm: 3, md: 4 }}>
             {diaries.map((diary, i) => (
               <Grid item xs={6} sm={4} md={2} key={i}>
-                <Link to={"/detaildiary/" + diary.id} style={{ textDecoration: "none" }}>
+                <Link to={"/detaildiary/" + diary.drawingId} style={{ textDecoration: "none" }}>
                   <Paper elevation={3}>
                     <div style={{ padding: "5%" }}>
                       <img
-                        src={diary.image}
+                        src={diary.drawingImagePath}
                         width="100%"
                         height="120px"
                         style={{
@@ -160,7 +185,7 @@ export default function Diary() {
                           fontSize: "2.5vh",
                         }}
                       >
-                        {diary.title}
+                        {diary.drawingTitle}
                       </Typography>
                       <Typography
                         sx={{
@@ -169,7 +194,7 @@ export default function Diary() {
                           fontSize: "2.2vh",
                         }}
                       >
-                        {moment(diary.date).format("YYYY년 M월 D일")}
+                        {moment(diary.createTime).format("YYYY년 M월 D일")}
                       </Typography>
                     </div>
                   </Paper>

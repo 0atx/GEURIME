@@ -32,6 +32,7 @@ function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/invite/:invitecode" element={<Home />} />
         <Route path="/main" element={<Main />} />
         <Route path="/userinfo" element={<UserInfo />} />
         <Route path="/registkids" element={<RegistKids />} />
