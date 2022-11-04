@@ -32,6 +32,7 @@ public class AuthController {
 
     private final JwtService jwtService;
     private final UserRepository userRepository;
+    private String os = System.getProperty("os.name").toLowerCase();
 
     /**
      * AccessToken, RefreshToken 발급
@@ -56,9 +57,9 @@ public class AuthController {
         String refreshTokenExpiration = jwtService.dateToString(token.getRefreshToken());
 
         String nickname = user.getNickname() == null ? "" : user.getNickname();
-        
-//        String uri = "http://localhost:3000/logincheck";
-        String uri = "https://k7a506.p.ssafy.io/logincheck";
+
+//        String uri = "https://k7a506.p.ssafy.io/logincheck";
+        String uri = "http://localhost:3000/logincheck";
 
         response.sendRedirect(UriComponentsBuilder.fromUriString(uri)
                 .queryParam("accessToken", token.getAccessToken())

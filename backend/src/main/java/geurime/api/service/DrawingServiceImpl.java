@@ -128,6 +128,7 @@ public class DrawingServiceImpl implements DrawingService {
         drawingRepository.save(drawing);
 
         Drawing.DrawingInfoResponse response = modelMapper.map(drawing, Drawing.DrawingInfoResponse.class);
+        response.setDrawingId(drawing.getId());
 
         return response;
     }
