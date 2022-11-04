@@ -13,8 +13,16 @@ import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftR
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
+import MenuIcon from "@mui/icons-material/Menu";
 
-export default function BackMenu({ type, isLeft, title, clickTitle, isRight, clickRight }) {
+export default function BackMenu({
+  type,
+  isLeft,
+  title,
+  clickTitle,
+  isRight,
+  clickRight,
+}) {
   const navigate = useNavigate();
 
   return (
@@ -53,7 +61,9 @@ export default function BackMenu({ type, isLeft, title, clickTitle, isRight, cli
             <Grid item sx={{ textAlign: "center" }} xs={8}>
               <span onClick={clickTitle}>
                 {title}
-                {type === "registDiary" && <ArrowDropDownRoundedIcon></ArrowDropDownRoundedIcon>}
+                {type === "registDiary" && (
+                  <ArrowDropDownRoundedIcon></ArrowDropDownRoundedIcon>
+                )}
               </span>
             </Grid>
             {/* isRight */}
@@ -66,6 +76,7 @@ export default function BackMenu({ type, isLeft, title, clickTitle, isRight, cli
               >
                 {isRight}
                 {type === "registKids" && <AddIcon></AddIcon>}
+                {type === "detailGallery" && <MenuIcon></MenuIcon>}
               </span>
             </Grid>
           </Grid>

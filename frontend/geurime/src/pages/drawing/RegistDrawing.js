@@ -1,3 +1,8 @@
+/*
+그림 등록 페이지
+@author 여예원
+@since 2022.11.04
+*/
 import BackMenu from "components/nav/BackMenu";
 import React, { useRef, useState } from "react";
 import {
@@ -16,6 +21,7 @@ import Btn from "components/common/Btn";
 import { http2 } from "api/http2";
 import RegistDrawingModal from "components/modal/RegistDrawingModal";
 import RotateRightIcon from "@mui/icons-material/RotateRight";
+import { http } from "api/http";
 
 export default function RegistDrawing() {
   const currentKid = useRecoilValue(CurrentKidState);
@@ -66,7 +72,7 @@ export default function RegistDrawing() {
       canvasContext.drawImage(temp, 0, temp.height * -1);
 
       let dataURI = canvas.toDataURL("image/jpeg");
-      // 회전딘 url로 변경
+      // 회전한 url로 변경
       setImageUrl(dataURI);
     };
   }
@@ -105,8 +111,15 @@ export default function RegistDrawing() {
 
     const response = await http2.post(`/drawings`, formData);
     if (response.data.message === "success") {
+      console.log(response.data.data);
+      analysisDrawing(response.data.data.drawingId);
       setOpen(true);
     }
+  }
+
+  // 그림 분석 AI를 요청하는 axios
+  async function analysisDrawing(id) {
+    const response = http.get(`ai/${id}`);
   }
 
   return (
