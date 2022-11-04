@@ -126,12 +126,11 @@ public class KidServiceImpl implements KidService {
                 .orElseThrow(() -> new CustomException(CustomExceptionList.KID_NOT_FOUND_ERROR));
         kid.updateKidInfo(request);
 
-        String kidProfileImage = "";
         //이미지 업로드 후 반환된 이미지경로 db에 저장
         if(profileImage != null && !profileImage.isEmpty()){
-            kidProfileImage = s3Uploader.uploadAndGetUrl(profileImage);
+            String kidProfileImage = s3Uploader.uploadAndGetUrl(profileImage);
+            kid.updateProfile(kidProfileImage);
         }
-        kid.updateProfile(kidProfileImage);
 
         Kid.KidInfoResponse response = modelMapper.map(kid, Kid.KidInfoResponse.class);
 
