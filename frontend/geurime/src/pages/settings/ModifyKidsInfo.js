@@ -20,6 +20,7 @@ import {
   MenuItem,
   Select,
   ListItemAvatar,
+  TextField,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { http2 } from "api/http2";
@@ -31,6 +32,7 @@ import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
 import NavBar from "components/nav/NavBar";
 import { http } from "api/http";
+import KidsInfoModal from "components/modal/KidsInfoModal";
 
 export default function ModifyKidsInfo() {
   const [userInfo, setUserInfo] = useRecoilState(userState);
@@ -40,6 +42,7 @@ export default function ModifyKidsInfo() {
   const [kidsGender, setKidsGender] = useState(null); // 성별
 
   // 모달
+  const [openRegist, setOpenRegist] = useState(false);
   const [openKidName, setOpenKidName] = useState(false);
   const [openFail, setOpenFail] = useState(false);
   const [openBirth, setOpenBirth] = useState(false);
@@ -59,15 +62,8 @@ export default function ModifyKidsInfo() {
     };
   }
 
-  // 아이 선택 시
-  const [selectKid, setSelectKid] = useState("");
-
-  const handleChange = (event) => {
-    setSelectKid(event.target.value);
-  };
-
-  // todo: axios 체크하기
-  async function registKid() {
+  // 수정 axios 연동 필요!!!
+  async function modifyKid() {
     // 닉네임 검사
     if (kidsNameInput.current.value == "") {
       setOpenKidName(true);
@@ -76,7 +72,12 @@ export default function ModifyKidsInfo() {
     // 생년월일 검사
     if (isBirth(kidsBirthInput.current.value)) {
       let birth = kidsBirthInput.current.value;
-      birth = birth.substr(0, 4) + "-" + birth.substr(4, 2) + "-" + birth.substr(6, 2);
+      birth =
+        birth.substr(0, 4) +
+        "-" +
+        birth.substr(4, 2) +
+        "-" +
+        birth.substr(6, 2);
 
       // 파일 전송
       let file = imgRef.current.files[0];
@@ -148,7 +149,10 @@ export default function ModifyKidsInfo() {
       } else if (day < 1 || day > 31) {
         // 1일 미만 31일 초과인 경우
         return false;
-      } else if ((month === 4 || month === 6 || month === 9 || month === 11) && day === 31) {
+      } else if (
+        (month === 4 || month === 6 || month === 9 || month === 11) &&
+        day === 31
+      ) {
         // 4, 6, 9, 11월에 31일인경우
         return false;
       } else if (month === 2) {
@@ -167,12 +171,45 @@ export default function ModifyKidsInfo() {
     }
   }
 
+  // 아이들 전체 정보
   const [kidsList, setKidsList] = useState([]);
+  // 선택한 아이의 value값
+  const [selectKid, setSelectKid] = useState(0);
+  // 선택한 아이의 정보
+  const [selectKidInfo, setSelectKidInfo] = useState({});
+  const [name, setName] = useState("");
+  const [gender, setGender] = useState("");
+  const [birth, setBirth] = useState("");
+
+  // 아이 선택 시
+  const handleChange = (e) => {
+    setSelectKid(e.target.value);
+
+    setImageUrl(kidsList[e.target.value].kidProfileImage);
+    setName(kidsList[e.target.value].kidName);
+    // setGender(kidsList[e.target.value].) // 젠더가 업네...?
+    let str =
+      kidsList[e.target.value].kidBirth.slice(0, 4) +
+      kidsList[e.target.value].kidBirth.slice(5, 7) +
+      kidsList[e.target.value].kidBirth.slice(8, 10);
+    setBirth(str);
+  };
 
   async function getUserInfo() {
     const response = await http.get(`/users/${userInfo.userId}`);
     // console.log(response.data);
-    setKidsList(response.data.data.kidDtoList);
+    let info = response.data.data;
+    setKidsList(info.kidDtoList);
+    setSelectKidInfo(info.kidDtoList[0]);
+
+    setImageUrl(info.kidDtoList[0].kidProfileImage);
+    setName(info.kidDtoList[0].kidName);
+    // setGender(info.kidDtoList[0].) // 젠더가 업네...?
+    let str =
+      info.kidDtoList[0].kidBirth.slice(0, 4) +
+      info.kidDtoList[0].kidBirth.slice(5, 7) +
+      info.kidDtoList[0].kidBirth.slice(8, 10);
+    setBirth(str);
   }
 
   useEffect(() => {
@@ -182,28 +219,44 @@ export default function ModifyKidsInfo() {
   return (
     <Grid>
       {/* 헤더 */}
-      <BackMenu isLeft type="registKids" title="아이 프로필 변경" />
+      <BackMenu
+        isLeft
+        type="registKids"
+        title="아이 프로필 변경"
+        clickRight={() => {
+          setOpenRegist(true);
+        }}
+      />
       <Grid id="container">
-        <div style={{ textAlign: "center" }}>
-          <FormControl sx={{ m: 1, minWidth: 120 }}>
+        <div style={{ textAlign: "center", marginBottom: "8%" }}>
+          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
             <Select
               value={selectKid}
               onChange={handleChange}
-              displayEmpty
               inputProps={{ "aria-label": "Without label" }}
+              MenuProps={{ disablePortal: true }}
             >
               {kidsList.map((kid, i) => (
                 <MenuItem key={i} value={i}>
-                  <ListItemAvatar>
-                    <Avatar src={kid.kidProfileImage}></Avatar>
-                  </ListItemAvatar>
-                  {i == 0 ? <em>{kid.kidName}</em> : <span>{kid.kidName}</span>}
+                  <Grid container alignItems="center">
+                    <Grid item xs={4}>
+                      <ListItemAvatar>
+                        <Avatar src={kid.kidProfileImage}></Avatar>
+                      </ListItemAvatar>
+                    </Grid>
+                    {kid.kidName}
+                  </Grid>
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
         </div>
-        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
+        <Grid
+          container
+          justifyContent="center"
+          textAlign="center"
+          sx={{ marginBottom: "3vh" }}
+        >
           <Grid item xs={3} sx={{ marginBottom: "1vh", textAlign: "center" }}>
             {imageUrl ? (
               <Avatar src={imageUrl} sx={{ width: 100, height: 100 }} />
@@ -232,17 +285,30 @@ export default function ModifyKidsInfo() {
           </Grid>
         </Grid>
         {/* 이름 */}
-        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
-          <Grid item xs={10} sx={{ fontSize: "2.3vh", marginBottom: "1vh", color: "#6F6F6F" }}>
+        <Grid
+          container
+          justifyContent="center"
+          textAlign="center"
+          sx={{ marginBottom: "3vh" }}
+        >
+          <Grid
+            item
+            xs={10}
+            sx={{ fontSize: "2.3vh", marginBottom: "1vh", color: "#6F6F6F" }}
+          >
             이름
           </Grid>
           {/* todo: 캘린더 클릭 후 이름 바뀌는 것 수정 필요 */}
           <Grid item xs={10}>
-            <Input
-              inputRef={kidsNameInput}
+            <TextField
+              variant="standard"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
               inputProps={{
                 style: {
-                  fontSize: "2.3vh",
+                  fontSize: "2.5vh",
                 },
               }}
             />
@@ -250,25 +316,47 @@ export default function ModifyKidsInfo() {
         </Grid>
 
         {/* 생년월일 */}
-        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "4vh" }}>
-          <Grid item xs={10} sx={{ fontSize: "2.3vh", marginBottom: "3vh", color: "#6F6F6F" }}>
+        <Grid
+          container
+          justifyContent="center"
+          textAlign="center"
+          sx={{ marginBottom: "4vh" }}
+        >
+          <Grid
+            item
+            xs={10}
+            sx={{ fontSize: "2.3vh", marginBottom: "3vh", color: "#6F6F6F" }}
+          >
             생년월일
           </Grid>
           <Grid item xs={10} sx={{ fontSize: "2.3vh" }} justifyContent="center">
-            <Input
-              inputRef={kidsBirthInput}
-              placeholder="ex) 20100717"
+            <TextField
+              variant="standard"
+              value={birth}
+              onChange={(e) => {
+                setBirth(e.target.value);
+              }}
+              placeholder="ex) 19970717"
               inputProps={{
                 style: {
-                  fontSize: "2.3vh",
+                  fontSize: "2.5vh",
                 },
               }}
             />
           </Grid>
         </Grid>
         {/* 성별 */}
-        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
-          <Grid item xs={10} sx={{ fontSize: "2.3vh", marginBottom: "2vh", color: "#6F6F6F" }}>
+        <Grid
+          container
+          justifyContent="center"
+          textAlign="center"
+          sx={{ marginBottom: "3vh" }}
+        >
+          <Grid
+            item
+            xs={10}
+            sx={{ fontSize: "2.3vh", marginBottom: "2vh", color: "#6F6F6F" }}
+          >
             성별
           </Grid>
           <Grid item xs={10} sx={{ fontSize: "2.3vh" }}>
@@ -279,12 +367,12 @@ export default function ModifyKidsInfo() {
                 name="row-radio-buttons-group"
                 color="secondary"
                 onChange={(e) => {
-                  setKidsGender(e.target.value);
+                  setGender(e.target.value);
                 }}
                 sx={{
                   fontSize: "2.3vh",
                 }}
-                value={kidsGender}
+                value={gender}
               >
                 <FormControlLabel
                   value="M"
@@ -298,16 +386,27 @@ export default function ModifyKidsInfo() {
                 />
               </RadioGroup>
             </FormControl>
-            <Grid container justifyContent="center" textAlign="center" sx={{ marginTop: "4vh" }}>
+            <Grid
+              container
+              justifyContent="center"
+              textAlign="center"
+              sx={{ marginTop: "4vh" }}
+            >
               <Btn
+                width="30%"
                 onClick={() => {
-                  registKid();
+                  modifyKid();
                 }}
               >
-                등록
+                수정
               </Btn>
             </Grid>
           </Grid>
+          {/* 아이 등록 모달 */}
+          <KidsInfoModal
+            open={openRegist}
+            setOpen={setOpenRegist}
+          ></KidsInfoModal>
           {/* 아이이름 입력부탁 모달 */}
           <Modal
             open={openKidName}
