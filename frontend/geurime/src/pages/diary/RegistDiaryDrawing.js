@@ -3,7 +3,7 @@
 @author 조혜안
 @since 2022.10.31
 */
-import { useState, useEffect, useRef, Suspense } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import BackMenu from "components/nav/BackMenu";
 import NavBar from "components/nav/NavBar";
 import RegistDiaryModal from "components/modal/RegistDiaryModal";
@@ -17,20 +17,94 @@ import {
   Typography,
   TextField,
   IconButton,
+  Slide,
+  AppBar,
+  Toolbar,
 } from "@mui/material";
 import Calendar from "react-calendar";
 import "./Calendar.css";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Button from "components/common/Btn";
 import { http2 } from "api/http2";
-
+import CloseIcon from "@mui/icons-material/Close";
 import { diaryState } from "states/DiaryState";
 import { useRecoilState } from "recoil";
 import { http } from "api/http";
+import DrawingModal from "components/modal/DrawingModal";
 
 export default function RegistDiary({}) {
+  // 그리기 풀 모달 transition
+  const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
+  // canvasRef
+  const canvasRef = useRef(null);
+  const contextRef = useRef(null);
+  // ctx
+  const [ctx, setCtx] = useState();
+  // drawing
+  const [isDrawing, setIsDrawing] = useState(false);
+  useEffect(() => {
+    // canvas useRef
+    const canvas = canvasRef.current;
+    // canvas.width = window.innerWidth * 2;
+    // canvas.height = window.innerHeight * 2;
+    // canvas.style.width = `${window.innerWidth}px`;
+    // canvas.style.height = `${window.innerHeight}px`;
+    const context = canvas.getContext("2d");
+    context.lineJoin = "round";
+    context.lineWidth = 3;
+    context.strokeStyle = "#000000";
+    contextRef.current = context;
+    setCtx(context);
+  }, []);
+  const startDrawing = () => {
+    setIsDrawing(true);
+  };
+  const finishDrawing = () => {
+    setIsDrawing(false);
+  };
+  const drawing = ({ nativeEvent }) => {
+    const { offsetX, offsetY } = nativeEvent;
+    if (ctx) {
+      if (!isDrawing) {
+        ctx.beginPath();
+        ctx.moveTo(offsetX, offsetY);
+      } else {
+        ctx.lineTo(offsetX, offsetY);
+        ctx.stroke();
+      }
+    }
+  };
+  // const startDrawing = ({ nativeEvent }) => {
+  //   const { offsetX, offsetY } = nativeEvent;
+  //   contextRef.current.beginPath();
+  //   contextRef.current.moveTo(offsetX, offsetY);
+  //   setIsDrawing(true);
+  // };
+
+  // const finishDrawing = () => {
+  //   contextRef.current.closePath();
+  //   setIsDrawing(false);
+  // };
+
+  // const draw = ({ nativeEvent }) => {
+  //   if (!isDrawing) {
+  //     return;
+  //   }
+  //   const { offsetX, offsetY } = nativeEvent;
+  //   contextRef.current.lineTo(offsetX, offsetY);
+  //   contextRef.current.stroke();
+  // };
+
   // 등록완료 모달
   const [open, setOpen] = useState(false);
+  // 직접 그리기 모달
+  const [openDrawing, setOpenDrawing] = useState(false);
+
+  const closeDrawing = () => {
+    setOpenDrawing(false);
+  };
 
   // 일기 제목
   const [title, setTitle] = useState("");
@@ -204,6 +278,14 @@ export default function RegistDiary({}) {
             )}
           </Grid>
         </Grid>
+        <canvas id="canvas" ref={canvasRef} width={5} height={5} />
+        <Button
+          onClick={() => {
+            setOpenDrawing(true);
+          }}
+        >
+          직접 그리기
+        </Button>
         {imageUrl ? (
           <div style={{ textAlign: "center" }}>
             {/* 그림 변경 버튼 */}
@@ -227,6 +309,64 @@ export default function RegistDiary({}) {
       <NavBar></NavBar>
       {/* 등록 완료 모달 */}
       <RegistDiaryModal open={open}></RegistDiaryModal>
+      {/* 직접 그리기 모달 */}
+      <DrawingModal
+        open={openDrawing}
+        handleClose={() => {
+          setOpenDrawing(false);
+        }}
+        canvasRef={canvasRef}
+        startDrawing={startDrawing}
+        finishDrawing={finishDrawing}
+        drawing={drawing}
+      ></DrawingModal>
+      {/* <Dialog
+        fullScreen
+        open={openDrawing}
+        onClose={() => {
+          setOpenDrawing(false);
+        }}
+        TransitionComponent={Transition}
+      >
+        <AppBar sx={{ position: "relative" }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={() => {
+                setOpenDrawing(false);
+              }}
+              aria-label="close"
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+              직접 그리기
+            </Typography>
+            <div
+              autoFocus
+              color="inherit"
+              onClick={() => {
+                setOpenDrawing(false);
+              }}
+            >
+              저장
+            </div>
+          </Toolbar>
+        </AppBar>
+        <Container>
+          <canvas
+            id="canvas"
+            ref={canvasRef}
+            width={800}
+            height={600}
+            // onMouseDown={startDrawing}
+            // onMouseUp={finishDrawing}
+            // onMouseMove={drawing}
+            // onMouseLeave={finishDrawing}
+          />
+        </Container>
+      </Dialog> */}
     </div>
   );
 }
