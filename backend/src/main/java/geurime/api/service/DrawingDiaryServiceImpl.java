@@ -45,6 +45,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
     public Drawing.DrawingDiaryInfoResponse readDrawingDiary(Long drawingId) {
         Drawing drawing = getDrawing(drawingId);
         Drawing.DrawingDiaryInfoResponse response = modelMapper.map(drawing, Drawing.DrawingDiaryInfoResponse.class);
+        response.setDrawingId(drawing.getId());
 
         return response;
     }
@@ -81,11 +82,20 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
     @Override
     public List<Drawing.DrawingDiaryListResponse> readByDateDrawingDiaryList(Long kidId, LocalDate date) {
         Kid kid = getKid(kidId);
-        LocalDateTime startTime = date.atStartOfDay();
-        LocalDateTime endTime = date.atTime(23, 59, 59);
 
-        List<Drawing> drawingDiaryList = drawingRepository.findByDrawingBox_KidAndCreateTimeBetween(kid, startTime, endTime);
-        List<Drawing.DrawingDiaryListResponse> responseList = mapList(drawingDiaryList, Drawing.DrawingDiaryListResponse.class);
+        List<Drawing> drawingDiaryList = drawingRepository.findByDrawingBox_KidAndCreateTime(kid, date);
+        List<Drawing.DrawingDiaryListResponse> responseList = new ArrayList<>(drawingDiaryList.size());
+
+        for (Drawing diary : drawingDiaryList){
+            Drawing.DrawingDiaryListResponse response = Drawing.DrawingDiaryListResponse.builder()
+                    .drawingId(diary.getId())
+                    .createTime(diary.getCreateTime())
+                    .drawingTitle(diary.getDrawingTitle())
+                    .drawingImagePath(diary.getDrawingImagePath())
+                    .build();
+            responseList.add(response);
+        }
+
         return responseList;
     }
 
