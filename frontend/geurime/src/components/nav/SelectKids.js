@@ -61,6 +61,8 @@ export default function SelectKids() {
   async function getKidInfo(kidId) {
     const response = await http.get(`kids/${kidId}`);
     setCurrentKid(response.data.data);
+    console.log(response.data.data.kidId);
+    localStorage.setItem("currentKidId", response.data.data.kidId);
   }
 
   const navigater = useNavigate();

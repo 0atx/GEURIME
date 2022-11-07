@@ -33,7 +33,18 @@ export default function RegistDrawing() {
   const [open, setOpen] = useState(false);
 
   // 그림 보관함
-  const drawingBoxes = currentKid.drawingBoxDtoList;
+  const [drawingBoxes, setDrawingBoxes] = useState(
+    currentKid.drawingBoxDtoList
+  );
+
+  for (let i = 0; i < drawingBoxes.length; i++) {
+    if (drawingBoxes[i].drawingBoxName === "그림일기 보관함") {
+      let copy = [...drawingBoxes];
+      console.log(i);
+      copy.splice(i, 1);
+      setDrawingBoxes(copy);
+    }
+  }
 
   const [drawingBox, setDrawingBox] = useState(currentKid.drawingBoxDtoList[0]);
 
