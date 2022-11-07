@@ -67,7 +67,7 @@ export default function ModifyKidsInfo() {
     };
   }
 
-  // 수정 axios 연동 필요!!!
+  // 아이 프로필 수정
   async function modifyKid() {
     // 아이 이름 검사
     if (name == "") {

@@ -71,6 +71,7 @@ export default function DetailDiary() {
     setOpenAnalysisModal(true);
   };
 
+  // 일기 조회
   async function getDiary() {
     const response = await http.get(`/diaries/info/${params.diaryid}`);
     console.log(response.data.data);
@@ -79,7 +80,6 @@ export default function DetailDiary() {
     setDiary(info);
 
     // 연동 후 데이터 가공
-    // response.data를 "2022-11-01 16:00"에 바로 넣어주자 - 변경 필요!!!
     setYear(new Date(info.createTime).getFullYear());
     setMonth(new Date(info.createTime).getMonth() + 1);
     setDate(new Date(info.createTime).getDate());
@@ -94,7 +94,6 @@ export default function DetailDiary() {
     if (!mounted.current) {
       mounted.current = true;
     } else {
-      // 일기장 get axios 연동 필요!!!
       getDiary();
     }
   }, []);
@@ -104,7 +103,7 @@ export default function DetailDiary() {
       {/* 헤더 */}
       <BackMenu
         isLeft={true}
-        title={diary.title}
+        title={diary.drawingTitle}
         isRight="삭제"
         clickRight={deleteDiary}
       ></BackMenu>

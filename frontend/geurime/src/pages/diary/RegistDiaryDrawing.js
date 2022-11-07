@@ -31,6 +31,7 @@ import { diaryState } from "states/DiaryState";
 import { useRecoilState } from "recoil";
 import { http } from "api/http";
 import DrawingModal from "components/modal/DrawingModal";
+import { CurrentKidState } from "states/CurrentKidState";
 
 export default function RegistDiary({}) {
   // 그리기 풀 모달 transition
@@ -111,7 +112,8 @@ export default function RegistDiary({}) {
 
   // 전역에 담긴 일기 정보
   const [diaryInfo, setDiaryInfo] = useRecoilState(diaryState);
-
+  // 현재 아이 정보
+  const [kidInfo, setKidInfo] = useRecoilState(CurrentKidState);
   // 이미지 업로드
   const [imageUrl, setImageUrl] = useState(null);
   const imgRef = useRef();
@@ -145,7 +147,7 @@ export default function RegistDiary({}) {
     formData.append("imageFile", file);
 
     let info = {
-      kidId: 37, // kidId 변경 필요!!!
+      kidId: kidInfo.kidId,
       drawingTitle: title,
       drawingDiary: diaryInfo.writing,
       createTime: diaryInfo.date,
@@ -168,7 +170,6 @@ export default function RegistDiary({}) {
     console.log(response.data);
 
     if (response.data.message == "success") {
-      // 그림분석 api 연동 필요!!!
       analyzeDrawing(response.data.data.drawingId);
     } else {
     }

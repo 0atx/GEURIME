@@ -28,7 +28,7 @@ export default function Diary() {
   const [searchKeyWord, setSearchKeyWord] = useState();
   const searchInput = useRef(null); // 검색바 input 객체
 
-  // 일기 목록 - 실제 데이터로 변경 필요!!!
+  // 일기 목록
   const [diaries, setDiaries] = useState([]);
 
   const mounted = useRef(false);
@@ -43,23 +43,48 @@ export default function Diary() {
   // 자녀의 그림일기 전체조회
   async function getDiaries() {
     const response = await http.get(`/diaries/${kidInfo.kidId}`);
-    // console.log(response.data.data);
+    console.log(kidInfo);
+    console.log(response.data.data);
     setDiaries(response.data.data);
   }
 
-  // 일기장 날짜로 검색하는 함수 -- 실제 데이터 연동 변경필요!!!
+  // 일기장 날짜로 검색하는 함수
   async function search(e) {
     if (e.key === "Enter") {
       e.preventDefault();
-      console.log("검색");
-      searchInput.current.value = "";
+      let keyword = searchKeyWord;
+      keyword = keyword.trim();
+
+      const response = await http.get(`/diaries/title`, {
+        params: {
+          keyword: keyword,
+          kidId: kidInfo.kidId,
+        },
+      });
+      if (response.data.message === "success") {
+        setDiaries(response.data.data);
+      }
+
+      // searchInput.current.value = "";
     }
   }
-  // 일기장 날짜로 검색하는 함수(클릭) -- 실제 데이터 연동 변경필요!!!
+  // 일기장 날짜로 검색하는 함수(클릭)
   async function searchClick(e) {
     e.preventDefault();
-    console.log("검색");
-    searchInput.current.value = "";
+    let keyword = searchKeyWord;
+    keyword = keyword.trim();
+
+    const response = await http.get(`/diaries/title`, {
+      params: {
+        keyword: keyword,
+        kidId: kidInfo.kidId,
+      },
+    });
+    if (response.data.message === "success") {
+      setDiaries(response.data.data);
+    }
+
+    // searchInput.current.value = "";
   }
 
   return (
@@ -90,14 +115,14 @@ export default function Diary() {
               {/* 검색어 입력 부분 */}
               <InputBase
                 sx={{ ml: 2, flex: 1 }}
-                placeholder="날짜(YYYY-MM-DD) 또는 제목으로 검색하세요"
+                placeholder="제목을 검색하세요"
                 onChange={(e) => {
                   setSearchKeyWord(e.target.value);
                 }} // 검색 키워드 변경
                 id="searchValue"
                 inputRef={searchInput} // input 객체를 반환
                 onKeyDown={(e) => {
-                  // search(e);
+                  search(e);
                 }} // enter시 검색하는 함수
               />
               {/* 검색어 삭제 버튼 */}
@@ -120,7 +145,7 @@ export default function Diary() {
                 sx={{ p: "10px", color: "#FFA000", mr: 2 }}
                 aria-label="search"
                 onClick={(e) => {
-                  // searchClick(e);
+                  searchClick(e);
                 }}
               >
                 <SearchIcon />
