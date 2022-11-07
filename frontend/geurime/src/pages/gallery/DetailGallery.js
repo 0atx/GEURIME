@@ -55,7 +55,7 @@ export default function DetailGallery() {
   return (
     <>
       <BackMenu
-        isLeft="true"
+        isLeft={true}
         title={`${boxInfo.drawingBoxName} (${boxInfo.dtoList.length})`}
         type="detailGallery"
       />

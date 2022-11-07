@@ -17,8 +17,8 @@ export const CurrentKidState = atom({
       },
     ],
     kidBirth: "",
-    kidId: 0,
+    kidId: localStorage.getItem("currentKidId"),
     kidName: "",
-    kidProfileImage: "s",
+    kidProfileImage: "",
   },
 });

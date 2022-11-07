@@ -13,6 +13,7 @@ import { Container } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import RegistDrawingBoxModal from "components/modal/RegistDrawingBoxModal";
 import { useEffect, useRef, useState } from "react";
+import { http } from "api/http";
 
 export default function Gallery() {
   const [currentKid, setCurrentKid] = useRecoilState(CurrentKidState);
@@ -26,14 +27,20 @@ export default function Gallery() {
     setOpen(true);
   }
 
+  async function getKidInfo() {
+    const response = await http.get(`/kids/${currentKid.kidId}`);
+    setCurrentKid(response.data.data);
+    setBoxes(response.data.data.drawingBoxDtoList);
+  }
+
   const mounted = useRef(false);
   useEffect(() => {
     if (!mounted.current) {
       mounted.current = true;
     } else {
-      setBoxes(currentKid.drawingBoxDtoList);
+      getKidInfo();
     }
-  }, [currentKid]);
+  }, []);
 
   return (
     <>
