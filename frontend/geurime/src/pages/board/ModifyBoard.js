@@ -17,7 +17,7 @@ export default function ModifyBoard() {
   const [text, setText] = useState(boardInfo.boardContent)
   const textRef = useRef();
   const titleRef = useRef();
-  const [imageUrl, setImageUrl] = useState(boardInfo.boardImagePathList[0]);
+  const [imageUrl, setImageUrl] = useState(boardInfo.boardImagePath);
   const [images, setImages] = useState();
   const imgRef = useRef();
   const boardCategories = [
@@ -62,7 +62,7 @@ export default function ModifyBoard() {
     console.log({ 현재내용: textRef.current.value })
     console.log({ 현재카테고리: boardCategory })
     console.log({ 현재유저아이디: userInfo.userID })
-    console.log({ 사진:  imgRef.current.files[0]})
+    console.log({ 사진:  imgRef.current.files})
     // 유저 아이디 리코일에서 가져오게 해야됨
     let request = {
       boardId: boardInfo.boardId,
@@ -78,7 +78,7 @@ export default function ModifyBoard() {
     );
     // 엑시오스 요청
     // 이미지 수정했을 때
-    if (imgRef.current.files[0]) {
+    if (imgRef.current.files) {
       const response = await http2.put(`/boards`, formData);
       if (response.data.message == "success") {
         console.log('수정 완료!')
@@ -107,7 +107,7 @@ export default function ModifyBoard() {
     const response = await http.delete(`/boards`, {
       params: {
         boardId: boardInfo.boardId,
-        userId: userInfo.userID
+        userId: userInfo.userId
       }
     });
     if (response.data.message == "success") {

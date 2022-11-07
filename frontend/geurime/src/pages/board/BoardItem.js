@@ -53,7 +53,7 @@ export default function BoardItem({ item }) {
           backgroundColor="#E1E1E1"
         >
         <img
-          src={item.boardFirstImage}
+          src={item.boardImagePath}
           loading="lazy"
           style={{ height: '14vh', width: '19vh', margin: '2%', borderRadius: 5, marginTop: '3.5%' }}
           />
