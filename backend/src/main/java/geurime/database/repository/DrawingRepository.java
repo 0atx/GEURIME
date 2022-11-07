@@ -7,6 +7,7 @@ import geurime.database.enums.BoxType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -17,7 +18,7 @@ public interface DrawingRepository extends JpaRepository<Drawing, Long> {
 
     List<Drawing> findByDrawingBox_KidAndDrawingBox_DrawingBoxCategory(Kid kid, BoxType drawingBoxCategory);
 
-    List<Drawing> findByDrawingBox_KidAndCreateTimeBetween(Kid kid, LocalDateTime createTimeStart, LocalDateTime createTimeEnd);
+    List<Drawing> findByDrawingBox_KidAndCreateTime(Kid kid, LocalDate createTime);
 
     List<Drawing> findByDrawingBox_KidAndDrawingTitleContains(Kid kid, String drawingTitle);
 
