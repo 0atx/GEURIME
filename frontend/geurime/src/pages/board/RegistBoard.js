@@ -33,13 +33,13 @@ export default function RegistBoard() {
   const imgRef = useRef();
   const [images, setImages] = useState();
 
-  const titleChange = (event) => {
-    setTitle(event.target.value);
-  };
+  // const titleChange = (event) => {
+  //   setTitle(event.target.value);
+  // };
 
-  const textChange = (event) => {
-    setText(event.target.value);
-  };
+  // const textChange = (event) => {
+  //   setText(event.target.value);
+  // };
   const handleChange = (event) => {
     setBoardCategory(event.target.value);
   };
@@ -66,7 +66,14 @@ export default function RegistBoard() {
     );
     // 엑시오스 요청
     console.log('등록중')
-    console.log({폼데이터: formData})
+    console.log({ 폼데이터: formData })
+    if (titleRef.current.value == 0) {
+      alert('제목을 입력해주세요')
+    }
+    else if (textRef.current.value == 0) {
+      alert('내용을 입력해주세요')
+    }
+    else{
     const response = await http2.post(`/boards`, formData);
     if (response.data.message == "success") {
       console.log('등록 완료!')
@@ -74,8 +81,8 @@ export default function RegistBoard() {
     } else {
       alert("게시글을 등록하지 못했습니다");
       return;
+      }
     }
-    console.log({ref: textRef.current.value})
   }
 
 
@@ -108,8 +115,8 @@ export default function RegistBoard() {
     >
     </BackMenu>
       <BoardInputItem
-        titleChange={titleChange}
-        textChange={textChange}
+        // titleChange={titleChange}
+        // textChange={textChange}
         handleChange={handleChange}
         boardCategory={boardCategory}
         boardCategories={boardCategories}

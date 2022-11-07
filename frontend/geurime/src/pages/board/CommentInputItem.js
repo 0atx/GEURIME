@@ -1,7 +1,8 @@
-import { Avatar, Grid } from "@mui/material";
+import { Avatar, Grid, IconButton } from "@mui/material";
 import moment from "moment";
 import { useEffect, useRef, useState } from "react";
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 export default function CommentInputItem({ item }) {
 
@@ -88,10 +89,11 @@ export default function CommentInputItem({ item }) {
       >
       <Grid
           container
-          sx={{ alignItems: 'center', justifyContent: 'space-between' }}
+          sx={{ alignItems: 'center' }}
       >
       {/* 작성 내용 */}
         <Grid
+          item
           sx={{ marginLeft: '3%' }}
           xs={10}
         >
@@ -101,11 +103,16 @@ export default function CommentInputItem({ item }) {
         {createTime}
         </Grid>
       {/* 편집 버튼 */}
-        <Grid
+        {/* <Grid
             item
+            sx={{ justifyContent: 'flex-end'}}
         >
-          <MoreHorizOutlinedIcon></MoreHorizOutlinedIcon>
-        </Grid>
+          <IconButton color="primary" component="label" onClick={''}>
+            <MoreHorizOutlinedIcon></MoreHorizOutlinedIcon>
+          </IconButton>   
+            <DeleteOutlineOutlinedIcon></DeleteOutlineOutlinedIcon>
+
+        </Grid> */}
         </Grid>
       </Grid>
     </Grid>

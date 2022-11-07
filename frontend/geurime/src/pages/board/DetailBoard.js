@@ -10,6 +10,7 @@ import BackMenu from "components/nav/BackMenu";
 import { boardState } from "states/BoardState";
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
+import moment from "moment";
 
 export default function DetailBoard( ) { 
   const location = useLocation()
@@ -49,6 +50,7 @@ export default function DetailBoard( ) {
   },[boardInfo])
   
   const navigator = useNavigate();
+  // 페이지 들어왔을때 엑시오스 요청
   const getDetail = async () => {
     console.log({ 페이지id: location.pathname.slice(13,) })
     const boardid = location.pathname.slice(13,);
@@ -61,13 +63,6 @@ export default function DetailBoard( ) {
       alert("게시글을 불러오지 못했습니다");
     }
   }
-  // const [initialized, setInitialized] = useState(false);
-
-  // useEffect(() => {
-  //   if (initialized) return;
-  //   getDetail();
-  //   setInitialized(true);
-  // }, [initialized]);
 
   let [check, setCheck] = useState(false);
   useEffect(() => { 
@@ -81,40 +76,52 @@ export default function DetailBoard( ) {
   }, [check])
 
   const [comment, setComment] = useState()
+
   useEffect(() => {
     console.log({ 보드아이템: commentDtoList })
-    // setComment(board.boardCommentDtoList?.map((store, idx) => {
-    //   return <CommentInputItem key={idx} item={store}/>;
-    // }))
+    console.log({유저정보: userInfo})
     console.log({댓글: comment})
   }, [commentDtoList])
 
   // const [commentText, setCommentText] = useState();
   const commentRef = useRef(null);
 
-  
+    // const onReset = (e) => {
+    // setText("");
+    // };
 
   const postComment = async () => {
     // commentUserId 리코일에서 가져오기
     const boardid = location.pathname.slice(13,);
-    console.log({현재댓글: commentRef.current.value });
+    console.log({ 현재댓글: commentRef.current.value });
+    if (commentRef.current.value != 0) { 
     const response = await http.post(`/comments`, 
       {
         boardId: boardid,
         commentContent: commentRef.current.value,
-        commentUserId: userInfo.userID
+        commentUserId: userInfo.userID,
       }
     );
 
-    if (response.data.message == "success") {
-      alert("댓글 등록 완료!")
-      setCommentDtoList([...commentDtoList, {
-        boardId: boardid,
-        commentContent: commentRef.current.value,
-        commentUserId: userInfo.userID
-      }])
-    } else {
-      alert("댓글을 등록하지 못했습니다");
+      if (response.data.message == "success") {
+        if (commentRef.current.value !== 0) {
+          setCommentDtoList([...commentDtoList, {
+            commentUserNickname: userInfo.nickName,
+            commentContent: commentRef.current.value,
+            commentUserId: userInfo.userID,
+            commentUserProfile: userInfo.userProfileImage,
+            createTime: moment().format('YYYY-MM-DD HH:mm:ss')
+          }])
+          commentRef.current.value = "";
+        }
+      }
+
+      else {
+        alert("댓글을 등록하지 못했습니다");
+      }
+    }
+    else {
+      alert('댓글 내용을 입력해주세요')
     }
   } 
   
@@ -148,7 +155,7 @@ export default function DetailBoard( ) {
         xs={7}  
       >
         <img
-          src={board.boardImagePathList}
+          src={board.boardImagePathList[0]}
           loading="lazy"
           style={{ height: '21vh', width: '24vh', margin: '2%', borderRadius: 5, marginTop: '3.5%' }}
           />
@@ -223,7 +230,7 @@ export default function DetailBoard( ) {
       {/* 댓글 */}
       <Grid
       >
-      {board.boardCommentDtoList?.map((store, idx) => {
+      {commentDtoList?.map((store, idx) => {
         return <CommentInputItem key={idx} item={store}/>;
       })}
 
