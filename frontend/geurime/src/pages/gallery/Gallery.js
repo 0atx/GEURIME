@@ -8,16 +8,31 @@ import BackMenu from "components/nav/BackMenu";
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
 import { CurrentKidState } from "states/CurrentKidState";
-import { Grid, Link, Paper, Typography } from "@mui/material";
+import {
+  Grid,
+  Link,
+  Paper,
+  Typography,
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
+  IconButton,
+} from "@mui/material";
 import { Container } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import RegistDrawingBoxModal from "components/modal/RegistDrawingBoxModal";
 import { useEffect, useRef, useState } from "react";
 import { http } from "api/http";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { Favorite } from "@mui/icons-material";
 
 export default function Gallery() {
   const [currentKid, setCurrentKid] = useRecoilState(CurrentKidState);
   const [boxes, setBoxes] = useState(currentKid.drawingBoxDtoList);
+
+  // 좋아요 보관함 그림 정보
+  const [likeBox, setLikeBox] = useState([]);
+
   const navigater = useNavigate();
 
   // 보관함 추가 관리 모달
@@ -27,6 +42,12 @@ export default function Gallery() {
     setOpen(true);
   }
 
+  // 좋아요 보관함 가져오는 axios 함수
+  async function getLikeBox() {
+    const response = await http.get(`/drawings/like/${currentKid.kidId}`);
+    setLikeBox(response.data.data);
+  }
+  // 아이의 정보를 가져오는 axios 함수
   async function getKidInfo() {
     const response = await http.get(`/kids/${currentKid.kidId}`);
     setCurrentKid(response.data.data);
@@ -39,8 +60,9 @@ export default function Gallery() {
       mounted.current = true;
     } else {
       getKidInfo();
+      getLikeBox();
     }
-  }, []);
+  }, [open]);
 
   return (
     <>
@@ -58,6 +80,58 @@ export default function Gallery() {
             columnSpacing={{ xs: 2, sm: 3, md: 4 }}
             textAlign="center"
           >
+            {likeBox.length !== 0 ? (
+              <Grid
+                item
+                xs={6}
+                sm={4}
+                md={2}
+                onClick={() => {
+                  console.log("click");
+                }}
+              >
+                <Paper
+                  elevation={4}
+                  sx={{
+                    width: "20vh",
+                    height: "20vh",
+                    borderRadius: "20px",
+                  }}
+                >
+                  <ImageListItem
+                    style={{
+                      width: "20vh",
+                      height: "20vh",
+                      borderRadius: "20px",
+                    }}
+                  >
+                    <img
+                      src={likeBox[0].drawingImagePath}
+                      width="100%"
+                      height="100%"
+                      style={{
+                        borderRadius: "20px",
+                        objectFit: "cover",
+                      }}
+                    />
+                    <ImageListItemBar
+                      sx={{
+                        background: "rgba(0,0,0,0)",
+                      }}
+                      position="top"
+                      actionIcon={
+                        <IconButton sx={{ color: "#FF5252" }}>
+                          <FavoriteIcon sx={{ fontSize: "30px" }} />
+                        </IconButton>
+                      }
+                    />
+                  </ImageListItem>
+                </Paper>
+                <Typography sx={{ marginTop: "1vh" }} variant="body1">
+                  좋아요 보관함 ({likeBox.length})
+                </Typography>
+              </Grid>
+            ) : null}
             {boxes.map((box, i) => (
               <Grid
                 item

@@ -40,7 +40,10 @@ function Router() {
         <Route path="/detailgallery/:galleryid" element={<DetailGallery />} />
         <Route path="/detaildrawing/:drawingid" element={<DetailDrawing />} />
         <Route path="/modifydrawing/:drawingid" element={<ModifyDrawing />} />
-        <Route path="/modifydetailgallery" element={<ModifyDetailGallery />} />
+        <Route
+          path="/modifydetailgallery/:galleryid"
+          element={<ModifyDetailGallery />}
+        />
         <Route path="/registdrawing" element={<RegistDrawing />} />
         <Route path="/diary" element={<Diary />} />
         <Route path="/detaildiary/:diaryid" element={<DetailDiary />} />

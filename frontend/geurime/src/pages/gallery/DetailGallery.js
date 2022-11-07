@@ -9,10 +9,9 @@ import BackMenu from "components/nav/BackMenu";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "states/UserState";
 import { CurrentKidState } from "states/CurrentKidState";
-import { Grid, Link, Paper, Typography } from "@mui/material";
+import { Grid, Link, Paper, Typography, Menu, MenuItem } from "@mui/material";
 import { Container } from "@mui/system";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import RegistDrawingBoxModal from "components/modal/RegistDrawingBoxModal";
 import { useEffect, useRef, useState } from "react";
 import { http } from "api/http";
 import { Masonry } from "@mui/lab";
@@ -60,7 +59,6 @@ export default function DetailGallery() {
         type="detailGallery"
       />
       <Grid id="container">
-        <RegistDrawingBoxModal />
         <Container>
           <Masonry
             columns={3}

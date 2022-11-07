@@ -44,6 +44,7 @@ export default function SelectKids() {
       if (response.data.message === "success") {
         setUserInfo(response.data.data);
         setKids(response.data.data.kidDtoList);
+        getKidInfo(localStorage.getItem("currentKidId"));
       }
     }
   }
