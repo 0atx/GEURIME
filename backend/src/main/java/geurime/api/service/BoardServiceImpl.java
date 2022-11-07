@@ -292,6 +292,12 @@ public class BoardServiceImpl implements BoardService {
         Board.BoardInfoResponse response = modelMapper.map(board, Board.BoardInfoResponse.class);
         response.setBoardImagePathList(stringImageList);
 
+        User writer = board.getUser();
+
+        response.setWriterId(writer.getId());
+        response.setWriterProfile(writer.getUserProfileImage());
+        response.setWriterNickname(writer.getNickname());
+
         return response;
     }
 
