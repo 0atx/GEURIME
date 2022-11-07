@@ -45,6 +45,17 @@ public class DrawingController {
         }
     }
 
+    @GetMapping("/heat-map/{kidId}")
+    @ApiOperation(value = "그림기록 통계 조회", notes = "자녀 id를 받아 날짜별로 업로드한 횟수를 그림이미지를 조회한다")
+    public ResponseEntity<BasicResponse<List<Drawing.CountHeatMapResponse>>> readDrawingCount(@PathVariable("kidId") Long kidId){
+        try {
+            List<Drawing.CountHeatMapResponse> responseList = drawingService.readDrawingCountHeatMap(kidId);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseList), HttpStatus.OK);
+        } catch (CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "그림기록 등록", notes = "그림 보관함과 그림 제목, 이미지 파일을 받아 그림기록을 등록한다.")
     public ResponseEntity<BasicResponse<Drawing.DrawingInfoResponse>> createDrawing(@RequestPart(value = "imageFile") MultipartFile imageFile, @RequestPart(value = "request") Drawing.DrawingPostRequest request){

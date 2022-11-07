@@ -103,6 +103,19 @@ public class Drawing {
     }
 
     /**
+     * 그림기록 업로드 횟수 히트맵
+     */
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CountHeatMapResponse{
+        @JsonFormat(pattern = "yyyy/MM/dd")
+        private LocalDate date;
+        private Long count;
+    }
+
+    /**
      * 그림기록 상세조회 DTO
      */
     @Getter

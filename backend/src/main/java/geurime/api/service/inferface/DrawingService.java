@@ -15,5 +15,7 @@ public interface DrawingService {
     Boolean deleteDrawingBox(Long kidId, Long drawingBoxId, Boolean isDelete);
     Boolean deleteDrawing(Long kidId,Long drawingId);
 
-    // AI 분석 결과값 넣어주는 메서드 필요
+    List<Drawing.CountHeatMapResponse> readDrawingCountHeatMap(Long kidId);
+
+    List<Drawing.CountHeatMapResponse> readDrawingEmotionHeatMap(Long kidId);
 }

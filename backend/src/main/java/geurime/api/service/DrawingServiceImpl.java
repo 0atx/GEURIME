@@ -213,6 +213,19 @@ public class DrawingServiceImpl implements DrawingService {
         return false;
     }
 
+    @Override
+    public List<Drawing.CountHeatMapResponse> readDrawingCountHeatMap(Long kidId) {
+        Kid kid = getKid(kidId);
+
+//        return drawingRepository.findDrawingCountList(kid);
+        return null;
+    }
+
+    @Override
+    public List<Drawing.CountHeatMapResponse> readDrawingEmotionHeatMap(Long kidId) {
+        return null;
+    }
+
     private DrawingBox getDrawingBox(Long drawingBoxId){
         return drawingBoxRepository.findById(drawingBoxId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_BOX_NOT_FOUND_ERROR));
