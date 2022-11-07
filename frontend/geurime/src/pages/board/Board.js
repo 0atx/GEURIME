@@ -78,13 +78,44 @@ export default function Board() {
     getBoard()
 
   },[])
-  async function search(e) {
+  function searchKeyword(e) {
     if (e.key === "Enter") {
-      e.preventDefault();
-      console.log("검색");
-      searchInput.current.value = "";
+      search()
+      // e.preventDefault();
+      // console.log("검색");
+      // searchInput.current.value = "";
+    }
+    // else if (e.key === 'click') {
+    //   search()
+    //   e.preventDefault();
+    //   console.log("검색");
+    //   searchInput.current.value = "";
+    // }
+  }
+
+  const search = async () => {
+    console.log({검색카테고리: list})
+    console.log({검색어: searchInput.current.value})
+    const response = await http.get(`/boards/search`, {
+      params: {
+        category: list,
+        keyword: searchInput.current.value,
+        page: 0,
+        size: 10
+      }
+    });
+    if (response.data.message == "success") {
+      console.log({ 검색결과: response.data.data })
+      if (response.data.data.length == 0) {
+        alert('검색결과 없음')
+      } else {
+        setBoards(response.data.data)
+      }
+    } else {
+      alert("게시글을 불러오지 못했습니다");
     }
   }
+
 
   return (
     <Grid
@@ -160,12 +191,13 @@ export default function Board() {
                   }} // enter시 검색하는 함수
                 /> */}
             <TextField
-            id="standard-search"
-            placeholder='검색어를 입력하세요...'
-            type="search"
-            variant="standard"
-            sx={{ color: '##FFCA28', width: '75%' }}
-            onKeyUp={search}
+              id="standard-search"
+              placeholder='검색어를 입력하세요...'
+              type="search"
+              variant="standard"
+              inputRef={searchInput}
+              onKeyUp={searchKeyword}
+              sx={{ color: '##FFCA28', width: '75%' }}
             />
             
             {/* 돋보기 버튼 */}
