@@ -7,7 +7,7 @@ import { fontWeight } from "@mui/system";
 import MenuItem from '@mui/material/MenuItem';
 
 
-export default function BoardInputItem({handleChange, boardCategory, boardCategories, changeProfile, imgRef, textRef, titleRef, imageUrl}) { 
+export default function BoardInputItem({handleChange, boardCategory, boardCategories, changeProfile, imgRef, textRef, titleRef, imageUrl, text, changeText,changeTitle, title}) { 
   // const [title, setTitle] = useState();
 
 
@@ -120,7 +120,7 @@ export default function BoardInputItem({handleChange, boardCategory, boardCatego
         </Grid>
         <Grid
           item
-          xs={9.5}
+            xs={9.5}
           alignItems='center'
         >
             <TextField
@@ -128,6 +128,10 @@ export default function BoardInputItem({handleChange, boardCategory, boardCatego
               variant="standard"
               placeholder="제목을 입력하세요"
               inputRef={titleRef}
+              value={title}
+              onChange={(e) => {
+                changeTitle(e);
+              }}
             />
         </Grid>
       </Grid>
@@ -153,6 +157,10 @@ export default function BoardInputItem({handleChange, boardCategory, boardCatego
               minRows={5}
               maxRows={5}
               inputRef={textRef}
+              value={text}
+              onChange={(e) => {
+                changeText(e);
+              }}
               sx={{ width: '85vw', borderBlockColor: '#FFE082', borderRadius: 10, borderColor: '#FFE082' }}
             />
       </Grid>
