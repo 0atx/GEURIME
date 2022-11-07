@@ -19,33 +19,43 @@ import {
 } from "@mui/material";
 import NavBar from "components/nav/NavBar";
 import Btn from "components/common/Btn";
+import Modal from "components/common/Modal";
 
 import { useRecoilValue } from "recoil";
 import { CurrentKidState } from "states/CurrentKidState";
 
 export default function ModifyDrawing() {
-  const location = useLocation();
   const navigater = useNavigate();
+  const location = useLocation();
 
+  // 수정 완료 모달
+  const [openModify, setOpenModify] = useState(false);
+  // 삭제 완료 모달
+  const [openDelete, setOpenDelete] = useState(false);
+
+  // 현재 등록된 아이
   const currentKid = useRecoilValue(CurrentKidState);
+
   // 그림 보관함
   const [drawingBoxes, setDrawingBoxes] = useState(
     currentKid.drawingBoxDtoList
   );
 
+  // 그림일기 보관함 삭제 함수
   for (let i = 0; i < drawingBoxes.length; i++) {
     if (drawingBoxes[i].drawingBoxName === "그림일기 보관함") {
       let copy = [...drawingBoxes];
-      console.log(i);
       copy.splice(i, 1);
       setDrawingBoxes(copy);
     }
   }
+  // 보관함 선택시 값 바꾸는 함수
   const handleChange = (event) => {
     setDrawingBox(event.target.value);
   };
 
   const [drawingBox, setDrawingBox] = useState(drawingBoxes[0]);
+  // 그림 id
   let id = location.pathname.substring(15, location.pathname.length + 1);
   const [drawingInfo, setDrawingInfo] = useState({
     drawingId: id,
@@ -59,10 +69,7 @@ export default function ModifyDrawing() {
     isLike: false,
   });
 
-  async function ModifyDrawing(copy) {
-    console.log(copy);
-  }
-
+  // 그림 정보 가져오는 axios 함수
   async function getDrawingInfo() {
     const response = await http.get(`/drawings/${id}`);
     setDrawingInfo(response.data.data);
@@ -79,18 +86,59 @@ export default function ModifyDrawing() {
 
   // 그림 수정 axios 함수
   async function modifyDrawing() {
-    console.log("click");
+    const response = await http.put(`drawings`, {
+      drawingBoxId: drawingBox.drawingBoxId,
+      drawingId: drawingInfo.drawingId,
+      drawingTitle: document.getElementById("drawingTitle").value,
+      isLike: drawingInfo.isLike,
+      kidId: currentKid.kidId,
+    });
+
+    if (response.data.message === "success") {
+      setOpenModify(true);
+    }
   }
 
   // 그림 삭제 axios 함수
   async function deleteDrawing() {
-    console.log("delete");
+    const response = await http.delete(`/drawings`, {
+      params: {
+        drawingId: drawingInfo.drawingId,
+        kidId: currentKid.kidId,
+      },
+    });
+
+    if (response.data.message === "success") {
+      setOpenDelete(true);
+    }
   }
 
   return (
     <>
       <BackMenu isLeft={true} title="그림 수정" />
       <Grid id="container" container>
+        <Modal
+          open={openModify}
+          close={() => {
+            setOpenModify(false);
+          }}
+          onClick={() => {
+            navigater("/gallery");
+          }}
+          text="그림 수정이 완료되었습니다."
+          icon="success"
+        />
+        <Modal
+          open={openDelete}
+          close={() => {
+            setOpenModify(false);
+          }}
+          onClick={() => {
+            navigater("/gallery");
+          }}
+          text="그림 삭제가 완료되었습니다."
+          icon="success"
+        />
         {/* 그림 영역 */}
         <Grid container justifyContent="center" sx={{ marginTop: "0.5vh" }}>
           <Grid
@@ -132,7 +180,7 @@ export default function ModifyDrawing() {
           <Grid item xs={7} sx={{ marginBottom: "3vh" }}>
             <TextField
               fullWidth
-              id="standard-basic"
+              id="drawingTitle"
               placeholder={drawingInfo.drawingTitle}
               variant="standard"
             />

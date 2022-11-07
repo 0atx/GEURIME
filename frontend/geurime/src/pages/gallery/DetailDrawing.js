@@ -25,7 +25,7 @@ export default function DetailDrawing() {
   const [drawingInfo, setDrawingInfo] = useState({
     drawingId: id,
     createTime: "",
-    drawingBoxid: 0,
+    drawingBoxId: 0,
     drawingImagePath: "",
     drawingTitle: "",
     emotionAngry: 0,
@@ -35,8 +35,13 @@ export default function DetailDrawing() {
   });
 
   async function ModifyDrawing(copy) {
-    console.log(copy);
-    const response = await http.put(``);
+    const response = await http.put(`drawings`, {
+      drawingBoxId: copy.drawingBoxId,
+      drawingId: copy.drawingId,
+      drawingTitle: copy.drawingTitle,
+      isLike: copy.isLike,
+      kidId: localStorage.getItem("currentKidId"),
+    });
   }
 
   async function getDrawingInfo() {
