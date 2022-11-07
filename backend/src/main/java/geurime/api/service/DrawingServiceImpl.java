@@ -60,8 +60,16 @@ public class DrawingServiceImpl implements DrawingService {
     public List<Drawing.DrawingGalleryDto> readLikeDrawingList(Long kidId) {
         Kid kid = getKid(kidId);
         List<Drawing> drawingList = drawingRepository.findByDrawingBox_KidAndIsLikeTrue(kid);
-
-        return mapList(drawingList, Drawing.DrawingGalleryDto.class);
+        List<Drawing.DrawingGalleryDto> responseList = new ArrayList<>(drawingList.size());
+        for (Drawing drawing : drawingList){
+            Drawing.DrawingGalleryDto response = Drawing.DrawingGalleryDto.builder()
+                    .drawingId(drawing.getId())
+                    .drawingImagePath(drawing.getDrawingImagePath())
+                    .build();
+            responseList.add(response);
+        }
+        
+        return responseList;
     }
 
     /**
@@ -190,6 +198,7 @@ public class DrawingServiceImpl implements DrawingService {
             for (Drawing drawing : deleteDrawingBox.getDrawingList()){
                 drawing.migrationDrawing(basicDrawingBox);
             }
+            deleteDrawingBox.emptyAllDrawings();
         }
 
         drawingBoxRepository.delete(deleteDrawingBox);

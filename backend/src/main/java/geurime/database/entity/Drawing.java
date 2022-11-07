@@ -148,6 +148,12 @@ public class Drawing {
     public static class DrawingGalleryDto {
         private Long drawingId;
         private String drawingImagePath;
+
+        @Builder
+        public DrawingGalleryDto(Long drawingId, String drawingImagePath) {
+            this.drawingId = drawingId;
+            this.drawingImagePath = drawingImagePath;
+        }
     }
 
     /**
