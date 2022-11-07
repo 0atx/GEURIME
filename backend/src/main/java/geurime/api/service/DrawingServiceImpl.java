@@ -46,6 +46,7 @@ public class DrawingServiceImpl implements DrawingService {
     public Drawing.DrawingInfoResponse readDrawingInfo(Long drawingId) {
         Drawing drawing = getDrawing(drawingId);
         Drawing.DrawingInfoResponse response = modelMapper.map(drawing, Drawing.DrawingInfoResponse.class);
+        response.setDrawingId(drawing.getId());
 
         return response;
     }

@@ -34,14 +34,6 @@ public class DrawingController {
         }
     }
 
-    // 검색 방법 구현해야함
-//    @GetMapping("/preview/{kidId}")
-//    @ApiOperation(value = "그림보관함 미리보기 조회", notes = "자녀 id를 받아 보관함 미리보기를 조회한다")
-//    public ResponseEntity<BasicResponse<Drawing.DrawingBoxPreviewResponse>> readDrawingBoxPreview(@PathVariable("kidId") Long kidId){
-//
-//        return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingInfoResponse), HttpStatus.OK);
-//    }
-
     @GetMapping("/like/{kidId}")
     @ApiOperation(value = "좋아요 그림기록 리스트 조회", notes = "자녀 id를 받아 좋아요한 그림이미지를 조회한다")
     public ResponseEntity<BasicResponse<List<Drawing.DrawingGalleryDto>>> readLikeDrawingList(@PathVariable("kidId") Long kidId){
