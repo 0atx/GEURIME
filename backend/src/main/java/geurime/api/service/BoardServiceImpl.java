@@ -3,11 +3,9 @@ package geurime.api.service;
 import geurime.api.service.inferface.BoardService;
 import geurime.config.s3.S3Uploader;
 import geurime.database.entity.Board;
-import geurime.database.entity.BoardImage;
 import geurime.database.entity.Comment;
 import geurime.database.entity.User;
 import geurime.database.enums.BoardType;
-import geurime.database.repository.BoardImageRepository;
 import geurime.database.repository.BoardRepository;
 import geurime.database.repository.CommentRepository;
 import geurime.database.repository.UserRepository;
@@ -25,7 +23,6 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +32,6 @@ public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
-    private final BoardImageRepository boardImageRepository;
     private final UserRepository userRepository;
     private final S3Uploader s3Uploader;
 
@@ -57,11 +53,6 @@ public class BoardServiceImpl implements BoardService {
         List<Board.BoardTitleResponse> responseList = new ArrayList<>(size);
         for (Board board : boardSlice){
             Board.BoardTitleResponse response = modelMapper.map(board, Board.BoardTitleResponse.class);
-
-            Optional<BoardImage> boardFirstImage = boardImageRepository.findFirstByBoard(board);
-            if(boardFirstImage.isPresent()){
-                response.setBoardFirstImage(boardFirstImage.get().getBoardImagePath());
-            }
 
             Long commentCount = commentRepository.countByBoard(board);
             response.setCommentCount(commentCount.intValue());
@@ -90,14 +81,6 @@ public class BoardServiceImpl implements BoardService {
         boardInfoResponse.setWriterId(user.getId());
         boardInfoResponse.setWriterProfile(user.getUserProfileImage());
         boardInfoResponse.setWriterNickname(user.getNickname());
-
-        //이미지
-        List<BoardImage> boardImageList = board.getBoardImageList();
-        List<String> stringImageList = new ArrayList<>(boardImageList.size());
-        for (BoardImage boardImage : boardImageList){
-            stringImageList.add(boardImage.getBoardImagePath());
-        }
-        boardInfoResponse.setBoardImagePathList(stringImageList);
 
         //댓글
         List<Comment> commentList = board.getCommentList();
@@ -149,11 +132,6 @@ public class BoardServiceImpl implements BoardService {
         for (Board board : boardSlice){
             Board.BoardTitleResponse response = modelMapper.map(board, Board.BoardTitleResponse.class);
 
-            Optional<BoardImage> boardFirstImage = boardImageRepository.findFirstByBoard(board);
-            if(boardFirstImage.isPresent()){
-                response.setBoardFirstImage(boardFirstImage.get().getBoardImagePath());
-            }
-
             Long commentCount = commentRepository.countByBoard(board);
             response.setCommentCount(commentCount.intValue());
 
@@ -204,11 +182,6 @@ public class BoardServiceImpl implements BoardService {
         for (Board board : boardSlice){
             Board.BoardTitleResponse response = modelMapper.map(board, Board.BoardTitleResponse.class);
 
-            Optional<BoardImage> boardFirstImage = boardImageRepository.findFirstByBoard(board);
-            if(boardFirstImage.isPresent()){
-                response.setBoardFirstImage(boardFirstImage.get().getBoardImagePath());
-            }
-
             Long commentCount = commentRepository.countByBoard(board);
             response.setCommentCount(commentCount.intValue());
 
@@ -234,30 +207,26 @@ public class BoardServiceImpl implements BoardService {
         if(boardType == BoardType.전체){
             boardType = BoardType.자유;
         }
+
+        String imagePath = null;
+
+        //이미지가 있는 경우
+        if(imageFile != null && !imageFile.isEmpty()){
+            imagePath = s3Uploader.uploadAndGetUrl(imageFile);
+        }
+
         Board board = Board.builder()
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
                 .boardTitle(request.getBoardTitle())
                 .boardContent(request.getBoardContent())
                 .boardCategory(boardType)
+                .boardImagePath(imagePath)
                 .boardViews(0)
                 .user(user)
                 .build();
 
         boardRepository.save(board);
-
-        BoardImage boardImage = null;
-
-        //이미지가 있는 경우
-        if(imageFile != null && !imageFile.isEmpty()){
-            String imagePath = s3Uploader.uploadAndGetUrl(imageFile);
-            boardImage = BoardImage.builder()
-                    .boardImagePath(imagePath)
-                    .board(board)
-                    .build();
-
-            boardImageRepository.save(boardImage);
-        }
 
         Board.BoardInfoResponse response = modelMapper.map(board, Board.BoardInfoResponse.class);
 
@@ -265,14 +234,6 @@ public class BoardServiceImpl implements BoardService {
         response.setWriterId(user.getId());
         response.setWriterProfile(user.getUserProfileImage());
         response.setWriterNickname(user.getNickname());
-
-        //이미지
-        List<String> stringImageList = new ArrayList<>();
-        if(boardImage != null){
-            stringImageList.add(boardImage.getBoardImagePath());
-        }
-
-        response.setBoardImagePathList(stringImageList);
 
         return response;
     }
@@ -285,31 +246,13 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new CustomException(CustomExceptionList.BOARD_NOT_FOUND_ERROR));
         board.updateBoard(request);
 
-        BoardImage boardImage = null;
-
         //이미지가 있는 경우 교체
         if(imageFile != null && !imageFile.isEmpty()){
-            boardImageRepository.deleteAll(board.getBoardImageList()); //기존 이미지 삭제
-
             String imagePath = s3Uploader.uploadAndGetUrl(imageFile);
-            boardImage = BoardImage.builder()
-                    .boardImagePath(imagePath)
-                    .board(board)
-                    .build();
-
-            boardImageRepository.save(boardImage);
+            board.changeBoardImage(imagePath);
         }
 
         Board.BoardInfoResponse response = modelMapper.map(board, Board.BoardInfoResponse.class);
-
-
-        List<String> stringImageList = new ArrayList<>();
-        List<BoardImage> boardImageList = board.getBoardImageList();
-
-        if(boardImageList.size() != 0){
-            stringImageList.add(boardImageList.get(0).getBoardImagePath());
-        }
-        response.setBoardImagePathList(stringImageList);
 
         User writer = board.getUser();
 
