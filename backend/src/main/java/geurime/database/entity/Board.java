@@ -44,18 +44,21 @@ public class Board {
     @Column(name = "board_views", nullable = false)
     private Integer boardViews;
 
+    @Column(name = "board_image_path")
+    private String boardImagePath;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<BoardImage> boardImageList = new ArrayList<>();
+//    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+//    private List<BoardImage> boardImageList = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> commentList = new ArrayList<>();
 
     @Builder
-    public Board(Long id, LocalDateTime createTime, LocalDateTime updateTime, String boardTitle, String boardContent, BoardType boardCategory, Integer boardViews, User user, List<BoardImage> boardImageList, List<Comment> commentList) {
+    public Board(Long id, LocalDateTime createTime, LocalDateTime updateTime, String boardTitle, String boardContent, BoardType boardCategory, Integer boardViews, String boardImagePath, User user, List<Comment> commentList) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -63,10 +66,13 @@ public class Board {
         this.boardContent = boardContent;
         this.boardCategory = boardCategory;
         this.boardViews = boardViews;
+        this.boardImagePath = boardImagePath;
         this.user = user;
-        this.boardImageList = boardImageList;
         this.commentList = commentList;
     }
+
+
+
 
     /**
      * 게시글 조회수 1 증가
@@ -88,8 +94,8 @@ public class Board {
         this.updateTime = LocalDateTime.now();
     }
 
-    public void changeBoardImage(List<BoardImage> boardImageList){
-        this.boardImageList = boardImageList;
+    public void changeBoardImage(String boardImagePath){
+        this.boardImagePath = boardImagePath;
     }
 
     /**
@@ -132,7 +138,7 @@ public class Board {
         private LocalDateTime updateTime;
         private String boardTitle;
         private String boardCategory;
-        private String boardFirstImage;
+        private String boardImagePath;
         private Integer boardViews;
         private Integer commentCount;
     }
@@ -157,11 +163,12 @@ public class Board {
         private String boardCategory;
         private Integer boardViews;
 
-        List<String> boardImagePathList;
+        private String boardImagePath;
+//        List<String> boardImagePathList;
         List<BoardCommentDto> boardCommentDtoList;
 
         @Builder
-        public BoardInfoResponse(Long boardId, Long writerId, String writerNickname, String writerProfile, LocalDateTime createTime, LocalDateTime updateTime, String boardTitle, String boardContent, String boardCategory, Integer boardViews, List<String> boardImagePathList, List<BoardCommentDto> boardCommentDtoList) {
+        public BoardInfoResponse(Long boardId, Long writerId, String writerNickname, String writerProfile, LocalDateTime createTime, LocalDateTime updateTime, String boardTitle, String boardContent, String boardCategory, Integer boardViews, String boardImagePath, List<BoardCommentDto> boardCommentDtoList) {
             this.boardId = boardId;
             this.writerId = writerId;
             this.writerNickname = writerNickname;
@@ -172,7 +179,7 @@ public class Board {
             this.boardContent = boardContent;
             this.boardCategory = boardCategory;
             this.boardViews = boardViews;
-            this.boardImagePathList = boardImagePathList;
+            this.boardImagePath = boardImagePath;
             this.boardCommentDtoList = boardCommentDtoList;
         }
     }
