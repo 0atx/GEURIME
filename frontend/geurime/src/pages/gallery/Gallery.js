@@ -87,7 +87,7 @@ export default function Gallery() {
                 sm={4}
                 md={2}
                 onClick={() => {
-                  console.log("click");
+                  navigater("/detailgallery/0");
                 }}
               >
                 <Paper

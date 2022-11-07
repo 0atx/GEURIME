@@ -34,12 +34,20 @@ export default function DetailGallery() {
 
   // 그림 보관함의 정보를 가져오는 함수
   async function getDrawingBoxInfo() {
-    const response = await http.get(`/drawings/box/${boxId}`, {
-      params: {
-        kidId: currentKid.kidId,
-      },
-    });
-    setBoxInfo(response.data.data);
+    if (boxId == 0) {
+      const response = await http.get(`/drawings/like/${currentKid.kidId}`);
+      let copy = { ...boxInfo };
+      copy.drawingBoxName = "좋아요한 보관함";
+      copy.dtoList = response.data.data;
+      setBoxInfo(copy);
+    } else {
+      const response = await http.get(`/drawings/box/${boxId}`, {
+        params: {
+          kidId: currentKid.kidId,
+        },
+      });
+      setBoxInfo(response.data.data);
+    }
   }
 
   const mounted = useRef(false);
@@ -53,11 +61,20 @@ export default function DetailGallery() {
 
   return (
     <>
-      <BackMenu
-        isLeft={true}
-        title={`${boxInfo.drawingBoxName} (${boxInfo.dtoList.length})`}
-        type="detailGallery"
-      />
+      {boxId == 0 ? (
+        // 좋아요한 보관함인 경우 수정, 삭제 버튼 없음
+        <BackMenu
+          isLeft={true}
+          title={`${boxInfo.drawingBoxName} (${boxInfo.dtoList.length})`}
+        />
+      ) : (
+        // 좋아요 외 보관함
+        <BackMenu
+          isLeft={true}
+          title={`${boxInfo.drawingBoxName} (${boxInfo.dtoList.length})`}
+          type="detailGallery"
+        />
+      )}
       <Grid id="container">
         <Container>
           <Masonry
