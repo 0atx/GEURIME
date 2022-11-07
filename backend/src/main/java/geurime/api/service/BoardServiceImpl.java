@@ -289,6 +289,8 @@ public class BoardServiceImpl implements BoardService {
 
         //이미지가 있는 경우 교체
         if(imageFile != null && !imageFile.isEmpty()){
+            boardImageRepository.deleteAll(board.getBoardImageList()); //기존 이미지 삭제
+
             String imagePath = s3Uploader.uploadAndGetUrl(imageFile);
             boardImage = BoardImage.builder()
                     .boardImagePath(imagePath)
