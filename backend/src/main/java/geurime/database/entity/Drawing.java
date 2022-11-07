@@ -86,12 +86,6 @@ public class Drawing {
         this.drawingDiarySleep = drawingDiarySleep;
     }
 
-    public void changeDrawingInfo(DrawingBox drawingBox, String drawingTitle, Boolean isLike){
-        this.drawingBox = drawingBox;
-        this.drawingTitle = drawingTitle;
-        this.isLike = isLike;
-    }
-
     public void changeDrawingLocation(DrawingBox drawingBox){
         this.drawingBox = drawingBox;
     }
@@ -178,16 +172,16 @@ public class Drawing {
         private Long drawingId;
         private Long drawingBoxId;
         private String drawingTitle;
+        private Boolean isLike;
     }
 
     /**
      * 그림보관함, 그림제목 수정
-     * @param drawingBox
-     * @param drawingTitle
      */
-    public void changeDrawingInfo(DrawingBox drawingBox, String drawingTitle){
+    public void changeDrawingInfo(DrawingBox drawingBox, String drawingTitle, Boolean isLike){
         this.drawingBox = drawingBox;
         this.drawingTitle = drawingTitle;
+        this.isLike = isLike;
     }
 
     /**
