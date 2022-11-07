@@ -111,6 +111,7 @@ public class Drawing {
     public static class DrawingInfoResponse{
         private Long drawingId;
         private Long drawingBoxId;
+        private String drawingBoxName;
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDate createTime;
         private String drawingTitle;
