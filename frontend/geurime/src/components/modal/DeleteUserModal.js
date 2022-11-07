@@ -8,9 +8,21 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import { useNavigate } from "react-router-dom";
+import { http } from "api/http";
+import { userState } from "states/UserState";
+import { useRecoilState } from "recoil";
 
 export default function DeleteUserModal({ open, handleClose }) {
   const navigate = useNavigate();
+
+  const [userInfo, setUserInfo] = useRecoilState(userState);
+
+  // 회원 탈퇴
+  async function deleteUser() {
+    const response = await http.delete(`/users/${userInfo.userId}`);
+    console.log(response.data);
+    navigate(`/`);
+  }
 
   return (
     <Dialog open={open} onClose={handleClose}>
@@ -25,12 +37,7 @@ export default function DeleteUserModal({ open, handleClose }) {
         </div>
       </DialogContent>
       <DialogActions sx={{ display: "flex", justifyContent: "center", marginBottom: "10px" }}>
-        <Button
-          width="30vw"
-          onClick={() => {
-            navigate(`/`);
-          }}
-        >
+        <Button width="30vw" onClick={deleteUser}>
           네
         </Button>
         <Button bgcolor="#FFCA28" width="30vw" onClick={handleClose}>

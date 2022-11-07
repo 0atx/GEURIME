@@ -118,7 +118,10 @@ export default function NavBar() {
           </div>
         </div>
       )}
-      <Paper sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }} elevation={3}>
+      <Paper
+        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+        elevation={3}
+      >
         <BottomNavigation
           showLabels
           value={value}
@@ -130,7 +133,6 @@ export default function NavBar() {
               "& .MuiBottomNavigationAction-label": {
                 transition: "none",
                 lineHeight: "20px",
-                fontSize: "1.8vh",
               },
               "& .MuiSvgIcon-root, & .MuiBottomNavigationAction-label": {
                 color: "#FFCA28",
