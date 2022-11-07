@@ -39,11 +39,11 @@ public class SecurityConfig {
 
         configuration.addAllowedOriginPattern("http://localhost:3000");
         configuration.addAllowedOriginPattern("http://localhost:9000");
-        configuration.addAllowedOriginPattern("http://j7a701.p.ssafy.io:3000");
-        configuration.addAllowedOriginPattern("http://j7a701.p.ssafy.io:9000");
-        configuration.addAllowedOriginPattern("https://j7a701.p.ssafy.io");
-        configuration.addAllowedOriginPattern("https://j7a701.p.ssafy.io:3000");
-        configuration.addAllowedOriginPattern("https://j7a701.p.ssafy.io:9000");
+        configuration.addAllowedOriginPattern("http://k7a506.p.ssafy.io:3000");
+        configuration.addAllowedOriginPattern("http://k7a506.p.ssafy.io:9000");
+        configuration.addAllowedOriginPattern("https://k7a506.p.ssafy.io");
+        configuration.addAllowedOriginPattern("https://k7a506.p.ssafy.io:3000");
+        configuration.addAllowedOriginPattern("https://k7a506.p.ssafy.io:9000");
         configuration.addAllowedOriginPattern("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
