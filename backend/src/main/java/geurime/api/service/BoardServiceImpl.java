@@ -273,7 +273,7 @@ public class BoardServiceImpl implements BoardService {
 
         BoardImage boardImage = null;
 
-        //이미지가 있는 경우
+        //이미지가 있는 경우 교체
         if(imageFile != null && !imageFile.isEmpty()){
             String imagePath = s3Uploader.uploadAndGetUrl(imageFile);
             boardImage = BoardImage.builder()
@@ -283,13 +283,16 @@ public class BoardServiceImpl implements BoardService {
 
             boardImageRepository.save(boardImage);
         }
-        //이미지
-        List<String> stringImageList = new ArrayList<>();
-        if(boardImage != null){
-            stringImageList.add(boardImage.getBoardImagePath());
-        }
 
         Board.BoardInfoResponse response = modelMapper.map(board, Board.BoardInfoResponse.class);
+
+
+        List<String> stringImageList = new ArrayList<>();
+        List<BoardImage> boardImageList = board.getBoardImageList();
+
+        if(boardImageList.size() != 0){
+            stringImageList.add(boardImageList.get(0).getBoardImagePath());
+        }
         response.setBoardImagePathList(stringImageList);
 
         User writer = board.getUser();
