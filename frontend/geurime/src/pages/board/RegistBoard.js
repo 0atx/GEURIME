@@ -28,6 +28,7 @@ export default function RegistBoard() {
       label: '질문',
     },
   ];
+
   const [boardCategory, setBoardCategory] = useState('자유');
   const [imageUrl, setImageUrl] = useState(null);
   const imgRef = useRef();
@@ -50,10 +51,11 @@ export default function RegistBoard() {
     let formData = new FormData();
     formData.append("imageFile", imgRef.current.files[0]);
     console.log({이미지: imgRef.current.files[0]})
-
+    console.log({ 제목: titleRef.current.value })
+    console.log({ 내용: textRef.current.value })
     // 유저 아이디 리코일에서 가져오게 해야됨
     let request = {
-      userId: userInfo.userID,
+      userId: userInfo.userId,
       boardTitle: titleRef.current.value,
       boardContent: textRef.current.value,
       boardCategory: boardCategory,

@@ -42,7 +42,7 @@ export default function DetailBoard( ) {
   // 네브바 우측용
   const [rightNav, setRightNav] = useState('')
   useEffect(() => {
-    if (boardInfo.writerId == userInfo.userID) {
+    if (boardInfo.writerId == userInfo.userId) {
       setRightNav('편집')
     } else {
       setRightNav('')
@@ -78,7 +78,8 @@ export default function DetailBoard( ) {
   const [comment, setComment] = useState()
 
   useEffect(() => {
-    console.log({ 보드아이템: commentDtoList })
+    console.log({게시판정보: boardInfo  })
+    console.log({ 댓글리스트: commentDtoList })
     console.log({유저정보: userInfo})
     console.log({댓글: comment})
   }, [commentDtoList])
@@ -99,16 +100,16 @@ export default function DetailBoard( ) {
       {
         boardId: boardid,
         commentContent: commentRef.current.value,
-        commentUserId: userInfo.userID,
+        commentUserId: userInfo.userId,
       }
     );
 
       if (response.data.message == "success") {
         if (commentRef.current.value !== 0) {
           setCommentDtoList([...commentDtoList, {
-            commentUserNickname: userInfo.nickName,
+            commentUserNickname: userInfo.nickname,
             commentContent: commentRef.current.value,
-            commentUserId: userInfo.userID,
+            commentUserId: userInfo.userId,
             commentUserProfile: userInfo.userProfileImage,
             createTime: moment().format('YYYY-MM-DD HH:mm:ss')
           }])
@@ -133,7 +134,7 @@ export default function DetailBoard( ) {
             isRight={rightNav}
             clickRight={() => {
               navigator("/modifyBoard");
-            }}
+             }}
         >
     </BackMenu>
     <Grid id="container"
@@ -155,7 +156,7 @@ export default function DetailBoard( ) {
         xs={7}  
       >
         <img
-          src={board.boardImagePathList[0]}
+          src={board.boardImagePath}
           loading="lazy"
           style={{ height: '21vh', width: '24vh', margin: '2%', borderRadius: 5, marginTop: '3.5%' }}
           />
