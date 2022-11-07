@@ -45,6 +45,10 @@ public class DrawingBox {
         this.kid = kid;
     }
 
+    public void emptyAllDrawings(){
+        this.drawingList = new ArrayList<>();
+    }
+
     public void updateName(String drawingBoxName){
         this.drawingBoxName = drawingBoxName;
     }

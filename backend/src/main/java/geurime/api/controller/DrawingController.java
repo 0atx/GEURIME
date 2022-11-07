@@ -38,8 +38,8 @@ public class DrawingController {
     @ApiOperation(value = "좋아요 그림기록 리스트 조회", notes = "자녀 id를 받아 좋아요한 그림이미지를 조회한다")
     public ResponseEntity<BasicResponse<List<Drawing.DrawingGalleryDto>>> readLikeDrawingList(@PathVariable("kidId") Long kidId){
         try {
-            List<Drawing.DrawingGalleryDto> drawingGalleryRespons = drawingService.readLikeDrawingList(kidId);
-            return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingGalleryRespons), HttpStatus.OK);
+            List<Drawing.DrawingGalleryDto> drawingGalleryResponse = drawingService.readLikeDrawingList(kidId);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingGalleryResponse), HttpStatus.OK);
         } catch (CustomException e) {
             return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
         }
