@@ -181,9 +181,23 @@ public class BoardServiceImpl implements BoardService {
 
         // 전체인 경우에는 모두 조회
         if(boardType == BoardType.전체){
-            boardSlice = boardRepository.findByBoardTitleContains(keyword, pageRequest);
-        }else{
-            boardSlice = boardRepository.findByBoardCategoryAndBoardTitleContains(boardType , keyword, pageRequest);
+            if(keyword != null && keyword != ""){
+                //키워드 있는 경우
+                boardSlice = boardRepository.findByBoardTitleContains(keyword, pageRequest);
+            }else{
+                //키워드 없는 경우
+                boardSlice = boardRepository.findAll(pageRequest);
+            }
+        }
+        // 분류 조회
+        else{
+            if(keyword != null && keyword != ""){
+                //키워드 있는 경우
+                boardSlice = boardRepository.findByBoardCategoryAndBoardTitleContains(boardType, keyword, pageRequest);
+            }else{
+                //키워드 없는 경우
+                boardSlice = boardRepository.findByBoardCategory(boardType, pageRequest);
+            }
         }
 
         List<Board.BoardTitleResponse> responseList = new ArrayList<>(size);

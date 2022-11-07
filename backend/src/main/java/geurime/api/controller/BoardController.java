@@ -36,21 +36,21 @@ public class BoardController {
         }
     }
 
-    @GetMapping("/category")
-    @ApiOperation(value = "게시글 분류조회", notes = "게시글 카테고리와 페이지 번호 page와 한번에 받아올 사이즈 size를 받아 분류된 게시글 목록을 반환한다.")
-    public ResponseEntity<BasicResponse<List<Board.BoardTitleResponse>>> readBoardByCategory(@RequestParam Integer page, @RequestParam Integer size, @RequestParam String category) {
-        try{
-            List<Board.BoardTitleResponse> responseList = boardService.readTitleByCategory(page, size, category);
-            return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseList), HttpStatus.OK);
-        }catch (CustomException e){
-            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
-        }
-    }
+//    @GetMapping("/category")
+//    @ApiOperation(value = "게시글 분류조회", notes = "게시글 카테고리와 페이지 번호 page와 한번에 받아올 사이즈 size를 받아 분류된 게시글 목록을 반환한다.")
+//    public ResponseEntity<BasicResponse<List<Board.BoardTitleResponse>>> readBoardByCategory(@RequestParam Integer page, @RequestParam Integer size, @RequestParam String category) {
+//        try{
+//            List<Board.BoardTitleResponse> responseList = boardService.readTitleByCategory(page, size, category);
+//            return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseList), HttpStatus.OK);
+//        }catch (CustomException e){
+//            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
     @GetMapping("/search")
     @ApiOperation(value = "게시글 검색조회", notes = "게시글 카테고리와 검색어, 페이지 번호 page와 한번에 받아올 사이즈 size를 받아 게시글 목록을 반환한다.")
     public ResponseEntity<BasicResponse<List<Board.BoardTitleResponse>>> readBoardBySearch
-            (@RequestParam Integer page, @RequestParam Integer size, @RequestParam String category, @RequestParam String keyword) {
+            (@RequestParam Integer page, @RequestParam Integer size, @RequestParam String category, @RequestParam(required = false) String keyword) {
         try{
             List<Board.BoardTitleResponse> responseList = boardService.readTitleBySearch(page, size, category, keyword);
             return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseList), HttpStatus.OK);
