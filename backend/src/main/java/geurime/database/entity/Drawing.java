@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 @Entity
@@ -109,10 +110,11 @@ public class Drawing {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class CountHeatMapResponse{
+    public static class CountHeatMapResponse {
         @JsonFormat(pattern = "yyyy/MM/dd")
         private LocalDate date;
         private Long count;
+
     }
 
     /**

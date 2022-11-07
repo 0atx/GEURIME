@@ -17,5 +17,4 @@ public interface DrawingService {
 
     List<Drawing.CountHeatMapResponse> readDrawingCountHeatMap(Long kidId);
 
-    List<Drawing.CountHeatMapResponse> readDrawingEmotionHeatMap(Long kidId);
 }

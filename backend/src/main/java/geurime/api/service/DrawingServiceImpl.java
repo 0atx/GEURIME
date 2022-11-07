@@ -7,6 +7,7 @@ import geurime.database.entity.DrawingBox;
 import geurime.database.entity.Kid;
 import geurime.database.enums.BoxType;
 import geurime.database.repository.DrawingBoxRepository;
+import geurime.database.repository.DrawingInfo;
 import geurime.database.repository.DrawingRepository;
 import geurime.database.repository.KidRepository;
 import geurime.exception.CustomException;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -217,13 +219,19 @@ public class DrawingServiceImpl implements DrawingService {
     public List<Drawing.CountHeatMapResponse> readDrawingCountHeatMap(Long kidId) {
         Kid kid = getKid(kidId);
 
-//        return drawingRepository.findDrawingCountList(kid);
-        return null;
-    }
+        List<DrawingInfo> drawingInfo = new ArrayList<>();
+        List<Drawing.CountHeatMapResponse> results = new ArrayList<>();
 
-    @Override
-    public List<Drawing.CountHeatMapResponse> readDrawingEmotionHeatMap(Long kidId) {
-        return null;
+        drawingInfo =  drawingRepository.findDrawingCountList(kid);
+
+        for(int i = 0; i < drawingInfo.size(); i++) {
+            results.add(new Drawing.CountHeatMapResponse(drawingInfo.get(i).getCreateTime(), drawingInfo.get(i).getCount()));
+        }
+
+
+
+        return results;
+
     }
 
     private DrawingBox getDrawingBox(Long drawingBoxId){

@@ -3,6 +3,7 @@ package geurime.api.controller;
 import geurime.api.dto.common.BasicResponse;
 import geurime.api.service.DrawingServiceImpl;
 import geurime.database.entity.Drawing;
+import geurime.database.repository.DrawingInfo;
 import geurime.exception.CustomException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
