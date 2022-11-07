@@ -36,6 +36,19 @@ dependencies {
     // json
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
+    // https://mvnrepository.com/artifact/com.github.vladimir-bukhtoyarov/bucket4j-core
+    implementation group: 'com.github.vladimir-bukhtoyarov', name: 'bucket4j-core', version: '7.5.0'
+    // https://mvnrepository.com/artifact/com.giffing.bucket4j.spring.boot.starter/bucket4j-spring-boot-starter
+    implementation group: 'com.giffing.bucket4j.spring.boot.starter', name: 'bucket4j-spring-boot-starter', version: '0.7.0'
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-cache
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache', version: '2.0.0.RELEASE'
+    // https://mvnrepository.com/artifact/javax.cache/cache-api
+    implementation group: 'javax.cache', name: 'cache-api', version: '1.0.0'
+    // https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine
+    implementation group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: '2.8.2'
+    // https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/jcache
+    implementation group: 'com.github.ben-manes.caffeine', name: 'jcache', version: '2.8.2'
+
 
     // 소셜 로그인 관련 설정
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
