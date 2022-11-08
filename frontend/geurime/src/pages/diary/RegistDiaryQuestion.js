@@ -57,7 +57,7 @@ export default function RegistDiary({}) {
     new Date().getMonth() + 1 + "월 " + new Date().getDate() + "일 일기"
   );
   // 선택된 날짜 (yyyy-mm-dd 형식)
-  const [date, setDate] = useState("2000-01-01");
+  const [date, setDate] = useState(getToday());
   // 캘린더 열기
   const [calOpen, setCalOpen] = useState(false);
   // 클릭된 기분
@@ -105,6 +105,16 @@ export default function RegistDiary({}) {
   const openCal = () => {
     setCalOpen(true);
   };
+
+  // 오늘 날짜 yyyy-mm-dd 형식으로 받아오기
+  function getToday() {
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = ("0" + (1 + date.getMonth())).slice(-2);
+    let day = ("0" + date.getDate()).slice(-2);
+
+    return year + "-" + month + "-" + day;
+  }
 
   // 날짜 변경
   const changeDate = () => {

@@ -19,6 +19,8 @@ import { useNavigate } from "react-router-dom";
 // icon
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
+import { Typography } from "@mui/material";
 
 export default function Modal({ open, close, text, onClick, icon }) {
   return (
@@ -27,6 +29,7 @@ export default function Modal({ open, close, text, onClick, icon }) {
         <div style={{ marginBottom: "5%", textAlign: "center" }}>
           {icon === "error" && <ErrorOutlineIcon sx={{ color: "#FFE082", fontSize: "10vh" }} />}
           {icon === "ok" && <TaskAltIcon sx={{ color: "#FFE082", fontSize: "10vh" }} />}
+          {icon === "wait" && <HourglassBottomIcon sx={{ color: "#FFE082", fontSize: "10vh" }} />}
         </div>
         <div
           style={{
@@ -34,7 +37,8 @@ export default function Modal({ open, close, text, onClick, icon }) {
             textAlign: "center",
           }}
         >
-          {text}
+          <Typography>{text}</Typography>
+          {icon === "wait" && <Typography>조금만 기다려주세요😉</Typography>}
         </div>
       </DialogContent>
       <DialogActions sx={{ display: "flex", justifyContent: "center", marginBottom: "10px" }}>

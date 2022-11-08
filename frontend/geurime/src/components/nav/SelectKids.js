@@ -4,16 +4,7 @@ SelectKids 헤더
 @since 2022.10.25
 */
 import { useState, useEffect, useRef } from "react";
-import {
-  AppBar,
-  Box,
-  Toolbar,
-  Avatar,
-  Grid,
-  IconButton,
-  Menu,
-  MenuItem,
-} from "@mui/material";
+import { AppBar, Box, Toolbar, Avatar, Grid, IconButton, Menu, MenuItem } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -32,18 +23,19 @@ export default function SelectKids() {
 
   // 처음 로딩시 유저정보 가져오기
   async function getUserInfo() {
-    if (currentKid.kidId === 0) {
+    if (currentKid.kidId === null) {
       const response = await http.get(`/users/${userInfo.userId}`);
       if (response.data.message === "success") {
         setUserInfo(response.data.data);
         setKids(response.data.data.kidDtoList);
-        setCurrentKid(response.data.data.kidDtoList[0]);
+        getKidInfo(response.data.data.kidDtoList[0].kidId);
       }
     } else {
       const response = await http.get(`/users/${userInfo.userId}`);
       if (response.data.message === "success") {
         setUserInfo(response.data.data);
         setKids(response.data.data.kidDtoList);
+        getKidInfo(localStorage.getItem("currentKidId"));
       }
     }
   }
@@ -56,6 +48,14 @@ export default function SelectKids() {
       getUserInfo();
     }
   }, []);
+
+  // 아이 정보 가져오는 함수
+  async function getKidInfo(kidId) {
+    const response = await http.get(`kids/${kidId}`);
+    setCurrentKid(response.data.data);
+    console.log(response.data.data.kidId);
+    localStorage.setItem("currentKidId", response.data.data.kidId);
+  }
 
   const navigater = useNavigate();
 
@@ -101,15 +101,9 @@ export default function SelectKids() {
                 {/* 상단바 */}
                 <Grid item xs={3} sx={{ marginLeft: "20px" }}>
                   {currentKid.kidProfileImage !== "" ? (
-                    <Avatar
-                      src={currentKid.kidProfileImage}
-                      sx={{ marginRight: "10px" }}
-                    />
+                    <Avatar src={currentKid.kidProfileImage} sx={{ marginRight: "10px" }} />
                   ) : (
-                    <Avatar
-                      src="/assets/icon/default_profile.png"
-                      sx={{ marginRight: "10px" }}
-                    />
+                    <Avatar src="/assets/icon/default_profile.png" sx={{ marginRight: "10px" }} />
                   )}
                 </Grid>
                 {currentKid.kidName}
@@ -137,15 +131,12 @@ export default function SelectKids() {
                     <MenuItem
                       key={i}
                       onClick={() => {
-                        setCurrentKid(kid);
+                        getKidInfo(kid.kidId);
                         handleClose();
                       }}
                     >
                       {kid.kidProfileImage !== "" ? (
-                        <Avatar
-                          src={kid.kidProfileImage}
-                          sx={{ marginRight: "10px" }}
-                        />
+                        <Avatar src={kid.kidProfileImage} sx={{ marginRight: "10px" }} />
                       ) : (
                         <Avatar
                           src="/assets/icon/default_profile.png"

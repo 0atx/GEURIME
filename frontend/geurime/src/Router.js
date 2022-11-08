@@ -32,14 +32,18 @@ function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/invite/:invitecode" element={<Home />} />
         <Route path="/main" element={<Main />} />
         <Route path="/userinfo" element={<UserInfo />} />
         <Route path="/registkids" element={<RegistKids />} />
         <Route path="/gallery" element={<Gallery />} />
-        <Route path="/detailgallery" element={<DetailGallery />} />
-        <Route path="/detaildrawing" element={<DetailDrawing />} />
-        <Route path="/modifydrawing" element={<ModifyDrawing />} />
-        <Route path="/modifydetailgallery" element={<ModifyDetailGallery />} />
+        <Route path="/detailgallery/:galleryid" element={<DetailGallery />} />
+        <Route path="/detaildrawing/:drawingid" element={<DetailDrawing />} />
+        <Route path="/modifydrawing/:drawingid" element={<ModifyDrawing />} />
+        <Route
+          path="/modifydetailgallery/:galleryid"
+          element={<ModifyDetailGallery />}
+        />
         <Route path="/registdrawing" element={<RegistDrawing />} />
         <Route path="/diary" element={<Diary />} />
         <Route path="/detaildiary/:diaryid" element={<DetailDiary />} />
