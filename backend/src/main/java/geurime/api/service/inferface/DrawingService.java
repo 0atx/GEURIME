@@ -1,6 +1,7 @@
 package geurime.api.service.inferface;
 
 import geurime.database.entity.Drawing;
+import geurime.api.dto.CountHeatMapResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -15,5 +16,6 @@ public interface DrawingService {
     Boolean deleteDrawingBox(Long kidId, Long drawingBoxId, Boolean isDelete);
     Boolean deleteDrawing(Long kidId,Long drawingId);
 
-    // AI 분석 결과값 넣어주는 메서드 필요
+    List<CountHeatMapResponse>  readDrawingCountHeatMap(Long kidId);
+
 }
