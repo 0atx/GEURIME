@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [Layout]
+ %m : 로그내용이 출력
+ %p : trace > debug > info > warn > error 등의 priority 출력
+ %r : 어플리케이션이 시작되어 로깅이벤트가 발생하는 시점까지의 경과시간을 밀리세컨드로 출력
+ %c : 예) 카테고리가 a.b.c 처럼 되어있다면 %c{2}는 b.c가 출력됩니다.
+ %n :  플랫폼 종속적인 개행문자가 출력된다. \r\n 또는 \n 일것이다
+ %d : 로깅이벤트가 일어나 날짜 출력 ( 프로그램의 실행속도를 느리게 한다.)
+     예) %d{HH:mm:ss} 또는 %d{dd MMMM yyyy HH:mm:ss}
+ %C : 호출자의 클래스명 출력
+    예) 클래스구조가 org.apache.xyz.SomeClass 처럼 되어있다면 %C{2}는 xyz.SomeClass 가 출력됩니다
+ %M : 로깅이 발생한 method 이름을 나타냅니다.
+ %F : 로깅이 발생한 프로그램 파일명을 나타냅니다.
+ %l : 로깅이 발생한 caller의 정보를 나타냅니다
+ %L : 로깅이 발생한 caller의 라인수를 나타냅니다
+ %x : 로깅이 발생한 thread와 관련된 NDC(nested diagnostic context)를 출력합니다.
+ %X : 로깅이 발생한 thread와 관련된 MDC(mapped diagnostic context)를 출력합니다.
+ %% : % 표시를 출력하기 위해 사용한다.
+ %t : 로그이벤트가 발생된 쓰레드의 이름을 출력합니다
+-->
+<!-- 60초마다 설정 파일의 변경을 확인 하여 변경시 갱신 -->
+<configuration scan="true" scanPeriod="60 seconds">
+    <!--springProfile 태그를 사용하면 logback 설정파일에서 복수개의 프로파일을 설정할 수 있다.-->
+    <springProfile name="local">
+        <property resource="logback-local.properties"/>
+    </springProfile>
+    <springProfile name="dev">
+        <property resource="logback-dev.properties"/>
+    </springProfile>
+    <!--Environment 내의 프로퍼티들을 개별적으로 설정할 수도 있다.-->
+    <springProperty scope="context" name="LOG_LEVEL" source="logging.level.root"/>
+
+    <!-- log file path -->
+    <property name="LOG_PATH" value="/logs/spring"/>
+    <!-- log file name -->
+    <property name="LOG_FILE_NAME" value="server_log"/>
+    <!-- err log file name -->
+    <property name="ERR_LOG_FILE_NAME" value="err_log"/>
+    <!-- pattern -->
+    <property name="LOG_PATTERN" value="%d{yy-MM-dd HH:mm:ss} %-5level ${PID:-} --- [%thread] %logger{0} : %msg%n"/>
+
+    <!-- Console Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- File Appender -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 파일경로 설정 -->
+        <file>/logs/local/${LOG_FILE_NAME}.log</file>
+
+        <!-- 출력패턴 설정-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+
+        <!-- Rolling 정책 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- .gz,.zip 등을 넣으면 자동 일자별 로그파일 압축 -->
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 파일당 최고 용량 kb, mb, gb -->
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- 일자별 로그파일 최대 보관주기(~일), 해당 설정일 이상된 파일은 자동으로 제거-->
+            <maxHistory>30</maxHistory>
+            <!--<MinIndex>1</MinIndex>
+            <MaxIndex>10</MaxIndex>-->
+        </rollingPolicy>
+    </appender>
+
+    <!-- 에러의 경우 파일에 로그 처리 -->
+    <appender name="Error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>error</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${LOG_PATH}/${ERR_LOG_FILE_NAME}.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <!-- Rolling 정책 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- .gz,.zip 등을 넣으면 자동 일자별 로그파일 압축 -->
+            <fileNamePattern>${LOG_PATH}/${ERR_LOG_FILE_NAME}.%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 파일당 최고 용량 kb, mb, gb -->
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!-- 일자별 로그파일 최대 보관주기(~일), 해당 설정일 이상된 파일은 자동으로 제거-->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- root레벨 설정 -->
+    <root level="${LOG_LEVEL}">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="Error"/>
+    </root>
+
+    <!-- 특정패키지 로깅레벨 설정 -->
+    <logger name="org.apache.ibatis" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="Error"/>
+    </logger>
+</configuration>
