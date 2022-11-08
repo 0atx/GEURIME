@@ -16,7 +16,8 @@ export default function Logincheck() {
     birthYear,
     gender,
     nickname,
-    email;
+    email,
+    inviteCode;
 
   useEffect(() => {
     // Redirect된 url 주소에서 parameter 세팅
@@ -36,9 +37,10 @@ export default function Logincheck() {
     gender = new URL(window.location.href).searchParams.get("gender");
     nickname = new URL(window.location.href).searchParams.get("nickname");
     email = new URL(window.location.href).searchParams.get("email");
+    inviteCode = localStorage.getItem("inviteCode");
 
-    // 신규 유저 성인
-    if (accessToken && nickname === "") {
+    // 신규 유저 성인 (가족 코드 없음)
+    if (accessToken && nickname === "" && inviteCode === "") {
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       localStorage.setItem("accessTokenExpiration", accessTokenExpiration);
@@ -49,6 +51,24 @@ export default function Logincheck() {
       localStorage.setItem("gender", gender);
       localStorage.setItem("nickname", nickname);
       localStorage.setItem("email", email);
+
+      // console.log(name, accessToken, refreshToken)
+      window.location.replace("/userinfo");
+    }
+
+    // // 신규 유저 성인 (가족 코드 있음)
+    if (accessToken && nickname === "" && inviteCode !== "") {
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("accessTokenExpiration", accessTokenExpiration);
+      localStorage.setItem("refreshTokenExpiration", refreshTokenExpiration);
+      localStorage.setItem("userId", userId);
+      localStorage.setItem("name", name);
+      localStorage.setItem("birthYear", birthYear);
+      localStorage.setItem("gender", gender);
+      localStorage.setItem("nickname", nickname);
+      localStorage.setItem("email", email);
+      localStorage.setItem("inviteCode", inviteCode);
 
       // console.log(name, accessToken, refreshToken)
       window.location.replace("/userinfo");

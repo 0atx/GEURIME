@@ -5,17 +5,51 @@ BackMenu 헤더
 @since 2022.10.25
 */
 import { useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import { Grid } from "@mui/material";
+import {
+  Toolbar,
+  Grid,
+  AppBar,
+  Box,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
 import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 import AddIcon from "@mui/icons-material/Add";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import MenuIcon from "@mui/icons-material/Menu";
+import DeleteGalleryModal from "components/modal/DeleteGalleryModal";
 
-export default function BackMenu({ type, isLeft, title, clickTitle, isRight, clickRight }) {
+export default function BackMenu({
+  type,
+  isLeft,
+  title,
+  clickTitle,
+  isRight,
+  clickRight,
+}) {
   const navigate = useNavigate();
+
+  // detail gallery 필요 변수들
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const location = useLocation();
+  const galleryId = location.pathname.substring(
+    15,
+    location.pathname.length + 1
+  );
+  const [deleteGalleryOpen, setDeleteGalleryOpen] = useState(false);
+
+  async function deleteGallery() {
+    setDeleteGalleryOpen(true);
+  }
 
   return (
     <Box
@@ -23,6 +57,12 @@ export default function BackMenu({ type, isLeft, title, clickTitle, isRight, cli
         flexGrow: 1,
       }}
     >
+      {/* 갤러리 삭제 모달 */}
+      <DeleteGalleryModal
+        open={deleteGalleryOpen}
+        id={galleryId}
+        setOpen={setDeleteGalleryOpen}
+      />
       <AppBar
         style={{
           background: "#FFFFFF",
@@ -53,12 +93,14 @@ export default function BackMenu({ type, isLeft, title, clickTitle, isRight, cli
             <Grid item sx={{ textAlign: "center" }} xs={8}>
               <span onClick={clickTitle}>
                 {title}
-                {type === "registDiary" && <ArrowDropDownRoundedIcon></ArrowDropDownRoundedIcon>}
+                {type === "registDiary" && (
+                  <ArrowDropDownRoundedIcon></ArrowDropDownRoundedIcon>
+                )}
               </span>
             </Grid>
             {/* isRight */}
             <Grid item sx={{ fontSize: "1.8vh", textAlign: "center" }} xs={2}>
-              <span
+              <div
                 style={{
                   color: "#ffa000",
                 }}
@@ -66,7 +108,51 @@ export default function BackMenu({ type, isLeft, title, clickTitle, isRight, cli
               >
                 {isRight}
                 {type === "registKids" && <AddIcon></AddIcon>}
-              </span>
+                {type === "detailGallery" && (
+                  <>
+                    <IconButton
+                      aria-label="more"
+                      id="long-button"
+                      aria-controls={open ? "long-menu" : undefined}
+                      aria-expanded={open ? "true" : undefined}
+                      aria-haspopup="true"
+                      onClick={handleClick}
+                    >
+                      <MenuIcon sx={{ color: "#FFCA28" }} />
+                    </IconButton>
+                    <Menu
+                      id="long-menu"
+                      MenuListProps={{
+                        "aria-labelledby": "long-button",
+                      }}
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      PaperProps={{
+                        style: {
+                          width: "30vw",
+                        },
+                      }}
+                    >
+                      <MenuItem
+                        onClick={() => {
+                          navigate(`/modifydetailgallery/${galleryId}`);
+                        }}
+                      >
+                        보관함 수정
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          deleteGallery();
+                          handleClose();
+                        }}
+                      >
+                        보관함 삭제
+                      </MenuItem>
+                    </Menu>
+                  </>
+                )}
+              </div>
             </Grid>
           </Grid>
         </Toolbar>

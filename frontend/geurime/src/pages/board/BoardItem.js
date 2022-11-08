@@ -16,11 +16,10 @@ export default function BoardItem({ item }) {
   const time = item.createTime.substring(0, 10);
   return (
     <Link
-      to={"/detailboard/:item.boardId" }
+      to={"/detailboard/" + item.boardId}
       style={{  textDecoration: 'none' }}
     >
     <Paper
-      
       style={{ margin: '3%', marginBottom: '5%' }}
       variant="outlined"
       sx={{
@@ -40,6 +39,7 @@ export default function BoardItem({ item }) {
        [{item.boardCategory}] {item.boardTitle}
       </Grid>
       
+      {/* 사진 */}
       <Grid
         container
         sx={{alignItems: 'center', display: 'flex'}}
@@ -53,16 +53,17 @@ export default function BoardItem({ item }) {
           backgroundColor="#E1E1E1"
         >
         <img
-          src={item.boardFirstImage}
+          src={item.boardImagePath}
           loading="lazy"
-          style={{ height: '16vh', width: '24vh', margin: '2%', borderRadius: 5, marginTop: '3.5%' }}
+          style={{ height: '14vh', width: '19vh', margin: '2%', borderRadius: 5, marginTop: '3.5%' }}
           />
 
       </Grid>
 
         <Grid
           justifyContent="center"
-          sx={{ marginTop: '3%'}}
+          sx={{ marginTop: '3%', marginLeft: '2%' }}
+          xs={5}
         >
           <Grid>
             작성자 : {item.userNickname}
@@ -70,8 +71,13 @@ export default function BoardItem({ item }) {
           <Grid
             sx={{ marginTop: '6%' }}
           >
-            작성일 : {time}
-          </Grid>
+            작성일 :
+            </Grid>
+            <Grid
+              sx={{marginTop: '3%'}}
+            >
+              {time}
+            </Grid>
           <Grid
             sx={{ marginTop: '6%'}}
             justifyContent="center"
@@ -81,7 +87,7 @@ export default function BoardItem({ item }) {
                 direction="row"
             >
               <Grid
-                sx={{marginRight: '10%'}}
+                sx={{marginRight: '5%'}}
               >
               <Visibility fontSize="8"/>
                   {item.boardViews}
