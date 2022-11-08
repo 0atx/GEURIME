@@ -14,6 +14,9 @@ import { boardState } from "states/BoardState";
 import BoardInputItem from "./BoardInputItem";
 import { userState } from "states/UserState";
 import DeleteBoardModal from "components/modal/DeleteBoardModal";
+import ModifyBoardModal from "components/modal/ModifyBoardModal";
+import NoCommentModal from "components/modal/NoCommentModal";
+import NoTitleModal from "components/modal/NoTitleModal";
 
 export default function ModifyBoard() {
   const navigator = useNavigate();
@@ -54,7 +57,6 @@ export default function ModifyBoard() {
 
   const regist = async () => {
 
-    console.log('수정중')
     let formData = new FormData();
     // 이미지를 새로 등록했을 때
     if (imgRef.current.files[0]) {
@@ -74,43 +76,47 @@ export default function ModifyBoard() {
     );
     // 엑시오스 요청
     // 이미지 수정했을 때
+    // 엑시오스 요청
+  
     if (imgRef.current.files) {
-      const response = await http2.put(`/boards`, formData);
+
+      if (titleRef.current.value == 0) {
+        setOpenNoTitleModal(true)
+      }
+      else if (textRef.current.value == 0) {
+        setOpenNoCommentModal(true)
+      }
+      else{
+        const response = await http2.put(`/boards`, formData);
       if (response.data.message == "success") {
-        console.log('수정 완료!')
-        navigator(`/detailboard/${boardInfo.boardId}`);
+        setOpen(true);
       } else {
         alert("게시글을 수정하지 못했습니다");
         return;
+        }
       }
     }
     else {
-      const response = await http.put(`/boards`, formData);
+      if (titleRef.current.value == 0) {
+        setOpenNoTitleModal(true)
+      }
+      else if (textRef.current.value == 0) {
+        setOpenNoCommentModal(true)
+      }
+      else{
+        const response = await http2.put(`/boards`, formData);
       if (response.data.message == "success") {
         console.log('수정 완료!')
-        navigator(`/detailboard/${boardInfo.boardId}`);
+        // navigator("/Board");
+        setOpen(true);
       } else {
         alert("게시글을 수정하지 못했습니다");
         return;
+        }
       }
     }
   };
 
-  // const del = async () => {
-
-  //   const response = await http.delete(`/boards`, {
-  //     params: {
-  //       boardId: boardInfo.boardId,
-  //       userId: userInfo.userId
-  //     }
-  //   });
-  //   if (response.data.message == "success") {
-  //     alert('게시글을 삭제했습니다')
-  //     navigator(`/board`);
-  //   } else {
-  //     alert("게시글을 삭제하지 못했습니다");
-  //   }
-  // } 
   function changeProfile(e) {
     const reader = new FileReader();
     const img = imgRef.current.files[0];
@@ -130,9 +136,6 @@ export default function ModifyBoard() {
     setTitle(e.target.value)
   }
 
-  useEffect(() => {
-    console.log({디테일정보: boardInfo})
-  }, [])
   // 삭제완료 모달
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   // 게시글 삭제 함수
@@ -142,13 +145,28 @@ export default function ModifyBoard() {
   // 삭제 모달 닫기
   const closeDeleteModal = () => {
     setOpenDeleteModal(false);
-    };
+  };
   
+  // 수정완료 모달
+  const [open, setOpen] = useState(false);
+   // 내용 모달
+   const [openNoCommentModal, setOpenNoCommentModal] = useState(false);
+   // 내용 없음 모달 닫기
+   const closeNoCommentModal = () => {
+     setOpenNoCommentModal(false);
+   };
+ 
+   // 제목 모달
+     const [openNoTitleModal, setOpenNoTitleModal] = useState(false);
+   // 제목 없음 모달 닫기
+     const closeNoTitleModal = () => {
+       setOpenNoTitleModal(false);
+     };
   return (
     <div>
     <BackMenu
       isLeft={true}
-      title="제목"
+      title={boardInfo.boardTitle}
       isRight="완료"
       clickRight={() => {
         navigator(`/detailboard/${boardInfo.boardId}`);
@@ -161,7 +179,7 @@ export default function ModifyBoard() {
     sx={{textAlign: "center", justifyContent: 'center'}}
     >
       <BoardInputItem
-          // titleChange={titleChange}
+        // titleChange={titleChange}
         textRef={textRef}
         titleRef={titleRef}
         handleChange={handleChange} 
@@ -194,13 +212,26 @@ export default function ModifyBoard() {
       </Grid>
       
   {/* 삭제 모달 */}
-  <DeleteBoardModal
-    open={openDeleteModal}
-    handleClose={closeDeleteModal}
-    boardId = {boardInfo.boardId}
-    userId = {userInfo.userId}
-  >
-  </DeleteBoardModal>
-    </div>
+    <DeleteBoardModal
+      open={openDeleteModal}
+      handleClose={closeDeleteModal}
+      boardId = {boardInfo.boardId}
+      userId = {userInfo.userId}
+    >
+    </DeleteBoardModal>
+  
+    {/* 등록 완료 모달 */}
+      <ModifyBoardModal open={open} boardId={boardInfo.boardId}></ModifyBoardModal>
+      {/* 내용 없음 모달 */}
+      <NoCommentModal
+        open={openNoCommentModal}
+        handleClose={closeNoCommentModal}
+      ></NoCommentModal>
+      {/* 제목 없음 모달 */}
+      <NoTitleModal
+        open={openNoTitleModal}
+        handleClose={closeNoTitleModal}
+      ></NoTitleModal>
+  </div>
   )
 }

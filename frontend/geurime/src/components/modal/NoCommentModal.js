@@ -9,7 +9,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 
 
-export default function NoSearchModal({ open, handleClose }) {
+export default function NoCommentModal({ open, handleClose }) {
 
   return (
     <Dialog open={open} onClose={handleClose}>
@@ -20,7 +20,7 @@ export default function NoSearchModal({ open, handleClose }) {
             textAlign: "center",
           }}
         >
-          검색결과가 없어요 😥
+          내용을 입력해주세요 😥
         </div>
       </DialogContent>
       <DialogActions sx={{ display: "flex", justifyContent: "center", marginBottom: "10px" }}>

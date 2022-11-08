@@ -101,10 +101,10 @@ export default function CommentInputItem({ item }) {
           sx={{ marginLeft: '3%' }}
           xs={10}
         >
-          <div>{item.commentUserNickname}</div>
+          <div style={{width : '50vw'}}>{item.commentUserNickname}</div>
           <div>{item.commentContent}</div>
-          <span style={{ fontSize: 13, fontWeight: 200 }}>{year}년 {month}월 {date}일</span>
-        {createTime}
+          <span style={{ fontSize: 13, fontWeight: 200 }}>{moment(createTime).fromNow()}</span>
+      
         </Grid>
       {/* 편집 버튼 */}
         {/* <Grid

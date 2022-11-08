@@ -15,9 +15,12 @@ import BackMenu from 'components/nav/BackMenu';
 import { http } from "api/http";
 import { useNavigate } from "react-router-dom";
 import NavBar from 'components/nav/NavBar';
+import NoSearchModal from 'components/modal/NoSearchModal';
 
 export default function Board() { 
   const navigator = useNavigate();
+
+
   // 게시판 데이터
   const [boards, setBoards] = useState([{
     "boardCategory": "질문",
@@ -39,6 +42,7 @@ export default function Board() {
   const handleChange = (event) => {
     setCategory(event.target.value);
   };
+
   // 전체 게시글 조회 axios
   const getBoard = async () => {
     const response = await http.get(`/boards`, {
@@ -53,25 +57,20 @@ export default function Board() {
     } else {
       alert("게시글을 불러오지 못했습니다");
     }
-  } 
+  }
+
+  // 전체 게시글 불러오기
   useEffect(() => {
     getBoard()
   }, [])
+
   function searchKeyword(e) {
     if (e.key === "Enter") {
       search()
-      // e.preventDefault();
-      // console.log("검색");
-      // searchInput.current.value = "";
     }
-    // else if (e.key === 'click') {
-    //   search()
-    //   e.preventDefault();
-    //   console.log("검색");
-    //   searchInput.current.value = "";
-    // }
   }
   
+  // 검색 axios
   const search = async () => {
 
     const response = await http.get(`/boards/search`, {
@@ -85,7 +84,7 @@ export default function Board() {
     if (response.data.message == "success") {
       console.log({ 검색결과: response.data.data })
       if (response.data.data.length == 0) {
-        alert('검색결과 없음')
+        setOpenNoSearchModal(true);
       } else {
         setBoards(response.data.data)
       }
@@ -94,11 +93,15 @@ export default function Board() {
     }
   }
 
-
+  const [openNoSearchModal, setOpenNoSearchModal] = useState(false);
+  // 검색결과없음 모달 닫기
+  const closeNoSearchModal = () => {
+    setOpenNoSearchModal(false);
+  };
+  
   return (
     <Grid
     >
-    
       {/* 상단바 */}
       <Grid>
         <BackMenu
@@ -116,9 +119,7 @@ export default function Board() {
         id='container'
         sx={{width: '92vw', marginLeft:'3%'}}
         >
-
         {/* 검색바 영역 */}
-
         <Grid
           container
           direction="row"
@@ -140,7 +141,7 @@ export default function Board() {
               <MenuItem value={"전체"}>전체</MenuItem>
               <MenuItem value={"자유"}>자유</MenuItem>
               <MenuItem value={'질문'}>질문</MenuItem>
-          </Select>
+            </Select>
           </FormControl>
 
         <Grid
@@ -155,7 +156,7 @@ export default function Board() {
             container
             direction="row"
           >
-              {/* 검색어 입력 부분 */}
+            {/* 검색어 입력 부분 */}
             <TextField
               id="standard-search"
               placeholder='검색어를 입력하세요...'
@@ -179,7 +180,7 @@ export default function Board() {
             </IconButton>
           </Grid>
         </Grid>
-        {/* 검색바 끝 */}
+      {/* 검색바 끝 */}
       </Grid>
     <Grid
       height={'25%'}
@@ -189,7 +190,12 @@ export default function Board() {
     })}
         </Grid>
       </Grid>
-      <NavBar/>
+      <NavBar />
+  <NoSearchModal
+    open={openNoSearchModal}
+    handleClose={closeNoSearchModal}
+  >
+  </NoSearchModal>
     </Grid>
   )
 } 
