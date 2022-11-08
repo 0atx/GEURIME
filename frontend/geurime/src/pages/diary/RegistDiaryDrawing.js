@@ -32,71 +32,17 @@ import { useRecoilState } from "recoil";
 import { http } from "api/http";
 import DrawingModal from "components/modal/DrawingModal";
 import { CurrentKidState } from "states/CurrentKidState";
+import CanvasDraw from "react-canvas-draw";
+import BrushIcon from "@mui/icons-material/Brush";
+import Btn from "@mui/material/Button";
+import PaletteIcon from "@mui/icons-material/Palette";
+import GestureIcon from "@mui/icons-material/Gesture";
 
 export default function RegistDiary({}) {
   // 그리기 풀 모달 transition
   const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
-  // canvasRef
-  const canvasRef = useRef(null);
-  const contextRef = useRef(null);
-  // ctx
-  const [ctx, setCtx] = useState();
-  // drawing
-  const [isDrawing, setIsDrawing] = useState(false);
-  useEffect(() => {
-    // canvas useRef
-    const canvas = canvasRef.current;
-    // canvas.width = window.innerWidth * 2;
-    // canvas.height = window.innerHeight * 2;
-    // canvas.style.width = `${window.innerWidth}px`;
-    // canvas.style.height = `${window.innerHeight}px`;
-    const context = canvas.getContext("2d");
-    context.lineJoin = "round";
-    context.lineWidth = 3;
-    context.strokeStyle = "#000000";
-    contextRef.current = context;
-    setCtx(context);
-  }, []);
-  const startDrawing = () => {
-    setIsDrawing(true);
-  };
-  const finishDrawing = () => {
-    setIsDrawing(false);
-  };
-  const drawing = ({ nativeEvent }) => {
-    const { offsetX, offsetY } = nativeEvent;
-    if (ctx) {
-      if (!isDrawing) {
-        ctx.beginPath();
-        ctx.moveTo(offsetX, offsetY);
-      } else {
-        ctx.lineTo(offsetX, offsetY);
-        ctx.stroke();
-      }
-    }
-  };
-  // const startDrawing = ({ nativeEvent }) => {
-  //   const { offsetX, offsetY } = nativeEvent;
-  //   contextRef.current.beginPath();
-  //   contextRef.current.moveTo(offsetX, offsetY);
-  //   setIsDrawing(true);
-  // };
-
-  // const finishDrawing = () => {
-  //   contextRef.current.closePath();
-  //   setIsDrawing(false);
-  // };
-
-  // const draw = ({ nativeEvent }) => {
-  //   if (!isDrawing) {
-  //     return;
-  //   }
-  //   const { offsetX, offsetY } = nativeEvent;
-  //   contextRef.current.lineTo(offsetX, offsetY);
-  //   contextRef.current.stroke();
-  // };
 
   // 등록완료 모달
   const [open, setOpen] = useState(false);
@@ -122,6 +68,7 @@ export default function RegistDiary({}) {
   function changeImage(e) {
     const reader = new FileReader();
     const img = imgRef.current.files[0];
+
     setImages(e.target.files);
 
     reader.readAsDataURL(img);
@@ -138,11 +85,35 @@ export default function RegistDiary({}) {
     console.log(response.data);
   }
 
+  // base64를 이미지 파일로 바꿔주는 함수
+  function dataURLtoFile(dataurl, fileName) {
+    var arr = dataurl.split(","),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], fileName, { type: mime });
+  }
+
   // 등록 완료 모달 열기
   async function registDiary() {
-    // 사진
-    let file = imgRef.current.files[0];
-    // console.log(file);
+    let file;
+    if (isDrawing) {
+      // 직접 그린 그림 전송
+      // url을 파일로 변경 후 formdata에 넣는다.
+      // file = dataURLtoFile(imageUrl, "image.png");
+      file = dataURLtoFile(canvas, "image.png");
+    } else {
+      // 파일 전송
+      file = imgRef.current.files[0];
+    }
+
+    console.log("이거야?", file);
     let formData = new FormData();
     formData.append("imageFile", file);
 
@@ -174,6 +145,16 @@ export default function RegistDiary({}) {
     } else {
     }
     setOpen(true);
+  }
+
+  const [canvas, setCanvas] = useState();
+
+  // 직접 그리기 state
+  const [isDrawing, setIsDrawing] = useState(false);
+  const canvasDraw = useRef(null);
+  // 직접 그린 그림 업로드
+  function loadDrawing() {
+    canvasDraw.current.loadSaveData(localStorage.getItem("savedDrawing"));
   }
 
   return (
@@ -219,10 +200,39 @@ export default function RegistDiary({}) {
           </Grid>
         </Grid>
         <Grid container justifyContent="center">
+          <Grid item xs={12} sx={{ textAlign: "right" }}>
+            {/* 직접 그리기 버튼 */}
+            <Btn
+              sx={{
+                marginTop: "10%",
+                color: "#ffa000",
+              }}
+              onClick={() => {
+                setOpenDrawing(true);
+                setIsDrawing(true);
+              }}
+            >
+              <GestureIcon />
+              &nbsp;직접 그리기
+            </Btn>
+            {/* <Button
+              width="30%"
+              sx={{
+                marginTop: "10%",
+              }}
+              onClick={() => {
+                setOpenDrawing(true);
+                setIsDrawing(true);
+              }}
+            >
+              <BrushIcon />
+              그리기
+            </Button> */}
+          </Grid>
           <Grid
             item
-            style={{
-              marginTop: "10%",
+            sx={{
+              marginTop: "2%",
               marginBottom: "10%",
               width: "90vw",
               height: "90vw",
@@ -243,7 +253,22 @@ export default function RegistDiary({}) {
                 />
               </form>
             </div>
-            {imageUrl ? (
+            {/* {localStorage.getItem("savedDrawing")} */}
+            {/* {JSON.stringify(canvasDraw)} */}
+            {isDrawing ? (
+              // 직접 그린 그림 canvas
+              <Paper elevation={3}>
+                <CanvasDraw
+                  loadTimeOffset={10}
+                  disabled
+                  hideGrid
+                  canvasWidth={window.innerWidth * 0.91}
+                  canvasHeight={window.innerHeight * 0.45}
+                  ref={canvasDraw}
+                  saveData={localStorage.getItem("savedDrawing")}
+                />
+              </Paper>
+            ) : imageUrl ? (
               <label htmlFor="input">
                 <Paper
                   elevation={0}
@@ -279,22 +304,21 @@ export default function RegistDiary({}) {
             )}
           </Grid>
         </Grid>
-        <canvas id="canvas" ref={canvasRef} width={5} height={5} />
-        <Button
-          onClick={() => {
-            setOpenDrawing(true);
-          }}
-        >
-          직접 그리기
-        </Button>
-        {imageUrl ? (
+
+        {localStorage.getItem("savedDrawing") !== null || imageUrl ? (
           <div style={{ textAlign: "center" }}>
             {/* 그림 변경 버튼 */}
-            <Button sx={{ marginRight: "5%" }} width="30%">
+            <Button
+              sx={{ marginRight: "5%" }}
+              width="40%"
+              onClick={() => {
+                setIsDrawing(false);
+              }}
+            >
               <label htmlFor="input">그림 변경</label>
             </Button>
 
-            <Button bgcolor="#FFCA28" width="30%" onClick={registDiary}>
+            <Button bgcolor="#FFCA28" width="40%" onClick={registDiary}>
               일기 등록
             </Button>
           </div>
@@ -315,59 +339,10 @@ export default function RegistDiary({}) {
         open={openDrawing}
         handleClose={() => {
           setOpenDrawing(false);
+          loadDrawing();
         }}
-        canvasRef={canvasRef}
-        startDrawing={startDrawing}
-        finishDrawing={finishDrawing}
-        drawing={drawing}
+        setCanvas={setCanvas}
       ></DrawingModal>
-      {/* <Dialog
-        fullScreen
-        open={openDrawing}
-        onClose={() => {
-          setOpenDrawing(false);
-        }}
-        TransitionComponent={Transition}
-      >
-        <AppBar sx={{ position: "relative" }}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={() => {
-                setOpenDrawing(false);
-              }}
-              aria-label="close"
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              직접 그리기
-            </Typography>
-            <div
-              autoFocus
-              color="inherit"
-              onClick={() => {
-                setOpenDrawing(false);
-              }}
-            >
-              저장
-            </div>
-          </Toolbar>
-        </AppBar>
-        <Container>
-          <canvas
-            id="canvas"
-            ref={canvasRef}
-            width={800}
-            height={600}
-            // onMouseDown={startDrawing}
-            // onMouseUp={finishDrawing}
-            // onMouseMove={drawing}
-            // onMouseLeave={finishDrawing}
-          />
-        </Container>
-      </Dialog> */}
     </div>
   );
 }
