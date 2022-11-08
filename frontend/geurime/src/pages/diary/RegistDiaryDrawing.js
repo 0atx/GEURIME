@@ -33,6 +33,10 @@ import { http } from "api/http";
 import DrawingModal from "components/modal/DrawingModal";
 import { CurrentKidState } from "states/CurrentKidState";
 import CanvasDraw from "react-canvas-draw";
+import BrushIcon from "@mui/icons-material/Brush";
+import Btn from "@mui/material/Button";
+import PaletteIcon from "@mui/icons-material/Palette";
+import GestureIcon from "@mui/icons-material/Gesture";
 
 export default function RegistDiary({}) {
   // 그리기 풀 모달 transition
@@ -102,7 +106,8 @@ export default function RegistDiary({}) {
     if (isDrawing) {
       // 직접 그린 그림 전송
       // url을 파일로 변경 후 formdata에 넣는다.
-      file = dataURLtoFile(imageUrl, "image.png");
+      // file = dataURLtoFile(imageUrl, "image.png");
+      file = dataURLtoFile(canvas, "image.png");
     } else {
       // 파일 전송
       file = imgRef.current.files[0];
@@ -142,14 +147,14 @@ export default function RegistDiary({}) {
     setOpen(true);
   }
 
+  const [canvas, setCanvas] = useState();
+
   // 직접 그리기 state
   const [isDrawing, setIsDrawing] = useState(false);
   const canvasDraw = useRef(null);
   // 직접 그린 그림 업로드
   function loadDrawing() {
     canvasDraw.current.loadSaveData(localStorage.getItem("savedDrawing"));
-    // console.log(canvasDraw.current.getDataURL());
-    setImageUrl(canvasDraw.current.getDataURL());
   }
 
   return (
@@ -195,10 +200,39 @@ export default function RegistDiary({}) {
           </Grid>
         </Grid>
         <Grid container justifyContent="center">
+          <Grid item xs={12} sx={{ textAlign: "right" }}>
+            {/* 직접 그리기 버튼 */}
+            <Btn
+              sx={{
+                marginTop: "10%",
+                color: "#ffa000",
+              }}
+              onClick={() => {
+                setOpenDrawing(true);
+                setIsDrawing(true);
+              }}
+            >
+              <GestureIcon />
+              &nbsp;직접 그리기
+            </Btn>
+            {/* <Button
+              width="30%"
+              sx={{
+                marginTop: "10%",
+              }}
+              onClick={() => {
+                setOpenDrawing(true);
+                setIsDrawing(true);
+              }}
+            >
+              <BrushIcon />
+              그리기
+            </Button> */}
+          </Grid>
           <Grid
             item
-            style={{
-              marginTop: "10%",
+            sx={{
+              marginTop: "2%",
               marginBottom: "10%",
               width: "90vw",
               height: "90vw",
@@ -219,20 +253,21 @@ export default function RegistDiary({}) {
                 />
               </form>
             </div>
-
             {/* {localStorage.getItem("savedDrawing")} */}
             {/* {JSON.stringify(canvasDraw)} */}
-            <br />
             {isDrawing ? (
-              <CanvasDraw
-                loadTimeOffset={10}
-                disabled
-                hideGrid
-                canvasWidth={window.innerWidth * 0.91}
-                canvasHeight={window.innerHeight * 0.5}
-                ref={canvasDraw}
-                saveData={localStorage.getItem("savedDrawing")}
-              />
+              // 직접 그린 그림 canvas
+              <Paper elevation={3}>
+                <CanvasDraw
+                  loadTimeOffset={10}
+                  disabled
+                  hideGrid
+                  canvasWidth={window.innerWidth * 0.91}
+                  canvasHeight={window.innerHeight * 0.45}
+                  ref={canvasDraw}
+                  saveData={localStorage.getItem("savedDrawing")}
+                />
+              </Paper>
             ) : imageUrl ? (
               <label htmlFor="input">
                 <Paper
@@ -270,20 +305,12 @@ export default function RegistDiary({}) {
           </Grid>
         </Grid>
 
-        <Button
-          onClick={() => {
-            setOpenDrawing(true);
-            setIsDrawing(true);
-          }}
-        >
-          직접 그리기
-        </Button>
         {localStorage.getItem("savedDrawing") !== null || imageUrl ? (
           <div style={{ textAlign: "center" }}>
             {/* 그림 변경 버튼 */}
             <Button
               sx={{ marginRight: "5%" }}
-              width="30%"
+              width="40%"
               onClick={() => {
                 setIsDrawing(false);
               }}
@@ -291,7 +318,7 @@ export default function RegistDiary({}) {
               <label htmlFor="input">그림 변경</label>
             </Button>
 
-            <Button bgcolor="#FFCA28" width="30%" onClick={registDiary}>
+            <Button bgcolor="#FFCA28" width="40%" onClick={registDiary}>
               일기 등록
             </Button>
           </div>
@@ -314,6 +341,7 @@ export default function RegistDiary({}) {
           setOpenDrawing(false);
           loadDrawing();
         }}
+        setCanvas={setCanvas}
       ></DrawingModal>
     </div>
   );

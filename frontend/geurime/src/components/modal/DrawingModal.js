@@ -22,7 +22,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function DrawingModal({ open, handleClose }) {
+export default function DrawingModal({ open, handleClose, setCanvas }) {
   const canvasRef = useRef(null);
 
   const [color, setColor] = useState("black");
@@ -37,6 +37,7 @@ export default function DrawingModal({ open, handleClose }) {
   // 그림 저장
   function saveDrawing() {
     localStorage.setItem("savedDrawing", canvasRef.current.getSaveData());
+    setCanvas(canvasRef.current.getDataURL());
   }
 
   return (
@@ -52,69 +53,9 @@ export default function DrawingModal({ open, handleClose }) {
             </Typography>
           </Toolbar>
         </AppBar>
-        <Container>
-          <Grid container>
-            <Grid item xs={12} sx={{ mb: 1 }}>
-              <p>펜 두께</p>
-              <Slider
-                step={5}
-                min={0}
-                max={50}
-                defaultValue={5}
-                aria-label="Default"
-                valueLabelDisplay="auto"
-                onChange={(e) => {
-                  setBrushRadius(e.target.value);
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sx={{ textAlign: "center" }}>
-              <CirclePicker
-                width="100%"
-                colors={[
-                  "#D0021B", // 빨
-                  "#F5A623", // 주
-                  "#F8E71C", // 노
-                  "#008B02", // 초
-                  "#004DCF", // 파
-                  "#5300EB", // 남
-                  "#9013FE", // 보
-                  "#03A9F4",
-                  "#8bc34a",
-                  "#cddc39",
-                  "#ffeb3b",
-                  "#ffc107",
-                  "#BD10E0",
-                  "#8B572A", // 갈
-                  "#9B9B9B", // 회
-                  "#000000", // 검
-                ]}
-                color={color}
-                onChange={(color) => {
-                  console.log(color);
-                  setColor(color.hex);
-                }}
-              ></CirclePicker>
-            </Grid>
-            <Grid item xs={12} sx={{ mt: 3 }}>
-              <Paper elevation={3}>
-                <CanvasDraw
-                  ref={canvasRef}
-                  canvasWidth={window.innerWidth * 0.91}
-                  canvasHeight={window.innerHeight * 0.5}
-                  catenaryColor={"#FFCA28"}
-                  hideGrid
-                  enablePanAndZoom
-                  brushColor={color}
-                  brushRadius={brushRadius}
-                  lazyRadius={0}
-
-                  // onChange={() => console.log("onChange")}
-                />
-              </Paper>
-            </Grid>
-
-            <Grid item xs={12} sx={{ mt: 2, textAlign: "right" }}>
+        <Container sx={{ marginTop: "10%" }}>
+          <Grid container sx={{ textAlign: "center" }}>
+            <Grid item xs={12} sx={{ textAlign: "right" }}>
               <UndoRoundedIcon
                 sx={{ mr: 1, fontSize: "3.5vh" }}
                 color="secondary"
@@ -128,7 +69,82 @@ export default function DrawingModal({ open, handleClose }) {
                 onClick={clearCanvas}
               />
             </Grid>
-            <Grid container justifyContent="center" textAlign="center">
+            <Grid item xs={12} sx={{ mt: 1, mb: 4 }}>
+              <Paper elevation={3}>
+                <CanvasDraw
+                  ref={canvasRef}
+                  canvasWidth={window.innerWidth * 0.91}
+                  canvasHeight={window.innerHeight * 0.4}
+                  // catenaryColor={"#FFCA28"}
+                  hideGrid
+                  enablePanAndZoom
+                  brushColor={color}
+                  brushRadius={brushRadius}
+                  lazyRadius={0}
+                  // onChange={() => console.log("onChange")}
+                />
+              </Paper>
+            </Grid>
+
+            <Grid container alignItems="center">
+              {/* 펜 두께 */}
+              <Grid item xs={2} sx={{ mb: 1 }}>
+                <p>펜 두께</p>
+              </Grid>
+              <Grid item xs={10} sx={{ mb: 1, pl: 2, pr: 2 }}>
+                <Slider
+                  step={5}
+                  min={0}
+                  max={50}
+                  defaultValue={5}
+                  aria-label="Default"
+                  valueLabelDisplay="auto"
+                  onChange={(e) => {
+                    setBrushRadius(e.target.value);
+                  }}
+                />
+              </Grid>
+              {/* 색깔 */}
+              <Grid item xs={2} sx={{ mb: 1, mt: 1 }}>
+                <p>색깔</p>
+              </Grid>
+
+              <Grid item xs={10} sx={{ mt: 1, textAlign: "center", pl: 2 }}>
+                <CirclePicker
+                  width="100%"
+                  circleSize={25}
+                  colors={[
+                    "#D33115",
+                    "#E27300",
+                    "#FCC400",
+                    "#B0BC00",
+                    "#68BC00",
+                    "#16A5A5",
+                    "#009CE0",
+                    "#7B64FF",
+                    "#FA28FF",
+                    "#FB9E00",
+                    "#194D33",
+                    "#0C797D",
+                    "#0062B1",
+                    "#653294",
+                    "#AB149E",
+                    "#ff5722",
+                    "#795548",
+                    "#607d8b",
+                    "#969696",
+                    "#263238",
+                    "#000000",
+                  ]}
+                  color={color}
+                  onChange={(color) => {
+                    console.log(color);
+                    setColor(color.hex);
+                  }}
+                ></CirclePicker>
+              </Grid>
+            </Grid>
+            <Grid container justifyContent="center" textAlign="center" sx={{ marginTop: "15%" }}>
               <Button
                 width="40%"
                 onClick={() => {
@@ -136,7 +152,7 @@ export default function DrawingModal({ open, handleClose }) {
                   handleClose();
                 }}
               >
-                저장하기
+                그림 올리기
               </Button>
             </Grid>
           </Grid>
