@@ -16,6 +16,8 @@ import { boardState } from "states/BoardState";
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
 import moment from "moment";
+import 'moment/locale/ko';
+
 import NoCommentModal from "components/modal/NoCommentModal";
 
 export default function DetailBoard( ) { 

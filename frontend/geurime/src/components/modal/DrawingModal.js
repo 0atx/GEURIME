@@ -23,6 +23,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function DrawingModal({ open, handleClose, setCanvas }) {
+  useEffect(() => {
+    // 펜 두께, 색깔 초기화
+    setColor("black");
+    setBrushRadius(5);
+  }, [open]);
+
   const canvasRef = useRef(null);
 
   const [color, setColor] = useState("black");

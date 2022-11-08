@@ -4,6 +4,7 @@
 */
 import { Avatar, Grid, IconButton } from "@mui/material";
 import moment from "moment";
+import 'moment/locale/ko';
 import { useEffect, useRef, useState } from "react";
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
@@ -103,7 +104,7 @@ export default function CommentInputItem({ item }) {
         >
           <div style={{width : '50vw'}}>{item.commentUserNickname}</div>
           <div>{item.commentContent}</div>
-          <span style={{ fontSize: 13, fontWeight: 200 }}>{moment(createTime).fromNow()}</span>
+            <span style={{ fontSize: 13, fontWeight: 200 }}>{moment(item.createTime).fromNow()}</span>
       
         </Grid>
       {/* 편집 버튼 */}
