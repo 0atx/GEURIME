@@ -188,7 +188,6 @@ export default function Board() {
       return <BoardItem key={idx} item={store}/>;
     })}
         </Grid>
-    <button onClick={() => console.log('테스트')}>테스트용</button>
       </Grid>
       <NavBar/>
     </Grid>
