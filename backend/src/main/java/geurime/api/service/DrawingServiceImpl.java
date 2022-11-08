@@ -7,6 +7,7 @@ import geurime.database.entity.DrawingBox;
 import geurime.database.entity.Kid;
 import geurime.database.enums.BoxType;
 import geurime.database.repository.DrawingBoxRepository;
+import geurime.api.dto.CountHeatMapResponse;
 import geurime.database.repository.DrawingRepository;
 import geurime.database.repository.KidRepository;
 import geurime.exception.CustomException;
@@ -219,6 +220,16 @@ public class DrawingServiceImpl implements DrawingService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<CountHeatMapResponse> readDrawingCountHeatMap(Long kidId) {
+        Kid kid = getKid(kidId);
+
+        List<CountHeatMapResponse> countHeatMapResponseList =  drawingRepository.findDrawingCountList(kid);
+
+        return countHeatMapResponseList;
+
     }
 
     private DrawingBox getDrawingBox(Long drawingBoxId){
