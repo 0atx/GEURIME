@@ -210,6 +210,10 @@ export default function RegistDiary({}) {
               onClick={() => {
                 setOpenDrawing(true);
                 setIsDrawing(true);
+                localStorage.setItem(
+                  "savedDrawing",
+                  JSON.stringify({ lines: [], width: 354.90000000000003, height: 337.6 })
+                );
               }}
             >
               <GestureIcon />
@@ -259,7 +263,7 @@ export default function RegistDiary({}) {
               // 직접 그린 그림 canvas
               <Paper elevation={3}>
                 <CanvasDraw
-                  loadTimeOffset={10}
+                  loadTimeOffset={40}
                   disabled
                   hideGrid
                   canvasWidth={window.innerWidth * 0.91}
