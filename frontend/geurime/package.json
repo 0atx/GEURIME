@@ -10,6 +10,8 @@
     "@mui/material": "^5.10.10",
     "@mui/styled-engine-sc": "^5.10.6",
     "@mui/x-date-pickers": "^5.0.6",
+    "@nivo/core": "^0.80.0",
+    "@nivo/pie": "^0.80.0",
     "@react-three/drei": "^9.37.1",
     "@react-three/fiber": "^8.8.10",
     "@testing-library/jest-dom": "^5.16.5",
@@ -62,7 +64,6 @@
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
-  "devDependencies": {},
   "keywords": [],
   "author": "",
   "license": "ISC"
