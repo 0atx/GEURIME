@@ -32,13 +32,13 @@
     <springProperty scope="context" name="LOG_LEVEL" source="logging.level.root"/>
 
     <!-- log file path -->
-    <property name="LOG_PATH" value="/logs/local"/>
+    <property name="LOG_PATH" value="/logs/spring"/>
     <!-- log file name -->
-    <property name="LOG_FILE_NAME" value="local_log"/>
+    <property name="LOG_FILE_NAME" value="server_log"/>
     <!-- err log file name -->
     <property name="ERR_LOG_FILE_NAME" value="err_log"/>
     <!-- pattern -->
-    <property name="LOG_PATTERN" value="%-5level %d{yy-MM-dd HH:mm:ss}[%thread] [%logger{0}:%line] - %msg%n"/>
+    <property name="LOG_PATTERN" value="%d{yy-MM-dd HH:mm:ss} %-5level ${PID:-} --- [%thread] %logger{0} : %msg%n"/>
 
     <!-- Console Appender -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
