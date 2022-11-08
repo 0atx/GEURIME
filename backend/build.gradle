@@ -28,6 +28,10 @@ dependencies {
     implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0' // swagger
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.1.0' //엔티티와 DTO간의 변환을 도와줌
 
+    // logback 관련
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+    implementation 'ch.qos.logback:logback-core:1.2.3'
+
     // Fast API REST 서비스 호출
     implementation group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.15'
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
