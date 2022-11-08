@@ -1,14 +1,14 @@
-package geurime.database.repository;
+package geurime.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import net.bytebuddy.asm.Advice;
 
 import java.time.LocalDate;
 
 /**
  * A Projection for the {@link geurime.database.entity.Drawing} entity
  */
-public interface DrawingInfo {
+public interface CountHeatMapResponse {
+    @JsonFormat(pattern = "yyyy/MM/dd")
     LocalDate getCreateTime();
     Long getCount();
 }

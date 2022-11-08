@@ -1,5 +1,6 @@
 package geurime.database.repository;
 
+import geurime.api.dto.CountHeatMapResponse;
 import geurime.database.entity.Drawing;
 import geurime.database.entity.DrawingBox;
 import geurime.database.entity.Kid;
@@ -9,8 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +27,6 @@ public interface DrawingRepository extends JpaRepository<Drawing, Long> {
     long countByDrawingBox(DrawingBox drawingBox);
 
     @Query(value = "select dr.createTime as createTime, count(dr.createTime) as count from Drawing dr where dr.drawingBox.kid = :kid group by dr.createTime")
-    List<DrawingInfo> findDrawingCountList(@Param("kid") Kid kid);
+    List<CountHeatMapResponse> findDrawingCountList(@Param("kid") Kid kid);
 
 }
