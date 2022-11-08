@@ -9,7 +9,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import { useNavigate } from "react-router-dom";
 import { DialogTitle } from "@mui/material";
-import Chart from "react-apexcharts";
+// import Chart from "react-apexcharts";
 
 // 분석결과 차트
 function ShowCharts({ happy, sad, angry }) {
@@ -45,7 +45,7 @@ function ShowCharts({ happy, sad, angry }) {
     <div className="app">
       <div className="row">
         <div className="mixed-chart">
-          <Chart options={options} series={series} type="pie" />
+          {/* <Chart options={options} series={series} type="pie" /> */}
         </div>
       </div>
     </div>
