@@ -6,6 +6,7 @@ import geurime.database.entity.Kid;
 import geurime.database.enums.BoxType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,9 +27,7 @@ public interface DrawingRepository extends JpaRepository<Drawing, Long> {
 
     long countByDrawingBox(DrawingBox drawingBox);
 
-
-//        @Query("select f from FoodInfo f where f.name like concat('%', :name, '%') and (f.foodUser = :userId or f.foodUser = 1) order by length(f.name) asc")
-//    List<FoodInfo> findByNameAndFoodUser(String name, Long userId, Pageable pageable);
-
+    @Query(value = "select dr.createTime as createTime, count(dr.createTime) as count from Drawing dr where dr.drawingBox.kid = :kid group by dr.createTime")
+    List<DrawingInfo> findDrawingCountList(@Param("kid") Kid kid);
 
 }

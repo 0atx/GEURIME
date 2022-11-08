@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 @Entity
@@ -94,6 +95,20 @@ public class Drawing {
         this.emotionSad = depression;
         this.emotionAngry = violence;
         this.emotionHappy = happniess;
+    }
+
+    /**
+     * 그림기록 업로드 횟수 히트맵
+     */
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CountHeatMapResponse {
+        @JsonFormat(pattern = "yyyy/MM/dd")
+        private LocalDate date;
+        private Long count;
+
     }
 
     /**
