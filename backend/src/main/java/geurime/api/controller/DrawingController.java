@@ -3,7 +3,7 @@ package geurime.api.controller;
 import geurime.api.dto.common.BasicResponse;
 import geurime.api.service.DrawingServiceImpl;
 import geurime.database.entity.Drawing;
-import geurime.database.repository.DrawingInfo;
+import geurime.api.dto.CountHeatMapResponse;
 import geurime.exception.CustomException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -48,10 +48,10 @@ public class DrawingController {
 
     @GetMapping("/heat-map/{kidId}")
     @ApiOperation(value = "그림기록 통계 조회", notes = "자녀 id를 받아 날짜별로 업로드한 횟수를 그림이미지를 조회한다")
-    public ResponseEntity<BasicResponse<List<Drawing.CountHeatMapResponse>>> readDrawingCount(@PathVariable("kidId") Long kidId){
+    public ResponseEntity<BasicResponse<List<CountHeatMapResponse>>> readDrawingCount(@PathVariable("kidId") Long kidId){
         try {
-            List<Drawing.CountHeatMapResponse> responseList = drawingService.readDrawingCountHeatMap(kidId);
-            return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseList), HttpStatus.OK);
+            List<CountHeatMapResponse> countHeatMapResponseList = drawingService.readDrawingCountHeatMap(kidId);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, countHeatMapResponseList), HttpStatus.OK);
         } catch (CustomException e) {
             return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
         }

@@ -39,8 +39,10 @@ public class SecurityConfig {
 
         configuration.addAllowedOriginPattern("http://localhost:3000");
         configuration.addAllowedOriginPattern("http://localhost:9000");
+        configuration.addAllowedOriginPattern("http://geurime.com");
         configuration.addAllowedOriginPattern("http://k7a506.p.ssafy.io:3000");
         configuration.addAllowedOriginPattern("http://k7a506.p.ssafy.io:9000");
+        configuration.addAllowedOriginPattern("https://geurime.com");
         configuration.addAllowedOriginPattern("https://k7a506.p.ssafy.io");
         configuration.addAllowedOriginPattern("https://k7a506.p.ssafy.io:3000");
         configuration.addAllowedOriginPattern("https://k7a506.p.ssafy.io:9000");
