@@ -1,5 +1,5 @@
 /*
-게시글 삭제 완료 모달
+검색 결과 없음 모달
 @author 유현욱
 @since 2022.11.08
 */
@@ -8,25 +8,12 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import { useNavigate } from "react-router-dom";
-import { http } from "api/http";
 
-export default function DeleteBoardModal ({ open, handleClose, boardId, userId}) {
+export default function NoSearchModal({ open }) {
   const navigate = useNavigate();
 
-  // 일기 삭제
-  async function deleteBoard() {
-    const response = await http.delete(`/boards`, {
-      params: {
-        boardId: boardId,
-        userId: userId
-      }
-    });
-
-    console.log(response.data);
-    navigate(`/board`);
-  }
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open}>
       <DialogContent>
         <div
           style={{
@@ -34,12 +21,17 @@ export default function DeleteBoardModal ({ open, handleClose, boardId, userId})
             textAlign: "center",
           }}
         >
-          정말로 삭제하시겠습니까? 😥
+          게시글 등록이 완료되었습니다!
         </div>
       </DialogContent>
       <DialogActions sx={{ display: "flex", justifyContent: "center", marginBottom: "10px" }}>
-        <Button width="100px" onClick={deleteBoard}>
-          삭제
+        <Button
+          width="100px"
+          onClick={() => {
+            navigate(`/board`);
+          }}
+        >
+          확인
         </Button>
       </DialogActions>
     </Dialog>

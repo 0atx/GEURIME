@@ -1,3 +1,8 @@
+/*
+@author 유현욱
+@since 2022.11.04
+*/
+
 import { Button, Grid } from "@mui/material";
 import { http2 } from "api/http2";
 import { useRef, useState } from "react";
@@ -6,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import BackMenu from "components/nav/BackMenu";
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
+import RegistBoardModal from "components/modal/RegistBoardModal";
 
 export default function RegistBoard() { 
   const [userInfo, setUserInfo] = useRecoilState(userState);
@@ -79,7 +85,8 @@ export default function RegistBoard() {
     const response = await http2.post(`/boards`, formData);
     if (response.data.message == "success") {
       console.log('등록 완료!')
-      navigator("/Board");
+      // navigator("/Board");
+      setOpen(true);
     } else {
       alert("게시글을 등록하지 못했습니다");
       return;
@@ -99,6 +106,9 @@ export default function RegistBoard() {
       setImageUrl(reader.result);
     };
   }
+  // 등록완료 모달
+  const [open, setOpen] = useState(false);
+  
 
   return (
     <Grid
@@ -111,9 +121,9 @@ export default function RegistBoard() {
       isLeft={true}
       title='게시글 등록'
       isRight="등록"
-    clickRight={() => {
-      regist();
-      }}
+      clickRight={() => {
+        regist();
+        }}
     >
     </BackMenu>
       <BoardInputItem
@@ -136,6 +146,8 @@ export default function RegistBoard() {
           onClick={() => { regist(); }}
         >게시글 등록</Button>
       </Grid>
+      {/* 등록 완료 모달 */}
+      <RegistBoardModal open={open}></RegistBoardModal>
     </Grid>
     )
 };

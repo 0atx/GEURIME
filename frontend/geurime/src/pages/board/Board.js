@@ -6,8 +6,6 @@ import * as React from 'react';
 import { Grid,TextField } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import { useState, useEffect, useRef } from "react";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import SearchIcon from '@mui/icons-material/Search';
 import FormControl from '@mui/material/FormControl';
@@ -20,7 +18,7 @@ import NavBar from 'components/nav/NavBar';
 
 export default function Board() { 
   const navigator = useNavigate();
-  
+  // 게시판 데이터
   const [boards, setBoards] = useState([{
     "boardCategory": "질문",
     "boardFirstImage": "https://en.pimg.jp/031/716/685/1/31716685.jpg",
@@ -33,31 +31,15 @@ export default function Board() {
     "userId": 0,
     "userNickname": "1번유저",
     "userProfileImage": "string"
-  },{
-    "boardCategory": "질문",
-    "boardFirstImage": "https://en.pimg.jp/031/716/685/1/31716685.jpg",
-    "boardId": 0,
-    "boardTitle": "1번글",
-    "boardViews": 0,
-    "commentCount": 0,
-    "createTime": "2022-10-28T06:37:58.611Z",
-    "updateTime": "2022-10-28T06:37:58.611Z",
-    "userId": 0,
-    "userNickname": "1번유저",
-    "userProfileImage": "string"
   }]);
-  const [list, setList] = useState('');
-  const [searchKeyWord, setSearchKeyWord] = useState();
+  const [category, setCategory] = useState(''); // 카테고리 변수명
+  // const [searchKeyWord, setSearchKeyWord] = useState();
   const searchInput = useRef(null); // 검색바 input 객체
+  // 카테고리 변경시 할당
   const handleChange = (event) => {
-    setList(event.target.value);
+    setCategory(event.target.value);
   };
-  // const getData = async () => {
-  //   const response = await axios.get(
-  //     'http://j7a104.p.ssafy.io:8080/categories',
-  //   );
-  //   console.log('서버에서 카페, 드링크가져왔음.');
-
+  // 전체 게시글 조회 axios
   const getBoard = async () => {
     const response = await http.get(`/boards`, {
       params: {
@@ -65,7 +47,6 @@ export default function Board() {
         size: 10
       }
     });
-    console.log({전체게시글: response.data });
 
     if (response.data.message == "success") {
       setBoards(response.data.data)
@@ -74,10 +55,8 @@ export default function Board() {
     }
   } 
   useEffect(() => {
-    console.log('전체 게시글 조회')
     getBoard()
-
-  },[])
+  }, [])
   function searchKeyword(e) {
     if (e.key === "Enter") {
       search()
@@ -92,13 +71,12 @@ export default function Board() {
     //   searchInput.current.value = "";
     // }
   }
-
+  
   const search = async () => {
-    console.log({검색카테고리: list})
-    console.log({검색어: searchInput.current.value})
+
     const response = await http.get(`/boards/search`, {
       params: {
-        category: list,
+        category: category,
         keyword: searchInput.current.value,
         page: 0,
         size: 10
@@ -151,7 +129,7 @@ export default function Board() {
         >
           <FormControl sx={{ height: '8vh', width: '16vh', Color: '#FFCA28', justifyContent:'center', textAlign: 'center'}} size='small'>
             <Select
-              value={list}
+              value={category}
               onChange={handleChange}
               displayEmpty
               inputProps={{ 'aria-label': 'Without label' }}
@@ -176,20 +154,8 @@ export default function Board() {
           <Grid 
             container
             direction="row"
-            // justifyContent='space-between'
           >
               {/* 검색어 입력 부분 */}
-              {/* <Input
-                placeholder="검색어를 입력하세요..."
-                onChange={(e) => {
-                  setSearchKeyWord(e.target.value);
-                }} // 검색 키워드 변경
-                id="searchValue"
-                inputRef={searchInput} // input 객체를 반환
-                onKeyDown={(e) => {
-                  // search(e);
-                  }} // enter시 검색하는 함수
-                /> */}
             <TextField
               id="standard-search"
               placeholder='검색어를 입력하세요...'
@@ -206,7 +172,6 @@ export default function Board() {
               sx={{ color: "#FFA000" }}
               aria-label="search"
               onClick={(e) => {
-                // searchClick(e);
                 search(e);
               }}
             >
@@ -223,6 +188,7 @@ export default function Board() {
       return <BoardItem key={idx} item={store}/>;
     })}
         </Grid>
+    <button onClick={() => console.log('테스트')}>테스트용</button>
       </Grid>
       <NavBar/>
     </Grid>

@@ -1,3 +1,7 @@
+/*
+@author 유현욱
+@since 2022.11.02
+*/
 import { Avatar, Grid, IconButton } from "@mui/material";
 import moment from "moment";
 import { useEffect, useRef, useState } from "react";

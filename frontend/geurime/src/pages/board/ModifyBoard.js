@@ -1,3 +1,8 @@
+/*
+@author 유현욱
+@since 2022.11.07
+*/
+
 import { Button, Grid } from "@mui/material";
 import { http } from "api/http";
 import { http2 } from "api/http2";
@@ -8,9 +13,11 @@ import { useRecoilState } from "recoil";
 import { boardState } from "states/BoardState";
 import BoardInputItem from "./BoardInputItem";
 import { userState } from "states/UserState";
+import DeleteBoardModal from "components/modal/DeleteBoardModal";
 
 export default function ModifyBoard() {
   const navigator = useNavigate();
+
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [boardInfo, setBoardInfo] = useRecoilState(boardState);
   const [title, setTitle] = useState(boardInfo.boardTitle);
@@ -46,24 +53,13 @@ export default function ModifyBoard() {
   };
 
   const regist = async () => {
-    // setTitle(event.target.value);
-    // console.log({제목: title})
+
     console.log('수정중')
     let formData = new FormData();
     // 이미지를 새로 등록했을 때
     if (imgRef.current.files[0]) {
       formData.append("imageFile", imgRef.current.files[0]);
-      console.log({ 이미지: imgRef.current.files[0] })
     }
-    // else {
-    //   formData.append("imageFile", null);
-    // }
-    console.log({ 현재제목: titleRef.current.value })
-    console.log({ 현재내용: textRef.current.value })
-    console.log({ 현재카테고리: boardCategory })
-    console.log({ 현재유저아이디: userInfo.userID })
-    console.log({ 사진:  imgRef.current.files})
-    // 유저 아이디 리코일에서 가져오게 해야됨
     let request = {
       boardId: boardInfo.boardId,
       boardTitle: titleRef.current.value,
@@ -100,23 +96,21 @@ export default function ModifyBoard() {
     }
   };
 
-  const del = async () => {
-    console.log('삭제 시도')
-    console.log({ 유저아이디: userInfo.userID })
-    console.log({ 게시물아이디: boardInfo.boardId})
-    const response = await http.delete(`/boards`, {
-      params: {
-        boardId: boardInfo.boardId,
-        userId: userInfo.userId
-      }
-    });
-    if (response.data.message == "success") {
-      alert('게시글을 삭제했습니다')
-      navigator(`/board`);
-    } else {
-      alert("게시글을 삭제하지 못했습니다");
-    }
-  } 
+  // const del = async () => {
+
+  //   const response = await http.delete(`/boards`, {
+  //     params: {
+  //       boardId: boardInfo.boardId,
+  //       userId: userInfo.userId
+  //     }
+  //   });
+  //   if (response.data.message == "success") {
+  //     alert('게시글을 삭제했습니다')
+  //     navigator(`/board`);
+  //   } else {
+  //     alert("게시글을 삭제하지 못했습니다");
+  //   }
+  // } 
   function changeProfile(e) {
     const reader = new FileReader();
     const img = imgRef.current.files[0];
@@ -138,7 +132,18 @@ export default function ModifyBoard() {
 
   useEffect(() => {
     console.log({디테일정보: boardInfo})
-  },[])
+  }, [])
+  // 삭제완료 모달
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  // 게시글 삭제 함수
+  const deleteBoard = () => {
+      setOpenDeleteModal(true);
+  };
+  // 삭제 모달 닫기
+  const closeDeleteModal = () => {
+    setOpenDeleteModal(false);
+    };
+  
   return (
     <div>
     <BackMenu
@@ -178,7 +183,7 @@ export default function ModifyBoard() {
         <Button
         variant="contained"
           sx={{ width: '25vw', borderRadius: 5, marginLeft: '10%' }}
-          onClick={() => del()}
+          onClick={() => deleteBoard()}
         >삭제</Button>
         <Button
         variant="contained"
@@ -186,7 +191,16 @@ export default function ModifyBoard() {
           onClick={() => regist()}
         >등록</Button>
       </Grid>
-    </Grid>
+      </Grid>
+      
+  {/* 삭제 모달 */}
+  <DeleteBoardModal
+    open={openDeleteModal}
+    handleClose={closeDeleteModal}
+    boardId = {boardInfo.boardId}
+    userId = {userInfo.userId}
+  >
+  </DeleteBoardModal>
     </div>
   )
 }
