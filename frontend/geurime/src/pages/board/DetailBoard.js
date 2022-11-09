@@ -219,9 +219,9 @@ export default function DetailBoard( ) {
       </Grid>
       <Paper
           variant="outlined"
-          sx={{ marginTop:'3%', borderBlockColor: '#FFE082', borderRadius: 2, borderColor: '#FFE082', borderWidth: 2.5,  height: '18vh', width:'94%',marginLeft:'3%'}}
+          sx={{ marginTop:'3%', backgroundColor: 'rgba(0,0,0,0)', borderRadius: 2, borderColor: '#FFE082', borderWidth: 2.5,  height: '18vh', width:'94%',marginLeft:'3%'}}
       >
-        <Grid sx={{marginTop:'2.5%', marginLeft: '3%'}}>{board.boardContent}</Grid>
+        <Grid sx={{marginTop:'2.5%', marginLeft: '3%', backgroundColor: 'rgba(0,0,0,0)'}}>{board.boardContent}</Grid>
           
       </Paper>
 
