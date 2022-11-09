@@ -263,11 +263,11 @@ export default function RegistDiary({}) {
               // 직접 그린 그림 canvas
               <Paper elevation={3}>
                 <CanvasDraw
-                  loadTimeOffset={40}
+                  loadTimeOffset={5}
                   disabled
                   hideGrid
                   canvasWidth={window.innerWidth * 0.91}
-                  canvasHeight={window.innerHeight * 0.45}
+                  canvasHeight={window.innerWidth * 0.91}
                   ref={canvasDraw}
                   saveData={localStorage.getItem("savedDrawing")}
                 />

@@ -5,7 +5,17 @@
 */
 import BackMenu from "components/nav/BackMenu";
 import { useState, useRef, useEffect } from "react";
-import { Container, Grid, Paper, InputBase, IconButton, Typography } from "@mui/material";
+import {
+  ImageList,
+  ImageListItem,
+  ImageListItemBar,
+  Container,
+  Grid,
+  Paper,
+  InputBase,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
@@ -17,6 +27,7 @@ import { http } from "api/http";
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
 import { CurrentKidState } from "states/CurrentKidState";
+import paper from "assets/diaryPaper.png";
 
 export default function Diary() {
   // userInfo
@@ -154,63 +165,63 @@ export default function Diary() {
           </Grid>
         </Grid>
         {/* 일기 리스트 */}
-        <Container sx={{ marginTop: "3%" }}>
-          <Grid container rowSpacing={2} columnSpacing={{ xs: 2, sm: 3, md: 4 }}>
-            {diaries.map((diary, i) => (
-              <Grid item xs={6} sm={4} md={2} key={i}>
-                <Link to={"/detaildiary/" + diary.drawingId} style={{ textDecoration: "none" }}>
-                  <Paper elevation={3}>
-                    <div style={{ padding: "5%" }}>
-                      <img
-                        src={diary.drawingImagePath}
-                        width="100%"
-                        height="120px"
-                        style={{
-                          marginTop: "3%",
-                          border: "3px solid #FFCA28",
-                          borderRadius: "5px",
-                          objectFit: "cover",
-                        }}
-                      ></img>
-                      {diary.drawingTitle.length >= 9 ? (
-                        <Typography
-                          sx={{
-                            textAlign: "center",
-                            fontFamily: "THEHongChawangjanemo",
-                            fontSize: "2.5vh",
-                            lineHeight: "3vh",
-                          }}
-                        >
-                          {diary.drawingTitle.substr(0, 9)}...
-                        </Typography>
-                      ) : (
-                        <Typography
-                          sx={{
-                            textAlign: "center",
-                            fontFamily: "THEHongChawangjanemo",
-                            fontSize: "2.5vh",
-                            lineHeight: "3vh",
-                          }}
-                        >
-                          {diary.drawingTitle}
-                        </Typography>
-                      )}
-                      <Typography
-                        sx={{
-                          textAlign: "center",
-                          fontFamily: "THEHongChawangjanemo",
-                          fontSize: "2.2vh",
-                        }}
-                      >
-                        {moment(diary.createTime).format("YYYY년 M월 D일")}
-                      </Typography>
-                    </div>
-                  </Paper>
-                </Link>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
+        <Grid
+          container
+          sx={{ marginTop: "1%", padding: "3%", "& .MuiGrid-item": { padding: "0px" } }}
+          rowSpacing={2}
+          // columnSpacing={{ xs: 2, sm: 3, md: 4 }}
+        >
+          {diaries.map((diary, i) => (
+            <Grid item xs={6} sm={4} md={2} key={i}>
+              <Link to={"/detaildiary/" + diary.drawingId} style={{ textDecoration: "none" }}>
+                <div
+                  style={{
+                    backgroundSize: "contain",
+                    padding: "10%",
+                    margin: "2%",
+                    backgroundImage: `url(${paper})`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "top center",
+                  }}
+                >
+                  <ImageListItem
+                    key={diary.drawingImagePath}
+                    sx={{ "& .MuiImageListItem-img": { width: "100%", height: "10vh" } }}
+                  >
+                    <img
+                      // height="120px"
+                      style={{
+                        marginTop: "13%",
+                        // boxShadow: "1px 2px 5px #c7c7c7",
+                        // border: "2px solid #FFCA28",
+                        borderRadius: "5px",
+                        objectFit: "cover",
+                      }}
+                      src={`${diary.drawingImagePath}`}
+                      srcSet={`${diary.drawingImagePath}`}
+                      alt={diary.drawingTitle}
+                    />
+                    {diary.drawingTitle.length >= 9 ? (
+                      <ImageListItemBar
+                        sx={{ color: "#6F6F6F", textAlign: "center" }}
+                        title={`${diary.drawingTitle}...`}
+                        subtitle={moment(diary.createTime).format("YYYY년 M월 D일")}
+                        position="below"
+                      />
+                    ) : (
+                      <ImageListItemBar
+                        sx={{ color: "#6F6F6F", textAlign: "center" }}
+                        title={`${diary.drawingTitle}`}
+                        subtitle={moment(diary.createTime).format("YYYY년 M월 D일")}
+                        position="below"
+                      />
+                    )}
+                  </ImageListItem>
+                </div>
+              </Link>
+            </Grid>
+          ))}
+        </Grid>
         {/* 네비바 */}
         <NavBar></NavBar>
       </div>
