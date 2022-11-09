@@ -61,9 +61,12 @@ export default function DetailGallery() {
 
   return (
     <>
-      {boxId == 0 ? (
+      {boxId == 0 || boxInfo.drawingBoxName === "그림일기 보관함" ? (
         // 좋아요한 보관함인 경우 수정, 삭제 버튼 없음
-        <BackMenu isLeft={true} title={`${boxInfo.drawingBoxName} (${boxInfo.dtoList.length})`} />
+        <BackMenu
+          isLeft={true}
+          title={`${boxInfo.drawingBoxName} (${boxInfo.dtoList.length})`}
+        />
       ) : (
         // 좋아요 외 보관함
         <BackMenu
@@ -74,7 +77,11 @@ export default function DetailGallery() {
       )}
       <Grid id="container">
         <Container>
-          <Masonry columns={3} spacing={1} sx={{ alignItems: "center", margin: 0 }}>
+          <Masonry
+            columns={3}
+            spacing={1}
+            sx={{ alignItems: "center", margin: 0 }}
+          >
             {boxInfo.dtoList.map(function (item, i) {
               return (
                 <Paper
