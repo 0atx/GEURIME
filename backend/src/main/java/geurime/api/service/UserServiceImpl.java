@@ -191,4 +191,29 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
 
     }
+
+    /**
+     * 유저의 가족멤버 조회
+     * @param userId
+     * @return
+     */
+    public List<Family.FamilyMemberResponse> readFamilyMembers(Long userId){
+        User user = userRepository.findByIdFetch(userId)
+                .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
+
+        Family family = user.getFamily();
+        List<Family.FamilyMemberResponse> responseList = new ArrayList<>();
+
+        for (User u : family.getUsers()){
+            responseList.add(
+                    Family.FamilyMemberResponse.builder()
+                    .userId(u.getId())
+                    .nickname(u.getNickname())
+                    .userProfileImage(u.getUserProfileImage())
+                    .build()
+            );
+        }
+        return responseList;
+    }
+
 }

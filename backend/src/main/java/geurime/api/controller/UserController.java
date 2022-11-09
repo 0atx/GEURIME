@@ -2,6 +2,7 @@ package geurime.api.controller;
 
 import geurime.api.dto.common.BasicResponse;
 import geurime.api.service.UserServiceImpl;
+import geurime.database.entity.Family;
 import geurime.database.entity.User;
 import geurime.exception.CustomException;
 import io.swagger.annotations.Api;
@@ -12,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,6 +43,17 @@ public class UserController {
         try {
             Boolean isExist = userService.checkNicknameExist(nickname);
             return new ResponseEntity<>(makeBasicResponse(SUCCESS, isExist), HttpStatus.OK);
+        } catch (CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/family/{userId}")
+    @ApiOperation(value = "유저의 가족멤버 조회", notes = "유저id를 받아 가족의 멤버들을 조회한다")
+    public ResponseEntity<BasicResponse<List<Family.FamilyMemberResponse>>> getFamilyMember(@PathVariable("userId") Long userId) {
+        try {
+            List<Family.FamilyMemberResponse> responseList = userService.readFamilyMembers(userId);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseList), HttpStatus.OK);
         } catch (CustomException e) {
             return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
         }
