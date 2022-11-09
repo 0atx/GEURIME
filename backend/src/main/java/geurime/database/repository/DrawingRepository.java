@@ -26,8 +26,11 @@ public interface DrawingRepository extends JpaRepository<Drawing, Long> {
 
     long countByDrawingBox(DrawingBox drawingBox);
 
-    @Query(value = "select d.drawingBox.kid.family.id from Drawing d")
-    Long getFamilyIdByDrawingId(Long drawingId);
+    @Query(value = "select f.id from Family f where f.id = " +
+            "(select k.family.id from Kid k where k.id = " +
+            "(select db.kid.id from DrawingBox db where db.id = " +
+            "(select d.drawingBox.id from Drawing d where d.id = :drawingId)))")
+    Long getFamilyIdByDrawingId(@Param("drawingId") Long drawingId);
 
     @Query(value = "select dr.createTime as createTime, count(dr.createTime) as count from Drawing dr where dr.drawingBox.kid = :kid group by dr.createTime")
     List<CountHeatMapResponse> findDrawingCountList(@Param("kid") Kid kid);

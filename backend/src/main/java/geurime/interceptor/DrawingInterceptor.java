@@ -39,28 +39,13 @@ public class DrawingInterceptor implements HandlerInterceptor {
         User userJwt = userRepository.findByEmailAndProvider(email, provider)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
-        Drawing drawing = drawingRepository.findById(Long.parseLong(drawingIdString))
-                .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_NOT_FOUND_ERROR));
+        Long ownerFamilyId = drawingRepository.getFamilyIdByDrawingId(Long.parseLong(drawingIdString));
+        Long requestFamilyId = userJwt.getFamily().getId();
 
-        System.out.println("테스트ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
-        Long ownerUserId = drawingRepository.getFamilyIdByDrawingId(Long.parseLong(drawingIdString));
-        Long requestUserId = userJwt.getFamily().getId();
-        
-        System.out.println(ownerUserId == requestUserId);
-
-        System.out.println("테스트ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
-
-        //        Map<String, String> pathVariables = (Map)request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        //        String value = (String) pathVariables.get("teamId");
-        //
-        //        String accessToken = request.getHeader("accessToken");
-        //        String email = jwtService.getEmail(accessToken);
-        //        String provider = jwtService.getProvider(accessToken);
-        //
-        //        Long id = memberRepository.findByEmailAndProvider(email, provider).orElseThrow(
-        //                () -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND_ERROR)
-        //        ).getId();
-        return true;
-
+        if(requestFamilyId == ownerFamilyId){
+            return true;
+        }else{
+            throw new CustomException(CustomExceptionList.NO_AUTHENTICATION_ERROR);
+        }
     }
 }
