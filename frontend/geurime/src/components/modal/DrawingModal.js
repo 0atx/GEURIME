@@ -76,7 +76,7 @@ export default function DrawingModal({ open, handleClose, setCanvas }) {
               />
             </Grid>
             <Grid item xs={12} sx={{ mt: 1, mb: 4 }}>
-              <Paper elevation={3} sx={{ width: "100%" }}>
+              <Paper elevation={3} sx={{ display: "inline-block" }}>
                 <CanvasDraw
                   ref={canvasRef}
                   canvasWidth={window.innerWidth * 0.92}
@@ -150,7 +150,12 @@ export default function DrawingModal({ open, handleClose, setCanvas }) {
                 ></CirclePicker>
               </Grid>
             </Grid>
-            <Grid container justifyContent="center" textAlign="center" sx={{ marginTop: "15%" }}>
+            <Grid
+              container
+              justifyContent="center"
+              textAlign="center"
+              sx={{ marginTop: "15%", marginBottom: "10%" }}
+            >
               <Button
                 width="40%"
                 onClick={() => {
