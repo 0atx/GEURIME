@@ -183,10 +183,12 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         Family family = user.getFamily();
-        family.removeMember(user);
-        List<User> users = family.getUsers();
-        if(users.isEmpty()){
-            familyRepository.delete(family);
+        if(family != null){
+            family.removeMember(user);
+            List<User> users = family.getUsers();
+            if(users.isEmpty()){
+                familyRepository.delete(family);
+            }
         }
         userRepository.delete(user);
 
