@@ -23,6 +23,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function DrawingModal({ open, handleClose, setCanvas }) {
+  useEffect(() => {
+    // 펜 두께, 색깔 초기화
+    setColor("black");
+    setBrushRadius(5);
+  }, [open]);
+
   const canvasRef = useRef(null);
 
   const [color, setColor] = useState("black");
@@ -70,11 +76,11 @@ export default function DrawingModal({ open, handleClose, setCanvas }) {
               />
             </Grid>
             <Grid item xs={12} sx={{ mt: 1, mb: 4 }}>
-              <Paper elevation={3}>
+              <Paper elevation={3} sx={{ width: "100%" }}>
                 <CanvasDraw
                   ref={canvasRef}
-                  canvasWidth={window.innerWidth * 0.91}
-                  canvasHeight={window.innerHeight * 0.4}
+                  canvasWidth={window.innerWidth * 0.92}
+                  canvasHeight={window.innerWidth * 0.92}
                   // catenaryColor={"#FFCA28"}
                   hideGrid
                   enablePanAndZoom
@@ -94,11 +100,11 @@ export default function DrawingModal({ open, handleClose, setCanvas }) {
               <Grid item xs={10} sx={{ mb: 1, pl: 2, pr: 2 }}>
                 <Slider
                   step={5}
-                  min={0}
+                  min={1}
                   max={50}
                   defaultValue={5}
                   aria-label="Default"
-                  valueLabelDisplay="auto"
+                  // valueLabelDisplay="auto"
                   onChange={(e) => {
                     setBrushRadius(e.target.value);
                   }}

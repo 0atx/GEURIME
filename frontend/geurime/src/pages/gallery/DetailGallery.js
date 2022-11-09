@@ -61,7 +61,7 @@ export default function DetailGallery() {
 
   return (
     <>
-      {boxId == 0 ? (
+      {boxId == 0 || boxInfo.drawingBoxName === "그림일기 보관함" ? (
         // 좋아요한 보관함인 경우 수정, 삭제 버튼 없음
         <BackMenu
           isLeft={true}

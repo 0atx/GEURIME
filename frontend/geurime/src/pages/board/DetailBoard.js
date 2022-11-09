@@ -1,3 +1,8 @@
+/*
+@author 유현욱
+@since 2022.11.02
+*/
+
 import { Avatar, Button, Grid, Paper, TextField } from "@mui/material";
 import { http } from "api/http";
 import { useEffect, useRef, useState } from "react"
@@ -11,6 +16,9 @@ import { boardState } from "states/BoardState";
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
 import moment from "moment";
+import 'moment/locale/ko';
+
+import NoCommentModal from "components/modal/NoCommentModal";
 
 export default function DetailBoard( ) { 
   const location = useLocation()
@@ -90,6 +98,12 @@ export default function DetailBoard( ) {
     // const onReset = (e) => {
     // setText("");
     // };
+  // 댓글 모달
+    const [openNoCommentModal, setOpenNoCommentModal] = useState(false);
+  // 댓글 내용 없음 모달 닫기
+  const closeNoCommentModal = () => {
+    setOpenNoCommentModal(false);
+  };
 
   const postComment = async () => {
     // commentUserId 리코일에서 가져오기
@@ -122,7 +136,7 @@ export default function DetailBoard( ) {
       }
     }
     else {
-      alert('댓글 내용을 입력해주세요')
+      setOpenNoCommentModal(true)
     }
   } 
   
@@ -239,7 +253,12 @@ export default function DetailBoard( ) {
       
 
       </Grid> 
-      <NavBar/>
-      </div>
+      <NavBar />
+      {/* 댓글 모달 */}
+      <NoCommentModal
+        open={openNoCommentModal}
+        handleClose={closeNoCommentModal}
+      ></NoCommentModal>
+    </div>
   )
 }

@@ -5,15 +5,7 @@
 */
 import BackMenu from "components/nav/BackMenu";
 import React, { useRef, useState } from "react";
-import {
-  Paper,
-  Grid,
-  Typography,
-  TextField,
-  Select,
-  MenuItem,
-  IconButton,
-} from "@mui/material";
+import { Paper, Grid, Typography, TextField, Select, MenuItem, IconButton } from "@mui/material";
 import { useRecoilValue } from "recoil";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { CurrentKidState } from "states/CurrentKidState";
@@ -33,14 +25,11 @@ export default function RegistDrawing() {
   const [open, setOpen] = useState(false);
 
   // 그림 보관함
-  const [drawingBoxes, setDrawingBoxes] = useState(
-    currentKid.drawingBoxDtoList
-  );
+  const [drawingBoxes, setDrawingBoxes] = useState(currentKid.drawingBoxDtoList);
 
   for (let i = 0; i < drawingBoxes.length; i++) {
     if (drawingBoxes[i].drawingBoxName === "그림일기 보관함") {
       let copy = [...drawingBoxes];
-      console.log(i);
       copy.splice(i, 1);
       setDrawingBoxes(copy);
     }
@@ -122,7 +111,6 @@ export default function RegistDrawing() {
 
     const response = await http2.post(`/drawings`, formData);
     if (response.data.message === "success") {
-      console.log(response.data.data);
       analysisDrawing(response.data.data.drawingId);
       setOpen(true);
     }
@@ -135,19 +123,9 @@ export default function RegistDrawing() {
 
   return (
     <>
-      <RegistDrawingModal
-        open={open}
-        setOpen={setOpen}
-        img={setImageUrl}
-        title={titleInput}
-      />
+      <RegistDrawingModal open={open} setOpen={setOpen} img={setImageUrl} title={titleInput} />
       <BackMenu isLeft={true} title="그림 등록" isRight="등록" />
-      <Grid
-        container
-        id="container2"
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Grid container id="container2" alignItems="center" justifyContent="center">
         <Grid container justifyContent="center" alignItems="center">
           <Grid
             item
@@ -222,12 +200,7 @@ export default function RegistDrawing() {
             )}
           </Grid>
         </Grid>
-        <Grid
-          container
-          sx={{ marginTop: "5vh" }}
-          justifyContent="center"
-          alignItems="center"
-        >
+        <Grid container sx={{ marginTop: "5vh" }} justifyContent="center" alignItems="center">
           {/* 보관함 */}
           <Grid item xs={3} sx={{ marginBottom: "3vh" }}>
             <Typography>보관함</Typography>

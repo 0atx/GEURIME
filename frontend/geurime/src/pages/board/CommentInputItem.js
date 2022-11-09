@@ -1,5 +1,10 @@
+/*
+@author 유현욱
+@since 2022.11.02
+*/
 import { Avatar, Grid, IconButton } from "@mui/material";
 import moment from "moment";
+import 'moment/locale/ko';
 import { useEffect, useRef, useState } from "react";
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
@@ -97,10 +102,10 @@ export default function CommentInputItem({ item }) {
           sx={{ marginLeft: '3%' }}
           xs={10}
         >
-          <div>{item.commentUserNickname}</div>
+          <div style={{width : '50vw'}}>{item.commentUserNickname}</div>
           <div>{item.commentContent}</div>
-          <span style={{ fontSize: 13, fontWeight: 200 }}>{year}년 {month}월 {date}일</span>
-        {createTime}
+            <span style={{ fontSize: 13, fontWeight: 200 }}>{moment(item.createTime).fromNow()}</span>
+      
         </Grid>
       {/* 편집 버튼 */}
         {/* <Grid
