@@ -11,4 +11,4 @@ docker stop springbootapp
 echo '컨테이너 삭제'
 docker rm springbootapp
 echo '컨테이너 실행'
-docker run -p 8000:8000 --name springbootapp --network ubuntu_default -d springbootapp
+docker run -v /tmp/log:/spring/logs -p 8000:8000 --name springbootapp --network ubuntu_default -d springbootapp
