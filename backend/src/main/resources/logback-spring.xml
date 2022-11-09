@@ -50,7 +50,7 @@
     <!-- File Appender -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 파일경로 설정 -->
-        <file>/logs/local/${LOG_FILE_NAME}.log</file>
+        <file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
 
         <!-- 출력패턴 설정-->
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
