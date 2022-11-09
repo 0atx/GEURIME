@@ -179,8 +179,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long userId) {
         //7일간 회원정보 유지하는 기능 추후 구현예정
+        User user = userRepository.findByIdFetch(userId)
+                .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
-        userRepository.deleteById(userId);
+        Family family = user.getFamily();
+        family.removeMember(user);
+        List<User> users = family.getUsers();
+        if(users.isEmpty()){
+            familyRepository.delete(family);
+        }
+        userRepository.delete(user);
 
     }
 }

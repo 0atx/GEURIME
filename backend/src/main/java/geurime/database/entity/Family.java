@@ -59,6 +59,13 @@ public class Family {
         return sb.toString();
     }
 
+    public void addMember(User user){
+        this.users.add(user);
+    }
+    public void removeMember(User user){
+        this.users.remove(user);
+    }
+
     public void changeName(String familyName){
         this.familyName = familyName;
     }
