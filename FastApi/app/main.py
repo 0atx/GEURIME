@@ -14,7 +14,7 @@ class Data(BaseModel):
 app = FastAPI()
 
 @app.get("/ai",  response_model=Data)
-def query(url: str):
+async def query(url: str):
     labels = ['depression', 'violence', 'happiness']
     prediction = predict(url)
     data = {}
@@ -23,7 +23,7 @@ def query(url: str):
     return data
 
 @app.post("/ai/predict",  response_model=Data)
-def predict(image: Image):
+async def get_prediction(image: Image):
     labels = ['depression', 'violence', 'happiness']
     prediction = predict(image.url)
     data = {}
@@ -33,6 +33,6 @@ def predict(image: Image):
 
 # 날씨 api 
 @app.get("/ai/weather")
-def query(year: int, month: int, day: int):
+async def weather(year: int, month: int, day: int):
     weather = get_weather(year, month, day)
     return weather

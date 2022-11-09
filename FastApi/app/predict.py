@@ -5,7 +5,7 @@ import imageio
 # from tensorflow.keras.preprocessing import image
 
 def predict(url):
-    model_path = "/code/app/efficientnet_v1.h5"
+    model_path = "/code/app/efficientnet_data_v3(73).h5"
     # model_path = "efficientnet_v1.h5"
     # model = load_model(model_path)
     model = tf.keras.models.load_model(model_path)
