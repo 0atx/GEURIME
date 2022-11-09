@@ -86,11 +86,12 @@ export default function BackMenu({
                     // 뒤로 가기
                     navigate(-1);
                   }}
+                  sx={{ fontSize: "3vh" }}
                 ></KeyboardArrowLeftRoundedIcon>
               )}
             </Grid>
             {/* title */}
-            <Grid item sx={{ textAlign: "center" }} xs={8}>
+            <Grid item sx={{ textAlign: "center", fontSize: "2vh" }} xs={8}>
               <span onClick={clickTitle}>
                 {title}
                 {type === "registDiary" && (
