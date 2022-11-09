@@ -16,6 +16,7 @@ import { http } from "api/http";
 import { useNavigate } from "react-router-dom";
 import NavBar from 'components/nav/NavBar';
 import NoSearchModal from 'components/modal/NoSearchModal';
+import HMap from './HMap';
 
 export default function Board() { 
   const navigator = useNavigate();
@@ -100,14 +101,15 @@ export default function Board() {
   };
   
   return (
-    <Grid
+    <div
+    id='container'
     >
       {/* 상단바 */}
       <Grid>
         <BackMenu
-            isLeft={true}
-            title='커뮤니티'
-            isRight="+"
+          isLeft={true}
+          title='커뮤니티'
+          type="registKids"
           clickRight={() => {
             navigator("/registBoard");
             }}
@@ -115,9 +117,10 @@ export default function Board() {
         </BackMenu>
       </Grid>
       {/* 상단바 끝 */}
+      {/* <HMap></HMap> */}
       <Grid
-        id='container'
-        sx={{width: '92vw', marginLeft:'3%'}}
+      item
+      sx={{width: '92vw', marginLeft:'3%'}}
         >
         {/* 검색바 영역 */}
         <Grid
@@ -126,9 +129,9 @@ export default function Board() {
           justifyContent="center"
           alignItems="flex-end"
           flexWrap={'nowrap'}
-          marginLeft='5%'
+          marginLeft='2%'
         >
-          <FormControl sx={{ height: '8vh', width: '16vh', Color: '#FFCA28', justifyContent:'center', textAlign: 'center'}} size='small'>
+          <FormControl sx={{ height: '8vh', width: '20vh', Color: '#FFCA28', justifyContent:'center', textAlign: 'center'}} size='small'>
             <Select
               value={category}
               onChange={handleChange}
@@ -141,6 +144,7 @@ export default function Board() {
               <MenuItem value={"전체"}>전체</MenuItem>
               <MenuItem value={"자유"}>자유</MenuItem>
               <MenuItem value={'질문'}>질문</MenuItem>
+              <MenuItem value={'정보'}>정보</MenuItem>
             </Select>
           </FormControl>
 
@@ -164,7 +168,7 @@ export default function Board() {
               variant="standard"
               inputRef={searchInput}
               onKeyUp={searchKeyword}
-              sx={{ color: '##FFCA28', width: '75%' }}
+              sx={{ color: '##FFCA28', width: '80%' }}
             />
             
             {/* 돋보기 버튼 */}
@@ -182,20 +186,21 @@ export default function Board() {
         </Grid>
       {/* 검색바 끝 */}
       </Grid>
-    <Grid
-      height={'25%'}
-    >
-    {boards?.map((store, idx) => {
-      return <BoardItem key={idx} item={store}/>;
-    })}
-        </Grid>
+      {/* 게시물 반복문 */}
+      <Grid
+        height={'25%'}
+      >
+      {boards?.map((store, idx) => {
+        return <BoardItem key={idx} item={store}/>;
+      })}
       </Grid>
-      <NavBar />
+    </Grid>
+      <NavBar/>
   <NoSearchModal
     open={openNoSearchModal}
     handleClose={closeNoSearchModal}
   >
   </NoSearchModal>
-    </Grid>
+    </div>
   )
 } 

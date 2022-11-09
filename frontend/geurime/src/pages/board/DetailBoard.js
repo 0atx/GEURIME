@@ -92,18 +92,21 @@ export default function DetailBoard( ) {
     console.log({댓글: comment})
   }, [commentDtoList])
 
-  // const [commentText, setCommentText] = useState();
+
   const commentRef = useRef(null);
 
-    // const onReset = (e) => {
-    // setText("");
-    // };
   // 댓글 모달
     const [openNoCommentModal, setOpenNoCommentModal] = useState(false);
   // 댓글 내용 없음 모달 닫기
   const closeNoCommentModal = () => {
     setOpenNoCommentModal(false);
   };
+  
+  function commentKeyword(e) {
+    if (e.key === "Enter") {
+      postComment()
+    }
+  }
 
   const postComment = async () => {
     // commentUserId 리코일에서 가져오기
@@ -141,7 +144,9 @@ export default function DetailBoard( ) {
   } 
   
   return (
-    <div>
+  <div
+  id='container'
+  >
     <BackMenu
             isLeft={true}
             title={'['+ board.boardCategory +'] ' + board.boardTitle}
@@ -151,7 +156,7 @@ export default function DetailBoard( ) {
              }}
         >
     </BackMenu>
-    <Grid id="container"
+    <Grid
       sx={{width: '95vw', marginLeft: '2%'}}>
       <Grid
         sx={{
@@ -214,9 +219,9 @@ export default function DetailBoard( ) {
       </Grid>
       <Paper
           variant="outlined"
-          sx={{ marginTop:'3%', borderBlockColor: '#FFE082', borderRadius: 2, borderColor: '#FFE082', borderWidth: 2.5,  height: '18vh', width:'94%',marginLeft:'3%'}}
+          sx={{ marginTop:'3%', backgroundColor: 'rgba(0,0,0,0)', borderRadius: 2, borderColor: '#FFE082', borderWidth: 2.5,  height: '18vh', width:'94%',marginLeft:'3%'}}
       >
-        <Grid sx={{marginTop:'2.5%', marginLeft: '3%'}}>{board.boardContent}</Grid>
+        <Grid sx={{marginTop:'2.5%', marginLeft: '3%', backgroundColor: 'rgba(0,0,0,0)'}}>{board.boardContent}</Grid>
           
       </Paper>
 
@@ -238,27 +243,27 @@ export default function DetailBoard( ) {
           item
         sx={{marginLeft:'5%', justifyContent: 'space-between'}}
       >
-          <TextField placeholder="댓글을 등록하세요..." variant="standard" sx={{width: '57vw'}} inputRef={commentRef} />
+          <TextField placeholder="댓글을 등록하세요..." variant="standard" sx={{width: '57vw'}} inputRef={commentRef} onKeyUp={commentKeyword}/>
           <Button onClick={postComment}>확인</Button>
      </Grid>
     </Grid>
-      {/* 댓글 */}
-      <Grid
-      >
-      {commentDtoList?.map((store, idx) => {
-        return <CommentInputItem key={idx} item={store}/>;
-      })}
+    {/* 댓글 */}
+    <Grid
+    >
+    {commentDtoList?.map((store, idx) => {
+      return <CommentInputItem key={idx} item={store}/>;
+    })}
 
-      </Grid>
+    </Grid>
       
 
-      </Grid> 
-      <NavBar />
-      {/* 댓글 모달 */}
-      <NoCommentModal
-        open={openNoCommentModal}
-        handleClose={closeNoCommentModal}
-      ></NoCommentModal>
-    </div>
+    </Grid> 
+    <NavBar />
+    {/* 댓글 모달 */}
+    <NoCommentModal
+      open={openNoCommentModal}
+      handleClose={closeNoCommentModal}
+    ></NoCommentModal>
+  </div>
   )
 }
