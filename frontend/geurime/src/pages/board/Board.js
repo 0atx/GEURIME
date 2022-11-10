@@ -16,7 +16,6 @@ import { http } from "api/http";
 import { useNavigate } from "react-router-dom";
 import NavBar from "components/nav/NavBar";
 import NoSearchModal from "components/modal/NoSearchModal";
-import HMap from "./HMap";
 import { Container } from "@mui/system";
 
 export default function Board() {
@@ -182,10 +181,7 @@ export default function Board() {
         </Grid>
 
         <NavBar />
-        <NoSearchModal
-          open={openNoSearchModal}
-          handleClose={closeNoSearchModal}
-        ></NoSearchModal>
+        <NoSearchModal open={openNoSearchModal} handleClose={closeNoSearchModal}></NoSearchModal>
       </Container>
     </div>
   );

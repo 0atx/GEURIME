@@ -38,8 +38,36 @@ import Btn from "@mui/material/Button";
 import PaletteIcon from "@mui/icons-material/Palette";
 import GestureIcon from "@mui/icons-material/Gesture";
 import Modal from "components/common/Modal";
+import ModeEditRoundedIcon from "@mui/icons-material/ModeEditRounded";
+import "pintura/pintura.css";
+import { openDefaultEditor } from "pintura/pintura";
 
 export default function RegistDiary({}) {
+  // 이미지 편집
+  const [isUpdated, setIsUpdated] = useState(false);
+  const [updatedImage, setUpdatedImage] = useState();
+
+  const editImage = (image, done) => {
+    const imageFile = image.pintura ? image.pintura.file : image;
+    const imageState = image.pintura ? image.pintura.data : {};
+
+    const editor = openDefaultEditor({
+      src: imageFile,
+      imageState,
+    });
+
+    editor.on("close", () => {
+      // the user cancelled editing the image
+    });
+
+    editor.on("process", ({ dest, imageState }) => {
+      Object.assign(dest, {
+        pintura: { file: imageFile, data: imageState },
+      });
+      done(dest);
+    });
+  };
+
   // 그리기 풀 모달 transition
   const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -66,13 +94,10 @@ export default function RegistDiary({}) {
   // 이미지 업로드
   const [imageUrl, setImageUrl] = useState(null);
   const imgRef = useRef();
-  const [images, setImages] = useState();
 
   function changeImage(e) {
     const reader = new FileReader();
     const img = imgRef.current.files[0];
-
-    setImages(e.target.files);
 
     reader.readAsDataURL(img);
     reader.onloadend = () => {
@@ -117,6 +142,9 @@ export default function RegistDiary({}) {
       // url을 파일로 변경 후 formdata에 넣는다.
       // file = dataURLtoFile(imageUrl, "image.png");
       file = dataURLtoFile(canvas, "image.png");
+    } else if (isUpdated) {
+      // 이미지를 편집했을 경우
+      file = updatedImage;
     } else {
       // 파일 전송
       file = imgRef.current.files[0];
@@ -146,7 +174,6 @@ export default function RegistDiary({}) {
 
     console.log(info);
     const response = await http2.post(`/diaries`, formData);
-    console.log("이거야이거");
     console.log(response.data);
 
     if (response.data.message == "success") {
@@ -228,19 +255,6 @@ export default function RegistDiary({}) {
               <GestureIcon />
               &nbsp;직접 그리기
             </Btn>
-            {/* <Button
-              width="30%"
-              sx={{
-                marginTop: "10%",
-              }}
-              onClick={() => {
-                setOpenDrawing(true);
-                setIsDrawing(true);
-              }}
-            >
-              <BrushIcon />
-              그리기
-            </Button> */}
           </Grid>
           <Grid
             item
@@ -263,6 +277,8 @@ export default function RegistDiary({}) {
                   ref={imgRef}
                   onChange={(e) => {
                     changeImage(e);
+                    setIsDrawing(false);
+                    setIsUpdated(false);
                   }}
                 />
               </form>
@@ -283,19 +299,57 @@ export default function RegistDiary({}) {
                 />
               </Paper>
             ) : imageUrl ? (
-              <label htmlFor="input">
-                <Paper
-                  elevation={0}
-                  sx={{
-                    width: "100%",
-                    height: "100%",
-                    backgroundImage: `url(${imageUrl})`,
-                    backgroundSize: "contain",
-                    backgroundRepeat: "no-repeat",
-                    backgroundPosition: "center",
-                  }}
-                />
-              </label>
+              <>
+                <label htmlFor="input">
+                  <Paper
+                    elevation={0}
+                    sx={{
+                      width: "100%",
+                      height: "100%",
+                      backgroundImage: `url(${imageUrl})`,
+                      backgroundSize: "contain",
+                      backgroundRepeat: "no-repeat",
+                      backgroundPosition: "center",
+                    }}
+                  />
+                </label>
+                {imageUrl && (
+                  <div style={{ textAlign: "right" }}>
+                    <IconButton>
+                      <ModeEditRoundedIcon
+                        sx={{ color: "#9e9e9e" }}
+                        onClick={() =>
+                          editImage(imageUrl, (output) => {
+                            const updatedFiles = [...imageUrl];
+
+                            // 원래 이미지를 편집된 이미지로 업데이트
+                            updatedFiles[0] = output;
+
+                            if (imageUrl.preview) URL.revokeObjectURL(imageUrl.preview);
+
+                            Object.assign(output, {
+                              preview: URL.createObjectURL(output),
+                            });
+
+                            const reader = new FileReader();
+                            const img = output;
+
+                            setUpdatedImage(img);
+                            setIsUpdated(true);
+                            // console.log("이거머야이거", img);
+
+                            reader.readAsDataURL(img);
+                            reader.onloadend = () => {
+                              // 화면에 읽힐 수 있는 url로 변경
+                              setImageUrl(reader.result);
+                            };
+                          })
+                        }
+                      />
+                    </IconButton>
+                  </div>
+                )}
+              </>
             ) : (
               <Paper
                 sx={{
@@ -320,15 +374,9 @@ export default function RegistDiary({}) {
         </Grid>
 
         {localStorage.getItem("savedDrawing") !== null || imageUrl ? (
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center", marginTop: "10%" }}>
             {/* 그림 변경 버튼 */}
-            <Button
-              sx={{ marginRight: "5%" }}
-              width="40%"
-              onClick={() => {
-                setIsDrawing(false);
-              }}
-            >
+            <Button sx={{ marginRight: "5%" }} width="40%" onClick={() => {}}>
               <label htmlFor="input">그림 변경</label>
             </Button>
 
@@ -337,7 +385,7 @@ export default function RegistDiary({}) {
             </Button>
           </div>
         ) : (
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center", marginTop: "10%" }}>
             <Button bgcolor="#FFCA28" width="45%" onClick={registDiary}>
               일기 등록
             </Button>
