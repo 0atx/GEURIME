@@ -5,15 +5,7 @@ BackMenu 헤더
 @since 2022.10.25
 */
 import { useState } from "react";
-import {
-  Toolbar,
-  Grid,
-  AppBar,
-  Box,
-  Menu,
-  MenuItem,
-  IconButton,
-} from "@mui/material";
+import { Toolbar, Grid, AppBar, Box, Menu, MenuItem, IconButton } from "@mui/material";
 import KeyboardArrowLeftRoundedIcon from "@mui/icons-material/KeyboardArrowLeftRounded";
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 import AddIcon from "@mui/icons-material/Add";
@@ -21,14 +13,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import DeleteGalleryModal from "components/modal/DeleteGalleryModal";
 
-export default function BackMenu({
-  type,
-  isLeft,
-  title,
-  clickTitle,
-  isRight,
-  clickRight,
-}) {
+export default function BackMenu({ type, isLeft, title, clickTitle, isRight, clickRight }) {
   const navigate = useNavigate();
 
   // detail gallery 필요 변수들
@@ -41,10 +26,7 @@ export default function BackMenu({
     setAnchorEl(null);
   };
   const location = useLocation();
-  const galleryId = location.pathname.substring(
-    15,
-    location.pathname.length + 1
-  );
+  const galleryId = location.pathname.substring(15, location.pathname.length + 1);
   const [deleteGalleryOpen, setDeleteGalleryOpen] = useState(false);
 
   async function deleteGallery() {
@@ -58,11 +40,7 @@ export default function BackMenu({
       }}
     >
       {/* 갤러리 삭제 모달 */}
-      <DeleteGalleryModal
-        open={deleteGalleryOpen}
-        id={galleryId}
-        setOpen={setDeleteGalleryOpen}
-      />
+      <DeleteGalleryModal open={deleteGalleryOpen} id={galleryId} setOpen={setDeleteGalleryOpen} />
       <AppBar
         style={{
           background: "#FFFFFF",
@@ -91,13 +69,11 @@ export default function BackMenu({
               )}
             </Grid>
             {/* title */}
-            <Grid item sx={{ textAlign: "center", fontSize: "2vh" }} xs={8}>
-              <span onClick={clickTitle}>
+            <Grid item sx={{ textAlign: "center" }} onClick={clickTitle} xs={8}>
+              <Grid container justifyContent="center" sx={{ textAlign: "center" }}>
                 {title}
-                {type === "registDiary" && (
-                  <ArrowDropDownRoundedIcon></ArrowDropDownRoundedIcon>
-                )}
-              </span>
+                {type === "registDiary" && <ArrowDropDownRoundedIcon></ArrowDropDownRoundedIcon>}
+              </Grid>
             </Grid>
             {/* isRight */}
             <Grid item sx={{ fontSize: "1.8vh", textAlign: "center" }} xs={2}>
