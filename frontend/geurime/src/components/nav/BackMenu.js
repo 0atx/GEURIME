@@ -70,7 +70,7 @@ export default function BackMenu({ type, isLeft, title, clickTitle, isRight, cli
             </Grid>
             {/* title */}
             <Grid item sx={{ textAlign: "center" }} onClick={clickTitle} xs={8}>
-              <Grid container justifyContent="center" sx={{ textAlign: "center" }}>
+              <Grid container justifyContent="center" sx={{ textAlign: "center", fontSize: "2vh" }}>
                 {title}
                 {type === "registDiary" && <ArrowDropDownRoundedIcon></ArrowDropDownRoundedIcon>}
               </Grid>
