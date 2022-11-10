@@ -67,7 +67,7 @@ export default function Gallery() {
   return (
     <>
       <BackMenu
-        title={`${currentKid.kidName}의 그림 갤러리`}
+        title={`${currentKid.kidName}의 갤러리`}
         type="registKids"
         clickRight={modalOpen}
       />
@@ -174,7 +174,12 @@ export default function Gallery() {
                   )}
                 </Paper>
                 <Typography sx={{ marginTop: "1vh" }} variant="body1">
-                  {box.drawingBoxName} ({box.drawingCount})
+                  {box.drawingBoxName.length > 8 ? (
+                    <>{box.drawingBoxName.substring(0, 7) + ".."}</>
+                  ) : (
+                    <>{box.drawingBoxName}</>
+                  )}
+                  ({box.drawingCount})
                 </Typography>
               </Grid>
             ))}
