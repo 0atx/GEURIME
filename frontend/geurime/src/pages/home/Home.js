@@ -68,7 +68,7 @@ export default function Home() {
       {/* 이젤 */}
       <div style={easelStyle}>
         <Grid container sx={{ marginTop: "10vh" }}>
-          <Grid item xs={12} sx={{ fontSize: "6vw", marginBottom: "3vh" }}>
+          <Grid item xs={12} sx={{ fontSize: "3vh", marginBottom: "3vh" }}>
             간편 로그인
           </Grid>
           <Grid item xs={12}>
