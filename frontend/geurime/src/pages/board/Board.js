@@ -121,8 +121,8 @@ export default function Board() {
             <FormControl
               sx={{
                 height: "8vh",
-                width: "10vh",
-                Color: "#FFCA28",
+                width: "90%",
+                color: "#FFCA28",
                 justifyContent: "center",
                 textAlign: "center",
               }}
@@ -133,6 +133,9 @@ export default function Board() {
                 onChange={handleChange}
                 displayEmpty
                 inputProps={{ "aria-label": "Without label" }}
+                MenuProps={{
+                  PaperProps: { sx: { maxHeight: 100 } },
+                }}
               >
                 <MenuItem value={""}>
                   <em>선택</em>
