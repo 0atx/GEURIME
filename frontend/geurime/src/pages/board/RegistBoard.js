@@ -35,6 +35,10 @@ export default function RegistBoard() {
       value: '질문',
       label: '질문',
     },
+    {
+      value: '정보',
+      label: '정보',
+    },
   ];
 
   const [boardCategory, setBoardCategory] = useState('자유');

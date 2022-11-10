@@ -37,6 +37,7 @@ import BrushIcon from "@mui/icons-material/Brush";
 import Btn from "@mui/material/Button";
 import PaletteIcon from "@mui/icons-material/Palette";
 import GestureIcon from "@mui/icons-material/Gesture";
+import Modal from "components/common/Modal";
 
 export default function RegistDiary({}) {
   // 그리기 풀 모달 transition
@@ -48,6 +49,8 @@ export default function RegistDiary({}) {
   const [open, setOpen] = useState(false);
   // 직접 그리기 모달
   const [openDrawing, setOpenDrawing] = useState(false);
+  // 제목 작성부탁 모달
+  const [openTitle, setOpenTitle] = useState(false);
 
   const closeDrawing = () => {
     setOpenDrawing(false);
@@ -102,6 +105,12 @@ export default function RegistDiary({}) {
 
   // 등록 완료 모달 열기
   async function registDiary() {
+    // 제목을 작성하지 않았을 경우 모달 열기
+    if (title == "") {
+      setOpenTitle(true);
+      return;
+    }
+
     let file;
     if (isDrawing) {
       // 직접 그린 그림 전송
@@ -236,6 +245,7 @@ export default function RegistDiary({}) {
           <Grid
             item
             sx={{
+              textAlign: "center",
               marginTop: "2%",
               marginBottom: "10%",
               width: "90vw",
@@ -261,13 +271,13 @@ export default function RegistDiary({}) {
             {/* {JSON.stringify(canvasDraw)} */}
             {isDrawing ? (
               // 직접 그린 그림 canvas
-              <Paper elevation={3}>
+              <Paper elevation={3} sx={{ display: "inline-block" }}>
                 <CanvasDraw
                   loadTimeOffset={5}
                   disabled
                   hideGrid
-                  canvasWidth={window.innerWidth * 0.91}
-                  canvasHeight={window.innerWidth * 0.91}
+                  canvasWidth={350}
+                  canvasHeight={350}
                   ref={canvasDraw}
                   saveData={localStorage.getItem("savedDrawing")}
                 />
@@ -336,6 +346,18 @@ export default function RegistDiary({}) {
       </Container>
       {/* 네비 바 */}
       <NavBar></NavBar>
+      {/* 제목 작성 부탁 모달 */}
+      <Modal
+        open={openTitle}
+        close={() => {
+          setOpenTitle(false);
+        }}
+        onClick={() => {
+          setOpenTitle(false);
+        }}
+        text="제목을 작성해주세요!"
+        icon="error"
+      ></Modal>
       {/* 등록 완료 모달 */}
       <RegistDiaryModal open={open}></RegistDiaryModal>
       {/* 직접 그리기 모달 */}
