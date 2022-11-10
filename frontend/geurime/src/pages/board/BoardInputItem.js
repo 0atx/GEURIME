@@ -23,15 +23,6 @@ export default function BoardInputItem({handleChange, boardCategory, boardCatego
 
   return (
     <Grid>
-      {/* <Paper
-        sx={{
-          Color: '#FFE082',
-          borderWidth: 3,
-          borderRadius: 3
-        }}
-      >
-      </Paper> */}
-  
       <Grid container justifyContent="center">
         <form method="post" encType="multipart/form-data">
         <label for="profile" >
@@ -40,13 +31,13 @@ export default function BoardInputItem({handleChange, boardCategory, boardCatego
                 <img src={imageUrl} style={{ height: '100%', width: '100%', margin: '2%', objectFit: "cover" }} />
               ) : (
                 <Paper
+                  item  
                   sx={{
                     height: "40vh",
                     width: "40vh",
                     textAlign: "center",
                     verticalAlign: "middle",
                     display: "flex",
-              
                   }}
                 >
                   <AddCircleIcon
@@ -99,7 +90,7 @@ export default function BoardInputItem({handleChange, boardCategory, boardCatego
           value={boardCategory}
           onChange={handleChange}
           variant="standard"
-            sx={{ width: '31vh'}}
+          sx={{ width: '31vh'}}
         >
           {boardCategories.map((option) => (
             <MenuItem key={option.value} value={option.value}>
@@ -144,31 +135,26 @@ export default function BoardInputItem({handleChange, boardCategory, boardCatego
       {/* 내용 */}
       <Grid
         container
-        direction="column"
       >
         <Grid
+          item
           xs={2.5}
           textAlign='center'
           sx={{ marginTop: '5%' }}
         >
           내용
         </Grid>
-        
-          <Grid
-            sx={{marginTop: '3%'}}
-          >
-            <TextField
-              multiline
-              minRows={5}
-              maxRows={5}
-              inputRef={textRef}
-              value={text}
-              onChange={(e) => {
-                changeText(e);
-              }}
-              sx={{ width: '85vw', borderBlockColor: '#FFE082', borderRadius: 10, borderColor: '#FFE082' }}
-            />
-      </Grid>
+        <TextField
+          multiline
+          minRows={5}
+          maxRows={5}
+          inputRef={textRef}
+          value={text}
+          onChange={(e) => {
+            changeText(e);
+          }}
+          sx={{ width: '87vw', borderBlockColor: '#FFE082', borderRadius: 10, borderColor: '#FFE082', marginLeft: '6vw', marginTop: '2vh' }}
+        />
       </Grid>
       {/* 등록 버튼 */}
       <Grid>

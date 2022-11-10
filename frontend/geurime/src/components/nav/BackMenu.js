@@ -64,6 +64,7 @@ export default function BackMenu({ type, isLeft, title, clickTitle, isRight, cli
                     // 뒤로 가기
                     navigate(-1);
                   }}
+                  sx={{ fontSize: "3vh" }}
                 ></KeyboardArrowLeftRoundedIcon>
               )}
             </Grid>

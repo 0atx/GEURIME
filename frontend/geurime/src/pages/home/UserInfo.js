@@ -37,7 +37,7 @@ export default function UserInfo() {
   // 가족 코드 여부 확인
 
   function getInviteCode() {
-    if (inviteCode !== null) {
+    if (inviteCode !== "null") {
       setHasInvite(true);
     } else {
       setHasInvite(false);

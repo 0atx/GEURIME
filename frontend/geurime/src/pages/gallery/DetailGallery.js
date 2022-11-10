@@ -32,6 +32,8 @@ export default function DetailGallery() {
 
   const navigater = useNavigate();
 
+  const [title, setTitle] = useState("");
+
   // 그림 보관함의 정보를 가져오는 함수
   async function getDrawingBoxInfo() {
     if (boxId == 0) {
@@ -46,6 +48,12 @@ export default function DetailGallery() {
           kidId: currentKid.kidId,
         },
       });
+      if (response.data.data.drawingBoxName.length > 9) {
+        setTitle(response.data.data.drawingBoxName.substring(0, 8) + "..");
+      } else {
+        setTitle(response.data.data.drawingBoxName);
+      }
+
       setBoxInfo(response.data.data);
     }
   }
@@ -62,7 +70,7 @@ export default function DetailGallery() {
   return (
     <>
       {boxId == 0 || boxInfo.drawingBoxName === "그림일기 보관함" ? (
-        // 좋아요한 보관함인 경우 수정, 삭제 버튼 없음
+        // 좋아요한 보관함, 그림일기 보관함인 경우 수정, 삭제 버튼 없음
         <BackMenu
           isLeft={true}
           title={`${boxInfo.drawingBoxName} (${boxInfo.dtoList.length})`}
@@ -71,7 +79,7 @@ export default function DetailGallery() {
         // 좋아요 외 보관함
         <BackMenu
           isLeft={true}
-          title={`${boxInfo.drawingBoxName} (${boxInfo.dtoList.length})`}
+          title={`${title} (${boxInfo.dtoList.length})`}
           type="detailGallery"
         />
       )}
