@@ -65,7 +65,7 @@ export default function Gallery() {
   }, [open]);
 
   return (
-    <>
+    <Grid>
       <BackMenu
         title={`${currentKid.kidName}의 갤러리`}
         type="registKids"
@@ -188,6 +188,6 @@ export default function Gallery() {
         {/* 하단 네비 */}
         <NavBar />
       </Grid>
-    </>
+    </Grid>
   );
 }
