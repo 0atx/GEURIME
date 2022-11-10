@@ -39,34 +39,37 @@ import PaletteIcon from "@mui/icons-material/Palette";
 import GestureIcon from "@mui/icons-material/Gesture";
 import Modal from "components/common/Modal";
 import ModeEditRoundedIcon from "@mui/icons-material/ModeEditRounded";
-import "pintura/pintura.css";
-import { openDefaultEditor } from "pintura/pintura";
+import CropModal from "components/modal/CropModal";
+import CropRoundedIcon from "@mui/icons-material/CropRounded";
+// import "pintura/pintura.css";
+// import { openDefaultEditor } from "pintura/pintura";
+import ReactCrop from "react-image-crop";
 
 export default function RegistDiary({}) {
   // 이미지 편집
   const [isUpdated, setIsUpdated] = useState(false);
   const [updatedImage, setUpdatedImage] = useState();
 
-  const editImage = (image, done) => {
-    const imageFile = image.pintura ? image.pintura.file : image;
-    const imageState = image.pintura ? image.pintura.data : {};
+  // const editImage = (image, done) => {
+  //   const imageFile = image.pintura ? image.pintura.file : image;
+  //   const imageState = image.pintura ? image.pintura.data : {};
 
-    const editor = openDefaultEditor({
-      src: imageFile,
-      imageState,
-    });
+  //   const editor = openDefaultEditor({
+  //     src: imageFile,
+  //     imageState,
+  //   });
 
-    editor.on("close", () => {
-      // the user cancelled editing the image
-    });
+  //   editor.on("close", () => {
+  //     // the user cancelled editing the image
+  //   });
 
-    editor.on("process", ({ dest, imageState }) => {
-      Object.assign(dest, {
-        pintura: { file: imageFile, data: imageState },
-      });
-      done(dest);
-    });
-  };
+  //   editor.on("process", ({ dest, imageState }) => {
+  //     Object.assign(dest, {
+  //       pintura: { file: imageFile, data: imageState },
+  //     });
+  //     done(dest);
+  //   });
+  // };
 
   // 그리기 풀 모달 transition
   const Transition = React.forwardRef(function Transition(props, ref) {
@@ -79,6 +82,8 @@ export default function RegistDiary({}) {
   const [openDrawing, setOpenDrawing] = useState(false);
   // 제목 작성부탁 모달
   const [openTitle, setOpenTitle] = useState(false);
+  // 이미지 크롭 모달
+  const [openCrop, setOpenCrop] = useState(false);
 
   const closeDrawing = () => {
     setOpenDrawing(false);
@@ -316,35 +321,11 @@ export default function RegistDiary({}) {
                 {imageUrl && (
                   <div style={{ textAlign: "right" }}>
                     <IconButton>
-                      <ModeEditRoundedIcon
+                      <CropRoundedIcon
                         sx={{ color: "#9e9e9e" }}
-                        onClick={() =>
-                          editImage(imageUrl, (output) => {
-                            const updatedFiles = [...imageUrl];
-
-                            // 원래 이미지를 편집된 이미지로 업데이트
-                            updatedFiles[0] = output;
-
-                            if (imageUrl.preview) URL.revokeObjectURL(imageUrl.preview);
-
-                            Object.assign(output, {
-                              preview: URL.createObjectURL(output),
-                            });
-
-                            const reader = new FileReader();
-                            const img = output;
-
-                            setUpdatedImage(img);
-                            setIsUpdated(true);
-                            // console.log("이거머야이거", img);
-
-                            reader.readAsDataURL(img);
-                            reader.onloadend = () => {
-                              // 화면에 읽힐 수 있는 url로 변경
-                              setImageUrl(reader.result);
-                            };
-                          })
-                        }
+                        onClick={() => {
+                          setOpenCrop(true);
+                        }}
                       />
                     </IconButton>
                   </div>
@@ -417,6 +398,14 @@ export default function RegistDiary({}) {
         }}
         setCanvas={setCanvas}
       ></DrawingModal>
+      {/* 이미지 크롭 모달 */}
+      <CropModal
+        open={openCrop}
+        handleClose={() => {
+          setOpenCrop(false);
+        }}
+        url={imageUrl}
+      ></CropModal>
     </div>
   );
 }
