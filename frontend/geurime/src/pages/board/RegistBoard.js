@@ -45,7 +45,12 @@ export default function RegistBoard() {
   const [imageUrl, setImageUrl] = useState(null);
   const imgRef = useRef();
   const [images, setImages] = useState();
+  function changeText(e) {
 
+  }
+  function changeTitle(e) {
+
+  }
   // const titleChange = (event) => {
   //   setTitle(event.target.value);
   // };
@@ -156,6 +161,8 @@ export default function RegistBoard() {
         imageUrl={imageUrl}
         textRef={textRef}
         titleRef={titleRef}
+        changeText={changeText}
+        changeTitle={changeTitle}
       ></BoardInputItem>
       <Grid
       sx={{marginTop: '5%'}}>
