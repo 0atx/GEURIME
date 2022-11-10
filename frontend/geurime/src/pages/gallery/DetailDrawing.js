@@ -15,12 +15,26 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Btn from "components/common/Btn";
-import ModifyDrawing from "./ModifyDrawing";
+import AnalysisModal from "components/modal/AnalysisModal";
+import Modal from "components/common/Modal";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function DetailDrawing() {
   const location = useLocation();
   const navigater = useNavigate();
 
+  // 분석결과 모달
+  const [openAnalysisModal, setOpenAnalysisModal] = useState(false);
+
+  // 분석 모달 닫기
+  const closeAnalysisModal = () => {
+    setOpenAnalysisModal(false);
+  };
+
+  // 삭제 완료 모달
+  const [openDelete, setOpenDelete] = useState(false);
+
+  // url에서 그림 id 가져오기
   let id = location.pathname.substring(15, location.pathname.length + 1);
   const [drawingInfo, setDrawingInfo] = useState({
     drawingId: id,
@@ -58,6 +72,20 @@ export default function DetailDrawing() {
     }
   }, []);
 
+  // 그림 삭제 axios 함수
+  async function deleteDrawing() {
+    const response = await http.delete(`/drawings`, {
+      params: {
+        drawingId: drawingInfo.drawingId,
+        kidId: localStorage.getItem("currentKidId"),
+      },
+    });
+
+    if (response.data.message === "success") {
+      setOpenDelete(true);
+    }
+  }
+
   return (
     <>
       <BackMenu isLeft={true} title={`제목: ${drawingInfo.drawingTitle}`} />
@@ -86,12 +114,13 @@ export default function DetailDrawing() {
             container
             justifyContent="flex-end"
             alignItems="flex-start"
-            sx={{ marginRight: "30px" }}
+            sx={{ marginRight: "10%" }}
           >
-            <Grid item xs={2} sx={{ textAlign: "right" }}>
+            {/* 그림 좋아요 */}
+            <Grid item xs={1} sx={{ textAlign: "center" }}>
               {drawingInfo.isLike ? (
                 <FavoriteIcon
-                  sx={{ color: "#FF5252" }}
+                  sx={{ color: "#FF5252", fontSize: "3vh" }}
                   onClick={() => {
                     let copy = { ...drawingInfo };
                     copy.isLike = false;
@@ -101,7 +130,7 @@ export default function DetailDrawing() {
                 />
               ) : (
                 <FavoriteBorderIcon
-                  sx={{ color: "#FF5252" }}
+                  sx={{ color: "#FF5252", fontSize: "3vh" }}
                   onClick={() => {
                     let copy = { ...drawingInfo };
                     copy.isLike = true;
@@ -111,11 +140,21 @@ export default function DetailDrawing() {
                 />
               )}
             </Grid>
-            <Grid item xs={2} sx={{ textAlign: "center" }}>
+            {/* 그림 수정 */}
+            <Grid item xs={1} sx={{ textAlign: "center" }}>
               <ModeEditIcon
-                sx={{ color: "#9e9e9e" }}
+                sx={{ color: "#9e9e9e", fontSize: "3vh" }}
                 onClick={() => {
                   navigater(`/modifydrawing/${id}`);
+                }}
+              />
+            </Grid>
+            {/* 그림 삭제 */}
+            <Grid item xs={1} sx={{ textAlign: "center" }}>
+              <DeleteIcon
+                sx={{ color: "#FFCA28", fontSize: "3vh" }}
+                onClick={() => {
+                  deleteDrawing();
                 }}
               />
             </Grid>
@@ -124,17 +163,17 @@ export default function DetailDrawing() {
         {/* 그림 정보 영역 */}
         <Grid container justifyContent="center" alignItems="center">
           {/* 보관함 */}
-          <Grid item xs={3}>
-            <Typography>보관함</Typography>
+          <Grid item xs={3} sx={{ marginBottom: "1vh" }}>
+            <Typography sx={{ fontSize: "2vh" }}>보관함</Typography>
           </Grid>
-          <Grid item xs={7}>
+          <Grid item xs={7} sx={{ fontSize: "2vh", marginBottom: "1vh" }}>
             {drawingInfo.drawingBoxName}
           </Grid>
           {/* 날짜  */}
           <Grid item xs={3}>
-            <Typography>날짜</Typography>
+            <Typography sx={{ fontSize: "2vh" }}>날짜</Typography>
           </Grid>
-          <Grid item xs={7}>
+          <Grid item xs={7} sx={{ fontSize: "2vh" }}>
             {drawingInfo.createTime}
           </Grid>
         </Grid>
@@ -143,12 +182,51 @@ export default function DetailDrawing() {
           container
           justifyContent="center"
           alignItems="center"
-          sx={{ marginTop: "20px", marginBottom: "20px" }}
+          sx={{ marginTop: "3vh", marginBottom: "20px" }}
         >
-          <Btn width="130px">그림 분석 보기</Btn>
+          <Btn
+            width="15vh"
+            onClick={() => {
+              setOpenAnalysisModal(true);
+            }}
+          >
+            그림 분석 보기
+          </Btn>
         </Grid>
       </Grid>
       <NavBar />
+      {/* 분석 결과 모달 */}
+      {drawingInfo.emotionHappy === null &&
+      drawingInfo.emotionSad === null &&
+      drawingInfo.emotionAngry === null ? (
+        <Modal
+          open={openAnalysisModal}
+          close={closeAnalysisModal}
+          onClick={closeAnalysisModal}
+          text="열심히 분석 중이에요!"
+          icon="wait"
+        ></Modal>
+      ) : (
+        <AnalysisModal
+          open={openAnalysisModal}
+          handleClose={closeAnalysisModal}
+          happy={drawingInfo.emotionHappy}
+          sad={drawingInfo.emotionSad}
+          angry={drawingInfo.emotionAngry}
+        ></AnalysisModal>
+      )}
+      {/* 그림 삭제 완료 모달 */}
+      <Modal
+        open={openDelete}
+        close={() => {
+          setOpenDelete(false);
+        }}
+        onClick={() => {
+          navigater(-1);
+        }}
+        text="그림 삭제가 완료되었습니다."
+        icon="success"
+      />
     </>
   );
 }

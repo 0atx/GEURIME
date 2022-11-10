@@ -4,7 +4,16 @@ SelectKids 헤더
 @since 2022.10.25
 */
 import { useState, useEffect, useRef } from "react";
-import { AppBar, Box, Toolbar, Avatar, Grid, IconButton, Menu, MenuItem } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  Avatar,
+  Grid,
+  IconButton,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -81,11 +90,11 @@ export default function SelectKids() {
       }}
     >
       <AppBar
-        color="transparent"
         style={{
           position: "fixed",
           paddingTop: "0px",
           boxShadow: "none",
+          background: "white",
         }}
       >
         <Toolbar>
@@ -101,9 +110,15 @@ export default function SelectKids() {
                 {/* 상단바 */}
                 <Grid item xs={3} sx={{ marginLeft: "20px" }}>
                   {currentKid.kidProfileImage !== "" ? (
-                    <Avatar src={currentKid.kidProfileImage} sx={{ marginRight: "10px" }} />
+                    <Avatar
+                      src={currentKid.kidProfileImage}
+                      sx={{ marginRight: "10px" }}
+                    />
                   ) : (
-                    <Avatar src="/assets/icon/default_profile.png" sx={{ marginRight: "10px" }} />
+                    <Avatar
+                      src="/assets/icon/default_profile.png"
+                      sx={{ marginRight: "10px" }}
+                    />
                   )}
                 </Grid>
                 {currentKid.kidName}
@@ -136,7 +151,10 @@ export default function SelectKids() {
                       }}
                     >
                       {kid.kidProfileImage !== "" ? (
-                        <Avatar src={kid.kidProfileImage} sx={{ marginRight: "10px" }} />
+                        <Avatar
+                          src={kid.kidProfileImage}
+                          sx={{ marginRight: "10px" }}
+                        />
                       ) : (
                         <Avatar
                           src="/assets/icon/default_profile.png"

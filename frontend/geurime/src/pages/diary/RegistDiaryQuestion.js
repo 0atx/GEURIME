@@ -17,6 +17,7 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
+import Btn from "@mui/material/Button";
 import Calendar from "react-calendar";
 import "./Calendar.css";
 import moment from "moment";
@@ -48,6 +49,8 @@ import angryClicked from "assets/icon/feeling/angryClicked.png";
 
 import { diaryState } from "states/DiaryState";
 import { useRecoilState } from "recoil";
+import ShowWeatherModal from "components/modal/ShowWeatherModal";
+import axios from "axios";
 
 export default function RegistDiary({}) {
   // 현재 날짜
@@ -56,6 +59,9 @@ export default function RegistDiary({}) {
   const [title, setTitle] = useState(
     new Date().getMonth() + 1 + "월 " + new Date().getDate() + "일 일기"
   );
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [day, setDay] = useState(new Date().getDate());
   // 선택된 날짜 (yyyy-mm-dd 형식)
   const [date, setDate] = useState(getToday());
   // 캘린더 열기
@@ -68,6 +74,39 @@ export default function RegistDiary({}) {
   const [sleepTime, setSleepTime] = useState("22:00");
   // 오늘 일어난 시간
   const [getupTime, setGetupTime] = useState("08:00");
+
+  // 날씨 알려주는 모달
+  const [openWeather, setOpenWeather] = useState(false);
+  const [weather, setWeather] = useState("");
+
+  // 그날의 날씨 가져오기
+  async function getWeather() {
+    const response = await axios.get(`${process.env.REACT_APP_BASE_URL_AI}/weather`, {
+      params: {
+        year: year,
+        month: month,
+        day: day,
+      },
+    });
+    //   console.log(response.data);
+    setWeather(response.data);
+  }
+
+  function applyWeather() {
+    if (weather === "맑음") {
+      setClickedWeather(0);
+    } else if (weather === "흐림") {
+      setClickedWeather(1);
+    } else if (weather === "비") {
+      setClickedWeather(2);
+    } else if (weather === "눈") {
+      setClickedWeather(3);
+    }
+  }
+
+  useEffect(() => {
+    getWeather();
+  }, []);
 
   // 전역에 담긴 일기 정보
   const [diaryInfo, setDiaryInfo] = useRecoilState(diaryState);
@@ -131,6 +170,13 @@ export default function RegistDiary({}) {
     let date = year + "-" + month + "-" + day;
     setDate(date);
     setTitle(month + "월 " + day + "일 일기");
+
+    setYear(year);
+    setMonth(month);
+    setDay(day);
+
+    getWeather();
+
     setCalOpen(false);
   };
 
@@ -262,7 +308,7 @@ export default function RegistDiary({}) {
           </Grid>
         </StyledPaper>
         {/* 날씨 질문 */}
-        <StyledPaper elevation={0}>
+        <StyledPaper elevation={0} sx={{ padding: "8% 3% 2% 3% !important" }}>
           <StyledTypography>오늘 날씨는 어땠어?</StyledTypography>
           <Grid container sx={{ textAlign: "center" }}>
             <Grid item xs={2.4}>
@@ -336,6 +382,16 @@ export default function RegistDiary({}) {
               <Typography>바람</Typography>
             </Grid>
           </Grid>
+          <div style={{ textAlign: "right", paddingTop: "3%" }}>
+            <Btn
+              sx={{ color: "#FFA000" }}
+              onClick={() => {
+                setOpenWeather(true);
+              }}
+            >
+              날씨가 기억나지 않아요😥
+            </Btn>
+          </div>
         </StyledPaper>
         {/* 잠든 시간  질문 */}
         <StyledPaper elevation={0}>
@@ -381,6 +437,18 @@ export default function RegistDiary({}) {
           </Button>
         </div>
       </Container>
+      {/* 날씨 보여주는 모달 */}
+      <ShowWeatherModal
+        open={openWeather}
+        handleClose={() => {
+          setOpenWeather(false);
+        }}
+        year={year}
+        month={month}
+        day={day}
+        weather={weather}
+        applyWeather={applyWeather}
+      ></ShowWeatherModal>
       {/* 네비 바 */}
       <NavBar></NavBar>
     </div>
