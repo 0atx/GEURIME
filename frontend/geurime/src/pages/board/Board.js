@@ -131,7 +131,7 @@ export default function Board() {
           flexWrap={'nowrap'}
           marginLeft='2%'
         >
-          <FormControl sx={{ height: '8vh', width: '20vh', Color: '#FFCA28', justifyContent:'center', textAlign: 'center'}} size='small'>
+          <FormControl item sx={{ height: '8vh', width: '20vh', Color: '#FFCA28', justifyContent:'center', textAlign: 'center'}} size='small'>
             <Select
               value={category}
               onChange={handleChange}
@@ -162,6 +162,7 @@ export default function Board() {
           >
             {/* 검색어 입력 부분 */}
             <TextField
+              item
               id="standard-search"
               placeholder='검색어를 입력하세요...'
               type="search"
@@ -172,7 +173,8 @@ export default function Board() {
             />
             
             {/* 돋보기 버튼 */}
-            <IconButton
+              <IconButton
+              item
               type="button"
               sx={{ color: "#FFA000" }}
               aria-label="search"

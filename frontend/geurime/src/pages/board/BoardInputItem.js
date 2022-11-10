@@ -25,7 +25,7 @@ export default function BoardInputItem({handleChange, boardCategory, boardCatego
     <Grid>
       <Grid container justifyContent="center">
         <form method="post" encType="multipart/form-data">
-        <label for="profile" >
+        <label htmlFor="profile" >
             <Grid item xs={12} sx={{ width: "300px",height: '300px', display: "table", textAlign: 'center'}}>
               {imageUrl ? (
                 <img src={imageUrl} style={{ height: '100%', width: '100%', margin: '2%', objectFit: "cover" }} />
