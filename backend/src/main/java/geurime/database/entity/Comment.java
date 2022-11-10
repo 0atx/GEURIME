@@ -1,5 +1,6 @@
 package geurime.database.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -59,6 +60,32 @@ public class Comment {
         private Long userId;
         private Long commentId;
         private String commentContent;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class CommentResponse{
+        private Long id;
+        private Long commentUserId;
+        private String commentUserProfile;
+        private String commentUserNickname;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime createTime;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime updateTime;
+        private String commentContent;
+
+        @Builder
+        public CommentResponse(Long id, Long commentUserId, String commentUserProfile, String commentUserNickname, LocalDateTime createTime, LocalDateTime updateTime, String commentContent) {
+            this.id = id;
+            this.commentUserId = commentUserId;
+            this.commentUserProfile = commentUserProfile;
+            this.commentUserNickname = commentUserNickname;
+            this.createTime = createTime;
+            this.updateTime = updateTime;
+            this.commentContent = commentContent;
+        }
     }
 
     public void updateComment(String commentContent){
