@@ -1,11 +1,7 @@
 package geurime.interceptor;
 
 import geurime.config.jwt.JwtService;
-import geurime.database.entity.Drawing;
-import geurime.database.entity.Family;
-import geurime.database.entity.Kid;
 import geurime.database.entity.User;
-import geurime.database.repository.BoardRepository;
 import geurime.database.repository.DrawingRepository;
 import geurime.database.repository.UserRepository;
 import geurime.exception.CustomException;
@@ -17,12 +13,11 @@ import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class DrawingInterceptor implements HandlerInterceptor {
+public class KidInterceptor implements HandlerInterceptor {
     private final JwtService jwtService;
     private final UserRepository userRepository;
     private final DrawingRepository drawingRepository;
@@ -34,11 +29,9 @@ public class DrawingInterceptor implements HandlerInterceptor {
         if(method.equals("POST")){
             return true;
         }
-        String drawingIdString = pathVariables.get("drawingId");
-        String drawingBoxIdString = pathVariables.get("drawingBoxId");
         String kidIdString = pathVariables.get("kidId");
 
-        if(drawingIdString == null && kidIdString == null && drawingBoxIdString == null){
+        if(kidIdString == null){
             throw new CustomException(CustomExceptionList.BAD_REQUEST_ERROR);
         }
 
@@ -51,28 +44,8 @@ public class DrawingInterceptor implements HandlerInterceptor {
 
         Long requestFamilyId = userJwt.getFamily().getId();
 
-        //drawingId 받는 API
-        if(drawingIdString != null){
-            Long ownerFamilyId = drawingRepository.getFamilyIdByDrawingId(Long.parseLong(drawingIdString));
-
-            if(requestFamilyId != null && requestFamilyId == ownerFamilyId){
-                return true;
-            }else{
-                throw new CustomException(CustomExceptionList.NO_AUTHENTICATION_ERROR);
-            }
-        }
-        //drawingBoxId 받는 API
-        else if (drawingBoxIdString != null) {
-            Long ownerFamilyId = drawingRepository.getFamilyIdByDrawingBoxId(Long.parseLong(drawingBoxIdString));
-
-            if(requestFamilyId != null && requestFamilyId == ownerFamilyId){
-                return true;
-            }else{
-                throw new CustomException(CustomExceptionList.NO_AUTHENTICATION_ERROR);
-            }
-        }
         //kidId 받는 API
-        else if(kidIdString != null){
+        if(kidIdString != null){
             Long kidFamilyId = drawingRepository.getFamilyIdByKidId(Long.parseLong(kidIdString));
 
             if(requestFamilyId != null && requestFamilyId == kidFamilyId){
