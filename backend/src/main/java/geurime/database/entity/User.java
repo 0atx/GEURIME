@@ -224,11 +224,12 @@ public class User {
         private Long familyLeaderId;
         private String inviteCode;
         private Boolean isActive;
+        private Boolean isChild;
 
         List<UserInfoKidDto> kidDtoList;
 
         @Builder
-        public UserInfoResponse(Long userId, String email, String userName, LocalDate createDate, String nickname, String userProfileImage, String provider, LocalDate userBirth, String userGender, Long familyId, String familyName, Long familyLeaderId, String inviteCode, List<UserInfoKidDto> kidDtoList) {
+        public UserInfoResponse(Long userId, String email, String userName, LocalDate createDate, String nickname, String userProfileImage, String provider, LocalDate userBirth, String userGender, Long familyId, String familyName, Long familyLeaderId, String inviteCode, Boolean isActive, Boolean isChild, List<UserInfoKidDto> kidDtoList) {
             this.userId = userId;
             this.email = email;
             this.userName = userName;
@@ -242,6 +243,8 @@ public class User {
             this.familyName = familyName;
             this.familyLeaderId = familyLeaderId;
             this.inviteCode = inviteCode;
+            this.isActive = isActive;
+            this.isChild = isChild;
             this.kidDtoList = kidDtoList;
         }
     }
