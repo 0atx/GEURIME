@@ -22,7 +22,7 @@ export default function Main() {
     },
   ]);
 
-  const [familyInfoOpen, setFamilyInfoOpen] = useState(true);
+  const [familyInfoOpen, setFamilyInfoOpen] = useState(false);
   const [clickedId, setClickedId] = useState(0);
 
   // 처음 로딩시 유저정보 가져오기
