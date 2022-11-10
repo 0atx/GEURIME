@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/comments")
@@ -19,6 +21,17 @@ public class CommentController {
 
     final CommentServiceImpl commentService;
     static final String SUCCESS = "success";
+
+    @GetMapping("/{boardId}")
+    @ApiOperation(value = "게시글 댓글 조회", notes = "게시글의 댓글을 조회한다")
+    public ResponseEntity<BasicResponse<List<Comment.CommentResponse>>> readComment(@PathVariable Long boardId) {
+        try {
+            List<Comment.CommentResponse> responseList = commentService.readComment(boardId);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseList), HttpStatus.CREATED);
+        } catch (CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @PostMapping
     @ApiOperation(value = "댓글 등록", notes = "등록 정보를 받아 댓글을 등록한다")
