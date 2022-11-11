@@ -146,6 +146,7 @@ public class User {
         this.nickname = request.getNickname();
         this.userBirth = LocalDate.parse(request.getUserBirth(), DateTimeFormatter.ISO_DATE);
         this.userGender = request.getUserGender();
+        this.isChild = request.getIsChild();
     }
 
     /**
@@ -168,6 +169,7 @@ public class User {
         private String userBirth;
         private String userGender;
         private String familyName;
+        private Boolean isChild;
     }
 
     /**
