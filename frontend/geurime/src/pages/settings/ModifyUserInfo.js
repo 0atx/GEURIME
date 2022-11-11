@@ -239,7 +239,7 @@ export default function ModifyUserInfo() {
                   onChange={(e) => {
                     changeProfile(e);
                   }}
-                  accept="img/*"
+                  accept="image/*"
                   id="profile"
                 />
               </form>

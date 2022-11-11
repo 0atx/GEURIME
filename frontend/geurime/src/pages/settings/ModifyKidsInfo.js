@@ -77,7 +77,12 @@ export default function ModifyKidsInfo() {
     // 생년월일 검사
     if (isBirth(birth)) {
       let newBirth = birth;
-      newBirth = birth.substr(0, 4) + "-" + birth.substr(4, 2) + "-" + birth.substr(6, 2);
+      newBirth =
+        birth.substr(0, 4) +
+        "-" +
+        birth.substr(4, 2) +
+        "-" +
+        birth.substr(6, 2);
 
       // 파일 전송
       let file = imgRef.current.files[0];
@@ -152,7 +157,10 @@ export default function ModifyKidsInfo() {
       } else if (day < 1 || day > 31) {
         // 1일 미만 31일 초과인 경우
         return false;
-      } else if ((month === 4 || month === 6 || month === 9 || month === 11) && day === 31) {
+      } else if (
+        (month === 4 || month === 6 || month === 9 || month === 11) &&
+        day === 31
+      ) {
         // 4, 6, 9, 11월에 31일인경우
         return false;
       } else if (month === 2) {
@@ -241,7 +249,9 @@ export default function ModifyKidsInfo() {
         }}
       />
       <Grid id="container">
-        <div style={{ textAlign: "center", marginTop: "10%", marginBottom: "10%" }}>
+        <div
+          style={{ textAlign: "center", marginTop: "10%", marginBottom: "10%" }}
+        >
           <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
             <Select
               value={selectKid}
@@ -266,7 +276,12 @@ export default function ModifyKidsInfo() {
             </Select>
           </FormControl>
         </div>
-        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
+        <Grid
+          container
+          justifyContent="center"
+          textAlign="center"
+          sx={{ marginBottom: "3vh" }}
+        >
           <Grid item xs={3} sx={{ marginBottom: "2vh", textAlign: "center" }}>
             {imageUrl ? (
               <Avatar src={imageUrl} sx={{ width: 100, height: 100 }} />
@@ -287,7 +302,7 @@ export default function ModifyKidsInfo() {
                   onChange={(e) => {
                     changeProfile(e);
                   }}
-                  accept="img/*"
+                  accept="image/*"
                   id="originProfile"
                 />
               </form>
@@ -295,8 +310,17 @@ export default function ModifyKidsInfo() {
           </Grid>
         </Grid>
         {/* 이름 */}
-        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
-          <Grid item xs={10} sx={{ fontSize: "2.3vh", marginBottom: "1vh", color: "#6F6F6F" }}>
+        <Grid
+          container
+          justifyContent="center"
+          textAlign="center"
+          sx={{ marginBottom: "3vh" }}
+        >
+          <Grid
+            item
+            xs={10}
+            sx={{ fontSize: "2.3vh", marginBottom: "1vh", color: "#6F6F6F" }}
+          >
             이름
           </Grid>
           {/* todo: 캘린더 클릭 후 이름 바뀌는 것 수정 필요 */}
@@ -317,8 +341,17 @@ export default function ModifyKidsInfo() {
         </Grid>
 
         {/* 생년월일 */}
-        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "4vh" }}>
-          <Grid item xs={10} sx={{ fontSize: "2.3vh", marginBottom: "3vh", color: "#6F6F6F" }}>
+        <Grid
+          container
+          justifyContent="center"
+          textAlign="center"
+          sx={{ marginBottom: "4vh" }}
+        >
+          <Grid
+            item
+            xs={10}
+            sx={{ fontSize: "2.3vh", marginBottom: "3vh", color: "#6F6F6F" }}
+          >
             생년월일
           </Grid>
           <Grid item xs={10} sx={{ fontSize: "2.3vh" }} justifyContent="center">
@@ -337,7 +370,12 @@ export default function ModifyKidsInfo() {
             />
           </Grid>
         </Grid>
-        <Grid container justifyContent="center" textAlign="center" sx={{ marginTop: "6vh" }}>
+        <Grid
+          container
+          justifyContent="center"
+          textAlign="center"
+          sx={{ marginTop: "6vh" }}
+        >
           <Btn
             width="25%"
             sx={{ mr: 2 }}
@@ -359,7 +397,10 @@ export default function ModifyKidsInfo() {
         </Grid>
 
         {/* 아이 등록 모달 */}
-        <KidsInfoModal open={openRegist} setOpen={setOpenRegist}></KidsInfoModal>
+        <KidsInfoModal
+          open={openRegist}
+          setOpen={setOpenRegist}
+        ></KidsInfoModal>
         {/* 아이이름 입력부탁 모달 */}
         <Modal
           open={openKidName}
