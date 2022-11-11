@@ -32,20 +32,11 @@ export default function SelectKids() {
 
   // 처음 로딩시 유저정보 가져오기
   async function getUserInfo() {
-    if (currentKid.kidId === null) {
-      const response = await http.get(`/users/${userInfo.userId}`);
-      if (response.data.message === "success") {
-        setUserInfo(response.data.data);
-        setKids(response.data.data.kidDtoList);
-        getKidInfo(response.data.data.kidDtoList[0].kidId);
-      }
-    } else {
-      const response = await http.get(`/users/${userInfo.userId}`);
-      if (response.data.message === "success") {
-        setUserInfo(response.data.data);
-        setKids(response.data.data.kidDtoList);
-        getKidInfo(localStorage.getItem("currentKidId"));
-      }
+    const response = await http.get(`/users/${userInfo.userId}`);
+    if (response.data.message === "success") {
+      setUserInfo(response.data.data);
+      setKids(response.data.data.kidDtoList);
+      getKidInfo(response.data.data.kidDtoList[0].kidId);
     }
   }
 
