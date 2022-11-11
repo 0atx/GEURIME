@@ -19,10 +19,12 @@ import InviteFamilyModal from "components/modal/InviteFamillyModal";
 import invite from "assets/icon/settings/settings_invite.png";
 import kids from "assets/icon/settings/settings_kids.png";
 import resign from "assets/icon/settings/settings_resign.png";
+import logout from "assets/icon/settings/settings_logout.png";
 import user from "assets/icon/settings/settings_user.png";
 import { useNavigate } from "react-router-dom";
 import { userState } from "states/UserState";
 import { useRecoilState } from "recoil";
+import PersonOffIcon from "@mui/icons-material/PersonOff";
 
 export default function Settings() {
   // userinfo
@@ -88,6 +90,20 @@ export default function Settings() {
             <ListItemText primary="가족 초대하기" />
           </ListItemButton>
           <Divider />
+          {/* 로그아웃 */}
+          <ListItemButton
+            onClick={() => {
+              localStorage.clear();
+              navigate("/");
+            }}
+          >
+            <ListItemAvatar>
+              <Avatar>
+                <img src={logout} width="100%" />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary="로그아웃" />
+          </ListItemButton>
           {/* 회원 탈퇴 */}
           <ListItemButton
             onClick={() => {
