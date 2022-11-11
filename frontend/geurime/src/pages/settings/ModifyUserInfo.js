@@ -68,12 +68,7 @@ export default function ModifyUserInfo() {
     if (isBirth(birth)) {
       let newBirth = birth;
       let inputYear = birth.substr(0, 4);
-      newBirth =
-        birth.substr(0, 4) +
-        "-" +
-        newBirth.substr(4, 2) +
-        "-" +
-        newBirth.substr(6, 2);
+      newBirth = birth.substr(0, 4) + "-" + newBirth.substr(4, 2) + "-" + newBirth.substr(6, 2);
 
       // isChild 계산하기
       let today = new Date();
@@ -111,18 +106,25 @@ export default function ModifyUserInfo() {
 
       // axios
       const response = await http2.put(`/users/${userInfo.userId}`, formData);
-
-      // state 갱신
-      setUserInfo((info) => {
-        const copyUserInfo = { ...info };
-        copyUserInfo.userProfileImage = response.data.data.userProfileImage;
-        copyUserInfo.userBirth = birth;
-        copyUserInfo.nickname = nickname;
-        copyUserInfo.familyName = famname;
-        copyUserInfo.isChild = !isAdult;
-        console.log(copyUserInfo);
-        return { ...copyUserInfo };
-      });
+      if (response.data.message == "success") {
+        setOpenModify(true);
+        // state 갱신
+        setUserInfo((info) => {
+          const copyUserInfo = { ...info };
+          copyUserInfo.userProfileImage = response.data.data.userProfileImage;
+          copyUserInfo.userBirth = birth;
+          copyUserInfo.nickname = nickname;
+          copyUserInfo.familyName = famname;
+          copyUserInfo.isChild = !isAdult;
+          console.log(copyUserInfo);
+          return { ...copyUserInfo };
+        });
+      } else {
+        setOpenFail(true);
+      }
+    } else {
+      setOpenBirth(true);
+      return;
     }
   }
 
@@ -150,10 +152,7 @@ export default function ModifyUserInfo() {
       } else if (day < 1 || day > 31) {
         // 1일 미만 31일 초과인 경우
         return false;
-      } else if (
-        (month === 4 || month === 6 || month === 9 || month === 11) &&
-        day === 31
-      ) {
+      } else if ((month === 4 || month === 6 || month === 9 || month === 11) && day === 31) {
         // 4, 6, 9, 11월에 31일인경우
         return false;
       } else if (month === 2) {
@@ -186,10 +185,7 @@ export default function ModifyUserInfo() {
     setUser(info);
     setImageUrl(info.userProfileImage);
     setGender(info.userGender);
-    let str =
-      info.userBirth.slice(0, 4) +
-      info.userBirth.slice(5, 7) +
-      info.userBirth.slice(8, 10);
+    let str = info.userBirth.slice(0, 4) + info.userBirth.slice(5, 7) + info.userBirth.slice(8, 10);
     setBirth(str);
     setNickname(info.nickname);
     setFamname(info.familyName);
@@ -209,16 +205,10 @@ export default function ModifyUserInfo() {
         isRight="수정"
         clickRight={() => {
           modifyUser();
-          setOpenModify(true);
         }}
       />
       <Grid id="container">
-        <Grid
-          container
-          justifyContent="center"
-          textAlign="center"
-          sx={{ marginBottom: "4vh" }}
-        >
+        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "4vh" }}>
           <Grid item xs={3} sx={{ marginBottom: "1vh", textAlign: "center" }}>
             {imageUrl ? (
               <Avatar src={imageUrl} sx={{ width: 100, height: 100 }} />
@@ -247,17 +237,8 @@ export default function ModifyUserInfo() {
           </Grid>
         </Grid>
         {/* 이름 */}
-        <Grid
-          container
-          justifyContent="center"
-          textAlign="center"
-          sx={{ marginBottom: "3vh" }}
-        >
-          <Grid
-            item
-            xs={10}
-            sx={{ fontSize: "2.3vh", marginBottom: "2vh", color: "#6F6F6F" }}
-          >
+        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "2.3vh", marginBottom: "2vh", color: "#6F6F6F" }}>
             이름
           </Grid>
           <Grid item xs={10} sx={{ fontSize: "2.5vh" }}>
@@ -265,17 +246,8 @@ export default function ModifyUserInfo() {
           </Grid>
         </Grid>
         {/* 성별 */}
-        <Grid
-          container
-          justifyContent="center"
-          textAlign="center"
-          sx={{ marginBottom: "3vh" }}
-        >
-          <Grid
-            item
-            xs={10}
-            sx={{ fontSize: "2.3vh", marginBottom: "2vh", color: "#6F6F6F" }}
-          >
+        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "2.3vh", marginBottom: "2vh", color: "#6F6F6F" }}>
             성별
           </Grid>
           <Grid item xs={10} sx={{ fontSize: "2.5vh" }}>
@@ -308,17 +280,8 @@ export default function ModifyUserInfo() {
           </Grid>
         </Grid>
         {/* 생년월일 */}
-        <Grid
-          container
-          justifyContent="center"
-          textAlign="center"
-          sx={{ marginBottom: "4vh" }}
-        >
-          <Grid
-            item
-            xs={10}
-            sx={{ fontSize: "2.3vh", marginBottom: "3vh", color: "#6F6F6F" }}
-          >
+        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "4vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "2.3vh", marginBottom: "3vh", color: "#6F6F6F" }}>
             생년월일
           </Grid>
           <Grid item xs={10} sx={{ fontSize: "2.5vh" }} justifyContent="center">
@@ -338,17 +301,8 @@ export default function ModifyUserInfo() {
           </Grid>
         </Grid>
         {/* 닉네임 */}
-        <Grid
-          container
-          justifyContent="center"
-          textAlign="center"
-          sx={{ marginBottom: "3vh" }}
-        >
-          <Grid
-            item
-            xs={10}
-            sx={{ fontSize: "2.3vh", marginBottom: "1vh", color: "#6F6F6F" }}
-          >
+        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "2.3vh", marginBottom: "1vh", color: "#6F6F6F" }}>
             닉네임
           </Grid>
           {/* todo: 캘린더 클릭 후 닉네임 바뀌는 것 수정 필요 */}
@@ -369,17 +323,8 @@ export default function ModifyUserInfo() {
         </Grid>
 
         {/* 가족이름 */}
-        <Grid
-          container
-          justifyContent="center"
-          textAlign="center"
-          sx={{ marginBottom: "3vh" }}
-        >
-          <Grid
-            item
-            xs={10}
-            sx={{ fontSize: "2.3vh", marginBottom: "1vh", color: "#6F6F6F" }}
-          >
+        <Grid container justifyContent="center" textAlign="center" sx={{ marginBottom: "3vh" }}>
+          <Grid item xs={10} sx={{ fontSize: "2.3vh", marginBottom: "1vh", color: "#6F6F6F" }}>
             가족 이름
           </Grid>
           <Grid item xs={10}>
