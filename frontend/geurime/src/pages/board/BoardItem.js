@@ -10,6 +10,7 @@ import CommentIcon from "@mui/icons-material/Comment";
 import { fontWeight } from "@mui/system";
 import { Link, useNavigate } from "react-router-dom";
 import DetailBoard from "./DetailBoard";
+import sampleImage from "assets/boardSample.png";
 
 export default function BoardItem({ item }) {
   const navigator = useNavigate();
@@ -77,15 +78,35 @@ export default function BoardItem({ item }) {
           {/* 사진 */}
           <Grid container sx={{ marginTop: "2vh" }} alignItems="center">
             <Grid item xs={12}>
-              <img
-                src={item.boardImagePath}
-                loading="lazy"
-                style={{
-                  height: "18vh",
-                  width: "100%",
-                  borderRadius: 5,
-                }}
-              />
+              {item.boardImagePath == null ? (
+                // 그림 업로드 안한 경우
+                <>
+                  <img
+                    src={sampleImage}
+                    loading="lazy"
+                    style={{
+                      height: "18vh",
+                      width: "100%",
+                      borderRadius: 5,
+                      objectFit: "cover",
+                    }}
+                  />
+                </>
+              ) : (
+                // 그림 업로드 한 경우
+                <>
+                  <img
+                    src={item.boardImagePath}
+                    loading="lazy"
+                    style={{
+                      height: "18vh",
+                      width: "100%",
+                      borderRadius: 5,
+                      objectFit: "cover",
+                    }}
+                  />
+                </>
+              )}
             </Grid>
             <Grid item xs={12}>
               <Grid container>

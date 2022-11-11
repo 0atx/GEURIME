@@ -71,9 +71,9 @@ export default function Main() {
           sx={{
             marginBottom: "3vh",
             width: "85%",
-            background: "white",
-            borderRadius: "5px",
-            boxShadow: "1px 1px 3px #9e9e9e",
+            // background: "white",
+            border: "5px solid #FFCA28",
+            // boxShadow: "1px 1px 3px #9e9e9e",
             padding: "1vh",
             marginTop: "1.5vh",
           }}
