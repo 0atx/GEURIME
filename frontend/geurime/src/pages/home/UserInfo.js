@@ -296,7 +296,7 @@ export default function UserInfo() {
                   onChange={(e) => {
                     changeProfile(e);
                   }}
-                  accept="img/*"
+                  accept="image/*"
                   id="profile"
                 />
               </form>

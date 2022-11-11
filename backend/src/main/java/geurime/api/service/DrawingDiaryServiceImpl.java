@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +57,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
     @Override
     public List<Drawing.DrawingDiaryListResponse> readAllDrawingDiaryList(Long kidId) {
         Kid kid = getKid(kidId);
-        List<Drawing> drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingBox_DrawingBoxCategory(kid, BoxType.일기);
+        List<Drawing> drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingBox_DrawingBoxCategoryOrderByIdDesc(kid, BoxType.일기);
         List<Drawing.DrawingDiaryListResponse> responseList = new ArrayList<>(drawingDiaryList.size());
         for (Drawing drawing : drawingDiaryList){
             Drawing.DrawingDiaryListResponse response = Drawing.DrawingDiaryListResponse.builder()
@@ -83,7 +82,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
     public List<Drawing.DrawingDiaryListResponse> readByDateDrawingDiaryList(Long kidId, LocalDate date) {
         Kid kid = getKid(kidId);
 
-        List<Drawing> drawingDiaryList = drawingRepository.findByDrawingBox_KidAndCreateTime(kid, date);
+        List<Drawing> drawingDiaryList = drawingRepository.findByDrawingBox_KidAndCreateTimeOrderByIdDesc(kid, date);
         List<Drawing.DrawingDiaryListResponse> responseList = new ArrayList<>(drawingDiaryList.size());
 
         for (Drawing diary : drawingDiaryList){
@@ -109,7 +108,12 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
     @Override
     public List<Drawing.DrawingDiaryListResponse> readByTitleSearchDrawingDiaryList(Long kidId, String keyword) {
         Kid kid = getKid(kidId);
-        List<Drawing> drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingTitleContains(kid, keyword);
+        List<Drawing> drawingDiaryList = null;
+        if(keyword != null && !keyword.isBlank()){
+            drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingTitleContainsAndDrawingBox_DrawingBoxCategoryOrderByIdDesc(kid, keyword, BoxType.일기);
+        }else{
+            drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingBox_DrawingBoxCategoryOrderByIdDesc(kid, BoxType.일기);
+        }
         List<Drawing.DrawingDiaryListResponse> responseList = mapList(drawingDiaryList, Drawing.DrawingDiaryListResponse.class);
 
         return responseList;
