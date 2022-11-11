@@ -90,5 +90,6 @@ public class Comment {
 
     public void updateComment(String commentContent){
         this.commentContent = commentContent;
+        this.updateTime = LocalDateTime.now();
     }
 }
