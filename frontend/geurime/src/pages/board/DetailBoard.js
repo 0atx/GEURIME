@@ -3,7 +3,7 @@
 @since 2022.11.02
 */
 
-import { Avatar, Button, Grid, Paper, TextField } from "@mui/material";
+import { Avatar, Box, Button, Grid, Paper, TextField } from "@mui/material";
 import { http } from "api/http";
 import { useEffect, useRef, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom";
@@ -61,7 +61,6 @@ export default function DetailBoard( ) {
   const navigator = useNavigate();
   // 페이지 들어왔을때 엑시오스 요청
   const getDetail = async () => {
-    console.log({ 페이지id: location.pathname.slice(13,) })
     const boardid = location.pathname.slice(13,);
     const response = await http.get(`/boards/${boardid}`);
     if (response.data.message == "success") {
@@ -108,7 +107,6 @@ export default function DetailBoard( ) {
   }, [board])
 
   const getComment = async () => {
-    console.log({ 페이지id: location.pathname.slice(13,) })
     const boardid = location.pathname.slice(13,);
     const response = await http.get(`/comments/${boardid}`);
     if (response.data.message == "success") {
@@ -135,7 +133,6 @@ export default function DetailBoard( ) {
   const postComment = async () => {
     // commentUserId 리코일에서 가져오기
     const boardid = location.pathname.slice(13,);
-    console.log({ 현재댓글: commentRef.current.value });
     if (commentRef.current.value != 0) { 
     const response = await http.post(`/comments`, 
       {
@@ -147,14 +144,9 @@ export default function DetailBoard( ) {
 
       if (response.data.message == "success") {
         if (commentRef.current.value !== 0) {
-          setCommentList([...commentList, {
-            commentUserNickname: userInfo.nickname,
-            commentContent: commentRef.current.value,
-            commentUserId: userInfo.userId,
-            commentUserProfile: userInfo.userProfileImage,
-            createTime: moment().format('YYYY-MM-DD HH:mm:ss')
-          }])
+          getComment()
           commentRef.current.value = "";
+          
         }
       }
 
@@ -246,7 +238,11 @@ export default function DetailBoard( ) {
           variant="outlined"
           sx={{ marginTop:'3%', backgroundColor: 'rgba(0,0,0,0)', borderRadius: 2, borderColor: '#FFE082', borderWidth: 2.5,  height: '18vh', width:'94%',marginLeft:'3%'}}
       >
-        <Grid item sx={{marginTop:'2.5%', marginLeft: '3%', backgroundColor: 'rgba(0,0,0,0)'}}>{board.boardContent}</Grid>
+          <Grid item sx={{ marginTop: '2.5%', marginLeft: '3%', backgroundColor: 'rgba(0,0,0,0)' }}>
+            <Box component="div" sx={{  overflow: 'auto', height: '16vh'}}>
+              {board.boardContent}
+            </Box>
+          </Grid>
           
       </Paper>
 
@@ -267,7 +263,7 @@ export default function DetailBoard( ) {
           item
         sx={{marginLeft:'5%', justifyContent: 'space-between'}}
       >
-          <TextField placeholder="댓글을 등록하세요..." variant="standard" sx={{width: '57vw'}} inputRef={commentRef} onKeyUp={commentKeyword}/>
+          <TextField placeholder="댓글을 등록하세요..." variant="standard" sx={{width: '57vw'} } inputRef={commentRef} onKeyUp={commentKeyword}/>
           <Button onClick={postComment}>확인</Button>
      </Grid>
     </Grid>
