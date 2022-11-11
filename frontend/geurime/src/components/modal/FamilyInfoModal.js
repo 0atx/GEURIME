@@ -21,7 +21,6 @@ export default function FamilyInfoModal(props) {
     if (response.data.message === "success") {
       setUserInfo(response.data.data);
     }
-    console.log(response.data.data);
   }
 
   const mounted = useRef(false);
