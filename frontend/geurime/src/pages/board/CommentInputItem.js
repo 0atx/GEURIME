@@ -60,12 +60,12 @@ export default function CommentInputItem({ item, setCommentList, getComment, che
         {
           commentContent: comment,
           commentId: item.id,
-          commentUserId: userInfo.userId,
+          userId: userInfo.userId,
         }
       );
       setCheckEdit(false)
       setCheckOne(false)
-
+      console.log(response.data)
       if (response.data.message == "success") {
         setOpenModifyModal(true);
         getComment()
@@ -75,10 +75,15 @@ export default function CommentInputItem({ item, setCommentList, getComment, che
       setOpenNoCommentModal(true)
     }
   }
-
-  function changeComment(e) {
-    setComment(e.target.value)
+  function enterReg(e) {
+    if (e.key === "Enter") {
+      console.log('엔터!')
+      modifyComment()
+    }
   }
+  function changeComment(e) {
+     setComment(e.target.value) 
+    }
 
 
 
@@ -88,7 +93,7 @@ export default function CommentInputItem({ item, setCommentList, getComment, che
     if (item.commentUserId == userInfo.userId) {
       setToolBox(<>
         <Grid item xs={1.5}>
-        <EditOutlinedIcon onClick={() => clickEdit()}/>
+          <EditOutlinedIcon onClick={() => clickEdit()}/>
         </Grid>
         <Grid item xs={1.5}>
 
@@ -130,7 +135,7 @@ export default function CommentInputItem({ item, setCommentList, getComment, che
           {checkEdit == true && checkOne== true? 
           // 수정 안누르면 내용만 표시
           <Grid item xs={9}>
-            <TextField value={comment} variant="standard" sx={{width: '55vw'}} onChange={(e) => {changeComment(e);}}/>
+              <TextField value={comment} variant="standard" sx={{ width: '55vw' }} onChange={(e) => { changeComment(e); }}  onKeyUp={ enterReg }/>
           </Grid>
         : (
           <Grid item xs={9}>
@@ -156,8 +161,13 @@ export default function CommentInputItem({ item, setCommentList, getComment, che
               : (
                 <></>
            )}
-      </Grid>
-        <span style={{ fontSize: 13, fontWeight: 200 }}>{moment(item.createTime).fromNow()}</span>
+        </Grid>
+        {item.updateTime ? <span style={{ fontSize: 13, fontWeight: 200 }}>{moment(item.updateTime).fromNow()}(수정됨) </span>
+          : (
+            <span style={{ fontSize: 13, fontWeight: 200 }}>{moment(item.createTime).fromNow()}</span>
+        
+          )
+        }
       </Grid>
       <DeleteCommentModal
         open={openDeleteModal}

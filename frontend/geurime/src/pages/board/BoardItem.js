@@ -10,6 +10,7 @@ import CommentIcon from "@mui/icons-material/Comment";
 import { fontWeight } from "@mui/system";
 import { Link, useNavigate } from "react-router-dom";
 import DetailBoard from "./DetailBoard";
+import logotext from "assets/logo/logotext.png";
 
 export default function BoardItem({ item }) {
   const navigator = useNavigate();
@@ -77,7 +78,7 @@ export default function BoardItem({ item }) {
           {/* 사진 */}
           <Grid container sx={{ marginTop: "2vh" }} alignItems="center">
             <Grid item xs={12}>
-              <img
+              {item.boardImagePath ? <img
                 src={item.boardImagePath}
                 loading="lazy"
                 style={{
@@ -85,7 +86,17 @@ export default function BoardItem({ item }) {
                   width: "100%",
                   borderRadius: 5,
                 }}
+              /> : (
+                <img
+                src={logotext}
+                loading="lazy"
+                style={{
+                  height: "18vh",
+                  width: "100%",
+                  borderRadius: 5,
+                }}
               />
+              )}
             </Grid>
             <Grid item xs={12}>
               <Grid container>
