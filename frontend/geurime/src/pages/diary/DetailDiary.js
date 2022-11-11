@@ -28,6 +28,8 @@ import AnalysisModal from "components/modal/AnalysisModal";
 import { http } from "api/http";
 import { useParams } from "react-router-dom";
 import Modal from "components/common/Modal";
+import { useRecoilState } from "recoil";
+import { registState } from "states/RegistState";
 
 export default function DetailDiary() {
   const params = useParams();
@@ -98,6 +100,12 @@ export default function DetailDiary() {
     }
   }, []);
 
+  // 분석 완료 여부 정보
+  const [registInfo, setRegistInfo] = useRecoilState(registState);
+  // 분석 완료시 정보 저장
+  useEffect(() => {
+    getDiary()
+  }, [registInfo])
   return (
     <div>
       {/* 헤더 */}
@@ -213,9 +221,16 @@ export default function DetailDiary() {
           </Grid>
         </Grid>
         <div style={{ textAlign: "center" }}>
-          <Button sx={{ marginTop: "8%" }} width="20vh" onClick={showAnalysisModal}>
-            분석결과 보기
-          </Button>
+          {registInfo.state == false || diary.emotionHappy !== null ?
+            <Button sx={{ marginTop: "8%" }} width="20vh" onClick={showAnalysisModal}>
+              분석결과 보기
+            </Button>
+            : (
+            <Button bgcolor="9E9E9E" sx={{ marginTop: "8%",  }} width="20vh" onClick={showAnalysisModal}>
+              분석중입니다
+            </Button>
+          )
+        }
         </div>
       </Container>
       {/* 네비 바 */}
@@ -227,7 +242,7 @@ export default function DetailDiary() {
         diaryid={diary.drawingId}
       ></DeleteDiaryModal>
       {/* 분석 결과 모달 */}
-      {diary.emotionHappy === null && diary.emotionSad === null && diary.emotionAngry === null ? (
+        {registInfo.state == true  || diary.emotionHappy === null  ? (
         <Modal
           open={openAnalysisModal}
           close={closeAnalysisModal}

@@ -50,11 +50,6 @@ export default function ModifyBoard() {
   ];
   const [boardCategory, setBoardCategory] = useState(boardInfo.boardCategory);
   
-  // const titleChange = (event) => {
-  //   setTitle(event.target.value);
-  //   console.log({제목: title})
-  // };
-
   const handleChange = (event) => {
     setBoardCategory(event.target.value);
   };

@@ -21,8 +21,6 @@ export default function DeleteBoardModal ({ open, handleClose, boardId, userId})
         userId: userId
       }
     });
-
-    console.log(response.data);
     navigate(`/board`);
   }
   return (
