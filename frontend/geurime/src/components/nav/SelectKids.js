@@ -23,7 +23,7 @@ import { userState } from "states/UserState";
 import { CurrentKidState } from "states/CurrentKidState";
 import { http } from "api/http";
 
-export default function SelectKids() {
+export default function SelectKids(props) {
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [currentKid, setCurrentKid] = useRecoilState(CurrentKidState);
 
@@ -62,7 +62,9 @@ export default function SelectKids() {
   async function getKidInfo(kidId) {
     const response = await http.get(`kids/${kidId}`);
     setCurrentKid(response.data.data);
+    console.log(response.data.data);
     localStorage.setItem("currentKidId", response.data.data.kidId);
+    props.setImgList(response.data.data.sampleImageList);
   }
 
   const navigater = useNavigate();
