@@ -53,8 +53,7 @@ export default function ({ open, close }) {
             InputProps={{
               readOnly: true,
             }}
-            //   배포된 주소로 변경 필요!!!
-            value={`http://localhost:3000/invite/${userInfo.inviteCode}`}
+            value={`https://k7a506.p.ssafy.io/invite/${userInfo.inviteCode}`}
             variant="standard"
           />
           <Button
