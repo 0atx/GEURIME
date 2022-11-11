@@ -6,12 +6,15 @@ import NavBar from "components/nav/NavBar";
 import SelectKids from "components/nav/SelectKids";
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
+import { CurrentKidState } from "states/CurrentKidState";
 import { http } from "api/http";
 import FamilyInfoModal from "components/modal/FamilyInfoModal";
 
 export default function Main() {
   // 유저 state
   const [userInfo, setUserInfo] = useRecoilState(userState);
+  // 자녀 state
+  const [currentKid, setCurrentKid] = useRecoilState(CurrentKidState);
 
   // 가족 정보
   const [familyInfo, setFamilyInfo] = useState([
@@ -50,12 +53,12 @@ export default function Main() {
     }
   }, []);
 
-  const [imgList, setImgList] = useState([0, 1, 2, 3, 4]);
+  const [imgList, setImgList] = useState(currentKid.sampleImageList);
   const navigator = useNavigate();
 
   return (
     <div>
-      <SelectKids />
+      <SelectKids setImgList={setImgList} />
       <Grid
         id="container"
         container
@@ -71,9 +74,7 @@ export default function Main() {
           sx={{
             marginBottom: "3vh",
             width: "85%",
-            background: "white",
-            borderRadius: "5px",
-            boxShadow: "1px 1px 3px #9e9e9e",
+            border: "3px dashed #FFCA28",
             padding: "1vh",
             marginTop: "1.5vh",
           }}
@@ -105,10 +106,7 @@ export default function Main() {
                     setFamilyInfoOpen(true);
                   }}
                 >
-                  <Avatar
-                    sx={{ marginTop: "5px" }}
-                    src={info.userProfileImage}
-                  />
+                  <Avatar sx={{ marginTop: "5px" }} src={info.userProfileImage} />
 
                   <Grid
                     item
@@ -134,33 +132,51 @@ export default function Main() {
         </Grid>
         <Grid item xs={10} sx={{ marginTop: "1.5vh" }}>
           <Masonry columns={2} spacing={1.5} sx={{ margin: 0 }}>
-            {imgList.map(function (img, i) {
-              return (
-                // todo: 실제 이미지로 변경 필요
-                <img
-                  key={i}
-                  src={`/assets/sample/${i}.png`}
-                  style={{
-                    border: "5px solid #FFCA28",
-                    boxShadow: "1px 1px 3px #6f6f6f",
-                  }}
-                  onClick={() => {
-                    navigator("/gallery");
-                  }}
-                  alt="drawing"
-                />
-              );
-            })}
+            {imgList.length === 0 ? (
+              <>
+                {[0, 1, 2, 3, 4].map(function (img, i) {
+                  return (
+                    <img
+                      key={i}
+                      src={`/assets/sample/${i}.png`}
+                      style={{
+                        border: "5px solid #FFCA28",
+                        boxShadow: "1px 1px 3px #6f6f6f",
+                      }}
+                      onClick={() => {
+                        navigator("/gallery");
+                      }}
+                      alt="drawing"
+                    />
+                  );
+                })}
+              </>
+            ) : (
+              <>
+                {imgList.map(function (img, i) {
+                  return (
+                    <img
+                      key={i}
+                      src={img}
+                      style={{
+                        border: "5px solid #FFCA28",
+                        boxShadow: "1px 1px 3px #6f6f6f",
+                      }}
+                      onClick={() => {
+                        navigator("/gallery");
+                      }}
+                      alt="drawing"
+                    />
+                  );
+                })}
+              </>
+            )}
           </Masonry>
         </Grid>
       </Grid>
       <NavBar />
       {/* 가족 정보 모달 */}
-      <FamilyInfoModal
-        userId={clickedId}
-        open={familyInfoOpen}
-        setOpen={setFamilyInfoOpen}
-      />
+      <FamilyInfoModal userId={clickedId} open={familyInfoOpen} setOpen={setFamilyInfoOpen} />
     </div>
   );
 }
