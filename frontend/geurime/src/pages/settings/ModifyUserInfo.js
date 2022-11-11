@@ -88,7 +88,7 @@ export default function ModifyUserInfo() {
       // 유저정보
       let user = {
         familyName: famname,
-        isChild: isAdult,
+        isChild: !isAdult,
         nickname: nickname,
         userBirth: newBirth,
         userGender: gender,
@@ -115,6 +115,7 @@ export default function ModifyUserInfo() {
         copyUserInfo.userBirth = birth;
         copyUserInfo.nickname = nickname;
         copyUserInfo.familyName = famname;
+        copyUserInfo.isChild = !isAdult;
         console.log(copyUserInfo);
         return { ...copyUserInfo };
       });

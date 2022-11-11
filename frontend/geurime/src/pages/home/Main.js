@@ -56,12 +56,7 @@ export default function Main() {
   return (
     <div>
       <SelectKids />
-      <Grid
-        id="container"
-        container
-        justifyContent="center"
-        alignItems="center"
-      >
+      <Grid id="container" container justifyContent="center" alignItems="center">
         {/* 가족 정보 */}
         <Grid item xs={10} sx={{ fontSize: "2.5vh", marginBottom: "1vh" }}>
           {userInfo.familyName}
@@ -104,10 +99,7 @@ export default function Main() {
                     setFamilyInfoOpen(true);
                   }}
                 >
-                  <Avatar
-                    sx={{ marginTop: "5px" }}
-                    src={info.userProfileImage}
-                  />
+                  <Avatar sx={{ marginTop: "5px" }} src={info.userProfileImage} />
 
                   <Grid
                     item
@@ -152,11 +144,7 @@ export default function Main() {
       </Grid>
       <NavBar />
       {/* 가족 정보 모달 */}
-      <FamilyInfoModal
-        userId={clickedId}
-        open={familyInfoOpen}
-        setOpen={setFamilyInfoOpen}
-      />
+      <FamilyInfoModal userId={clickedId} open={familyInfoOpen} setOpen={setFamilyInfoOpen} />
     </div>
   );
 }
