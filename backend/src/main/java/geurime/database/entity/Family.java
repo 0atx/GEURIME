@@ -1,9 +1,6 @@
 package geurime.database.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -57,6 +54,32 @@ public class Family {
             value /= 62;
         } while( value > 0);
         return sb.toString();
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class FamilyMemberResponse{
+        private Long userId;
+        private String nickname;
+        private String userProfileImage;
+        @Builder
+        public FamilyMemberResponse(Long userId, String nickname, String userProfileImage) {
+            this.userId = userId;
+            this.nickname = nickname;
+            this.userProfileImage = userProfileImage;
+        }
+    }
+
+    public void addMember(User user){
+        this.users.add(user);
+    }
+    public void removeMember(User user){
+        this.users.remove(user);
+    }
+
+    public void changeName(String familyName){
+        this.familyName = familyName;
     }
 
     public void setInviteCode(String inviteCode){

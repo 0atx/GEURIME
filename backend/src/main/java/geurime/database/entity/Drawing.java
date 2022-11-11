@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 @Entity
@@ -86,20 +87,14 @@ public class Drawing {
         this.drawingDiarySleep = drawingDiarySleep;
     }
 
-    public void changeDrawingInfo(DrawingBox drawingBox, String drawingTitle, Boolean isLike){
-        this.drawingBox = drawingBox;
-        this.drawingTitle = drawingTitle;
-        this.isLike = isLike;
-    }
-
     public void changeDrawingLocation(DrawingBox drawingBox){
         this.drawingBox = drawingBox;
     }
 
-    public void changeDrawingEmotion(float happy, float sad, float angry){
-        this.emotionHappy = happy;
-        this.emotionSad = sad;
-        this.emotionAngry = angry;
+    public void changeDrawingEmotion(float depression, float violence ,float happniess){
+        this.emotionSad = depression;
+        this.emotionAngry = violence;
+        this.emotionHappy = happniess;
     }
 
     /**
@@ -111,6 +106,7 @@ public class Drawing {
     public static class DrawingInfoResponse{
         private Long drawingId;
         private Long drawingBoxId;
+        private String drawingBoxName;
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDate createTime;
         private String drawingTitle;
@@ -134,14 +130,31 @@ public class Drawing {
     }
 
     /**
+     * 그림 갤러리 응답 DTO
+     */
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class DrawingGalleryResponse{
+        private String drawingBoxName;
+        private List<DrawingGalleryDto> dtoList;
+    }
+
+    /**
      * 그림 갤러리 DTO
      */
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class DrawingGalleryResponse {
+    public static class DrawingGalleryDto {
         private Long drawingId;
         private String drawingImagePath;
+
+        @Builder
+        public DrawingGalleryDto(Long drawingId, String drawingImagePath) {
+            this.drawingId = drawingId;
+            this.drawingImagePath = drawingImagePath;
+        }
     }
 
     /**
@@ -166,16 +179,16 @@ public class Drawing {
         private Long drawingId;
         private Long drawingBoxId;
         private String drawingTitle;
+        private Boolean isLike;
     }
 
     /**
      * 그림보관함, 그림제목 수정
-     * @param drawingBox
-     * @param drawingTitle
      */
-    public void changeDrawingInfo(DrawingBox drawingBox, String drawingTitle){
+    public void changeDrawingInfo(DrawingBox drawingBox, String drawingTitle, Boolean isLike){
         this.drawingBox = drawingBox;
         this.drawingTitle = drawingTitle;
+        this.isLike = isLike;
     }
 
     /**
@@ -270,6 +283,7 @@ public class Drawing {
         private Float emotionSad;
         private Float emotionAngry;
         private String drawingImagePath;
+        private String drawingDiary;
         private Integer drawingDiaryWeather;
         private Integer drawingDiaryFeeling;
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -290,6 +304,14 @@ public class Drawing {
         private LocalDate createTime;
         private String drawingTitle;
         private String drawingImagePath;
+
+        @Builder
+        public DrawingDiaryListResponse(Long drawingId, LocalDate createTime, String drawingTitle, String drawingImagePath) {
+            this.drawingId = drawingId;
+            this.createTime = createTime;
+            this.drawingTitle = drawingTitle;
+            this.drawingImagePath = drawingImagePath;
+        }
     }
 
 }

@@ -7,6 +7,7 @@ import geurime.database.entity.DrawingBox;
 import geurime.database.entity.Kid;
 import geurime.database.enums.BoxType;
 import geurime.database.repository.DrawingBoxRepository;
+import geurime.api.dto.CountHeatMapResponse;
 import geurime.database.repository.DrawingRepository;
 import geurime.database.repository.KidRepository;
 import geurime.exception.CustomException;
@@ -18,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,13 +47,9 @@ public class DrawingServiceImpl implements DrawingService {
     public Drawing.DrawingInfoResponse readDrawingInfo(Long drawingId) {
         Drawing drawing = getDrawing(drawingId);
         Drawing.DrawingInfoResponse response = modelMapper.map(drawing, Drawing.DrawingInfoResponse.class);
+        response.setDrawingId(drawing.getId());
 
         return response;
-    }
-
-    @Override
-    public List<Drawing.DrawingBoxPreviewResponse> readDrawingBoxPreviewList(Long kidId) {
-        return null;
     }
 
     /**
@@ -62,11 +58,19 @@ public class DrawingServiceImpl implements DrawingService {
      * @return
      */
     @Override
-    public List<Drawing.DrawingGalleryResponse> readLikeDrawingList(Long kidId) {
+    public List<Drawing.DrawingGalleryDto> readLikeDrawingList(Long kidId) {
         Kid kid = getKid(kidId);
         List<Drawing> drawingList = drawingRepository.findByDrawingBox_KidAndIsLikeTrue(kid);
-
-        return mapList(drawingList, Drawing.DrawingGalleryResponse.class);
+        List<Drawing.DrawingGalleryDto> responseList = new ArrayList<>(drawingList.size());
+        for (Drawing drawing : drawingList){
+            Drawing.DrawingGalleryDto response = Drawing.DrawingGalleryDto.builder()
+                    .drawingId(drawing.getId())
+                    .drawingImagePath(drawing.getDrawingImagePath())
+                    .build();
+            responseList.add(response);
+        }
+        
+        return responseList;
     }
 
     /**
@@ -75,29 +79,33 @@ public class DrawingServiceImpl implements DrawingService {
      * @return
      */
     @Override
-    public List<Drawing.DrawingGalleryResponse> readBoxDrawingList(Long kidId, Long drawingBoxId) {
+    public Drawing.DrawingGalleryResponse readBoxDrawingList(Long kidId, Long drawingBoxId) {
         DrawingBox drawingBox = getDrawingBox(drawingBoxId);
+
+        Drawing.DrawingGalleryResponse response = new Drawing.DrawingGalleryResponse();
+        response.setDrawingBoxName(drawingBox.getDrawingBoxName());
 
         //조회하는 자녀의 아이디가 일치하면
         if(drawingBox.getKid().getId() == kidId){
             List<Drawing> drawingList = drawingBox.getDrawingList();
-            List<Drawing.DrawingGalleryResponse> responseList = new ArrayList<>(drawingList.size());
+            List<Drawing.DrawingGalleryDto> dtoList = new ArrayList<>(drawingList.size());
 
             //DTO에 매핑
             for (Drawing drawing : drawingList){
-                Drawing.DrawingGalleryResponse response = new Drawing.DrawingGalleryResponse();
-                response.setDrawingId(drawing.getId());
-                response.setDrawingImagePath(drawing.getDrawingImagePath());
+                Drawing.DrawingGalleryDto dto = new Drawing.DrawingGalleryDto();
+                dto.setDrawingId(drawing.getId());
+                dto.setDrawingImagePath(drawing.getDrawingImagePath());
 
-                responseList.add(response);
+                dtoList.add(dto);
             }
 
-            return responseList;
+            response.setDtoList(dtoList);
+
+            return response;
         }
 
-        //불일치하면 빈 list 반환
-        List<Drawing.DrawingGalleryResponse> emptyList = new ArrayList<>();
-        return emptyList;
+        //불일치하면 null 반환
+        return null;
     }
 
     /**
@@ -128,6 +136,7 @@ public class DrawingServiceImpl implements DrawingService {
         drawingRepository.save(drawing);
 
         Drawing.DrawingInfoResponse response = modelMapper.map(drawing, Drawing.DrawingInfoResponse.class);
+        response.setDrawingId(drawing.getId());
 
         return response;
     }
@@ -143,12 +152,11 @@ public class DrawingServiceImpl implements DrawingService {
         DrawingBox drawingBox = getDrawingBox(request.getDrawingBoxId());
 
         if(drawingBox.getKid().getId() == request.getKidId()){
-            drawing.changeDrawingInfo(drawingBox, request.getDrawingTitle());
+            drawing.changeDrawingInfo(drawingBox, request.getDrawingTitle(), request.getIsLike());
             return drawing.getId();
         }
 
         return 0L;
-
     }
 
     /**
@@ -191,6 +199,7 @@ public class DrawingServiceImpl implements DrawingService {
             for (Drawing drawing : deleteDrawingBox.getDrawingList()){
                 drawing.migrationDrawing(basicDrawingBox);
             }
+            deleteDrawingBox.emptyAllDrawings();
         }
 
         drawingBoxRepository.delete(deleteDrawingBox);
@@ -211,6 +220,16 @@ public class DrawingServiceImpl implements DrawingService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<CountHeatMapResponse> readDrawingCountHeatMap(Long kidId) {
+        Kid kid = getKid(kidId);
+
+        List<CountHeatMapResponse> countHeatMapResponseList =  drawingRepository.findDrawingCountList(kid);
+
+        return countHeatMapResponseList;
+
     }
 
     private DrawingBox getDrawingBox(Long drawingBoxId){

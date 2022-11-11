@@ -20,6 +20,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +45,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
     public Drawing.DrawingDiaryInfoResponse readDrawingDiary(Long drawingId) {
         Drawing drawing = getDrawing(drawingId);
         Drawing.DrawingDiaryInfoResponse response = modelMapper.map(drawing, Drawing.DrawingDiaryInfoResponse.class);
+        response.setDrawingId(drawing.getId());
 
         return response;
     }
@@ -57,7 +59,17 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
     public List<Drawing.DrawingDiaryListResponse> readAllDrawingDiaryList(Long kidId) {
         Kid kid = getKid(kidId);
         List<Drawing> drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingBox_DrawingBoxCategory(kid, BoxType.일기);
-        List<Drawing.DrawingDiaryListResponse> responseList = mapList(drawingDiaryList, Drawing.DrawingDiaryListResponse.class);
+        List<Drawing.DrawingDiaryListResponse> responseList = new ArrayList<>(drawingDiaryList.size());
+        for (Drawing drawing : drawingDiaryList){
+            Drawing.DrawingDiaryListResponse response = Drawing.DrawingDiaryListResponse.builder()
+                    .drawingId(drawing.getId())
+                    .createTime(drawing.getCreateTime())
+                    .drawingTitle(drawing.getDrawingTitle())
+                    .drawingImagePath(drawing.getDrawingImagePath())
+                    .build();
+
+            responseList.add(response);
+        }
         return responseList;
     }
 
@@ -70,11 +82,20 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
     @Override
     public List<Drawing.DrawingDiaryListResponse> readByDateDrawingDiaryList(Long kidId, LocalDate date) {
         Kid kid = getKid(kidId);
-        LocalDateTime startTime = date.atStartOfDay();
-        LocalDateTime endTime = date.atTime(23, 59, 59);
 
-        List<Drawing> drawingDiaryList = drawingRepository.findByDrawingBox_KidAndCreateTimeBetween(kid, startTime, endTime);
-        List<Drawing.DrawingDiaryListResponse> responseList = mapList(drawingDiaryList, Drawing.DrawingDiaryListResponse.class);
+        List<Drawing> drawingDiaryList = drawingRepository.findByDrawingBox_KidAndCreateTime(kid, date);
+        List<Drawing.DrawingDiaryListResponse> responseList = new ArrayList<>(drawingDiaryList.size());
+
+        for (Drawing diary : drawingDiaryList){
+            Drawing.DrawingDiaryListResponse response = Drawing.DrawingDiaryListResponse.builder()
+                    .drawingId(diary.getId())
+                    .createTime(diary.getCreateTime())
+                    .drawingTitle(diary.getDrawingTitle())
+                    .drawingImagePath(diary.getDrawingImagePath())
+                    .build();
+            responseList.add(response);
+        }
+
         return responseList;
     }
 
@@ -107,7 +128,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
 
         //이미지 업로드 후 반환된 이미지경로
         String drawingImagePath = "";
-        if(!imageFile.isEmpty()){
+        if(imageFile != null && !imageFile.isEmpty()){
             drawingImagePath = s3Uploader.uploadAndGetUrl(imageFile);
         }
 
@@ -127,6 +148,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
         drawingRepository.save(drawing);
 
         Drawing.DrawingDiaryInfoResponse response = modelMapper.map(drawing, Drawing.DrawingDiaryInfoResponse.class);
+        response.setDrawingId(drawing.getId());
 
         return response;
     }

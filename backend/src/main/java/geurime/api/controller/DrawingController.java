@@ -3,6 +3,8 @@ package geurime.api.controller;
 import geurime.api.dto.common.BasicResponse;
 import geurime.api.service.DrawingServiceImpl;
 import geurime.database.entity.Drawing;
+import geurime.api.dto.CountHeatMapResponse;
+import geurime.exception.CustomException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -25,52 +27,79 @@ public class DrawingController {
     @GetMapping("/{drawingId}")
     @ApiOperation(value = "그림기록 상세조회", notes = "그림기록 id를 받아 상세정보를 조회한다")
     public ResponseEntity<BasicResponse<Drawing.DrawingInfoResponse>> readDrawingInfo(@PathVariable("drawingId") Long drawingId){
-        Drawing.DrawingInfoResponse drawingInfoResponse = drawingService.readDrawingInfo(drawingId);
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingInfoResponse), HttpStatus.OK);
+        try {
+            Drawing.DrawingInfoResponse drawingInfoResponse = drawingService.readDrawingInfo(drawingId);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingInfoResponse), HttpStatus.OK);
+        } catch (CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
-
-    // 검색 방법 구현해야함
-//    @GetMapping("/preview/{kidId}")
-//    @ApiOperation(value = "그림보관함 미리보기 조회", notes = "자녀 id를 받아 보관함 미리보기를 조회한다")
-//    public ResponseEntity<BasicResponse<Drawing.DrawingBoxPreviewResponse>> readDrawingBoxPreview(@PathVariable("kidId") Long kidId){
-//
-//        return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingInfoResponse), HttpStatus.OK);
-//    }
 
     @GetMapping("/like/{kidId}")
     @ApiOperation(value = "좋아요 그림기록 리스트 조회", notes = "자녀 id를 받아 좋아요한 그림이미지를 조회한다")
-    public ResponseEntity<BasicResponse<List<Drawing.DrawingGalleryResponse>>> readLikeDrawingList(@PathVariable("kidId") Long kidId){
-        List<Drawing.DrawingGalleryResponse> drawingGalleryResponses = drawingService.readLikeDrawingList(kidId);
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingGalleryResponses), HttpStatus.OK);
+    public ResponseEntity<BasicResponse<List<Drawing.DrawingGalleryDto>>> readLikeDrawingList(@PathVariable("kidId") Long kidId){
+        try {
+            List<Drawing.DrawingGalleryDto> drawingGalleryResponse = drawingService.readLikeDrawingList(kidId);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingGalleryResponse), HttpStatus.OK);
+        } catch (CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/heat-map/{kidId}")
+    @ApiOperation(value = "그림기록 통계 조회", notes = "자녀 id를 받아 날짜별로 업로드한 횟수를 그림이미지를 조회한다")
+    public ResponseEntity<BasicResponse<List<CountHeatMapResponse>>> readDrawingCount(@PathVariable("kidId") Long kidId){
+        try {
+            List<CountHeatMapResponse> countHeatMapResponseList = drawingService.readDrawingCountHeatMap(kidId);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, countHeatMapResponseList), HttpStatus.OK);
+        } catch (CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "그림기록 등록", notes = "그림 보관함과 그림 제목, 이미지 파일을 받아 그림기록을 등록한다.")
     public ResponseEntity<BasicResponse<Drawing.DrawingInfoResponse>> createDrawing(@RequestPart(value = "imageFile") MultipartFile imageFile, @RequestPart(value = "request") Drawing.DrawingPostRequest request){
-        Drawing.DrawingInfoResponse response = drawingService.createDrawing(request, imageFile);
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
+        try {
+            Drawing.DrawingInfoResponse response = drawingService.createDrawing(request, imageFile);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
+        } catch (CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping
     @ApiOperation(value = "그림기록 수정", notes = "그림 보관함과 그림 제목을 받아 그림기록을 수정한다.")
     public ResponseEntity<BasicResponse<Long>> updateDrawing(@RequestBody Drawing.DrawingPutRequest request){
-        Long drawingId = drawingService.updateDrawing(request);
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingId), HttpStatus.OK);
+        try {
+            Long drawingId = drawingService.updateDrawing(request);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingId), HttpStatus.OK);
+        } catch (CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/migration")
     @ApiOperation(value = "그림기록 리스트 보관함 이동", notes = "그림 보관함 id 리스트와 이동시킬 그림보관함의 id를 받아 그림기록 보관함을 수정한다.")
     public ResponseEntity<BasicResponse<Long>> migrateDrawingList(@RequestBody Drawing.DrawingMigrationPutRequest request){
-        Long drawingBoxId = drawingService.drawingBoxMigration(request);
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingBoxId), HttpStatus.OK);
+        try {
+            Long drawingBoxId = drawingService.drawingBoxMigration(request);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingBoxId), HttpStatus.OK);
+        } catch (CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping
     @ApiOperation(value = "그림기록 삭제", notes = "유저 id로 주인인지 검증하고 그림기록을 삭제한다.")
     public ResponseEntity<BasicResponse<String>> deleteDrawing(@RequestParam Long kidId, @RequestParam Long drawingId){
-        Boolean isDelete = drawingService.deleteDrawing(kidId, drawingId);
-        String result = isDelete == true ? "삭제완료" : "삭제실패";
-        return new ResponseEntity<>(makeBasicResponse(SUCCESS, result), HttpStatus.OK);
+        try {
+            Boolean isDelete = drawingService.deleteDrawing(kidId, drawingId);
+            String result = isDelete == true ? "삭제완료" : "삭제실패";
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, result), HttpStatus.OK);
+        } catch (CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**

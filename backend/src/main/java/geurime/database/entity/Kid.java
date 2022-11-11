@@ -84,6 +84,32 @@ public class Kid {
     }
 
     /**
+     * 자녀 정보 조회 DTO + 샘플이미지
+     */
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class KidMainInfoResponse{
+        private Long kidId;
+        private String kidName;
+        private String kidProfileImage;
+        @JsonFormat(pattern = "yyyy-MM-dd")
+        private LocalDate kidBirth;
+        private List<DrawingBoxDto> drawingBoxDtoList;
+        private List<String> sampleImageList;
+
+        @Builder
+        public KidMainInfoResponse(Long kidId, String kidName, String kidProfileImage, LocalDate kidBirth, List<DrawingBoxDto> drawingBoxDtoList, List<String> sampleImageList) {
+            this.kidId = kidId;
+            this.kidName = kidName;
+            this.kidProfileImage = kidProfileImage;
+            this.kidBirth = kidBirth;
+            this.drawingBoxDtoList = drawingBoxDtoList;
+            this.sampleImageList = sampleImageList;
+        }
+    }
+
+    /**
      * 자녀 정보 조회 DTO
      */
     @Getter
@@ -117,5 +143,16 @@ public class Kid {
         private Long drawingBoxId;
         private String drawingBoxName;
         private String drawingBoxCategory;
+        private String thumbnailImage;
+        private Long drawingCount;
+
+        @Builder
+        public DrawingBoxDto(Long drawingBoxId, String drawingBoxName, String drawingBoxCategory, String thumbnailImage, Long drawingCount) {
+            this.drawingBoxId = drawingBoxId;
+            this.drawingBoxName = drawingBoxName;
+            this.drawingBoxCategory = drawingBoxCategory;
+            this.thumbnailImage = thumbnailImage;
+            this.drawingCount = drawingCount;
+        }
     }
 }

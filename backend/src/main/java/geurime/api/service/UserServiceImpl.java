@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //이미지 업로드 후 반환된 이미지경로 db에 저장
-        if(!profileImage.isEmpty()){
+        if(profileImage != null && !profileImage.isEmpty()){
             String userProfileImage = s3Uploader.uploadAndGetUrl(profileImage);
             user.updateProfileImage(userProfileImage);
         }else{
@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
 
         user.inviteSingUpUpdate(request);
         //이미지 업로드 후 반환된 이미지경로 db에 저장
-        if(!profileImage.isEmpty()){
+        if(profileImage != null && !profileImage.isEmpty()){
             String userProfileImage = s3Uploader.uploadAndGetUrl(profileImage);
             user.updateProfileImage(userProfileImage);
         }else{
@@ -163,13 +163,15 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
+        Family family = familyRepository.findById(user.getFamily().getId())
+                .orElseThrow(() -> new CustomException(CustomExceptionList.FAMILY_NOT_FOUND_ERROR));
+        family.changeName(request.getFamilyName());
+
         user.updateUserInfo(request);
         //이미지 업로드 후 반환된 이미지경로 db에 저장
         if(imageFile != null && !imageFile.isEmpty()){
             String userProfileImage = s3Uploader.uploadAndGetUrl(imageFile);
             user.updateProfileImage(userProfileImage);
-        }else{
-            user.updateProfileImage("");
         }
         return modelMapper.map(user, User.UserInfoResponse.class);
     }
@@ -177,8 +179,43 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long userId) {
         //7일간 회원정보 유지하는 기능 추후 구현예정
+        User user = userRepository.findByIdFetch(userId)
+                .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
-        userRepository.deleteById(userId);
+        Family family = user.getFamily();
+        if(family != null){
+            family.removeMember(user);
+            List<User> users = family.getUsers();
+            if(users.isEmpty()){
+                familyRepository.delete(family);
+            }
+        }
+        userRepository.delete(user);
 
     }
+
+    /**
+     * 유저의 가족멤버 조회
+     * @param userId
+     * @return
+     */
+    public List<Family.FamilyMemberResponse> readFamilyMembers(Long userId){
+        User user = userRepository.findByIdFetch(userId)
+                .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
+
+        Family family = user.getFamily();
+        List<Family.FamilyMemberResponse> responseList = new ArrayList<>();
+
+        for (User u : family.getUsers()){
+            responseList.add(
+                    Family.FamilyMemberResponse.builder()
+                    .userId(u.getId())
+                    .nickname(u.getNickname())
+                    .userProfileImage(u.getUserProfileImage())
+                    .build()
+            );
+        }
+        return responseList;
+    }
+
 }

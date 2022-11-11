@@ -3,16 +3,20 @@ package geurime.api.service;
 import geurime.api.service.inferface.CommentService;
 import geurime.database.entity.Board;
 import geurime.database.entity.Comment;
+import geurime.database.entity.User;
 import geurime.database.repository.BoardRepository;
 import geurime.database.repository.CommentRepository;
 import geurime.database.repository.UserRepository;
 import geurime.exception.CustomException;
 import geurime.exception.CustomExceptionList;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -21,6 +25,28 @@ public class CommentServiceImpl implements CommentService {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper = new ModelMapper();
+
+    public List<Comment.CommentResponse> readComment(Long boardId){
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new CustomException(CustomExceptionList.BOARD_NOT_FOUND_ERROR));
+
+        //댓글
+        List<Comment> commentList = board.getCommentList();
+        List<Comment.CommentResponse> responseList = new ArrayList<>(commentList.size());
+
+        for (Comment comment : commentList){
+            User commentUser = userRepository.findById(comment.getCommentUserId())
+                    .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
+
+            Comment.CommentResponse response = modelMapper.map(comment, Comment.CommentResponse.class);
+            response.setCommentUserNickname(commentUser.getNickname());
+            response.setCommentUserProfile(commentUser.getUserProfileImage());
+
+            responseList.add(response);
+        }
+        return responseList;
+    }
 
     /**
      * 댓글을 작성하고 생성된 댓글의 id를 반환한다.

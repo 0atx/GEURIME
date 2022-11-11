@@ -1,10 +1,12 @@
 package geurime.api.service;
 
 import geurime.api.service.inferface.DrawingBoxService;
+import geurime.database.entity.Drawing;
 import geurime.database.entity.DrawingBox;
 import geurime.database.entity.Kid;
 import geurime.database.enums.BoxType;
 import geurime.database.repository.DrawingBoxRepository;
+import geurime.database.repository.DrawingRepository;
 import geurime.database.repository.KidRepository;
 import geurime.exception.CustomException;
 import geurime.exception.CustomExceptionList;
@@ -12,12 +14,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class DrawingBoxServiceImpl implements DrawingBoxService {
     private final DrawingBoxRepository drawingBoxRepository;
+    private final DrawingRepository drawingRepository;
     private final KidRepository kidRepository;
 
     /**
@@ -27,7 +33,7 @@ public class DrawingBoxServiceImpl implements DrawingBoxService {
      * @return
      */
     @Override
-    public Long createDrawingBox(Long kidId, String drawingBoxName) {
+    public Kid.KidInfoResponse createDrawingBox(Long kidId, String drawingBoxName) {
         Kid kid = kidRepository.findById(kidId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.KID_NOT_FOUND_ERROR));
 
@@ -38,7 +44,35 @@ public class DrawingBoxServiceImpl implements DrawingBoxService {
                 .build();
         drawingBoxRepository.save(drawingBox);
 
-        return drawingBox.getId();
+        //KidServiceImpl 메서드와 동일
+        Kid.KidInfoResponse response = Kid.KidInfoResponse.builder()
+                .kidId(kid.getId())
+                .kidName(kid.getKidName())
+                .kidProfileImage(kid.getKidProfileImage())
+                .kidBirth(kid.getKidBirth())
+                .build();
+
+        List<DrawingBox> drawingBoxList = kid.getDrawingBoxList();
+        List<Kid.DrawingBoxDto> drawingBoxDtoList = new ArrayList<>(drawingBoxList.size());
+
+        for (DrawingBox box : drawingBoxList){
+            Optional<Drawing> firstDrawing = drawingRepository.findFirstByDrawingBox(box);
+            String thumbnailImage = firstDrawing.isPresent() ? firstDrawing.get().getDrawingImagePath() : null;
+            long drawingCount = drawingRepository.countByDrawingBox(box);
+
+            Kid.DrawingBoxDto drawingBoxDto = Kid.DrawingBoxDto.builder()
+                    .drawingBoxId(box.getId())
+                    .drawingBoxName(box.getDrawingBoxName())
+                    .drawingBoxCategory(box.getDrawingBoxCategory().toString())
+                    .thumbnailImage(thumbnailImage)
+                    .drawingCount(drawingCount)
+                    .build();
+            drawingBoxDtoList.add(drawingBoxDto);
+        }
+
+        response.setDrawingBoxDtoList(drawingBoxDtoList);
+
+        return response;
     }
 
     /**
