@@ -21,6 +21,9 @@ export default function DeleteUserModal({ open, handleClose }) {
   async function deleteUser() {
     const response = await http.delete(`/users/${userInfo.userId}`);
     console.log(response.data);
+
+    window.localStorage.clear();
+
     navigate(`/`);
   }
 
