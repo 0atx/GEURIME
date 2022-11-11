@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DrawingRepository extends JpaRepository<Drawing, Long> {
-    List<Drawing> findByDrawingBox_KidAndIsLikeTrue(Kid kid);
+    List<Drawing> findByDrawingBox_KidAndIsLikeTrueOrderByIdDesc(Kid kid);
 
-    List<Drawing> findByDrawingBox_KidAndDrawingBox_DrawingBoxCategory(Kid kid, BoxType drawingBoxCategory);
+    List<Drawing> findByDrawingBox_KidAndDrawingBox_DrawingBoxCategoryOrderByIdDesc(Kid kid, BoxType drawingBoxCategory);
 
-    List<Drawing> findByDrawingBox_KidAndCreateTime(Kid kid, LocalDate createTime);
+    List<Drawing> findByDrawingBox_KidAndCreateTimeOrderByIdDesc(Kid kid, LocalDate createTime);
 
-    List<Drawing> findByDrawingBox_KidAndDrawingTitleContains(Kid kid, String drawingTitle);
+    List<Drawing> findByDrawingBox_KidAndDrawingTitleContainsAndDrawingBox_DrawingBoxCategoryOrderByIdDesc(Kid kid, String drawingTitle, BoxType drawingBoxCategory);
 
     Optional<Drawing> findFirstByDrawingBox(DrawingBox drawingBox);
 

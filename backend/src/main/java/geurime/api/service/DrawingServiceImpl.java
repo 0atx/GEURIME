@@ -60,7 +60,7 @@ public class DrawingServiceImpl implements DrawingService {
     @Override
     public List<Drawing.DrawingGalleryDto> readLikeDrawingList(Long kidId) {
         Kid kid = getKid(kidId);
-        List<Drawing> drawingList = drawingRepository.findByDrawingBox_KidAndIsLikeTrue(kid);
+        List<Drawing> drawingList = drawingRepository.findByDrawingBox_KidAndIsLikeTrueOrderByIdDesc(kid);
         List<Drawing.DrawingGalleryDto> responseList = new ArrayList<>(drawingList.size());
         for (Drawing drawing : drawingList){
             Drawing.DrawingGalleryDto response = Drawing.DrawingGalleryDto.builder()
