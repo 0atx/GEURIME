@@ -119,6 +119,8 @@ export default function ModifyUserInfo() {
         copyUserInfo.userBirth = birth;
         copyUserInfo.nickname = nickname;
         copyUserInfo.familyName = famname;
+        copyUserInfo.isChild = !isAdult;
+        console.log(copyUserInfo);
         return { ...copyUserInfo };
       });
     }
