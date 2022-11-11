@@ -23,6 +23,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -83,23 +84,38 @@ public class BoardServiceImpl implements BoardService {
         boardInfoResponse.setWriterNickname(user.getNickname());
 
         //댓글
-        List<Comment> commentList = board.getCommentList();
+        List<Comment> commentList = commentRepository.findByBoard(board);
+
         List<Board.BoardCommentDto> boardCommentDtoList = new ArrayList<>(commentList.size());
+        String ghostUser = "탈퇴한 회원";
 
         for (Comment comment : commentList){
-            User commentUser = userRepository.findById(comment.getCommentUserId())
-                    .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
+            Optional<User> commentUser = userRepository.findById(comment.getCommentUserId());
 
-            Board.BoardCommentDto commentDto = Board.BoardCommentDto.builder()
-                    .commentId(comment.getId())
-                    .commentUserId(comment.getCommentUserId())
-                    .commentUserProfile(commentUser.getUserProfileImage())
-                    .commentUserNickname(commentUser.getNickname())
-                    .createTime(comment.getCreateTime())
-                    .updateTime(comment.getUpdateTime())
-                    .commentContent(comment.getCommentContent())
-                    .build();
-            boardCommentDtoList.add(commentDto);
+            if(commentUser.isPresent()){
+                Board.BoardCommentDto commentDto = Board.BoardCommentDto.builder()
+                        .commentId(comment.getId())
+                        .commentUserId(comment.getCommentUserId())
+                        .commentUserProfile(commentUser.get().getUserProfileImage())
+                        .commentUserNickname(commentUser.get().getNickname())
+                        .createTime(comment.getCreateTime())
+                        .updateTime(comment.getUpdateTime())
+                        .commentContent(comment.getCommentContent())
+                        .build();
+                boardCommentDtoList.add(commentDto);
+            }else{
+                Board.BoardCommentDto commentDto = Board.BoardCommentDto.builder()
+                        .commentId(comment.getId())
+                        .commentUserId(comment.getCommentUserId())
+                        .commentUserNickname(ghostUser)
+                        .createTime(comment.getCreateTime())
+                        .updateTime(comment.getUpdateTime())
+                        .commentContent(comment.getCommentContent())
+                        .build();
+                boardCommentDtoList.add(commentDto);
+            }
+
+
         }
         boardInfoResponse.setBoardCommentDtoList(boardCommentDtoList);
 
