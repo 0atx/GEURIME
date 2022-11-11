@@ -318,7 +318,8 @@ export default function RegistDiary({}) {
                     }}
                   />
                 </label>
-                {imageUrl && (
+                {/* 자르기 버튼 */}
+                {/* {imageUrl && (
                   <div style={{ textAlign: "right" }}>
                     <IconButton>
                       <CropRoundedIcon
@@ -329,7 +330,7 @@ export default function RegistDiary({}) {
                       />
                     </IconButton>
                   </div>
-                )}
+                )} */}
               </>
             ) : (
               <Paper
