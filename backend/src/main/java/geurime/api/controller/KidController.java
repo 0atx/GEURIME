@@ -23,10 +23,10 @@ public class KidController {
 
     @GetMapping("/{kidId}")
     @ApiOperation(value = "자녀 정보 조회", notes = "자녀 Id를 받아 자녀 정보를 조회한다")
-    public ResponseEntity<BasicResponse<Kid.KidInfoResponse>> readKidInfo(@PathVariable("kidId") Long kidId) {
+    public ResponseEntity<BasicResponse<Kid.KidMainInfoResponse>> readKidInfo(@PathVariable("kidId") Long kidId) {
         try {
-            Kid.KidInfoResponse kidInfoResponse = kidService.readKidInfo(kidId);
-            return new ResponseEntity<>(makeBasicResponse(SUCCESS, kidInfoResponse), HttpStatus.OK);
+            Kid.KidMainInfoResponse response = kidService.readKidInfo(kidId);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
         } catch (CustomException e) {
             return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
         }
