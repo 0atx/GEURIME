@@ -45,10 +45,10 @@ public class KidServiceImpl implements KidService {
      * @return
      */
     @Override
-    public Kid.KidInfoResponse readKidInfo(Long kidId) {
+    public Kid.KidMainInfoResponse readKidInfo(Long kidId) {
         Kid kid = kidRepository.findByIdWithDrawingBox(kidId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.KID_NOT_FOUND_ERROR));
-        Kid.KidInfoResponse response = modelMapper.map(kid, Kid.KidInfoResponse.class);
+        Kid.KidMainInfoResponse response = modelMapper.map(kid, Kid.KidMainInfoResponse.class);
 
         List<DrawingBox> drawingBoxList = kid.getDrawingBoxList();
         List<Kid.DrawingBoxDto> drawingBoxDtoList = new ArrayList<>(drawingBoxList.size());
@@ -69,7 +69,14 @@ public class KidServiceImpl implements KidService {
         }
 
         response.setDrawingBoxDtoList(drawingBoxDtoList);
-        
+
+        List<Drawing> sampleDrawingList = drawingRepository.findTop5ByDrawingBox_KidOrderByCreateTimeDesc(kid);
+        List<String> sampleImageList = new ArrayList<>();
+        for (Drawing sample : sampleDrawingList){
+            sampleImageList.add(sample.getDrawingImagePath());
+        }
+        response.setSampleImageList(sampleImageList);
+
         return response;
     }
 
