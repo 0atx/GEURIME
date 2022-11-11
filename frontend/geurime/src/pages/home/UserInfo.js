@@ -120,7 +120,7 @@ export default function UserInfo() {
       // 유저정보
       let user = {
         familyName: familyNameInput.current.value,
-        isChild: isAdult,
+        isChild: !isAdult,
         nickname: nickNameInput.current.value,
         userBirth: birth,
         userGender: userInfo.userGender,
@@ -186,7 +186,7 @@ export default function UserInfo() {
 
       // 유저정보
       let user = {
-        isChild: isAdult,
+        isChild: !isAdult,
         nickname: nickNameInput.current.value,
         userBirth: birth,
         userGender: userInfo.userGender,
