@@ -93,7 +93,7 @@ public class DrawingDiaryController {
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{drawingId}")
     @ApiOperation(value = "자녀의 그림일기 삭제", notes = "자녀의 그림일기를 삭제한다.")
     public ResponseEntity<BasicResponse<Boolean>> deleteDrawingDiary(@PathVariable Long drawingId) {
         try {
