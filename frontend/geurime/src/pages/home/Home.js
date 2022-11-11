@@ -3,12 +3,13 @@ import Kakao from "components/common/Kakao";
 import Google from "components/common/Google";
 import { Grid } from "@mui/material";
 import easel from "assets/easel.png";
-import bottomcrayon from "assets/icon/bottomcrayon.png";
-import topcrayon from "assets/icon/topcrayon.png";
 import logotext from "assets/logo/logotext.png";
 import { useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
+import bg from "assets/background/home.png";
+import top from "assets/background/topcrayon.png";
+import bottom from "assets/background/bottomcrayon.png";
 
 export default function Home() {
   // userInfo
@@ -17,13 +18,12 @@ export default function Home() {
   const params = useParams();
 
   let easelStyle = {
-    margin: "5vw",
     width: "100%",
-    height: "42vh",
+    height: "50vh",
     backgroundImage: `url(${easel})`,
     backgroundRepeat: "no-repeat",
-    backgroundPosition: "top center",
-    backgroundSize: "31vh",
+    backgroundPosition: "center",
+    backgroundSize: "35vh",
   };
 
   const mounted = useRef(false);
@@ -49,25 +49,49 @@ export default function Home() {
   return (
     <Grid
       container
-      style={{ background: "#FFFFF8" }}
+      style={{
+        minHeight: "100vh",
+      }}
       justifyContent="center"
       alignItems="center"
       textAlign="center"
     >
-      {/* 상단 크레파스 */}
-      <Grid item xs={12}>
-        <img src={topcrayon} width="100%" alt="crayon" />
-      </Grid>
-      <Grid item xs={12} sx={{ fontSize: "3vh", marginTop: "4vh" }}>
+      <Grid
+        item
+        xs={12}
+        sx={{
+          minHeight: "10vh",
+          maxHight: "10vh",
+          backgroundImage: `url(${top})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "100%",
+          marginBottom: "5vh",
+        }}
+      ></Grid>
+      <Grid
+        item
+        xs={12}
+        sx={{
+          minHeight: "7vh",
+          maxHight: "7vh",
+          fontSize: "3vh",
+        }}
+      >
         그림일기 도우미
       </Grid>
-      {/* 그리미 텍스트 로고 */}
-      <Grid item xs={12} sx={{ marginTop: "2vh" }}>
+      <Grid
+        item
+        xs={12}
+        sx={{
+          minHeight: "12vh",
+          maxHight: "12vh",
+          fontSize: "3vh",
+        }}
+      >
         <img src={logotext} width="60%" alt="text" />
       </Grid>
-      {/* 이젤 */}
-      <div style={easelStyle}>
-        <Grid container sx={{ marginTop: "10vh" }}>
+      <Grid item xs={12} sx={easelStyle}>
+        <Grid container sx={{ marginTop: "15vh" }}>
           <Grid item xs={12} sx={{ fontSize: "3vh", marginBottom: "3vh" }}>
             간편 로그인
           </Grid>
@@ -76,11 +100,19 @@ export default function Home() {
             <Google />
           </Grid>
         </Grid>
-      </div>
-      {/* 하단 크레파스 */}
-      <Grid item xs={12}>
-        <img src={bottomcrayon} width="100%" alt="crayon" />
       </Grid>
+      <Grid
+        item
+        xs={12}
+        sx={{
+          minHeight: "10vh",
+          maxHeight: "10vh",
+          backgroundImage: `url(${bottom})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "100%",
+          marginTop: "5vh",
+        }}
+      ></Grid>
     </Grid>
   );
 }
