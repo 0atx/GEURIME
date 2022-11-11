@@ -41,40 +41,11 @@ import Modal from "components/common/Modal";
 import ModeEditRoundedIcon from "@mui/icons-material/ModeEditRounded";
 import CropModal from "components/modal/CropModal";
 import CropRoundedIcon from "@mui/icons-material/CropRounded";
-// import "pintura/pintura.css";
-// import { openDefaultEditor } from "pintura/pintura";
-import ReactCrop from "react-image-crop";
 
 export default function RegistDiary({}) {
   // 이미지 편집
   const [isUpdated, setIsUpdated] = useState(false);
   const [updatedImage, setUpdatedImage] = useState();
-
-  // const editImage = (image, done) => {
-  //   const imageFile = image.pintura ? image.pintura.file : image;
-  //   const imageState = image.pintura ? image.pintura.data : {};
-
-  //   const editor = openDefaultEditor({
-  //     src: imageFile,
-  //     imageState,
-  //   });
-
-  //   editor.on("close", () => {
-  //     // the user cancelled editing the image
-  //   });
-
-  //   editor.on("process", ({ dest, imageState }) => {
-  //     Object.assign(dest, {
-  //       pintura: { file: imageFile, data: imageState },
-  //     });
-  //     done(dest);
-  //   });
-  // };
-
-  // 그리기 풀 모달 transition
-  const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
 
   // 등록완료 모달
   const [open, setOpen] = useState(false);
@@ -149,7 +120,7 @@ export default function RegistDiary({}) {
       file = dataURLtoFile(canvas, "image.png");
     } else if (isUpdated) {
       // 이미지를 편집했을 경우
-      file = updatedImage;
+      file = dataURLtoFile(updatedImage, "croppedImage.png");
     } else {
       // 파일 전송
       file = imgRef.current.files[0];
@@ -304,34 +275,72 @@ export default function RegistDiary({}) {
                 />
               </Paper>
             ) : imageUrl ? (
-              <>
-                <label htmlFor="input">
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      width: "100%",
-                      height: "100%",
-                      backgroundImage: `url(${imageUrl})`,
-                      backgroundSize: "contain",
-                      backgroundRepeat: "no-repeat",
-                      backgroundPosition: "center",
-                    }}
-                  />
-                </label>
-                {/* 자르기 버튼 */}
-                {/* {imageUrl && (
-                  <div style={{ textAlign: "right" }}>
-                    <IconButton>
-                      <CropRoundedIcon
-                        sx={{ color: "#9e9e9e" }}
+              // 이미지를 편집했을 경우
+              isUpdated ? (
+                <>
+                  <label htmlFor="input">
+                    <Paper
+                      elevation={0}
+                      sx={{
+                        width: "100%",
+                        height: "100%",
+                        backgroundImage: `url(${updatedImage})`,
+                        backgroundSize: "contain",
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "center",
+                      }}
+                    />
+                  </label>
+                  {/* 자르기 버튼 */}
+                  {imageUrl && (
+                    <div style={{ textAlign: "right" }}>
+                      <Btn
+                        sx={{
+                          color: "#9e9e9e",
+                        }}
                         onClick={() => {
                           setOpenCrop(true);
                         }}
-                      />
-                    </IconButton>
-                  </div>
-                )} */}
-              </>
+                      >
+                        <CropRoundedIcon />
+                        &nbsp;자르기
+                      </Btn>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <label htmlFor="input">
+                    <Paper
+                      elevation={0}
+                      sx={{
+                        width: "100%",
+                        height: "100%",
+                        backgroundImage: `url(${imageUrl})`,
+                        backgroundSize: "contain",
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "center",
+                      }}
+                    />
+                  </label>
+                  {/* 자르기 버튼 */}
+                  {imageUrl && (
+                    <div style={{ textAlign: "right" }}>
+                      <Btn
+                        sx={{
+                          color: "#9e9e9e",
+                        }}
+                        onClick={() => {
+                          setOpenCrop(true);
+                        }}
+                      >
+                        <CropRoundedIcon />
+                        &nbsp;자르기
+                      </Btn>
+                    </div>
+                  )}
+                </>
+              )
             ) : (
               <Paper
                 sx={{
@@ -404,8 +413,11 @@ export default function RegistDiary({}) {
         open={openCrop}
         handleClose={() => {
           setOpenCrop(false);
+          setIsUpdated(true);
         }}
         url={imageUrl}
+        updatedImage={updatedImage}
+        setUpdatedImage={setUpdatedImage}
       ></CropModal>
     </div>
   );
