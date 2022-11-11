@@ -3,7 +3,7 @@
 @since 2022.11.02
 */
 
-import { Avatar, Button, Grid, Paper, TextField } from "@mui/material";
+import { Avatar, Box, Button, Grid, Paper, TextField } from "@mui/material";
 import { http } from "api/http";
 import { useEffect, useRef, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom";
@@ -22,7 +22,7 @@ import NoCommentModal from "components/modal/NoCommentModal";
 
 export default function DetailBoard( ) { 
   const location = useLocation()
-  const [commentDtoList, setCommentDtoList] = useState([
+  const [commentList, setCommentList] = useState([
     { 'commentId': 1, 'commentUserId': 20, 'commentUserProfile': 'https://geurime-a506.s3.ap-northeast-2.amazonaws.c…86a5a%5Chome%5Cubuntu%5Cstatic%5CsunnyClicked.png', 'commentUserNickname': '해안', 'createTime': '2022-11-03 14:41:00', 'updateTime': null },
     ])  
   const [board, setBoard] = useState({
@@ -57,16 +57,16 @@ export default function DetailBoard( ) {
     }
   },[boardInfo])
   
+  
   const navigator = useNavigate();
   // 페이지 들어왔을때 엑시오스 요청
   const getDetail = async () => {
-    console.log({ 페이지id: location.pathname.slice(13,) })
     const boardid = location.pathname.slice(13,);
     const response = await http.get(`/boards/${boardid}`);
     if (response.data.message == "success") {
       setBoard(response.data.data)
       setBoardInfo(response.data.data)
-      setCommentDtoList(response.data.data.boardCommentDtoList)
+      setCommentList(response.data.data.boardCommentDtoList)
     } else {
       alert("게시글을 불러오지 못했습니다");
     }
@@ -80,30 +80,52 @@ export default function DetailBoard( ) {
     else{
       getDetail();
     }
-
+    
   }, [check])
-
+  
   const [comment, setComment] = useState()
-
+  
   useEffect(() => {
-    console.log({게시판정보: boardInfo  })
-    console.log({ 댓글리스트: commentDtoList })
-    console.log({유저정보: userInfo})
-    console.log({댓글: comment})
-  }, [commentDtoList])
-
-
+    setCommentLen(commentList.length)
+  }, [commentList])
+  
+  
   const commentRef = useRef(null);
-
+  
   // 댓글 모달
-    const [openNoCommentModal, setOpenNoCommentModal] = useState(false);
+  const [openNoCommentModal, setOpenNoCommentModal] = useState(false);
   // 댓글 내용 없음 모달 닫기
   const closeNoCommentModal = () => {
     setOpenNoCommentModal(false);
   };
+  // 댓글 개수
+  const [commentLen, setCommentLen] = useState(0)
+  
+  // 댓글 불러오기
+  useEffect(() => {
+    getComment()
+  }, [board])
+
+  const getComment = async () => {
+    const boardid = location.pathname.slice(13,);
+    const response = await http.get(`/comments/${boardid}`);
+    if (response.data.message == "success") {
+      setCommentList(response.data.data)
+      console.log({댓글: response.data.data})
+    } else {
+      alert("댓글을 불러오지 못했습니다");
+    }
+  }
+
+    // 편집 댓글이 하나인지 여부
+    const [checkOne, setCheckOne] = useState(false);
+  //   const clickCheck = () => {
+  //     setCheckOne(true)
+  // }
   
   function commentKeyword(e) {
     if (e.key === "Enter") {
+      console.log('엔터!')
       postComment()
     }
   }
@@ -111,7 +133,6 @@ export default function DetailBoard( ) {
   const postComment = async () => {
     // commentUserId 리코일에서 가져오기
     const boardid = location.pathname.slice(13,);
-    console.log({ 현재댓글: commentRef.current.value });
     if (commentRef.current.value != 0) { 
     const response = await http.post(`/comments`, 
       {
@@ -123,14 +144,9 @@ export default function DetailBoard( ) {
 
       if (response.data.message == "success") {
         if (commentRef.current.value !== 0) {
-          setCommentDtoList([...commentDtoList, {
-            commentUserNickname: userInfo.nickname,
-            commentContent: commentRef.current.value,
-            commentUserId: userInfo.userId,
-            commentUserProfile: userInfo.userProfileImage,
-            createTime: moment().format('YYYY-MM-DD HH:mm:ss')
-          }])
+          getComment()
           commentRef.current.value = "";
+          
         }
       }
 
@@ -149,7 +165,7 @@ export default function DetailBoard( ) {
   >
     <BackMenu
             isLeft={true}
-            title={'['+ board.boardCategory +'] ' + board.boardTitle}
+            title={`${board.boardCategory} 게시판`}
             isRight={rightNav}
             clickRight={() => {
               navigator("/modifyBoard");
@@ -165,7 +181,7 @@ export default function DetailBoard( ) {
         fontWeight:"bold"
         }}
          >
-          [{board.boardCategory}] {board.boardTitle}
+         제목:  { board.boardTitle.length > 18 ? (<>{board.boardTitle.substring(0,17)+".."}</>) : (<>{board.boardTitle}</>)}
       </Grid>
       <Paper
         variant="outlined"
@@ -205,14 +221,15 @@ export default function DetailBoard( ) {
           direction='row'
           >
               <Grid
-                    sx={{marginRight: '10%'}}
+                item
+                sx={{marginRight: '10%'}}
                   >
                   <Visibility fontSize="8"/>
                       {board.boardViews}
               </Grid> 
               <Grid>
                   <QuestionAnswerOutlinedIcon fontSize="8" />
-                    {board.boardCommentDtoList.length}
+                    {commentLen}
               </Grid>
           </Grid>
         </Grid>
@@ -221,20 +238,23 @@ export default function DetailBoard( ) {
           variant="outlined"
           sx={{ marginTop:'3%', backgroundColor: 'rgba(0,0,0,0)', borderRadius: 2, borderColor: '#FFE082', borderWidth: 2.5,  height: '18vh', width:'94%',marginLeft:'3%'}}
       >
-        <Grid sx={{marginTop:'2.5%', marginLeft: '3%', backgroundColor: 'rgba(0,0,0,0)'}}>{board.boardContent}</Grid>
+          <Grid item sx={{ marginTop: '2.5%', marginLeft: '3%', backgroundColor: 'rgba(0,0,0,0)' }}>
+            <Box component="div" sx={{  overflow: 'auto', height: '16vh'}}>
+              {board.boardContent}
+            </Box>
+          </Grid>
           
       </Paper>
 
 
       {/* 유저 아이디, 사진정보 리코일에서 가져오기 */}
-      <Grid
+    <Grid
       sx={{marginTop: '5%', marginLeft: '3%',alignItems: 'center'}}
       container
       direction='row'
     >
       {/* 아이콘 */}
       <Grid
-          item
       >
         <Avatar src={userInfo.userProfileImage} sx={{ width: '15vw', height: '15vw' }} />
       </Grid>
@@ -243,15 +263,15 @@ export default function DetailBoard( ) {
           item
         sx={{marginLeft:'5%', justifyContent: 'space-between'}}
       >
-          <TextField placeholder="댓글을 등록하세요..." variant="standard" sx={{width: '57vw'}} inputRef={commentRef} onKeyUp={commentKeyword}/>
+          <TextField placeholder="댓글을 등록하세요..." variant="standard" sx={{width: '57vw'} } inputRef={commentRef} onKeyUp={commentKeyword}/>
           <Button onClick={postComment}>확인</Button>
      </Grid>
     </Grid>
     {/* 댓글 */}
     <Grid
     >
-    {commentDtoList?.map((store, idx) => {
-      return <CommentInputItem key={idx} item={store}/>;
+    {commentList?.map((store) => {
+      return <CommentInputItem key={store.id} item={store} setCommentList={setCommentList} getComment={getComment} setCheckOne={setCheckOne} checkOne={checkOne} />;
     })}
 
     </Grid>
