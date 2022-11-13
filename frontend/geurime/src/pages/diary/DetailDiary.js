@@ -221,7 +221,7 @@ export default function DetailDiary() {
           </Grid>
         </Grid>
         <div style={{ textAlign: "center" }}>
-          {registInfo.state == false || diary.emotionHappy !== null ?
+          {registInfo.state == false ?
             <Button sx={{ marginTop: "8%" }} width="20vh" onClick={showAnalysisModal}>
               분석결과 보기
             </Button>
@@ -242,7 +242,7 @@ export default function DetailDiary() {
         diaryid={diary.drawingId}
       ></DeleteDiaryModal>
       {/* 분석 결과 모달 */}
-        {registInfo.state == true  || diary.emotionHappy === null  ? (
+        {registInfo.state == true ? (
         <Modal
           open={openAnalysisModal}
           close={closeAnalysisModal}

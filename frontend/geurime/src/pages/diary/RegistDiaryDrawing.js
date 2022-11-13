@@ -104,6 +104,8 @@ export default function RegistDiary({}) {
   // 분석 완료 여부 정보
   const [registInfo, setRegistInfo] = useRecoilState(registState);
 
+
+
   function changeImage(e) {
     const reader = new FileReader();
     const img = imgRef.current.files[0];
@@ -121,6 +123,8 @@ export default function RegistDiary({}) {
     // console.log("분석한다");
     console.log(response.data);
     console.log('분석완료')
+    // 일기 리스트에 추가
+    localStorage.setItem('registD', false)
     setRegistInfo({'state' : false})
   }
 
