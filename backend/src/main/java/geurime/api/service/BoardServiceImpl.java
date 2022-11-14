@@ -78,10 +78,16 @@ public class BoardServiceImpl implements BoardService {
         Board.BoardInfoResponse boardInfoResponse = modelMapper.map(board, Board.BoardInfoResponse.class);
 
         //작성자
-        User user = board.getUser();
-        boardInfoResponse.setWriterId(user.getId());
-        boardInfoResponse.setWriterProfile(user.getUserProfileImage());
-        boardInfoResponse.setWriterNickname(user.getNickname());
+        Optional<User> userOptional = userRepository.findById(board.getUser().getId());
+        if(userOptional.isPresent()){
+            User user = userOptional.get();
+            boardInfoResponse.setWriterId(user.getId());
+            boardInfoResponse.setWriterProfile(user.getUserProfileImage());
+            boardInfoResponse.setWriterNickname(user.getNickname());
+        }else{
+            boardInfoResponse.setWriterId(0L);
+            boardInfoResponse.setWriterNickname("탈퇴한 회원");
+        }
 
         //댓글
         List<Comment> commentList = commentRepository.findByBoard(board);
