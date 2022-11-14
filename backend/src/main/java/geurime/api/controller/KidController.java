@@ -1,5 +1,6 @@
 package geurime.api.controller;
 
+import geurime.api.dto.EmotionDto;
 import geurime.api.dto.common.BasicResponse;
 import geurime.api.service.KidServiceImpl;
 import geurime.database.entity.Kid;
@@ -12,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,6 +30,17 @@ public class KidController {
         try {
             Kid.KidMainInfoResponse response = kidService.readKidInfo(kidId);
             return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
+        } catch (CustomException e) {
+            return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/emotion/{kidId}")
+    @ApiOperation(value = "자녀 감정 통계 조회", notes = "자녀 Id와 조회할 날짜를 연월(ex : 202208)로 받아 자녀의 그림감정 통계를 조회한다")
+    public ResponseEntity<BasicResponse<EmotionDto>> readEmotionCount(@PathVariable("kidId") Long kidId, @RequestParam String yyyy, @RequestParam String MM) {
+        try {
+            EmotionDto emotionDto = kidService.readEmotionCount(kidId, LocalDate.of(Integer.parseInt(yyyy), Integer.parseInt(MM), 1));
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, emotionDto), HttpStatus.OK);
         } catch (CustomException e) {
             return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
         }
