@@ -56,7 +56,7 @@ public class DrawingBoxServiceImpl implements DrawingBoxService {
         List<Kid.DrawingBoxDto> drawingBoxDtoList = new ArrayList<>(drawingBoxList.size());
 
         for (DrawingBox box : drawingBoxList){
-            Optional<Drawing> firstDrawing = drawingRepository.findFirstByDrawingBox(box);
+            Optional<Drawing> firstDrawing = drawingRepository.findFirstByDrawingBoxOrderByIdDesc(box);
             String thumbnailImage = firstDrawing.isPresent() ? firstDrawing.get().getDrawingImagePath() : null;
             long drawingCount = drawingRepository.countByDrawingBox(box);
 
