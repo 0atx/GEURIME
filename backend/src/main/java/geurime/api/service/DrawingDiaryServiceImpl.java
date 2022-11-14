@@ -168,7 +168,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
         Drawing drawing = getDrawing(request.getDrawingId());
 
         //이미지 업로드 후 반환된 이미지경로 업데이트
-        if(!imageFile.isEmpty()){
+        if(imageFile != null && !imageFile.isEmpty()){
             String drawingImagePath = s3Uploader.uploadAndGetUrl(imageFile);
             drawing.changeDrawingImagePath(drawingImagePath);
         }
