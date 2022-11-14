@@ -82,6 +82,13 @@ export default function RegistDiary({}) {
   const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } =
     useSpeechRecognition();
 
+  // 음성인식 작성한 글
+  const [speech, setSpeech] = useState("");
+
+  // 음성인식 작성 함수
+  const handleSpeech = (event) => {
+    setSpeech(event.target.value);
+  };
   // 직접 작성한 글
   const [writing, setWriting] = useState("");
 
@@ -117,7 +124,7 @@ export default function RegistDiary({}) {
 
     setDiaryInfo((diary) => {
       const copyDiary = { ...diary };
-      copyDiary.writing = transcript;
+      copyDiary.writing = speech;
       // console.log(copyDiary);
       return { ...copyDiary };
     });
@@ -213,6 +220,7 @@ export default function RegistDiary({}) {
                     onClick={() => {
                       SpeechRecognition.stopListening();
                       setStartSpeech(false);
+                      setSpeech(speech + transcript);
                     }}
                   />
                   <Typography sx={{ fontSize: "2.3vh", color: "#6F6F6F" }}>끝내기</Typography>
@@ -228,6 +236,7 @@ export default function RegistDiary({}) {
                       borderRadius: "20px",
                     }}
                     onClick={() => {
+                      resetTranscript();
                       SpeechRecognition.startListening({ continuous: true, language: "ko" });
                       setStartSpeech(true);
                     }}
@@ -239,23 +248,24 @@ export default function RegistDiary({}) {
             <Paper elevation={3} sx={{ marginTop: "5%" }}>
               <TextField
                 inputProps={{
-                  style: { fontSize: "2.5vh", color: "#ffffff" },
+                  style: { fontSize: "2.5vh" },
                 }}
                 id="outlined-multiline-static"
                 sx={{
                   width: "100%",
                 }}
                 multiline
-                disabled
+                // disabled
                 rows={12}
-                value={transcript}
+                value={speech}
+                onChange={handleSpeech}
               />
             </Paper>
             {/* 다시쓰기, 다음 버튼 */}
             <div style={{ textAlign: "right", marginTop: "10%" }}>
               <Button
                 bgcolor="#fff4ce"
-                onClick={resetTranscript}
+                onClick={handleSpeech}
                 sx={{ width: "100px", marginRight: "5%" }}
               >
                 다시 쓰기

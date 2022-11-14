@@ -1,10 +1,10 @@
 /*
-일기 상세 조회 페이지
+일기 수정 페이지
 @author 조혜안
-@since 2022.11.01
+@since 2022.11.14
 */
 import { useEffect, useRef, useState } from "react";
-import { Container, Grid, Typography } from "@mui/material";
+import { Container, Grid, TextField, Typography } from "@mui/material";
 import BackMenu from "components/nav/BackMenu";
 import NavBar from "components/nav/NavBar";
 import moment from "moment";
@@ -28,11 +28,14 @@ import AnalysisModal from "components/modal/AnalysisModal";
 import { http } from "api/http";
 import { useNavigate, useParams } from "react-router-dom";
 import Modal from "components/common/Modal";
+import { http2 } from "api/http2";
 
 export default function DetailDiary() {
   const params = useParams();
   const navigate = useNavigate();
 
+  // 수정 모달
+  const [modifyModal, setModifyModal] = useState(false);
   // 삭제완료 모달
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   // 분석결과 모달
@@ -52,6 +55,9 @@ export default function DetailDiary() {
   const [wakeup, setWakeup] = useState("");
   const [sleep, setSleep] = useState("");
 
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
   // 삭제 모달 닫기
   const closeDeleteModal = () => {
     setOpenDeleteModal(false);
@@ -68,14 +74,29 @@ export default function DetailDiary() {
   };
 
   // 일기장 수정 함수
-  const modifyDiary = () => {
-    navigate(`/modifydetaildiary/${params.diaryid}`);
-  };
+  async function modifyDiary() {
+    // 파일 전송
+    let formData = new FormData();
+    formData.append("imageFile", diary.drawingImagePath);
 
-  // 분석결과 함수
-  const showAnalysisModal = () => {
-    setOpenAnalysisModal(true);
-  };
+    let info = {
+      drawingId: diary.drawingId,
+      drawingTitle: title,
+      drawingDiary: content,
+      drawingDiaryWeather: diary.drawingDiaryWeather,
+      drawingDiaryFeeling: diary.drawingDiaryFeeling,
+      drawingDiaryWakeUp: diary.drawingDiaryWakeUp,
+      drawingDiarySleep: diary.drawingDiarySleep,
+    };
+
+    formData.append("request", new Blob([JSON.stringify(info)], { type: "application/json" }));
+
+    const response = await http2.put(`/diaries`, formData);
+    console.log(response.data);
+    if (response.data.message === "success") {
+      setModifyModal(true);
+    }
+  }
 
   // 일기 조회
   async function getDiary() {
@@ -93,6 +114,9 @@ export default function DetailDiary() {
 
     setWakeup(moment(info.drawingDiaryWakeUp).format("A h시 mm분"));
     setSleep(moment(info.drawingDiarySleep).format("A h시 mm분"));
+
+    setTitle(info.drawingTitle);
+    setContent(info.drawingDiary);
   }
 
   const mounted = useRef(false);
@@ -107,12 +131,7 @@ export default function DetailDiary() {
   return (
     <div>
       {/* 헤더 */}
-      <BackMenu
-        isLeft={true}
-        title={diary.drawingTitle}
-        isRight="수정"
-        clickRight={modifyDiary}
-      ></BackMenu>
+      <BackMenu isLeft={true} title="일기 수정" isRight="삭제" clickRight={deleteDiary}></BackMenu>
       <Container id="container">
         {/* 일기장 */}
         <Grid
@@ -209,18 +228,55 @@ export default function DetailDiary() {
           <Grid item xs={12} sx={{ textAlign: "center", padding: "4% 4% 0% 4%" }}>
             <img src={diary.drawingImagePath} width="100%" style={{ borderRadius: "5%" }}></img>
           </Grid>
-          <Grid
-            className="content"
-            item
-            xs={12}
-            sx={{ textalign: "center", padding: "0% 6% 2% 6%" }}
-          >
-            <p className="notes">{diary.drawingDiary}</p>
+        </Grid>
+        {/* 제목 */}
+        <Grid
+          container
+          justifyContent="center"
+          sx={{
+            border: 3,
+            borderRadius: "10px",
+            borderColor: "secondary.main",
+            backgroundColor: "white",
+            alignItems: "center",
+            padding: "5%",
+            mt: 3,
+          }}
+        >
+          <Grid item xs={2}>
+            <Typography>제목</Typography>
+          </Grid>
+          <Grid item xs={10}>
+            <TextField
+              fullWidth
+              id="standard-basic"
+              placeholder="제목을 써주세요"
+              variant="standard"
+              //   size="small"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <Typography>내용</Typography>
+          </Grid>
+          <Grid item xs={10} sx={{ textalign: "center", mt: 3 }}>
+            <TextField
+              fullWidth
+              multiline
+              value={content}
+              onChange={(e) => {
+                setContent(e.target.value);
+              }}
+            />
           </Grid>
         </Grid>
+
         <div style={{ textAlign: "center" }}>
-          <Button sx={{ marginTop: "8%" }} width="20vh" onClick={showAnalysisModal}>
-            분석결과 보기
+          <Button sx={{ marginTop: "8%" }} width="20vh" onClick={modifyDiary}>
+            수정하기
           </Button>
         </div>
       </Container>
@@ -232,24 +288,18 @@ export default function DetailDiary() {
         handleClose={closeDeleteModal}
         diaryid={diary.drawingId}
       ></DeleteDiaryModal>
-      {/* 분석 결과 모달 */}
-      {diary.emotionHappy === null && diary.emotionSad === null && diary.emotionAngry === null ? (
-        <Modal
-          open={openAnalysisModal}
-          close={closeAnalysisModal}
-          onClick={closeAnalysisModal}
-          text="열심히 분석 중이에요!"
-          icon="wait"
-        ></Modal>
-      ) : (
-        <AnalysisModal
-          open={openAnalysisModal}
-          handleClose={closeAnalysisModal}
-          happy={diary.emotionHappy}
-          sad={diary.emotionSad}
-          angry={diary.emotionAngry}
-        ></AnalysisModal>
-      )}
+      {/* 수정 모달 */}
+      <Modal
+        open={modifyModal}
+        close={() => {
+          setModifyModal(false);
+        }}
+        onClick={() => {
+          navigate(`/diary`);
+        }}
+        text="수정이 완료되었습니다.😀"
+        icon="ok"
+      ></Modal>
     </div>
   );
 }
