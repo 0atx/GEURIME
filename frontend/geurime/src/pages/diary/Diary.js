@@ -101,7 +101,7 @@ export default function Diary() {
   return (
     <div>
       {/* 헤더 */}
-      <BackMenu isLeft={true} title="그림 일기장"></BackMenu>
+      <BackMenu isLeft={true} title={`${kidInfo.kidName}의 일기장`}></BackMenu>
       <div id="container">
         {/* 검색바 영역 */}
         <Grid
