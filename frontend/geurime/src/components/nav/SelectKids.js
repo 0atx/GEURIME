@@ -36,7 +36,15 @@ export default function SelectKids(props) {
     if (response.data.message === "success") {
       setUserInfo(response.data.data);
       setKids(response.data.data.kidDtoList);
-      getKidInfo(response.data.data.kidDtoList[0].kidId);
+
+      // 선택된 아이가 있는 경우 선택된 아이 정보
+      if (localStorage.getItem("currentKidId") != null) {
+        getKidInfo(localStorage.getItem("currentKidId"));
+      }
+      // 선택된 아이가 없는 경우 첫번째 아이로
+      else {
+        getKidInfo(response.data.data.kidDtoList[0].kidId);
+      }
     }
   }
 
@@ -53,7 +61,7 @@ export default function SelectKids(props) {
   async function getKidInfo(kidId) {
     const response = await http.get(`kids/${kidId}`);
     setCurrentKid(response.data.data);
-    console.log(response.data.data);
+
     localStorage.setItem("currentKidId", response.data.data.kidId);
     props.setImgList(response.data.data.sampleImageList);
   }
