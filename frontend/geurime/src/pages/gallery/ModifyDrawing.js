@@ -218,9 +218,9 @@ export default function ModifyDrawing() {
           alignItems="center"
           sx={{ marginTop: "7vh" }}
         >
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <Btn
-              width="130px"
+              width="100%"
               onClick={() => {
                 deleteDrawing();
               }}
@@ -228,10 +228,10 @@ export default function ModifyDrawing() {
               그림 삭제
             </Btn>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <Btn
+              width="100%"
               bgcolor="#FFCA28"
-              width="130px"
               onClick={() => {
                 modifyDrawing();
               }}
