@@ -175,7 +175,7 @@ export default function RegistDiary({}) {
             <Paper elevation={3}>
               <TextField
                 id="outlined-multiline-static"
-                inputProps={{ style: { fontSize: "2.5vh" } }}
+                inputProps={{ style: { fontSize: "2.5vh", lineHeight: "3vh" } }}
                 sx={{ width: "100%" }}
                 multiline
                 rows={12}
@@ -247,9 +247,7 @@ export default function RegistDiary({}) {
             </div>
             <Paper elevation={3} sx={{ marginTop: "5%" }}>
               <TextField
-                inputProps={{
-                  style: { fontSize: "2.5vh" },
-                }}
+                inputProps={{ style: { fontSize: "2.5vh", lineHeight: "3vh" } }}
                 id="outlined-multiline-static"
                 sx={{
                   width: "100%",
