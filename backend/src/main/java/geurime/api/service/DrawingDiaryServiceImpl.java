@@ -57,7 +57,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
     @Override
     public List<Drawing.DrawingDiaryListResponse> readAllDrawingDiaryList(Long kidId) {
         Kid kid = getKid(kidId);
-        List<Drawing> drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingBox_DrawingBoxCategoryOrderByIdDesc(kid, BoxType.일기);
+        List<Drawing> drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingBox_DrawingBoxCategoryOrderByCreateTimeDescIdDesc(kid, BoxType.일기);
         List<Drawing.DrawingDiaryListResponse> responseList = new ArrayList<>(drawingDiaryList.size());
         for (Drawing drawing : drawingDiaryList){
             Drawing.DrawingDiaryListResponse response = Drawing.DrawingDiaryListResponse.builder()
@@ -112,7 +112,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
         if(keyword != null && !keyword.isBlank()){
             drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingTitleContainsAndDrawingBox_DrawingBoxCategoryOrderByIdDesc(kid, keyword, BoxType.일기);
         }else{
-            drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingBox_DrawingBoxCategoryOrderByIdDesc(kid, BoxType.일기);
+            drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingBox_DrawingBoxCategoryOrderByCreateTimeDescIdDesc(kid, BoxType.일기);
         }
         List<Drawing.DrawingDiaryListResponse> responseList = mapList(drawingDiaryList, Drawing.DrawingDiaryListResponse.class);
 

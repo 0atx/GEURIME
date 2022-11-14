@@ -54,7 +54,7 @@ public class KidServiceImpl implements KidService {
         List<Kid.DrawingBoxDto> drawingBoxDtoList = new ArrayList<>(drawingBoxList.size());
 
         for (DrawingBox drawingBox : drawingBoxList){
-            Optional<Drawing> firstDrawing = drawingRepository.findFirstByDrawingBox(drawingBox);
+            Optional<Drawing> firstDrawing = drawingRepository.findFirstByDrawingBoxOrderByIdDesc(drawingBox);
             String thumbnailImage = firstDrawing.isPresent() ? firstDrawing.get().getDrawingImagePath() : null;
             long drawingCount = drawingRepository.countByDrawingBox(drawingBox);
 
