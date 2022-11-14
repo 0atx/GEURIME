@@ -82,7 +82,7 @@ export default function RegistDiary({}) {
 
   // 그날의 날씨 가져오기
   async function getWeather() {
-    const response = await axios.get(`${process.env.REACT_APP_BASE_URL_AI}/weather`, {
+    const response = await axios.get(`${process.env.REACT_APP_BASE_URL_WEATHER}`, {
       params: {
         year: year,
         month: month,
