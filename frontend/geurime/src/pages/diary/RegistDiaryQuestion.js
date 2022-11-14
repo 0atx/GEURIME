@@ -24,6 +24,7 @@ import moment from "moment";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "components/common/Btn.js";
 import styled from "styled-components";
+
 // 날씨 이미지 import
 import sunnyUnclicked from "assets/icon/weather/sunnyUnclicked.png";
 import sunnyClicked from "assets/icon/weather/sunnyClicked.png";
@@ -168,6 +169,7 @@ export default function RegistDiary({}) {
       day = "0" + day;
     }
     let date = year + "-" + month + "-" + day;
+
     setDate(date);
     setTitle(month + "월 " + day + "일 일기");
 
@@ -215,6 +217,7 @@ export default function RegistDiary({}) {
           // 날짜의 일을 빼는 코드
           formatDay={(locale, date) => moment(date).format("DD")}
           value={value}
+          maxDate={new Date()} // 오늘 날짜 이후 막기
         ></Calendar>
         <DialogActions sx={{ marginBottom: "10px" }}>
           <Button
@@ -382,15 +385,18 @@ export default function RegistDiary({}) {
               <Typography>바람</Typography>
             </Grid>
           </Grid>
-          <div style={{ textAlign: "right", paddingTop: "3%" }}>
-            <Btn
-              sx={{ color: "#FFA000" }}
-              onClick={() => {
-                setOpenWeather(true);
-              }}
-            >
-              날씨가 기억나지 않아요😥
-            </Btn>
+          <div style={{ textAlign: "right", paddingTop: "3%", paddingBottom: "2%" }}>
+            {/* 오늘 날짜는 날씨 알림 버튼 막기 */}
+            {moment().format(`${year}-${month}-${day}`) != moment().format("YYYY-MM-DD") && (
+              <Btn
+                sx={{ color: "#FFA000" }}
+                onClick={() => {
+                  setOpenWeather(true);
+                }}
+              >
+                날씨가 기억나지 않아요😥
+              </Btn>
+            )}
           </div>
         </StyledPaper>
         {/* 잠든 시간  질문 */}

@@ -147,7 +147,7 @@ export default function Board() {
             </FormControl>
           </Grid>
 
-          <Grid item xs={8.5} direction="row">
+          <Grid item xs={8.5}>
             {/* 검색어 입력 부분 */}
             <TextField
               id="standard-search"
@@ -181,7 +181,10 @@ export default function Board() {
         </Grid>
 
         <NavBar />
-        <NoSearchModal open={openNoSearchModal} handleClose={closeNoSearchModal}></NoSearchModal>
+        <NoSearchModal
+          open={openNoSearchModal}
+          handleClose={closeNoSearchModal}
+        ></NoSearchModal>
       </Container>
     </div>
   );

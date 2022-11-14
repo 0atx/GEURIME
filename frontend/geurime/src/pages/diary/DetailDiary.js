@@ -85,8 +85,8 @@ export default function DetailDiary() {
     setDate(new Date(info.createTime).getDate());
     setDays(WEEKDAY[new Date(info.createTime).getDay()]);
 
-    setWakeup(moment(new Date(info.drawingDiaryWakeUp)).format("A h시 mm분"));
-    setSleep(moment(new Date(info.drawingDiarySleep)).format("A h시 mm분"));
+    setWakeup(moment(info.drawingDiaryWakeUp).format("A h시 mm분"));
+    setSleep(moment(info.drawingDiarySleep).format("A h시 mm분"));
   }
 
   const mounted = useRef(false);
