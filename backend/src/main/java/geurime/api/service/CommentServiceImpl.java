@@ -57,12 +57,12 @@ public class CommentServiceImpl implements CommentService {
     public Long createComment(Comment.CommentPostRequest request) {
         Board board = boardRepository.findById(request.getBoardId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.BOARD_NOT_FOUND_ERROR));
-        userRepository.findById(request.getCommentUserId())
+        User user = userRepository.findById(request.getCommentUserId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         Comment comment = Comment.builder()
                 .board(board)
-                .commentUserId(request.getCommentUserId())
+                .commentUserId(user.getId())
                 .createTime(LocalDateTime.now())
                 .commentContent(request.getCommentContent())
                 .build();
@@ -80,7 +80,7 @@ public class CommentServiceImpl implements CommentService {
     public Long updateComment(Comment.CommentPutRequest request) {
         Comment comment = commentRepository.findById(request.getCommentId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.COMMENT_NOT_FOUND_ERROR));
-        if(comment.getCommentUserId() == request.getUserId()){
+        if(comment.getCommentUserId().equals(request.getUserId())){
             comment.updateComment(request.getCommentContent());
             return comment.getId();
         }else {
@@ -98,7 +98,7 @@ public class CommentServiceImpl implements CommentService {
     public Boolean deleteComment(Long userId, Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.COMMENT_NOT_FOUND_ERROR));
-        if(comment.getCommentUserId() == userId){
+        if(comment.getCommentUserId().equals(userId)){
             commentRepository.delete(comment);
             return true;
         }else {
