@@ -186,41 +186,45 @@ export default function ModifyDrawing() {
             />
           </Grid>
           {/* 보관함 */}
-          <Grid item xs={3}>
-            <Typography>보관함</Typography>
-          </Grid>
-          <Grid item xs={7}>
-            <Select
-              fullWidth
-              value={drawingBox}
-              onChange={handleChange}
-              variant="standard"
-              placeholder="기본 보관함"
-              MenuProps={{
-                disablePortal: true,
-                PaperProps: { sx: { maxHeight: 150 } },
-              }}
-            >
-              {drawingBoxes.map(function (box, i) {
-                return (
-                  <MenuItem key={i} value={box}>
-                    {box.drawingBoxName}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </Grid>
+          {drawingInfo.drawingBoxName === "그림일기 보관함" ? null : (
+            <>
+              <Grid item xs={3}>
+                <Typography>보관함</Typography>
+              </Grid>
+              <Grid item xs={7}>
+                <Select
+                  fullWidth
+                  value={drawingBox}
+                  onChange={handleChange}
+                  variant="standard"
+                  placeholder="기본 보관함"
+                  MenuProps={{
+                    disablePortal: true,
+                    PaperProps: { sx: { maxHeight: 150 } },
+                  }}
+                >
+                  {drawingBoxes.map(function (box, i) {
+                    return (
+                      <MenuItem key={i} value={box}>
+                        {box.drawingBoxName}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </Grid>
+            </>
+          )}
         </Grid>
         {/* 그림 수정 및 삭제 버튼 */}
         <Grid
           container
           justifyContent="space-evenly"
           alignItems="center"
-          sx={{ marginTop: "7vh" }}
+          sx={{ marginTop: "6vh" }}
         >
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <Btn
-              width="130px"
+              width="100%"
               onClick={() => {
                 deleteDrawing();
               }}
@@ -228,10 +232,10 @@ export default function ModifyDrawing() {
               그림 삭제
             </Btn>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <Btn
+              width="100%"
               bgcolor="#FFCA28"
-              width="130px"
               onClick={() => {
                 modifyDrawing();
               }}
