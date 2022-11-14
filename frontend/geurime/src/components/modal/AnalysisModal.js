@@ -30,7 +30,7 @@ const Piechart = ({ happy, sad, angry }) => {
         data={[
           { id: "행복😆", value: happy },
           { id: "우울😥", value: sad },
-          { id: "분노😡", value: angry },
+          { id: "폭력😡", value: angry },
         ]}
         margin={{ right: 80, bottom: 80, left: 80 }}
         innerRadius={0.5}
@@ -99,7 +99,7 @@ function ShowCharts({ happy, sad, angry }) {
   const series = [happy, sad, angry];
   const options = {
     //data on the x-axis
-    labels: ["행복😆", "우울😥", "분노😡"],
+    labels: ["행복😆", "우울😥", "폭력😡"],
     colors: ["#A9D5C7", "#F7BF87", "#FFB3B3"],
     chart: {
       type: "pie",

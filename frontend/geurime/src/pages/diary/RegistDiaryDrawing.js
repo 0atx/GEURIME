@@ -164,10 +164,11 @@ export default function RegistDiary({}) {
   // 직접 그리기 state
   const [isDrawing, setIsDrawing] = useState(false);
   const canvasDraw = useRef(null);
+
   // 직접 그린 그림 업로드
-  function loadDrawing() {
-    canvasDraw.current.loadSaveData(localStorage.getItem("savedDrawing"));
-  }
+  // function loadDrawing() {
+  // canvasDraw.current.loadSaveData(localStorage.getItem("savedDrawing"));
+  // }
 
   return (
     <div>
@@ -264,15 +265,16 @@ export default function RegistDiary({}) {
             {isDrawing ? (
               // 직접 그린 그림 canvas
               <Paper elevation={3} sx={{ display: "inline-block" }}>
-                <CanvasDraw
-                  loadTimeOffset={5}
+                {/* <CanvasDraw
+                  // loadTimeOffset={5}
                   disabled
                   hideGrid
-                  canvasWidth={350}
-                  canvasHeight={350}
-                  ref={canvasDraw}
-                  saveData={localStorage.getItem("savedDrawing")}
-                />
+                  canvasWidth={window.innerWidth * 0.92}
+                  canvasHeight={window.innerWidth * 0.92}
+                  ref={canvasRef}
+                  // saveData={localStorage.getItem("savedDrawing")}
+                /> */}
+                <img src={canvas}></img>
               </Paper>
             ) : imageUrl ? (
               // 이미지를 편집했을 경우
@@ -404,7 +406,7 @@ export default function RegistDiary({}) {
         open={openDrawing}
         handleClose={() => {
           setOpenDrawing(false);
-          loadDrawing();
+          // loadDrawing();
         }}
         setCanvas={setCanvas}
       ></DrawingModal>
