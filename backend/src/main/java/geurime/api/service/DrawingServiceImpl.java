@@ -86,12 +86,13 @@ public class DrawingServiceImpl implements DrawingService {
         response.setDrawingBoxName(drawingBox.getDrawingBoxName());
 
         //조회하는 자녀의 아이디가 일치하면
-        if(drawingBox.getKid().getId() == kidId){
+        if(drawingBox.getKid().getId().equals(kidId)){
             List<Drawing> drawingList = drawingBox.getDrawingList();
             List<Drawing.DrawingGalleryDto> dtoList = new ArrayList<>(drawingList.size());
 
-            //DTO에 매핑
-            for (Drawing drawing : drawingList){
+            //DTO에 매핑 - id역순 (최신순으로)
+            for (int i = drawingList.size() - 1; i >= 0; i--) {
+                Drawing drawing = drawingList.get(i);
                 Drawing.DrawingGalleryDto dto = new Drawing.DrawingGalleryDto();
                 dto.setDrawingId(drawing.getId());
                 dto.setDrawingImagePath(drawing.getDrawingImagePath());
@@ -151,7 +152,7 @@ public class DrawingServiceImpl implements DrawingService {
         Drawing drawing = getDrawing(request.getDrawingId());
         DrawingBox drawingBox = getDrawingBox(request.getDrawingBoxId());
 
-        if(drawingBox.getKid().getId() == request.getKidId()){
+        if(drawingBox.getKid().getId().equals(request.getKidId())){
             drawing.changeDrawingInfo(drawingBox, request.getDrawingTitle(), request.getIsLike());
             return drawing.getId();
         }
@@ -188,7 +189,7 @@ public class DrawingServiceImpl implements DrawingService {
 
         //커스텀 보관함이 아니거나
         //삭제하려는 자녀가 보관함의 주인이 아니면 false 반환
-        if(deleteDrawingBox.getDrawingBoxCategory() != BoxType.커스텀 || deleteDrawingBox.getKid().getId() != kid.getId()){
+        if(deleteDrawingBox.getDrawingBoxCategory() != BoxType.커스텀 || !deleteDrawingBox.getKid().getId().equals(kid.getId())){
             return false;
         }
 
@@ -215,7 +216,7 @@ public class DrawingServiceImpl implements DrawingService {
     public Boolean deleteDrawing(Long kidId, Long drawingId) {
         Drawing drawing = getDrawing(drawingId);
 
-        if(drawing.getDrawingBox().getKid().getId() == kidId){
+        if(drawing.getDrawingBox().getKid().getId().equals(kidId)){
             drawingRepository.delete(drawing);
             return true;
         }

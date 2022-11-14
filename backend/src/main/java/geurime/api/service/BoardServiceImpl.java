@@ -175,7 +175,7 @@ public class BoardServiceImpl implements BoardService {
 
         // 전체인 경우에는 모두 조회
         if(boardType == BoardType.전체){
-            if(keyword != null && keyword != ""){
+            if(keyword != null && !keyword.equals("")){
                 //키워드 있는 경우
                 boardSlice = boardRepository.findByBoardTitleContains(keyword, pageRequest);
             }else{
@@ -185,7 +185,7 @@ public class BoardServiceImpl implements BoardService {
         }
         // 분류 조회
         else{
-            if(keyword != null && keyword != ""){
+            if(keyword != null && !keyword.equals("")){
                 //키워드 있는 경우
                 boardSlice = boardRepository.findByBoardCategoryAndBoardTitleContains(boardType, keyword, pageRequest);
             }else{
@@ -291,7 +291,7 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new CustomException(CustomExceptionList.BOARD_NOT_FOUND_ERROR));
 
         // 게시글 작성자와 일치하면 게시글 삭제
-        if(board.getUser().getId() == userId){
+        if(board.getUser().getId().equals(userId)){
             boardRepository.deleteById(boardId);
             return true;
         }else{

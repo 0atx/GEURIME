@@ -16,13 +16,13 @@ import java.util.Optional;
 public interface DrawingRepository extends JpaRepository<Drawing, Long> {
     List<Drawing> findByDrawingBox_KidAndIsLikeTrueOrderByIdDesc(Kid kid);
 
-    List<Drawing> findByDrawingBox_KidAndDrawingBox_DrawingBoxCategoryOrderByIdDesc(Kid kid, BoxType drawingBoxCategory);
+    List<Drawing> findByDrawingBox_KidAndDrawingBox_DrawingBoxCategoryOrderByCreateTimeDescIdDesc(Kid kid, BoxType drawingBoxCategory);
 
     List<Drawing> findByDrawingBox_KidAndCreateTimeOrderByIdDesc(Kid kid, LocalDate createTime);
 
     List<Drawing> findByDrawingBox_KidAndDrawingTitleContainsAndDrawingBox_DrawingBoxCategoryOrderByIdDesc(Kid kid, String drawingTitle, BoxType drawingBoxCategory);
 
-    Optional<Drawing> findFirstByDrawingBox(DrawingBox drawingBox);
+    Optional<Drawing> findFirstByDrawingBoxOrderByIdDesc(DrawingBox drawingBox);
 
     long countByDrawingBox(DrawingBox drawingBox);
 
