@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import NavBar from "components/nav/NavBar";
 import NoSearchModal from "components/modal/NoSearchModal";
 import { Container } from "@mui/system";
+import NoCategoryModal from "components/modal/NoCategoryModal copy";
 
 export default function Board() {
   const navigator = useNavigate();
@@ -45,20 +46,57 @@ export default function Board() {
     setCategory(event.target.value);
   };
 
+  // 스크롤링 카운트용
+  const [count, setCount] = useState(0)
+  // 스크롤링 확인용
+  const [loading, setLoading] = useState(false)
+
+  // 스크롤 이벤트 핸들러
+const handleScroll = () => {
+  const scrollHeight = document.documentElement.scrollHeight;
+  const scrollTop = document.documentElement.scrollTop;
+  const clientHeight = document.documentElement.clientHeight;
+  
+  // 페이지 끝에 도달하면 추가 데이터를 받아온다
+  if (scrollTop + clientHeight >= scrollHeight * 0.95  && loading == false) {
+    getBoard();
+  }
+ };
+
+useEffect(() => {
+  // scroll event listener 등록
+  window.addEventListener("scroll", handleScroll);
+  return () => {
+    // scroll event listener 해제
+    window.removeEventListener("scroll", handleScroll);
+  };
+  });
+
   // 전체 게시글 조회 axios
   const getBoard = async () => {
+    setLoading(true)
     const response = await http.get(`/boards`, {
       params: {
-        page: 0,
-        size: 10,
+        page: count,
+        size: 5,
       },
     });
-
-    if (response.data.message == "success") {
-      setBoards(response.data.data);
-    } else {
-      alert("게시글을 불러오지 못했습니다");
+    setLoading(false)
+    if (response.data.message == "success" && response.data.data.length != 0) {
+      if (count == 0) {
+        setBoards(response.data.data);
+        setCount(count + 1)
+      }
+      else {
+        const fetchedData = response.data.data;
+        const mergedData = boards.concat(...fetchedData);
+        setBoards(mergedData);
+        setCount(count + 1)
+      }
     }
+    // else {
+    //   alert("게시글을 불러오지 못했습니다");
+    // }
   };
 
   // 전체 게시글 불러오기
@@ -66,7 +104,7 @@ export default function Board() {
     getBoard();
   }, []);
 
-  function searchKeyword(e) {
+  async function searchKeyword(e) {
     if (e.key === "Enter") {
       search();
     }
@@ -74,30 +112,74 @@ export default function Board() {
 
   // 검색 axios
   const search = async () => {
-    const response = await http.get(`/boards/search`, {
-      params: {
-        category: category,
-        keyword: searchInput.current.value,
-        page: 0,
-        size: 10,
-      },
-    });
-    if (response.data.message == "success") {
-      console.log({ 검색결과: response.data.data });
-      if (response.data.data.length == 0) {
-        setOpenNoSearchModal(true);
-      } else {
-        setBoards(response.data.data);
-      }
-    } else {
-      alert("게시글을 불러오지 못했습니다");
+    if (category == '') {
+      setOpenNoCategoryModal(true);
     }
+    else {
+      const response = await http.get(`/boards/search`, {
+        params: {
+          category: category,
+          keyword: searchInput.current.value,
+          page: 0,
+          size: 20,
+        },
+      });
+      if (response.data.message == "success") {
+
+        if (response.data.data.length == 0) {
+          setOpenNoSearchModal(true);
+        } else {
+          setBoards(response.data.data);
+        }
+      } else {
+        alert("게시글을 불러오지 못했습니다");
+      }
+    }
+
+
+    //   setLoading(true)
+    //   const response = await http.get(`/boards/search`, {
+    //     params: {
+    //       category: category,
+    //       keyword: searchInput.current.value,
+    //       page: count,
+    //       size: 5,
+    //     },
+    //   });
+    //   setLoading(false)
+    //   if (response.data.message == "success") {
+    //     console.log({ 검색결과: response.data.data });
+    //     if (response.data.data.length == 0) {
+    //       setOpenNoSearchModal(true);
+    //     } else {
+    //       // setBoards(response.data.data);
+    //       if (count == 0) {
+    //         setBoards(response.data.data);
+    //         setCount(count + 1)
+    //       }
+    //       else {
+    //         const fetchedData = response.data.data;
+    //         const mergedData = boards.concat(...fetchedData);
+    //         setBoards(mergedData);
+    //         setCount(count + 1)
+    //       }
+    //     }
+    //   } else {
+    //     alert("게시글을 불러오지 못했습니다");
+    //   }
+    // }
   };
 
   const [openNoSearchModal, setOpenNoSearchModal] = useState(false);
   // 검색결과없음 모달 닫기
   const closeNoSearchModal = () => {
     setOpenNoSearchModal(false);
+  };
+  
+  const [openNoCategoryModal, setOpenNoCategoryModal] = useState(false);
+  // 검색결과없음 모달 닫기
+  const closeNoCategoryModal = () => {
+    setOpenNoCategoryModal(false);
   };
 
   return (
@@ -133,7 +215,7 @@ export default function Board() {
                 displayEmpty
                 inputProps={{ "aria-label": "Without label" }}
                 MenuProps={{
-                  PaperProps: { sx: { maxHeight: 100 } },
+                  PaperProps: { sx: { maxHeight: '30vh' } },
                 }}
               >
                 <MenuItem value={""}>
@@ -185,6 +267,10 @@ export default function Board() {
           open={openNoSearchModal}
           handleClose={closeNoSearchModal}
         ></NoSearchModal>
+        <NoCategoryModal
+          open={openNoCategoryModal}
+          handleClose={closeNoCategoryModal}
+        ></NoCategoryModal>
       </Container>
     </div>
   );
