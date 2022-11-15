@@ -3,7 +3,7 @@
 @since 2022.11.02
 */
 
-import { Avatar, Box, Button, Grid, Paper, TextField } from "@mui/material";
+import { Avatar, Button, Grid, Paper, TextField } from "@mui/material";
 import { http } from "api/http";
 import { useEffect, useRef, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom";
@@ -17,6 +17,8 @@ import { useRecoilState } from "recoil";
 import { userState } from "states/UserState";
 import moment from "moment";
 import 'moment/locale/ko';
+import sampleImage from "assets/boardSample.png";
+
 
 import NoCommentModal from "components/modal/NoCommentModal";
 
@@ -61,6 +63,7 @@ export default function DetailBoard( ) {
   const navigator = useNavigate();
   // 페이지 들어왔을때 엑시오스 요청
   const getDetail = async () => {
+    console.log({ 페이지id: location.pathname.slice(13,) })
     const boardid = location.pathname.slice(13,);
     const response = await http.get(`/boards/${boardid}`);
     if (response.data.message == "success") {
@@ -71,7 +74,9 @@ export default function DetailBoard( ) {
       alert("게시글을 불러오지 못했습니다");
     }
   }
-
+  useEffect(() => {
+    console.log({페이지정보: board})
+  }, [board])
   let [check, setCheck] = useState(false);
   useEffect(() => { 
     if (check == false){
@@ -107,6 +112,7 @@ export default function DetailBoard( ) {
   }, [board])
 
   const getComment = async () => {
+    console.log({ 페이지id: location.pathname.slice(13,) })
     const boardid = location.pathname.slice(13,);
     const response = await http.get(`/comments/${boardid}`);
     if (response.data.message == "success") {
@@ -133,6 +139,7 @@ export default function DetailBoard( ) {
   const postComment = async () => {
     // commentUserId 리코일에서 가져오기
     const boardid = location.pathname.slice(13,);
+    console.log({ 현재댓글: commentRef.current.value });
     if (commentRef.current.value != 0) { 
     const response = await http.post(`/comments`, 
       {
@@ -144,9 +151,14 @@ export default function DetailBoard( ) {
 
       if (response.data.message == "success") {
         if (commentRef.current.value !== 0) {
-          getComment()
+          setCommentList([...commentList, {
+            commentUserNickname: userInfo.nickname,
+            commentContent: commentRef.current.value,
+            commentUserId: userInfo.userId,
+            commentUserProfile: userInfo.userProfileImage,
+            createTime: moment().format('YYYY-MM-DD HH:mm:ss')
+          }])
           commentRef.current.value = "";
-          
         }
       }
 
@@ -190,11 +202,30 @@ export default function DetailBoard( ) {
         borderColor: '#FFE082', borderWidth: 5}}
         xs={7}  
       >
-        <img
-          src={board.boardImagePath}
-          loading="lazy"
-          style={{ height: '21vh', width: '24vh', margin: '2%', borderRadius: 5, marginTop: '3.5%' }}
-          />
+          {/* <img
+            src={board.boardImagePath}
+            loading="lazy"
+
+            /> */}
+            {board.boardImagePath == null ? (
+                // 그림 업로드 안한 경우
+                <>
+                  <img
+                    src={sampleImage}
+                    loading="lazy"
+                    style={{ height: '21vh', width: '24vh', margin: '2%', borderRadius: 5, marginTop: '3.5%' }}
+                  />
+                </>
+              ) : (
+                // 그림 업로드 한 경우
+                <>
+                  <img
+                    src={board.boardImagePath}
+                    loading="lazy"
+                    style={{ height: '21vh', width: '24vh', margin: '2%', borderRadius: 5, marginTop: '3.5%' }}
+                  />
+                </>
+              )}
       </Paper>
 
       {/* 작성자, 뷰 */}
@@ -236,13 +267,19 @@ export default function DetailBoard( ) {
       </Grid>
       <Paper
           variant="outlined"
-          sx={{ marginTop:'3%', backgroundColor: 'rgba(0,0,0,0)', borderRadius: 2, borderColor: '#FFE082', borderWidth: 2.5,  height: '18vh', width:'94%',marginLeft:'3%'}}
+          sx={{ marginTop:'3%',  backgroundColor: 'rgba(0,0,0,0)', borderRadius: 2, borderColor: '#FFE082', borderWidth: 2.5,  minHeight : '18vh', width:'94%', marginLeft:'3%'}}
       >
-          <Grid item sx={{ marginTop: '2.5%', marginLeft: '3%', backgroundColor: 'rgba(0,0,0,0)' }}>
-            <Box component="div" sx={{  overflow: 'auto', height: '16vh'}}>
-              {board.boardContent}
-            </Box>
-          </Grid>
+        <Grid item sx={{marginTop:'2.5%', marginBottom:'3%', marginLeft: '3%', backgroundColor: 'rgba(0,0,0,0)'}}>
+
+          {board.boardContent.split("\n").map((line) => {
+            return (
+              <span>
+                {line}
+                <br />
+              </span>
+            );
+          })}
+        </Grid>
           
       </Paper>
 
@@ -263,7 +300,7 @@ export default function DetailBoard( ) {
           item
         sx={{marginLeft:'5%', justifyContent: 'space-between'}}
       >
-          <TextField placeholder="댓글을 등록하세요..." variant="standard" sx={{width: '57vw'} } inputRef={commentRef} onKeyUp={commentKeyword}/>
+          <TextField placeholder="댓글을 등록하세요..." variant="standard" sx={{width: '57vw'}} inputRef={commentRef} onKeyUp={commentKeyword}/>
           <Button onClick={postComment}>확인</Button>
      </Grid>
     </Grid>
