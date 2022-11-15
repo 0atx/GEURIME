@@ -91,7 +91,7 @@ export default function DetailDiary() {
 
     formData.append("request", new Blob([JSON.stringify(info)], { type: "application/json" }));
 
-    const response = await http2.put(`/diaries`, formData);
+    const response = await http2.put(`/diaries/${diary.drawingId}`, formData);
     console.log(response.data);
     if (response.data.message === "success") {
       setModifyModal(true);
