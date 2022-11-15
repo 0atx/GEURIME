@@ -15,7 +15,7 @@ export default function DeleteCommentModal ({ open, handleClose, commentId, user
  
   // 일기 삭제
   async function deleteComment() {
-    const response = await http.delete(`/comments`, {
+    const response = await http.delete(`/comments/${commentId}`, {
       params: {
         commentId: commentId,
         userId: userId

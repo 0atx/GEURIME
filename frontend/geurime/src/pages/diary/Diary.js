@@ -73,6 +73,7 @@ export default function Diary() {
         },
       });
       if (response.data.message === "success") {
+        console.log({일기들: response.data.data})
         setDiaries(response.data.data);
       }
 
@@ -92,6 +93,7 @@ export default function Diary() {
       },
     });
     if (response.data.message === "success") {
+      console.log({일기들: response.data.data})
       setDiaries(response.data.data);
     }
 

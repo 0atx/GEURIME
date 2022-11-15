@@ -50,11 +50,6 @@ export default function ModifyBoard() {
   ];
   const [boardCategory, setBoardCategory] = useState(boardInfo.boardCategory);
   
-  // const titleChange = (event) => {
-  //   setTitle(event.target.value);
-  //   console.log({제목: title})
-  // };
-
   const handleChange = (event) => {
     setBoardCategory(event.target.value);
   };
@@ -91,7 +86,7 @@ export default function ModifyBoard() {
         setOpenNoCommentModal(true)
       }
       else{
-        const response = await http2.put(`/boards`, formData);
+        const response = await http2.put(`/boards/${boardInfo.boardId}`, formData);
       if (response.data.message == "success") {
         setOpen(true);
       } else {
@@ -108,7 +103,7 @@ export default function ModifyBoard() {
         setOpenNoCommentModal(true)
       }
       else{
-        const response = await http2.put(`/boards`, formData);
+        const response = await http2.put(`/boards/${boardInfo.boardId}`, formData);
       if (response.data.message == "success") {
         console.log('수정 완료!')
         // navigator("/Board");
