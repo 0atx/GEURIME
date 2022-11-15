@@ -60,7 +60,7 @@ export default function ModifyDrawing() {
   const [drawingInfo, setDrawingInfo] = useState({
     drawingId: id,
     createTime: "",
-    drawingBoxid: 0,
+    drawingBoxId: 0,
     drawingImagePath: "",
     drawingTitle: "",
     emotionAngry: 0,
@@ -86,8 +86,11 @@ export default function ModifyDrawing() {
 
   // 그림 수정 axios 함수
   async function modifyDrawing() {
+    console.log(drawingInfo.drawingBoxId);
+    console.log(drawingInfo.drawingBoxName);
+
     const response = await http.put(`drawings`, {
-      drawingBoxId: drawingBox.drawingBoxId,
+      drawingBoxId: drawingInfo.drawingBoxId,
       drawingId: drawingInfo.drawingId,
       drawingTitle: document.getElementById("drawingTitle").value,
       isLike: drawingInfo.isLike,
