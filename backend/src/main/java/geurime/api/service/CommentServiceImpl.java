@@ -54,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
      * @return 생성된 댓글의 id
      */
     @Override
-    public Long createComment(Comment.CommentPostRequest request) {
+    public Comment.CommentResponse createComment(Comment.CommentPostRequest request) {
         Board board = boardRepository.findById(request.getBoardId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.BOARD_NOT_FOUND_ERROR));
         User user = userRepository.findById(request.getCommentUserId())
@@ -68,7 +68,11 @@ public class CommentServiceImpl implements CommentService {
                 .build();
         commentRepository.save(comment);
 
-        return comment.getId();
+        Comment.CommentResponse response = modelMapper.map(comment, Comment.CommentResponse.class);
+        response.setCommentUserProfile(user.getUserProfileImage());
+        response.setCommentUserNickname(user.getNickname());
+
+        return response;
     }
 
     /**
@@ -77,15 +81,21 @@ public class CommentServiceImpl implements CommentService {
      * @return 수정된 댓글의 id (댓글작성자가 아니면 0)
      */
     @Override
-    public Long updateComment(Comment.CommentPutRequest request) {
+    public Comment.CommentResponse updateComment(Comment.CommentPutRequest request) {
         Comment comment = commentRepository.findById(request.getCommentId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.COMMENT_NOT_FOUND_ERROR));
-        if(comment.getCommentUserId().equals(request.getUserId())){
-            comment.updateComment(request.getCommentContent());
-            return comment.getId();
-        }else {
-            return 0L;
-        }
+
+
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
+
+        comment.updateComment(request.getCommentContent());
+
+        Comment.CommentResponse response = modelMapper.map(comment, Comment.CommentResponse.class);
+        response.setCommentUserProfile(user.getUserProfileImage());
+        response.setCommentUserNickname(user.getNickname());
+
+        return response;
     }
 
     /**

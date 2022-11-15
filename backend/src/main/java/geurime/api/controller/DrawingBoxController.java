@@ -49,9 +49,9 @@ public class DrawingBoxController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/{drawingBoxId}")
     @ApiOperation(value = "그림보관함 제목수정", notes = "커스텀 그림보관함의 제목을 수정한다.")
-    public ResponseEntity<BasicResponse<Boolean>> updateDrawingBox(@RequestParam Long drawingBoxId, @RequestParam String drawingBoxName){
+    public ResponseEntity<BasicResponse<Boolean>> updateDrawingBox(@PathVariable Long drawingBoxId, @RequestParam String drawingBoxName){
         try {
             Boolean isChange = drawingBoxService.updateDrawingBox(drawingBoxId, drawingBoxName);
             return new ResponseEntity<>(makeBasicResponse(SUCCESS, isChange), HttpStatus.OK);
@@ -60,9 +60,9 @@ public class DrawingBoxController {
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{drawingBoxId}")
     @ApiOperation(value = "그림기록 보관함 삭제", notes = "isDelete가 true면 포함되어있던 사진도 전부 삭제, isDelete가 false면 포함되어있던 사진 기본보관함으로 이동")
-    public ResponseEntity<BasicResponse<String>> deleteDrawingBox(@RequestParam Long kidId, @RequestParam Long drawingBoxId, @RequestParam Boolean isDelete){
+    public ResponseEntity<BasicResponse<String>> deleteDrawingBox(@RequestParam Long kidId, @PathVariable Long drawingBoxId, @RequestParam Boolean isDelete){
         Boolean deleteResult = drawingService.deleteDrawingBox(kidId, drawingBoxId, isDelete);
         try {
             String result = deleteResult == true ? "삭제완료" : "삭제실패";
