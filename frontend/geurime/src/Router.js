@@ -25,6 +25,7 @@ import ModifyKidsInfo from "pages/settings/ModifyKidsInfo";
 import ModifyUserInfo from "pages/settings/ModifyUserInfo";
 import LoginCheck from "pages/home/LoginCheck";
 import Components from "pages/home/Components";
+import NotFound from "pages/error/NotFound";
 
 function Router() {
   // const url = window.location.href;
@@ -32,6 +33,7 @@ function Router() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="*" element={<NotFound />} />
         <Route path="/" element={<Home />} />
         <Route path="/invite/:invitecode" element={<Home />} />
         <Route path="/main" element={<Main />} />
