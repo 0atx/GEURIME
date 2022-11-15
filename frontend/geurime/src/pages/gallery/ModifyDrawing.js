@@ -60,7 +60,7 @@ export default function ModifyDrawing() {
   const [drawingInfo, setDrawingInfo] = useState({
     drawingId: id,
     createTime: "",
-    drawingBoxid: 0,
+    drawingBoxId: 0,
     drawingImagePath: "",
     drawingTitle: "",
     emotionAngry: 0,
@@ -86,8 +86,11 @@ export default function ModifyDrawing() {
 
   // 그림 수정 axios 함수
   async function modifyDrawing() {
+    console.log(drawingInfo.drawingBoxId);
+    console.log(drawingInfo.drawingBoxName);
+
     const response = await http.put(`drawings`, {
-      drawingBoxId: drawingBox.drawingBoxId,
+      drawingBoxId: drawingInfo.drawingBoxId,
       drawingId: drawingInfo.drawingId,
       drawingTitle: document.getElementById("drawingTitle").value,
       isLike: drawingInfo.isLike,
@@ -186,41 +189,45 @@ export default function ModifyDrawing() {
             />
           </Grid>
           {/* 보관함 */}
-          <Grid item xs={3}>
-            <Typography>보관함</Typography>
-          </Grid>
-          <Grid item xs={7}>
-            <Select
-              fullWidth
-              value={drawingBox}
-              onChange={handleChange}
-              variant="standard"
-              placeholder="기본 보관함"
-              MenuProps={{
-                disablePortal: true,
-                PaperProps: { sx: { maxHeight: 150 } },
-              }}
-            >
-              {drawingBoxes.map(function (box, i) {
-                return (
-                  <MenuItem key={i} value={box}>
-                    {box.drawingBoxName}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </Grid>
+          {drawingInfo.drawingBoxName === "그림일기 보관함" ? null : (
+            <>
+              <Grid item xs={3}>
+                <Typography>보관함</Typography>
+              </Grid>
+              <Grid item xs={7}>
+                <Select
+                  fullWidth
+                  value={drawingBox}
+                  onChange={handleChange}
+                  variant="standard"
+                  placeholder="기본 보관함"
+                  MenuProps={{
+                    disablePortal: true,
+                    PaperProps: { sx: { maxHeight: 150 } },
+                  }}
+                >
+                  {drawingBoxes.map(function (box, i) {
+                    return (
+                      <MenuItem key={i} value={box}>
+                        {box.drawingBoxName}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </Grid>
+            </>
+          )}
         </Grid>
         {/* 그림 수정 및 삭제 버튼 */}
         <Grid
           container
           justifyContent="space-evenly"
           alignItems="center"
-          sx={{ marginTop: "7vh" }}
+          sx={{ marginTop: "6vh" }}
         >
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <Btn
-              width="130px"
+              width="100%"
               onClick={() => {
                 deleteDrawing();
               }}
@@ -228,10 +235,10 @@ export default function ModifyDrawing() {
               그림 삭제
             </Btn>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={3}>
             <Btn
+              width="100%"
               bgcolor="#FFCA28"
-              width="130px"
               onClick={() => {
                 modifyDrawing();
               }}
