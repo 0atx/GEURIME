@@ -106,7 +106,10 @@ export default function Main() {
                     setFamilyInfoOpen(true);
                   }}
                 >
-                  <Avatar sx={{ marginTop: "5px" }} src={info.userProfileImage} />
+                  <Avatar
+                    sx={{ marginTop: "5px" }}
+                    src={info.userProfileImage}
+                  />
 
                   <Grid
                     item
@@ -176,7 +179,11 @@ export default function Main() {
       </Grid>
       <NavBar />
       {/* 가족 정보 모달 */}
-      <FamilyInfoModal userId={clickedId} open={familyInfoOpen} setOpen={setFamilyInfoOpen} />
+      <FamilyInfoModal
+        userId={clickedId}
+        open={familyInfoOpen}
+        setOpen={setFamilyInfoOpen}
+      />
     </div>
   );
 }
