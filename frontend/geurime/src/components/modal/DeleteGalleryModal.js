@@ -19,9 +19,8 @@ export default function RegistDrawingModal(props) {
   const [resultModal, setResultModal] = useState(false);
 
   async function deleteGallery(type) {
-    const response = await http.delete(`drawings/box`, {
+    const response = await http.delete(`drawings/box/${props.id}`, {
       params: {
-        drawingBoxId: props.id,
         isDelete: type,
         kidId: localStorage.getItem("currentKidId"),
       },
