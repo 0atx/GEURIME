@@ -2,7 +2,16 @@ import tensorflow as tf
 import numpy as np
 import cv2
 import imageio
+import urllib.request
 # from tensorflow.keras.preprocessing import image
+
+def url_to_image(url):
+    resp = urllib.request.urlopen(url)
+    image = np.asarray(bytearray(resp.read()))
+    image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+    return image
 
 def predict(url):
     model_path = "/code/app/efficientnet_data_v3(73).h5"
@@ -12,7 +21,8 @@ def predict(url):
     train_input_shape = (224, 224, 3)
     labels = ['depression', 'violence', 'happiness']
 
-    web_image = imageio.imread(url)
+    # web_image = imageio.imread(url)
+    web_image = url_to_image(url)
     web_image = cv2.cvtColor(web_image, cv2.COLOR_RGBA2RGB)
     web_image = cv2.resize(web_image, dsize=train_input_shape[0:2], )
     # web_image = image.img_to_array(web_image)
