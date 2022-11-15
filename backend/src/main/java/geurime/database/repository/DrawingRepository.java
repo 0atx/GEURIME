@@ -44,6 +44,6 @@ public interface DrawingRepository extends JpaRepository<Drawing, Long> {
     @Query(value = "select dr.createTime as createTime, count(dr.createTime) as count from Drawing dr where dr.drawingBox.kid = :kid group by dr.createTime")
     List<CountHeatMapResponse> findDrawingCountList(@Param("kid") Kid kid);
 
-    List<Drawing> findTop5ByDrawingBox_KidOrderByIdDesc(Kid kid);
+    List<Drawing> findTop4ByDrawingBox_KidOrderByIdDesc(Kid kid);
 
 }

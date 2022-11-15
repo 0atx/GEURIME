@@ -71,7 +71,7 @@ public class KidServiceImpl implements KidService {
 
         response.setDrawingBoxDtoList(drawingBoxDtoList);
 
-        List<Drawing> sampleDrawingList = drawingRepository.findTop5ByDrawingBox_KidOrderByIdDesc(kid);
+        List<Drawing> sampleDrawingList = drawingRepository.findTop4ByDrawingBox_KidOrderByIdDesc(kid);
         List<String> sampleImageList = new ArrayList<>();
         for (Drawing sample : sampleDrawingList){
             sampleImageList.add(sample.getDrawingImagePath());
