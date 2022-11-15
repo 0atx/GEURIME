@@ -66,7 +66,7 @@ export default function Diary() {
       let keyword = searchKeyWord;
       keyword = keyword.trim();
 
-      const response = await http.get(`/diaries/title`, {
+      const response = await http.get(`/diaries/title/${kidInfo.kidId}`, {
         params: {
           keyword: keyword,
           kidId: kidInfo.kidId,
@@ -85,7 +85,7 @@ export default function Diary() {
     let keyword = searchKeyWord;
     keyword = keyword.trim();
 
-    const response = await http.get(`/diaries/title`, {
+    const response = await http.get(`/diaries/title/${kidInfo.kidId}`, {
       params: {
         keyword: keyword,
         kidId: kidInfo.kidId,

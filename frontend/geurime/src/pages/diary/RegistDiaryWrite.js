@@ -175,8 +175,10 @@ export default function RegistDiary({}) {
             <Paper elevation={3}>
               <TextField
                 id="outlined-multiline-static"
-                inputProps={{ style: { fontSize: "2.5vh" } }}
+                inputProps={{ style: { fontSize: "2.5vh", lineHeight: "3vh" } }}
                 sx={{ width: "100%" }}
+                color="primary"
+                focused
                 multiline
                 rows={12}
                 value={writing}
@@ -214,16 +216,27 @@ export default function RegistDiary({}) {
                     sx={{
                       color: "#FFA000",
                       backgroundColor: "#fff4ce",
-                      fontSize: "7vh",
+                      fontSize: "6vh",
                       borderRadius: "20px",
                     }}
                     onClick={() => {
                       SpeechRecognition.stopListening();
                       setStartSpeech(false);
-                      setSpeech(speech + transcript);
+                      // setSpeech(speech + transcript);
+                      let txtArea = document.getElementById("text");
+                      let txtValue = txtArea.value; // 기존에 입력된 문자값 전체
+                      let selectPos = txtArea.selectionStart; // 커서 위치 앞 문자 공백 0부터 카운터 하여 숫자 반환
+                      let beforeTxt = txtValue.substring(0, selectPos); // 기존텍스트부터 ~ 커서[시작점] 까지의 문자
+                      let afterTxt = txtValue.substring(txtArea.selectionEnd, txtValue.length); // 커서[끝지점]부터~ 기존텍스트 까지의문자
+
+                      txtArea.value = beforeTxt + transcript + afterTxt; // 커스에 문자 추가하여 전체 조합
+                      selectPos = selectPos + transcript.length;
+                      txtArea.selectionStart = selectPos; // 커서 시작점을 추가 삽입된 텍스트 이후로 지정
+                      txtArea.selectionEnd = selectPos; // 커서 끝지점을 추가 삽입된 텍스트 이후로 지정
+                      setSpeech(txtArea.value);
                     }}
                   />
-                  <Typography sx={{ fontSize: "2.3vh", color: "#6F6F6F" }}>끝내기</Typography>
+                  <Typography sx={{ fontSize: "2vh", color: "#6F6F6F" }}>끝내기</Typography>
                 </div>
               ) : (
                 // 음성 인식 해제된 상태 (음성인식 시작 버튼)
@@ -232,7 +245,7 @@ export default function RegistDiary({}) {
                     sx={{
                       color: "#FFA000",
                       backgroundColor: "#fff4ce",
-                      fontSize: "7vh",
+                      fontSize: "6vh",
                       borderRadius: "20px",
                     }}
                     onClick={() => {
@@ -241,21 +254,37 @@ export default function RegistDiary({}) {
                       setStartSpeech(true);
                     }}
                   />
-                  <Typography sx={{ fontSize: "2.3vh", color: "#6F6F6F" }}>시작하기</Typography>
+                  <Typography sx={{ fontSize: "2vh", color: "#6F6F6F" }}>시작하기</Typography>
                 </div>
               )}
             </div>
             <Paper elevation={3} sx={{ marginTop: "5%" }}>
               <TextField
-                inputProps={{
-                  style: { fontSize: "2.5vh" },
-                }}
+                inputProps={{ style: { fontSize: "2vh", lineHeight: "3vh" } }}
                 id="outlined-multiline-static"
+                placeholder="음성인식이 나타나는 영역이에요."
                 sx={{
                   width: "100%",
                 }}
                 multiline
-                // disabled
+                rows={2}
+                disabled
+                value={transcript}
+              />
+            </Paper>
+
+            <Paper elevation={3} sx={{ marginTop: "5%" }}>
+              <TextField
+                inputProps={{
+                  style: { fontSize: "2.5vh", lineHeight: "3vh" },
+                }}
+                id="text"
+                color="primary"
+                focused
+                sx={{
+                  width: "100%",
+                }}
+                multiline
                 rows={12}
                 value={speech}
                 onChange={handleSpeech}
