@@ -68,20 +68,20 @@ public class DrawingController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/{drawingId}")
     @ApiOperation(value = "그림기록 수정", notes = "그림 보관함과 그림 제목을 받아 그림기록을 수정한다.")
-    public ResponseEntity<BasicResponse<Long>> updateDrawing(@RequestBody Drawing.DrawingPutRequest request){
+    public ResponseEntity<BasicResponse<Long>> updateDrawing(@PathVariable Long drawingId ,@RequestBody Drawing.DrawingPutRequest request){
         try {
-            Long drawingId = drawingService.updateDrawing(request);
+            drawingService.updateDrawing(request);
             return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingId), HttpStatus.OK);
         } catch (CustomException e) {
             return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PutMapping("/migration")
+    @PutMapping("/migration/{kidId}")
     @ApiOperation(value = "그림기록 리스트 보관함 이동", notes = "그림 보관함 id 리스트와 이동시킬 그림보관함의 id를 받아 그림기록 보관함을 수정한다.")
-    public ResponseEntity<BasicResponse<Long>> migrateDrawingList(@RequestBody Drawing.DrawingMigrationPutRequest request){
+    public ResponseEntity<BasicResponse<Long>> migrateDrawingList(@PathVariable Long kidId ,@RequestBody Drawing.DrawingMigrationPutRequest request){
         try {
             Long drawingBoxId = drawingService.drawingBoxMigration(request);
             return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingBoxId), HttpStatus.OK);
@@ -90,9 +90,9 @@ public class DrawingController {
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{drawingId}")
     @ApiOperation(value = "그림기록 삭제", notes = "유저 id로 주인인지 검증하고 그림기록을 삭제한다.")
-    public ResponseEntity<BasicResponse<String>> deleteDrawing(@RequestParam Long kidId, @RequestParam Long drawingId){
+    public ResponseEntity<BasicResponse<String>> deleteDrawing(@RequestParam Long kidId, @PathVariable Long drawingId){
         try {
             Boolean isDelete = drawingService.deleteDrawing(kidId, drawingId);
             String result = isDelete == true ? "삭제완료" : "삭제실패";
