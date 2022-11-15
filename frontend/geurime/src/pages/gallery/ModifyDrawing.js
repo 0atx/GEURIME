@@ -86,10 +86,7 @@ export default function ModifyDrawing() {
 
   // 그림 수정 axios 함수
   async function modifyDrawing() {
-    console.log(drawingInfo.drawingBoxId);
-    console.log(drawingInfo.drawingBoxName);
-
-    const response = await http.put(`drawings`, {
+    const response = await http.put(`drawings/${drawingInfo.drawingId}`, {
       drawingBoxId: drawingInfo.drawingBoxId,
       drawingId: drawingInfo.drawingId,
       drawingTitle: document.getElementById("drawingTitle").value,
@@ -104,9 +101,8 @@ export default function ModifyDrawing() {
 
   // 그림 삭제 axios 함수
   async function deleteDrawing() {
-    const response = await http.delete(`/drawings`, {
+    const response = await http.delete(`/drawings/${drawingInfo.drawingId}`, {
       params: {
-        drawingId: drawingInfo.drawingId,
         kidId: currentKid.kidId,
       },
     });

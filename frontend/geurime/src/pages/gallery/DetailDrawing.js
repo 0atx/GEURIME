@@ -49,7 +49,7 @@ export default function DetailDrawing() {
   });
 
   async function ModifyDrawing(copy) {
-    const response = await http.put(`drawings`, {
+    const response = await http.put(`/drawings/${copy.drawinId}`, {
       drawingBoxId: copy.drawingBoxId,
       drawingId: copy.drawingId,
       drawingTitle: copy.drawingTitle,
@@ -74,9 +74,8 @@ export default function DetailDrawing() {
 
   // 그림 삭제 axios 함수
   async function deleteDrawing() {
-    const response = await http.delete(`/drawings`, {
+    const response = await http.delete(`/drawings/${drawingInfo.drawingId}`, {
       params: {
-        drawingId: drawingInfo.drawingId,
         kidId: localStorage.getItem("currentKidId"),
       },
     });

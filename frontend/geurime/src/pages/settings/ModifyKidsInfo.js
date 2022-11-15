@@ -103,7 +103,10 @@ export default function ModifyKidsInfo() {
         new Blob([JSON.stringify(kidsInfo)], { type: "application/json" })
       );
 
-      const response = await http2.put(`/kids`, formData);
+      const response = await http2.put(
+        `/kids/${selectKidInfo.kidId}`,
+        formData
+      );
       // console.log(response.data);
 
       let kidInfo = response.data.data;
@@ -181,11 +184,7 @@ export default function ModifyKidsInfo() {
 
   // 아이 삭제
   async function deleteKid() {
-    const response = await http.delete(`/kids`, {
-      params: {
-        kidId: selectKidInfo.kidId,
-      },
-    });
+    const response = await http.delete(`/kids/${selectKidInfo.kidId}`);
     console.log(response.data);
     setOpenDelete(false);
     navigate("/settings");
