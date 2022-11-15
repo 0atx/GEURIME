@@ -31,7 +31,9 @@ export default function MoveGalleryModal(props) {
   };
 
   // 현재 선택된 아이의 그림 보관함 리스트
-  const [drawingBoxes, setDrawingBoxes] = useState(currentKid.drawingBoxDtoList);
+  const [drawingBoxes, setDrawingBoxes] = useState(
+    currentKid.drawingBoxDtoList
+  );
 
   // 보관함 리스트 중 그림일기 보관함을 제외
   for (let i = 0; i < drawingBoxes.length; i++) {
@@ -43,7 +45,7 @@ export default function MoveGalleryModal(props) {
   }
 
   async function moveDrawings() {
-    const response = await http.put(`/drawings/migration`, {
+    const response = await http.put(`/drawings/migration/${currentKid.kidId}`, {
       drawingBoxId: drawingBox.drawingBoxId,
       drawingIdList: props.list,
     });
