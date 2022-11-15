@@ -137,7 +137,7 @@ export default function Main() {
           <Masonry columns={2} spacing={1.5} sx={{ margin: 0 }}>
             {imgList.length === 0 ? (
               <>
-                {[0, 1, 2, 3, 4].map(function (img, i) {
+                {[0, 1, 2, 3].map(function (img, i) {
                   return (
                     <img
                       key={i}
