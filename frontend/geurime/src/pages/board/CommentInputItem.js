@@ -20,7 +20,8 @@ import { http } from "api/http";
 export default function CommentInputItem({ item, setCommentList, getComment, checkOne, setCheckOne }) {
   const [userInfo, setUserInfo] = useRecoilState(userState);
   useEffect(() => {
-    console.log({아이템: item})
+    console.log({ 아이템: item })
+    console.log(item.id)
   }, [])
 
   const [comment, setComment] = useState(item.commentContent)
@@ -56,11 +57,11 @@ export default function CommentInputItem({ item, setCommentList, getComment, che
   // 댓글 수정 로직
   const modifyComment = async () => {
     if (comment.length != 0) {
-      const response = await http.put(`/comments`,
+      const response = await http.put(`/comments/${item.id}`,
         {
           commentContent: comment,
           commentId: item.id,
-          commentUserId: userInfo.userId,
+          userId: userInfo.userId,
         }
       );
       setCheckEdit(false)

@@ -13,11 +13,10 @@ import { http } from "api/http";
 export default function DeleteBoardModal ({ open, handleClose, boardId, userId}) {
   const navigate = useNavigate();
 
-  // 일기 삭제
+  // 게시글 삭제
   async function deleteBoard() {
-    const response = await http.delete(`/boards`, {
+    const response = await http.delete(`/boards/${boardId}`, {
       params: {
-        boardId: boardId,
         userId: userId
       }
     });

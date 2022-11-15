@@ -86,7 +86,7 @@ export default function ModifyBoard() {
         setOpenNoCommentModal(true)
       }
       else{
-        const response = await http2.put(`/boards`, formData);
+        const response = await http2.put(`/boards/${boardInfo.boardId}`, formData);
       if (response.data.message == "success") {
         setOpen(true);
       } else {
@@ -103,7 +103,7 @@ export default function ModifyBoard() {
         setOpenNoCommentModal(true)
       }
       else{
-        const response = await http2.put(`/boards`, formData);
+        const response = await http2.put(`/boards/${boardInfo.boardId}`, formData);
       if (response.data.message == "success") {
         console.log('수정 완료!')
         // navigator("/Board");
