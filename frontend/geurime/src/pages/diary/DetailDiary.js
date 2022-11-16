@@ -29,6 +29,9 @@ import { http } from "api/http";
 import { useParams } from "react-router-dom";
 import Modal from "components/common/Modal";
 
+// 캡처
+import html2canvas from "html2canvas";
+
 export default function DetailDiary() {
   const params = useParams();
 
@@ -98,6 +101,22 @@ export default function DetailDiary() {
     }
   }, []);
 
+  // 일기장 캡처 함수
+  function capture() {
+    html2canvas(document.getElementById("diary")).then((canvas) => {
+      onSaveAs(canvas.toDataURL("image/png"), "diary-download.png");
+    });
+  }
+
+  function onSaveAs(uri, filename) {
+    var link = document.createElement("a");
+    document.body.appendChild(link);
+    link.href = uri;
+    link.download = filename;
+    link.click();
+    document.body.removeChild(link);
+  }
+
   return (
     <div>
       {/* 헤더 */}
@@ -108,8 +127,10 @@ export default function DetailDiary() {
         clickRight={deleteDiary}
       ></BackMenu>
       <Container id="container">
+        <Button onClick={capture}>test</Button>
         {/* 일기장 */}
         <Grid
+          id="diary"
           container
           sx={{
             border: 3,
@@ -129,8 +150,8 @@ export default function DetailDiary() {
               padding: "3%",
             }}
           >
-            <span>{year}</span> 년 <span>{month}</span> 월 <span>{date}</span> 일{" "}
-            <span>{days}</span> 요일
+            <span>{year}</span> 년 <span>{month}</span> 월 <span>{date}</span>{" "}
+            일 <span>{days}</span> 요일
           </Grid>
           <Grid
             item
@@ -145,19 +166,39 @@ export default function DetailDiary() {
             <Grid container sx={{ alignItems: "center" }}>
               {/* 날씨 */}
               <Grid item xs={6} sx={{ textAlign: "right" }}>
-                {diary.drawingDiaryWeather === 0 && <img src={sunny} width="30vh"></img>}
-                {diary.drawingDiaryWeather === 1 && <img src={cloudy} width="30vh"></img>}
-                {diary.drawingDiaryWeather === 2 && <img src={rainy} width="30vh"></img>}
-                {diary.drawingDiaryWeather === 3 && <img src={snowy} width="30vh"></img>}
-                {diary.drawingDiaryWeather === 4 && <img src={windy} width="30vh"></img>}
+                {diary.drawingDiaryWeather === 0 && (
+                  <img src={sunny} width="30vh"></img>
+                )}
+                {diary.drawingDiaryWeather === 1 && (
+                  <img src={cloudy} width="30vh"></img>
+                )}
+                {diary.drawingDiaryWeather === 2 && (
+                  <img src={rainy} width="30vh"></img>
+                )}
+                {diary.drawingDiaryWeather === 3 && (
+                  <img src={snowy} width="30vh"></img>
+                )}
+                {diary.drawingDiaryWeather === 4 && (
+                  <img src={windy} width="30vh"></img>
+                )}
               </Grid>
               {/* 기분 */}
               <Grid item xs={6} sx={{ textAlign: "right" }}>
-                {diary.drawingDiaryFeeling === 0 && <img src={happy} width="30vh"></img>}
-                {diary.drawingDiaryFeeling === 1 && <img src={sad} width="30vh"></img>}
-                {diary.drawingDiaryFeeling === 2 && <img src={surprise} width="30vh"></img>}
-                {diary.drawingDiaryFeeling === 3 && <img src={scary} width="30vh"></img>}
-                {diary.drawingDiaryFeeling === 4 && <img src={angry} width="30vh"></img>}
+                {diary.drawingDiaryFeeling === 0 && (
+                  <img src={happy} width="30vh"></img>
+                )}
+                {diary.drawingDiaryFeeling === 1 && (
+                  <img src={sad} width="30vh"></img>
+                )}
+                {diary.drawingDiaryFeeling === 2 && (
+                  <img src={surprise} width="30vh"></img>
+                )}
+                {diary.drawingDiaryFeeling === 3 && (
+                  <img src={scary} width="30vh"></img>
+                )}
+                {diary.drawingDiaryFeeling === 4 && (
+                  <img src={angry} width="30vh"></img>
+                )}
               </Grid>
             </Grid>
           </Grid>
@@ -200,8 +241,16 @@ export default function DetailDiary() {
             </Grid>
           </Grid>
 
-          <Grid item xs={12} sx={{ textAlign: "center", padding: "4% 4% 0% 4%" }}>
-            <img src={diary.drawingImagePath} width="100%" style={{ borderRadius: "5%" }}></img>
+          <Grid
+            item
+            xs={12}
+            sx={{ textAlign: "center", padding: "4% 4% 0% 4%" }}
+          >
+            <img
+              src={diary.drawingImagePath}
+              width="100%"
+              style={{ borderRadius: "5%" }}
+            ></img>
           </Grid>
           <Grid
             className="content"
@@ -213,7 +262,11 @@ export default function DetailDiary() {
           </Grid>
         </Grid>
         <div style={{ textAlign: "center" }}>
-          <Button sx={{ marginTop: "8%" }} width="20vh" onClick={showAnalysisModal}>
+          <Button
+            sx={{ marginTop: "8%" }}
+            width="20vh"
+            onClick={showAnalysisModal}
+          >
             분석결과 보기
           </Button>
         </div>
@@ -227,7 +280,9 @@ export default function DetailDiary() {
         diaryid={diary.drawingId}
       ></DeleteDiaryModal>
       {/* 분석 결과 모달 */}
-      {diary.emotionHappy === null && diary.emotionSad === null && diary.emotionAngry === null ? (
+      {diary.emotionHappy === null &&
+      diary.emotionSad === null &&
+      diary.emotionAngry === null ? (
         <Modal
           open={openAnalysisModal}
           close={closeAnalysisModal}

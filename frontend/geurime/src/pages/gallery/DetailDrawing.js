@@ -49,7 +49,7 @@ export default function DetailDrawing() {
   });
 
   async function ModifyDrawing(copy) {
-    const response = await http.put(`/drawings/${copy.drawinId}`, {
+    const response = await http.put(`/drawings/${copy.drawingId}`, {
       drawingBoxId: copy.drawingBoxId,
       drawingId: copy.drawingId,
       drawingTitle: copy.drawingTitle,
