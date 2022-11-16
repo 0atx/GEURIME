@@ -28,7 +28,7 @@ import { Favorite } from "@mui/icons-material";
 
 export default function Gallery() {
   const [currentKid, setCurrentKid] = useRecoilState(CurrentKidState);
-  const [boxes, setBoxes] = useState(currentKid.drawingBoxDtoList);
+  const [boxes, setBoxes] = useState([]);
 
   // 좋아요 보관함 그림 정보
   const [likeBox, setLikeBox] = useState([]);
