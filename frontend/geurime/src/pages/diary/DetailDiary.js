@@ -4,7 +4,7 @@
 @since 2022.11.01
 */
 import { useEffect, useRef, useState } from "react";
-import { Container, Grid, Typography } from "@mui/material";
+import { Container, Grid, IconButton, Typography } from "@mui/material";
 import BackMenu from "components/nav/BackMenu";
 import NavBar from "components/nav/NavBar";
 import moment from "moment";
@@ -30,7 +30,8 @@ import { useParams } from "react-router-dom";
 import Modal from "components/common/Modal";
 
 // 캡처
-import html2canvas from "html2canvas";
+import domtoimage from "dom-to-image";
+import { saveAs } from "file-saver";
 
 export default function DetailDiary() {
   const params = useParams();
@@ -77,10 +78,13 @@ export default function DetailDiary() {
   // 일기 조회
   async function getDiary() {
     const response = await http.get(`/diaries/info/${params.diaryid}`);
-    console.log(response.data.data);
-
     const info = response.data.data;
+    getBase64(info.drawingImagePath).then((a) => {
+      info.drawingImagePath = a;
+    });
+
     setDiary(info);
+    console.log(info);
 
     // 연동 후 데이터 가공
     setYear(new Date(info.createTime).getFullYear());
@@ -90,6 +94,20 @@ export default function DetailDiary() {
 
     setWakeup(moment(new Date(info.drawingDiaryWakeUp)).format("A h시 mm분"));
     setSleep(moment(new Date(info.drawingDiarySleep)).format("A h시 mm분"));
+  }
+
+  async function getBase64(url) {
+    const data = await fetch(url);
+    const blob = await data.blob();
+
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = function () {
+        const base64data = reader.result;
+        resolve(base64data);
+      };
+    });
   }
 
   const mounted = useRef(false);
@@ -102,19 +120,13 @@ export default function DetailDiary() {
   }, []);
 
   // 일기장 캡처 함수
-  function capture() {
-    html2canvas(document.getElementById("diary")).then((canvas) => {
-      onSaveAs(canvas.toDataURL("image/png"), "diary-download.png");
-    });
-  }
+  const cardRef = useRef();
 
-  function onSaveAs(uri, filename) {
-    var link = document.createElement("a");
-    document.body.appendChild(link);
-    link.href = uri;
-    link.download = filename;
-    link.click();
-    document.body.removeChild(link);
+  function capture() {
+    const card = cardRef.current;
+    domtoimage.toBlob(card).then((blob) => {
+      saveAs(blob, "diary.png");
+    });
   }
 
   return (
@@ -127,9 +139,9 @@ export default function DetailDiary() {
         clickRight={deleteDiary}
       ></BackMenu>
       <Container id="container">
-        <Button onClick={capture}>test</Button>
         {/* 일기장 */}
         <Grid
+          ref={cardRef}
           id="diary"
           container
           sx={{
@@ -251,6 +263,7 @@ export default function DetailDiary() {
               width="100%"
               style={{ borderRadius: "5%" }}
             ></img>
+            <canvas id="canvas" style={{ display: "none" }} />
           </Grid>
           <Grid
             className="content"
@@ -263,11 +276,19 @@ export default function DetailDiary() {
         </Grid>
         <div style={{ textAlign: "center" }}>
           <Button
-            sx={{ marginTop: "8%" }}
-            width="20vh"
+            sx={{ marginTop: "8%", marginRight: "10%" }}
+            width="15vh"
             onClick={showAnalysisModal}
           >
             분석결과 보기
+          </Button>
+          <Button
+            sx={{ marginTop: "8%" }}
+            width="15vh"
+            onClick={capture}
+            bgcolor="#FFCA28"
+          >
+            다운로드
           </Button>
         </div>
       </Container>
