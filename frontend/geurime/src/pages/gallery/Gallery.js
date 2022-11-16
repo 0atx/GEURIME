@@ -50,6 +50,9 @@ export default function Gallery() {
   // 아이의 정보를 가져오는 axios 함수
   async function getKidInfo() {
     const response = await http.get(`/kids/${currentKid.kidId}`);
+
+    
+
     setCurrentKid(response.data.data);
     setBoxes(response.data.data.drawingBoxDtoList);
   }

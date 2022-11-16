@@ -110,6 +110,8 @@ const Piechart = ({ happy, sad, angry }) => {
 };
 
 export default function Main() {
+  const navigate = useNavigate();
+
   // 유저 state
   const [userInfo, setUserInfo] = useRecoilState(userState);
   // 자녀 state
@@ -149,41 +151,64 @@ export default function Main() {
 
   // 자녀의 감정 통계 조회
   async function getEmotion(month, year) {
-    const response = await http.get(`/kids/emotion/${currentKid.kidId}`, {
-      params: {
-        MM: month,
-        yyyy: year,
-      },
-    });
+    const response = await http
+      .get(`/kids/emotion/${currentKid.kidId}`, {
+        params: {
+          MM: month,
+          yyyy: year,
+        },
+      })
+      .then((response) => {
+        // console.log(month, year, response.data.data);
 
-    // console.log(month, year, response.data.data);
-
-    if (response.data.message === "success") {
-      setHappy(response.data.data.happy);
-      setSad(response.data.data.sad);
-      setAngry(response.data.data.angry);
-    }
+        if (response.data.message === "success") {
+          setHappy(response.data.data.happy);
+          setSad(response.data.data.sad);
+          setAngry(response.data.data.angry);
+        }
+      })
+      .catch((error) => {
+        if (error.response.data.code === "E012") {
+          navigate("/norights");
+        }
+      });
   }
 
   // 처음 로딩시 유저정보 가져오기
   async function getUserInfo() {
-    const response = await http.get(`/users/${userInfo.userId}`);
-    if (response.data.message === "success") {
-      setUserInfo(response.data.data);
+    const response = await http
+      .get(`/users/${userInfo.userId}`)
+      .then((response) => {
+        if (response.data.message === "success") {
+          setUserInfo(response.data.data);
 
-      // 가입년도부터 현재년도까지의 배열
-      let createYear = response.data.data.createDate.substring(0, 4);
-      for (let i = parseInt(createYear); i <= new Date().getFullYear(); i++) {
-        years.push(i);
-      }
-    }
+          // 가입년도부터 현재년도까지의 배열
+          let createYear = response.data.data.createDate.substring(0, 4);
+          for (let i = parseInt(createYear); i <= new Date().getFullYear(); i++) {
+            years.push(i);
+          }
+        }
+      })
+      .catch((error) => {
+        if (error.response.data.code === "E012") {
+          navigate("/norights");
+        }
+      });
   }
 
   async function getFamilyInfo() {
-    const response = await http.get(`/users/family/${userInfo.userId}`);
-    if (response.data.message === "success") {
-      setFamilyInfo(response.data.data);
-    }
+    const response = await http
+      .get(`/users/family/${userInfo.userId}`)
+      .then((response) => {
+        if (response.data.message === "success") {
+          setFamilyInfo(response.data.data);
+        }
+      })
+      .catch((error) => {
+        if (error.response.data.code === "E012") {
+          navigate("/norights");
+        }
+      });
   }
 
   const mounted = useRef(false);

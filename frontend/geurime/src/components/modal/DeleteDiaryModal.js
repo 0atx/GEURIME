@@ -15,9 +15,17 @@ export default function DeleteDiaryModal({ open, handleClose, diaryid }) {
 
   // 일기 삭제
   async function deleteDiary() {
-    const response = await http.delete(`/diaries/${diaryid}`);
-    console.log(response.data);
-    navigate(`/diary`);
+    const response = await http
+      .delete(`/diaries/${diaryid}`)
+      .then((response) => {
+        // console.log(response.data);
+        navigate(`/diary`);
+      })
+      .catch((error) => {
+        if (error.response.data.code === "E012") {
+          navigate("/norights");
+        }
+      });
   }
   return (
     <Dialog open={open} onClose={handleClose}>

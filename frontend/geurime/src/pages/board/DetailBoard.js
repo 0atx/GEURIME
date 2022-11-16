@@ -22,7 +22,8 @@ import sampleImage from "assets/boardSample.png";
 
 import NoCommentModal from "components/modal/NoCommentModal";
 
-export default function DetailBoard( ) { 
+export default function DetailBoard() { 
+  const navigater = useNavigate();
   const location = useLocation()
   const [commentList, setCommentList] = useState([
     { 'id': 1, 'commentUserId': 20, 'commentUserProfile': 'https://geurime-a506.s3.ap-northeast-2.amazonaws.c…86a5a%5Chome%5Cubuntu%5Cstatic%5CsunnyClicked.png', 'commentUserNickname': '해안', 'createTime': '2022-11-03 14:41:00', 'updateTime': null },
@@ -65,13 +66,22 @@ export default function DetailBoard( ) {
   const getDetail = async () => {
     // console.log({ 페이지id: location.pathname.slice(13,) })
     const boardid = location.pathname.slice(13,);
-    const response = await http.get(`/boards/${boardid}`);
-    if (response.data.message == "success") {
-      setBoard(response.data.data)
-      setBoardInfo(response.data.data)
-    } else {
-      alert("게시글을 불러오지 못했습니다");
-    }
+    const response = await http
+      .get(`/boards/${boardid}`)
+      .then((res) => {
+        setBoard(res.data.data)
+        setBoardInfo(res.data.data)
+      })
+      .catch((error) => {
+          navigater("/norights");
+
+      });
+    // if (response.data.message == "success") {
+    //   setBoard(response.data.data)
+    //   setBoardInfo(response.data.data)
+    // } else {
+    //   alert("게시글을 불러오지 못했습니다");
+    // }
   }
 
   let [check, setCheck] = useState(false);

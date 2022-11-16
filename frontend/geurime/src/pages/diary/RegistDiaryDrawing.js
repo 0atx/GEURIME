@@ -46,8 +46,11 @@ import CropRoundedIcon from "@mui/icons-material/CropRounded";
 // import { openDefaultEditor } from "pintura/pintura";
 import ReactCrop from "react-image-crop";
 import { registState } from "states/RegistState";
+import { useNavigate } from "react-router-dom";
 
 export default function RegistDiary({}) {
+  const navigate = useNavigate();
+
   // 이미지 편집
   const [isUpdated, setIsUpdated] = useState(false);
   const [updatedImage, setUpdatedImage] = useState();
@@ -92,13 +95,20 @@ export default function RegistDiary({}) {
 
   // 그림 분석하기
   async function analyzeDrawing(id) {
-    const response = await http.get(`/ai/${id}`);
-    // console.log("분석한다");
-    console.log(response.data);
-    console.log("분석완료");
-    // 일기 리스트에 추가
-    localStorage.setItem("registD", false);
-    setRegistInfo({ state: false });
+    const response = await http
+      .get(`/ai/${id}`)
+      .then((response) => {
+        // console.log(response.data);
+        // console.log("분석완료");
+        // 일기 리스트에 추가
+        localStorage.setItem("registD", false);
+        setRegistInfo({ state: false });
+      })
+      .catch((error) => {
+        if (error.response.data.code === "E012") {
+          navigate("/norights");
+        }
+      });
   }
 
   // base64를 이미지 파일로 바꿔주는 함수

@@ -19,12 +19,18 @@ export default function DeleteUserModal({ open, handleClose }) {
 
   // 회원 탈퇴
   async function deleteUser() {
-    const response = await http.delete(`/users/${userInfo.userId}`);
-    console.log(response.data);
-
-    window.localStorage.clear();
-
-    navigate(`/`);
+    const response = await http
+      .delete(`/users/${userInfo.userId}`)
+      .then((response) => {
+        // console.log(response.data);
+        window.localStorage.clear();
+        navigate(`/`);
+      })
+      .catch((error) => {
+        if (error.response.data.code === "E012") {
+          navigate("/norights");
+        }
+      });
   }
 
   return (
