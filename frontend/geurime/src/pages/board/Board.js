@@ -136,38 +136,6 @@ useEffect(() => {
       }
     }
 
-
-    //   setLoading(true)
-    //   const response = await http.get(`/boards/search`, {
-    //     params: {
-    //       category: category,
-    //       keyword: searchInput.current.value,
-    //       page: count,
-    //       size: 5,
-    //     },
-    //   });
-    //   setLoading(false)
-    //   if (response.data.message == "success") {
-    //     console.log({ 검색결과: response.data.data });
-    //     if (response.data.data.length == 0) {
-    //       setOpenNoSearchModal(true);
-    //     } else {
-    //       // setBoards(response.data.data);
-    //       if (count == 0) {
-    //         setBoards(response.data.data);
-    //         setCount(count + 1)
-    //       }
-    //       else {
-    //         const fetchedData = response.data.data;
-    //         const mergedData = boards.concat(...fetchedData);
-    //         setBoards(mergedData);
-    //         setCount(count + 1)
-    //       }
-    //     }
-    //   } else {
-    //     alert("게시글을 불러오지 못했습니다");
-    //   }
-    // }
   };
 
   const [openNoSearchModal, setOpenNoSearchModal] = useState(false);

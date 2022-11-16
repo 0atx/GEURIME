@@ -21,9 +21,7 @@ export default function DeleteCommentModal ({ open, handleClose, commentId, user
         userId: userId
       }
     });
-    // if (response.)
     getComment()
-    console.log(response.data);
   }
   return (
     <Dialog open={open} onClose={handleClose}>
