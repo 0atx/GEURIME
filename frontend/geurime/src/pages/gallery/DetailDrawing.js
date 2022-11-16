@@ -21,7 +21,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function DetailDrawing() {
   const location = useLocation();
-  const navigater = useNavigate();
 
   // 분석결과 모달
   const [openAnalysisModal, setOpenAnalysisModal] = useState(false);
@@ -49,7 +48,7 @@ export default function DetailDrawing() {
   });
 
   async function ModifyDrawing(copy) {
-    const response = await http.put(`/drawings/${copy.drawinId}`, {
+    const response = await http.put(`/drawings/${copy.drawingId}`, {
       drawingBoxId: copy.drawingBoxId,
       drawingId: copy.drawingId,
       drawingTitle: copy.drawingTitle,
@@ -58,9 +57,20 @@ export default function DetailDrawing() {
     });
   }
 
+  const navigater = useNavigate();
+
   async function getDrawingInfo() {
-    const response = await http.get(`/drawings/${id}`);
-    setDrawingInfo(response.data.data);
+    const response = await http
+      .get(`/drawings/${id}`)
+      .then((res) => {
+        setDrawingInfo(res.data.data);
+        console.log(res);
+      })
+      .catch((error) => {
+        if (error.response.data.code === "E012") {
+          navigater("/norights");
+        }
+      });
   }
 
   const mounted = useRef(false);
