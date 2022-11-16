@@ -46,7 +46,7 @@ public class SecurityConfig {
         configuration.addAllowedOriginPattern("https://k7a506.p.ssafy.io");
         configuration.addAllowedOriginPattern("https://k7a506.p.ssafy.io:3000");
         configuration.addAllowedOriginPattern("https://k7a506.p.ssafy.io:8000");
-        configuration.addAllowedOriginPattern("*");
+//        configuration.addAllowedOriginPattern("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
