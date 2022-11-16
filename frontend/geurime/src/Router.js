@@ -26,6 +26,7 @@ import ModifyUserInfo from "pages/settings/ModifyUserInfo";
 import LoginCheck from "pages/home/LoginCheck";
 import Components from "pages/home/Components";
 import NotFound from "pages/error/NotFound";
+import NoRights from "pages/error/NoRights";
 
 function Router() {
   // const url = window.location.href;
@@ -33,6 +34,7 @@ function Router() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/norights" element={<NoRights />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/" element={<Home />} />
         <Route path="/invite/:invitecode" element={<Home />} />
