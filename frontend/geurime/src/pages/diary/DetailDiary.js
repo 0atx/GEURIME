@@ -4,7 +4,7 @@
 @since 2022.11.01
 */
 import { useEffect, useRef, useState } from "react";
-import { Container, Grid, Typography } from "@mui/material";
+import { Container, Grid, IconButton, Typography } from "@mui/material";
 import BackMenu from "components/nav/BackMenu";
 import NavBar from "components/nav/NavBar";
 import moment from "moment";
@@ -30,6 +30,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import Modal from "components/common/Modal";
 import { useRecoilState } from "recoil";
 import { registState } from "states/RegistState";
+
+// 캡처
+import domtoimage from "dom-to-image";
+import { saveAs } from "file-saver";
 
 export default function DetailDiary() {
   const params = useParams();
@@ -104,6 +108,20 @@ export default function DetailDiary() {
       });
   }
 
+  async function getBase64(url) {
+    const data = await fetch(url);
+    const blob = await data.blob();
+
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = function () {
+        const base64data = reader.result;
+        resolve(base64data);
+      };
+    });
+  }
+
   const mounted = useRef(false);
   useEffect(() => {
     if (!mounted.current) {
@@ -119,6 +137,17 @@ export default function DetailDiary() {
   useEffect(() => {
     getDiary();
   }, [registInfo]);
+
+  // 일기장 캡처 함수
+  const cardRef = useRef();
+
+  function capture() {
+    const card = cardRef.current;
+    domtoimage.toBlob(card).then((blob) => {
+      saveAs(blob, "diary.png");
+    });
+  }
+
   return (
     <div>
       {/* 헤더 */}
@@ -131,6 +160,8 @@ export default function DetailDiary() {
       <Container id="container">
         {/* 일기장 */}
         <Grid
+          ref={cardRef}
+          id="diary"
           container
           sx={{
             border: 3,
@@ -248,6 +279,15 @@ export default function DetailDiary() {
               분석중입니다..
             </Button>
           )}
+
+          <Button
+            sx={{ marginTop: "8%" }}
+            width="15vh"
+            onClick={capture}
+            bgcolor="#FFCA28"
+          >
+            다운로드
+          </Button>
         </div>
       </Container>
       {/* 네비 바 */}
