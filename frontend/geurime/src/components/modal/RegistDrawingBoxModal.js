@@ -9,18 +9,28 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import { DialogTitle, Grid, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useRecoilState } from "recoil";
 import { CurrentKidState } from "states/CurrentKidState";
 import { http } from "api/http";
+import NoDrawingBoxTitleModal from "./NoDrawingBoxTitleModal";
 
 export default function RegistDrawingModal(props) {
   const navigate = useNavigate();
   const boxNameInput = useRef(null);
 
   const [currentKid, setCurrentKid] = useRecoilState(CurrentKidState);
-
+  // 보관함 제목없음 모달
+  const [openNoTitleModal, setOpenNoTitleModal] = useState(false);
+  // 제목 없음 모달 닫기
+  const closeNoTitleModal = () => {
+    setOpenNoTitleModal(false);
+  };
   async function addDrawingBox() {
+    if (boxNameInput.current.value == '') {
+      setOpenNoTitleModal(true)
+    }
+    else {
     const response = await http.post(`/drawings/box`, null, {
       params: {
         drawingBoxName: boxNameInput.current.value,
@@ -33,6 +43,7 @@ export default function RegistDrawingModal(props) {
       setCurrentKid(copy);
     }
     props.setOpen(false);
+    }
   }
 
   return (
@@ -88,6 +99,10 @@ export default function RegistDrawingModal(props) {
           </Grid>
         </Grid>
       </DialogContent>
+      <NoDrawingBoxTitleModal
+        open={openNoTitleModal}
+        handleClose={closeNoTitleModal}
+      ></NoDrawingBoxTitleModal>
     </Dialog>
   );
 }

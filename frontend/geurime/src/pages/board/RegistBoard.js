@@ -67,9 +67,9 @@ export default function RegistBoard() {
     
     let formData = new FormData();
     formData.append("imageFile", imgRef.current.files[0]);
-    console.log({이미지: imgRef.current.files[0]})
-    console.log({ 제목: titleRef.current.value })
-    console.log({ 내용: textRef.current.value })
+    // console.log({이미지: imgRef.current.files[0]})
+    // console.log({ 제목: titleRef.current.value })
+    // console.log({ 내용: textRef.current.value })
     // 유저 아이디 리코일에서 가져오게 해야됨
     let request = {
       userId: userInfo.userId,
@@ -84,8 +84,8 @@ export default function RegistBoard() {
       })
     );
     // 엑시오스 요청
-    console.log('등록중')
-    console.log({ 폼데이터: formData })
+    // console.log('등록중')
+    // console.log({ 폼데이터: formData })
     if (titleRef.current.value == 0) {
       setOpenNoTitleModal(true)
     }
@@ -95,7 +95,7 @@ export default function RegistBoard() {
     else{
     const response = await http2.post(`/boards`, formData);
     if (response.data.message == "success") {
-      console.log('등록 완료!')
+      // console.log('등록 완료!')
       // navigator("/Board");
       setOpen(true);
     } else {
@@ -151,10 +151,8 @@ export default function RegistBoard() {
     >
     </BackMenu>
       <BoardInputItem
-        // titleChange={titleChange}
-        // textChange={textChange}
         handleChange={handleChange}
-        boardCategory={boardCategory}
+        boardCategory={`${boardCategory}`}
         boardCategories={boardCategories}
         changeProfile={changeProfile}
         imgRef={imgRef}

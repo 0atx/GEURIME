@@ -19,10 +19,7 @@ import { http } from "api/http";
 
 export default function CommentInputItem({ item, setCommentList, getComment, checkOne, setCheckOne }) {
   const [userInfo, setUserInfo] = useRecoilState(userState);
-  useEffect(() => {
-    console.log({ 아이템: item })
-    console.log(item.id)
-  }, [])
+
 
   const [comment, setComment] = useState(item.commentContent)
   // 삭제완료 모달
@@ -66,7 +63,7 @@ export default function CommentInputItem({ item, setCommentList, getComment, che
       );
       setCheckEdit(false)
       setCheckOne(false)
-      console.log(response.data)
+      // console.log(response.data)
       if (response.data.message == "success") {
         setOpenModifyModal(true);
         getComment()
@@ -78,7 +75,6 @@ export default function CommentInputItem({ item, setCommentList, getComment, che
   }
   function enterReg(e) {
     if (e.key === "Enter") {
-      console.log('엔터!')
       modifyComment()
     }
   }

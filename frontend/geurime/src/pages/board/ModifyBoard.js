@@ -105,7 +105,7 @@ export default function ModifyBoard() {
       else{
         const response = await http2.put(`/boards/${boardInfo.boardId}`, formData);
       if (response.data.message == "success") {
-        console.log('수정 완료!')
+        // console.log('수정 완료!')
         // navigator("/Board");
         setOpen(true);
       } else {

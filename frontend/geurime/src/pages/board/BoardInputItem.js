@@ -11,20 +11,18 @@ import QuestionAnswerOutlinedIcon from "@mui/icons-material/QuestionAnswerOutlin
 import { fontWeight } from "@mui/system";
 import MenuItem from "@mui/material/MenuItem";
 
-export default function BoardInputItem({
-  handleChange,
-  boardCategory,
-  boardCategories,
-  changeProfile,
-  imgRef,
-  textRef,
-  titleRef,
-  imageUrl,
-  text,
-  changeText,
-  changeTitle,
-  title,
-}) {
+export default function BoardInputItem(props) {
+  useEffect(() => {
+    // console.log({handleChange: handleChange})
+    // console.log({boardCategory: boardCategory})
+    // console.log({boardCategories: boardCategories})
+    // console.log({changeProfile: changeProfile})
+    // console.log({imgRef: imgRef})
+    // console.log({imageUrl: imageUrl})
+    // console.log({textRef: textRef})
+    // console.log({changeText: changeText})
+
+  }, [])
   // const [title, setTitle] = useState();
 
   // const titleChange = (event) => {
@@ -47,9 +45,9 @@ export default function BoardInputItem({
                 textAlign: "center",
               }}
             >
-              {imageUrl ? (
+              {props.imageUrl ? (
                 <img
-                  src={imageUrl}
+                  src={props.imageUrl}
                   style={{
                     height: "100%",
                     width: "100%",
@@ -59,7 +57,6 @@ export default function BoardInputItem({
                 />
               ) : (
                 <Paper
-                  item
                   sx={{
                     height: "40vh",
                     width: "40vh",
@@ -82,9 +79,9 @@ export default function BoardInputItem({
           <input
             style={{ display: "none" }}
             type="file"
-            ref={imgRef}
+            ref={props.imgRef}
             onChange={(e) => {
-              changeProfile(e);
+              props.changeProfile(e);
             }}
             accept="image/*"
             id="profile"
@@ -106,12 +103,12 @@ export default function BoardInputItem({
           <TextField
             id="standard-select-currency"
             select
-            value={boardCategory}
-            onChange={handleChange}
+            value={props.boardCategory}
+            onChange={props.handleChange}
             variant="standard"
             sx={{ width: "31vh" }}
           >
-            {boardCategories.map((option) => (
+            {props.boardCategories.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
               </MenuItem>
@@ -134,10 +131,10 @@ export default function BoardInputItem({
               sx={{ width: "31vh" }}
               variant="standard"
               placeholder="제목을 입력하세요"
-              inputRef={titleRef}
-              value={title}
+              inputRef={props.titleRef}
+              value={props.title}
               onChange={(e) => {
-                changeTitle(e);
+                props.changeTitle(e);
               }}
             />
           </Grid>
@@ -152,10 +149,10 @@ export default function BoardInputItem({
             multiline
             minRows={5}
             maxRows={5}
-            inputRef={textRef}
-            value={text}
+            inputRef={props.textRef}
+            value={props.text}
             onChange={(e) => {
-              changeText(e);
+              props.changeText(e);
             }}
             sx={{
               width: "87vw",
