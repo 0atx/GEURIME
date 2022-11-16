@@ -93,8 +93,19 @@ export default function DetailBoard( ) {
   useEffect(() => {
     setCommentLen(commentList.length)
   }, [commentList])
-  
-  
+  useEffect(() => {
+    if (userInfo.userProfileImage == '') {
+      getUserInfo()
+    }
+    console.log({유저: userInfo})
+  }, [userInfo])
+  async function getUserInfo() {
+    const response = await http.get(`/users/${userInfo.userId}`);
+    if (response.data.message === "success") {
+      setUserInfo(response.data.data);
+    }
+  }
+
   const commentRef = useRef(null);
   
   // 댓글 모달
@@ -151,14 +162,8 @@ export default function DetailBoard( ) {
 
       if (response.data.message == "success") {
         if (commentRef.current.value !== 0) {
-          setCommentList([...commentList, {
-            commentUserNickname: userInfo.nickname,
-            commentContent: commentRef.current.value,
-            commentUserId: userInfo.userId,
-            commentUserProfile: userInfo.userProfileImage,
-            createTime: moment().format('YYYY-MM-DD HH:mm:ss')
-          }])
           commentRef.current.value = "";
+          getComment()
         }
       }
 
