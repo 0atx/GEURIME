@@ -38,7 +38,7 @@ function Instance() {
       } = error;
       const originalRequest = config;
 
-      if (status === 500 && originalRequest._retry == undefined) {
+      if (status === 401 && originalRequest._retry == undefined) {
         // token refresh 요청
         const { data } = await axios.get(
           `${process.env.REACT_APP_BASE_URL}/oauth/refresh`, // token refresh api

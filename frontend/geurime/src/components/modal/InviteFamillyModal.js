@@ -53,6 +53,7 @@ export default function ({ open, close }) {
             InputProps={{
               readOnly: true,
             }}
+            // 게우레미로 변경 필요!!!
             value={`https://k7a506.p.ssafy.io/invite/${userInfo.inviteCode}`}
             variant="standard"
           />

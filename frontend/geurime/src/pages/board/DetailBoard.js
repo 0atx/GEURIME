@@ -25,7 +25,7 @@ import NoCommentModal from "components/modal/NoCommentModal";
 export default function DetailBoard( ) { 
   const location = useLocation()
   const [commentList, setCommentList] = useState([
-    { 'commentId': 1, 'commentUserId': 20, 'commentUserProfile': 'https://geurime-a506.s3.ap-northeast-2.amazonaws.c…86a5a%5Chome%5Cubuntu%5Cstatic%5CsunnyClicked.png', 'commentUserNickname': '해안', 'createTime': '2022-11-03 14:41:00', 'updateTime': null },
+    { 'id': 1, 'commentUserId': 20, 'commentUserProfile': 'https://geurime-a506.s3.ap-northeast-2.amazonaws.c…86a5a%5Chome%5Cubuntu%5Cstatic%5CsunnyClicked.png', 'commentUserNickname': '해안', 'createTime': '2022-11-03 14:41:00', 'updateTime': null },
     ])  
   const [board, setBoard] = useState({
     boardCategory: "",
@@ -63,20 +63,17 @@ export default function DetailBoard( ) {
   const navigator = useNavigate();
   // 페이지 들어왔을때 엑시오스 요청
   const getDetail = async () => {
-    console.log({ 페이지id: location.pathname.slice(13,) })
+    // console.log({ 페이지id: location.pathname.slice(13,) })
     const boardid = location.pathname.slice(13,);
     const response = await http.get(`/boards/${boardid}`);
     if (response.data.message == "success") {
       setBoard(response.data.data)
       setBoardInfo(response.data.data)
-      setCommentList(response.data.data.boardCommentDtoList)
     } else {
       alert("게시글을 불러오지 못했습니다");
     }
   }
-  useEffect(() => {
-    console.log({페이지정보: board})
-  }, [board])
+
   let [check, setCheck] = useState(false);
   useEffect(() => { 
     if (check == false){
@@ -97,7 +94,7 @@ export default function DetailBoard( ) {
     if (userInfo.userProfileImage == '') {
       getUserInfo()
     }
-    console.log({유저: userInfo})
+
   }, [userInfo])
   async function getUserInfo() {
     const response = await http.get(`/users/${userInfo.userId}`);
@@ -123,12 +120,11 @@ export default function DetailBoard( ) {
   }, [board])
 
   const getComment = async () => {
-    console.log({ 페이지id: location.pathname.slice(13,) })
+    // console.log({ 페이지id: location.pathname.slice(13,) })
     const boardid = location.pathname.slice(13,);
     const response = await http.get(`/comments/${boardid}`);
     if (response.data.message == "success") {
       setCommentList(response.data.data)
-      console.log({댓글: response.data.data})
     } else {
       alert("댓글을 불러오지 못했습니다");
     }
@@ -136,13 +132,10 @@ export default function DetailBoard( ) {
 
     // 편집 댓글이 하나인지 여부
     const [checkOne, setCheckOne] = useState(false);
-  //   const clickCheck = () => {
-  //     setCheckOne(true)
-  // }
   
   function commentKeyword(e) {
     if (e.key === "Enter") {
-      console.log('엔터!')
+
       postComment()
     }
   }
@@ -150,7 +143,6 @@ export default function DetailBoard( ) {
   const postComment = async () => {
     // commentUserId 리코일에서 가져오기
     const boardid = location.pathname.slice(13,);
-    console.log({ 현재댓글: commentRef.current.value });
     if (commentRef.current.value != 0) { 
     const response = await http.post(`/comments`, 
       {
@@ -276,16 +268,17 @@ export default function DetailBoard( ) {
       >
         <Grid item sx={{marginTop:'2.5%', marginBottom:'3%', marginLeft: '3%', backgroundColor: 'rgba(0,0,0,0)'}}>
 
-          {board.boardContent.split("\n").map((line) => {
-            return (
+          {board.boardContent.split("\n").map((line, idx) => {
+            return <div key={idx}>
               <span>
                 {line}
                 <br />
               </span>
-            );
+            </div>
           })}
         </Grid>
           
+          {/* {board.boardContent} */}
       </Paper>
 
 
@@ -312,9 +305,9 @@ export default function DetailBoard( ) {
     {/* 댓글 */}
     <Grid
     >
-    {commentList?.map((store) => {
-      return <CommentInputItem key={store.id} item={store} setCommentList={setCommentList} getComment={getComment} setCheckOne={setCheckOne} checkOne={checkOne} />;
-    })}
+          {commentList.map((store) => {
+            return <CommentInputItem key={store.id} item={store} setCommentList={setCommentList} getComment={getComment} setCheckOne={setCheckOne} checkOne={checkOne} />;
+          })}
 
     </Grid>
       

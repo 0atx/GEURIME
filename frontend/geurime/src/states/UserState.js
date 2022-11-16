@@ -27,5 +27,6 @@ export const userState = atom({
     familyLeaderId: "",
     isChild: false,
     kidDtoList: [],
+    createDate: "",
   },
 });
