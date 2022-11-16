@@ -64,6 +64,30 @@ export default function Diary() {
     if (e.key === "Enter") {
       e.preventDefault();
       let keyword = searchKeyWord;
+      if (typeof keyword !== "undefined") {
+        keyword = keyword.trim();
+
+        const response = await http.get(`/diaries/title/${kidInfo.kidId}`, {
+          params: {
+            keyword: keyword,
+            kidId: kidInfo.kidId,
+          },
+        });
+        if (response.data.message === "success") {
+          // console.log({ 일기들: response.data.data });
+          setDiaries(response.data.data);
+
+          // searchInput.current.value = "";
+        }
+      }
+    }
+  }
+  // 일기장 날짜로 검색하는 함수(클릭)
+  async function searchClick(e) {
+    e.preventDefault();
+    let keyword = searchKeyWord;
+
+    if (typeof keyword !== "undefined") {
       keyword = keyword.trim();
 
       const response = await http.get(`/diaries/title/${kidInfo.kidId}`, {
@@ -73,31 +97,12 @@ export default function Diary() {
         },
       });
       if (response.data.message === "success") {
-        console.log({일기들: response.data.data})
+        // console.log({ 일기들: response.data.data });
         setDiaries(response.data.data);
+
+        // searchInput.current.value = "";
       }
-
-      // searchInput.current.value = "";
     }
-  }
-  // 일기장 날짜로 검색하는 함수(클릭)
-  async function searchClick(e) {
-    e.preventDefault();
-    let keyword = searchKeyWord;
-    keyword = keyword.trim();
-
-    const response = await http.get(`/diaries/title/${kidInfo.kidId}`, {
-      params: {
-        keyword: keyword,
-        kidId: kidInfo.kidId,
-      },
-    });
-    if (response.data.message === "success") {
-      console.log({일기들: response.data.data})
-      setDiaries(response.data.data);
-    }
-
-    // searchInput.current.value = "";
   }
 
   return (

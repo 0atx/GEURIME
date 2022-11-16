@@ -17,6 +17,8 @@ import CanvasDraw from "react-canvas-draw";
 import { CirclePicker } from "react-color";
 import UndoRoundedIcon from "@mui/icons-material/UndoRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import white from "assets/white.png";
+import paper from "assets/diaryPaper.png";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -36,7 +38,6 @@ export default function DrawingModal({ open, handleClose, setCanvas }) {
 
   // 전부 지우기
   const clearCanvas = () => {
-    // console.log(canvasRef.current);
     canvasRef.current.clear();
   };
 
@@ -78,6 +79,7 @@ export default function DrawingModal({ open, handleClose, setCanvas }) {
             <Grid item xs={12} sx={{ mt: 1, mb: 4 }}>
               <Paper elevation={3} sx={{ display: "inline-block" }}>
                 <CanvasDraw
+                  id="canvas"
                   ref={canvasRef}
                   canvasWidth={window.innerWidth * 0.92}
                   canvasHeight={window.innerWidth * 0.92}

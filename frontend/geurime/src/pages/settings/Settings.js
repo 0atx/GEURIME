@@ -104,6 +104,7 @@ export default function Settings() {
             </ListItemAvatar>
             <ListItemText primary="로그아웃" />
           </ListItemButton>
+          <Divider />
           {/* 회원 탈퇴 */}
           <ListItemButton
             onClick={() => {

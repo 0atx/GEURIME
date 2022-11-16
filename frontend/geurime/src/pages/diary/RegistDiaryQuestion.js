@@ -53,6 +53,25 @@ import { useRecoilState } from "recoil";
 import ShowWeatherModal from "components/modal/ShowWeatherModal";
 import axios from "axios";
 
+// Paper css
+const StyledPaper = styled(Paper)`
+  && {
+    padding: 8% 3% 8% 3%;
+    margin-bottom: 5%;
+    background-color: #fff4ce;
+    border-radius: 20px;
+  }
+`;
+
+// Typography css
+const StyledTypography = styled(Typography)`
+  && {
+    text-align: center;
+    margin-bottom: 5%;
+    font-size: 2.3vh;
+  }
+`;
+
 export default function RegistDiary({}) {
   // 현재 날짜
   const [value, setValue] = useState(new Date());
@@ -181,25 +200,6 @@ export default function RegistDiary({}) {
 
     setCalOpen(false);
   };
-
-  // Paper css
-  const StyledPaper = styled(Paper)`
-    && {
-      padding: 8% 3% 8% 3%;
-      margin-bottom: 5%;
-      background-color: #fff4ce;
-      border-radius: 20px;
-    }
-  `;
-
-  // Typography css
-  const StyledTypography = styled(Typography)`
-    && {
-      text-align: center;
-      margin-bottom: 5%;
-      font-size: 2.3vh;
-    }
-  `;
 
   return (
     <div>
