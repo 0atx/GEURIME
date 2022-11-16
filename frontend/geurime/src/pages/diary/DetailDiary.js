@@ -87,10 +87,6 @@ export default function DetailDiary() {
   async function getDiary() {
     const response = await http.get(`/diaries/info/${params.diaryid}`);
     const info = response.data.data;
-    getBase64(info.drawingImagePath).then((a) => {
-      info.drawingImagePath = a;
-    });
-
     setDiary(info);
     console.log(info);
 
@@ -102,20 +98,6 @@ export default function DetailDiary() {
 
     setWakeup(moment(info.drawingDiaryWakeUp).format("A h시 mm분"));
     setSleep(moment(info.drawingDiarySleep).format("A h시 mm분"));
-  }
-
-  async function getBase64(url) {
-    const data = await fetch(url);
-    const blob = await data.blob();
-
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = function () {
-        const base64data = reader.result;
-        resolve(base64data);
-      };
-    });
   }
 
   const mounted = useRef(false);
@@ -291,8 +273,8 @@ export default function DetailDiary() {
         <div style={{ textAlign: "center" }}>
           {registInfo.state == false ? (
             <Button
-              sx={{ marginTop: "8%" }}
-              width="20vh"
+              sx={{ marginTop: "8%", marginRight: "3%" }}
+              width="15vh"
               onClick={showAnalysisModal}
             >
               분석결과 보기
@@ -300,8 +282,8 @@ export default function DetailDiary() {
           ) : (
             <Button
               bgcolor="#D4D4D4"
-              sx={{ marginTop: "8%" }}
-              width="20vh"
+              sx={{ marginTop: "8%", marginRight: "3%" }}
+              width="15vh"
               onClick={showAnalysisModal}
             >
               분석중입니다..
