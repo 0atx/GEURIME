@@ -181,8 +181,8 @@ export default function DetailDiary() {
               padding: "3%",
             }}
           >
-            <span>{year}</span> 년 <span>{month}</span> 월 <span>{date}</span> 일{" "}
-            <span>{days}</span> 요일
+            <span>{year}</span> 년 <span>{month}</span> 월 <span>{date}</span>{" "}
+            일 <span>{days}</span> 요일
           </Grid>
           <Grid
             item
@@ -197,19 +197,39 @@ export default function DetailDiary() {
             <Grid container sx={{ alignItems: "center" }}>
               {/* 날씨 */}
               <Grid item xs={6} sx={{ textAlign: "right" }}>
-                {diary.drawingDiaryWeather === 0 && <img src={sunny} width="30vh"></img>}
-                {diary.drawingDiaryWeather === 1 && <img src={cloudy} width="30vh"></img>}
-                {diary.drawingDiaryWeather === 2 && <img src={rainy} width="30vh"></img>}
-                {diary.drawingDiaryWeather === 3 && <img src={snowy} width="30vh"></img>}
-                {diary.drawingDiaryWeather === 4 && <img src={windy} width="30vh"></img>}
+                {diary.drawingDiaryWeather === 0 && (
+                  <img src={sunny} width="30vh"></img>
+                )}
+                {diary.drawingDiaryWeather === 1 && (
+                  <img src={cloudy} width="30vh"></img>
+                )}
+                {diary.drawingDiaryWeather === 2 && (
+                  <img src={rainy} width="30vh"></img>
+                )}
+                {diary.drawingDiaryWeather === 3 && (
+                  <img src={snowy} width="30vh"></img>
+                )}
+                {diary.drawingDiaryWeather === 4 && (
+                  <img src={windy} width="30vh"></img>
+                )}
               </Grid>
               {/* 기분 */}
               <Grid item xs={6} sx={{ textAlign: "right" }}>
-                {diary.drawingDiaryFeeling === 0 && <img src={happy} width="30vh"></img>}
-                {diary.drawingDiaryFeeling === 1 && <img src={sad} width="30vh"></img>}
-                {diary.drawingDiaryFeeling === 2 && <img src={surprise} width="30vh"></img>}
-                {diary.drawingDiaryFeeling === 3 && <img src={scary} width="30vh"></img>}
-                {diary.drawingDiaryFeeling === 4 && <img src={angry} width="30vh"></img>}
+                {diary.drawingDiaryFeeling === 0 && (
+                  <img src={happy} width="30vh"></img>
+                )}
+                {diary.drawingDiaryFeeling === 1 && (
+                  <img src={sad} width="30vh"></img>
+                )}
+                {diary.drawingDiaryFeeling === 2 && (
+                  <img src={surprise} width="30vh"></img>
+                )}
+                {diary.drawingDiaryFeeling === 3 && (
+                  <img src={scary} width="30vh"></img>
+                )}
+                {diary.drawingDiaryFeeling === 4 && (
+                  <img src={angry} width="30vh"></img>
+                )}
               </Grid>
             </Grid>
           </Grid>
@@ -252,8 +272,16 @@ export default function DetailDiary() {
             </Grid>
           </Grid>
 
-          <Grid item xs={12} sx={{ textAlign: "center", padding: "4% 4% 0% 4%" }}>
-            <img src={diary.drawingImagePath} width="100%" style={{ borderRadius: "5%" }}></img>
+          <Grid
+            item
+            xs={12}
+            sx={{ textAlign: "center", padding: "4% 4% 0% 4%" }}
+          >
+            <img
+              src={diary.drawingImagePath}
+              width="100%"
+              style={{ borderRadius: "5%" }}
+            ></img>
           </Grid>
           <Grid
             className="content"
@@ -266,13 +294,17 @@ export default function DetailDiary() {
         </Grid>
         <div style={{ textAlign: "center" }}>
           {registInfo.state == false ? (
-            <Button sx={{ marginTop: "8%" }} width="20vh" onClick={showAnalysisModal}>
+            <Button
+              sx={{ marginTop: "8%", marginRight: "10%" }}
+              width="20vh"
+              onClick={showAnalysisModal}
+            >
               분석결과 보기
             </Button>
           ) : (
             <Button
               bgcolor="#D4D4D4"
-              sx={{ marginTop: "8%" }}
+              sx={{ marginTop: "8%", marginRight: "10%" }}
               width="20vh"
               onClick={showAnalysisModal}
             >
