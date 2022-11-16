@@ -38,15 +38,11 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.addAllowedOriginPattern("http://localhost:3000");
-        configuration.addAllowedOriginPattern("http://localhost:8000");
-        configuration.addAllowedOriginPattern("http://k7a506.p.ssafy.io:3000");
-        configuration.addAllowedOriginPattern("http://k7a506.p.ssafy.io:8000");
-        configuration.addAllowedOriginPattern("https://geurime.com");
-        configuration.addAllowedOriginPattern("https://k7a506.p.ssafy.io");
-        configuration.addAllowedOriginPattern("https://k7a506.p.ssafy.io:3000");
-        configuration.addAllowedOriginPattern("https://k7a506.p.ssafy.io:8000");
-//        configuration.addAllowedOriginPattern("*");
+        configuration.addAllowedOriginPattern("http://localhost:[*]");
+        configuration.addAllowedOriginPattern("http://k7a506.p.ssafy.io:[*]");
+//        configuration.addAllowedOriginPattern("https://geurime.com");
+        configuration.addAllowedOriginPattern("https://k7a506.p.ssafy.io:[*]");
+        configuration.addAllowedOriginPattern("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);
