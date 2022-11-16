@@ -21,7 +21,7 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import NavBar from "components/nav/NavBar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { http } from "api/http";
 import { useRecoilState } from "recoil";
@@ -30,6 +30,8 @@ import { CurrentKidState } from "states/CurrentKidState";
 import paper from "assets/diaryPaper.png";
 
 export default function Diary() {
+  const navigate = useNavigate();
+
   // userInfo
   const [userInfo, setUserInfo] = useRecoilState(userState);
   // kidsInfo
@@ -53,10 +55,18 @@ export default function Diary() {
 
   // 자녀의 그림일기 전체조회
   async function getDiaries() {
-    const response = await http.get(`/diaries/${kidInfo.kidId}`);
-    console.log(kidInfo);
-    console.log(response.data.data);
-    setDiaries(response.data.data);
+    const response = await http
+      .get(`/diaries/${kidInfo.kidId}`)
+      .then((response) => {
+        // console.log(kidInfo);
+        // console.log(response.data.data);
+        setDiaries(response.data.data);
+      })
+      .catch((error) => {
+        if (error.response.data.code === "E012") {
+          navigate("/norights");
+        }
+      });
   }
 
   // 일기장 날짜로 검색하는 함수
@@ -67,18 +77,24 @@ export default function Diary() {
       if (typeof keyword !== "undefined") {
         keyword = keyword.trim();
 
-        const response = await http.get(`/diaries/title/${kidInfo.kidId}`, {
-          params: {
-            keyword: keyword,
-            kidId: kidInfo.kidId,
-          },
-        });
-        if (response.data.message === "success") {
-          // console.log({ 일기들: response.data.data });
-          setDiaries(response.data.data);
+        const response = await http
+          .get(`/diaries/title/${kidInfo.kidId}`, {
+            params: {
+              keyword: keyword,
+              kidId: kidInfo.kidId,
+            },
+          })
+          .then((response) => {
+            // console.log({ 일기들: response.data.data });
+            setDiaries(response.data.data);
 
-          // searchInput.current.value = "";
-        }
+            // searchInput.current.value = "";
+          })
+          .catch((error) => {
+            if (error.response.data.code === "E012") {
+              navigate("/norights");
+            }
+          });
       }
     }
   }
@@ -90,18 +106,24 @@ export default function Diary() {
     if (typeof keyword !== "undefined") {
       keyword = keyword.trim();
 
-      const response = await http.get(`/diaries/title/${kidInfo.kidId}`, {
-        params: {
-          keyword: keyword,
-          kidId: kidInfo.kidId,
-        },
-      });
-      if (response.data.message === "success") {
-        // console.log({ 일기들: response.data.data });
-        setDiaries(response.data.data);
+      const response = await http
+        .get(`/diaries/title/${kidInfo.kidId}`, {
+          params: {
+            keyword: keyword,
+            kidId: kidInfo.kidId,
+          },
+        })
+        .then((response) => {
+          // console.log({ 일기들: response.data.data });
+          setDiaries(response.data.data);
 
-        // searchInput.current.value = "";
-      }
+          // searchInput.current.value = "";
+        })
+        .catch((error) => {
+          if (error.response.data.code === "E012") {
+            navigate("/norights");
+          }
+        });
     }
   }
 
