@@ -47,7 +47,6 @@ import CropRoundedIcon from "@mui/icons-material/CropRounded";
 import ReactCrop from "react-image-crop";
 import { registState } from "states/RegistState";
 
-
 export default function RegistDiary({}) {
   // 이미지 편집
   const [isUpdated, setIsUpdated] = useState(false);
@@ -80,8 +79,6 @@ export default function RegistDiary({}) {
   // 분석 완료 여부 정보
   const [registInfo, setRegistInfo] = useRecoilState(registState);
 
-
-
   function changeImage(e) {
     const reader = new FileReader();
     const img = imgRef.current.files[0];
@@ -98,10 +95,10 @@ export default function RegistDiary({}) {
     const response = await http.get(`/ai/${id}`);
     // console.log("분석한다");
     console.log(response.data);
-    console.log('분석완료')
+    console.log("분석완료");
     // 일기 리스트에 추가
-    localStorage.setItem('registD', false)
-    setRegistInfo({'state' : false})
+    localStorage.setItem("registD", false);
+    setRegistInfo({ state: false });
   }
 
   // base64를 이미지 파일로 바꿔주는 함수
@@ -169,7 +166,7 @@ export default function RegistDiary({}) {
 
     if (response.data.message == "success") {
       analyzeDrawing(response.data.data.drawingId);
-      setRegistInfo({ 'state' : true })
+      setRegistInfo({ state: true });
     } else {
     }
     setOpen(true);

@@ -22,6 +22,9 @@ import { http } from "api/http";
 import FamilyInfoModal from "components/modal/FamilyInfoModal";
 import { ResponsivePie } from "@nivo/pie";
 import drawing from "assets/icon/drawing.png";
+import paper from "assets/galleryPaper.png";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Piechart = ({ happy, sad, angry }) => {
   const handle = {
@@ -153,7 +156,7 @@ export default function Main() {
       },
     });
 
-    console.log(month, year, response.data.data);
+    // console.log(month, year, response.data.data);
 
     if (response.data.message === "success") {
       setHappy(response.data.data.happy);
@@ -188,6 +191,8 @@ export default function Main() {
     if (!mounted.current) {
       mounted.current = true;
     } else {
+      AOS.init();
+
       getUserInfo();
       getFamilyInfo();
 
@@ -198,86 +203,98 @@ export default function Main() {
   const [imgList, setImgList] = useState(currentKid.sampleImageList);
   const navigator = useNavigate();
 
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+    } else {
+      AOS.init();
+    }
+  }, [imgList]);
+
   return (
     <div>
       <SelectKids setImgList={setImgList} />
       <Grid id="container" container justifyContent="center" alignItems="center">
         {/* 그림 갤러리 */}
-        <Grid item xs={12} sx={{ fontSize: "2.3vh", marginBottom: "1vh" }}>
-          <div style={{ textAlign: "center" }}>그림 갤러리</div>
-        </Grid>
         <Grid
           container
           sx={{
             textAlign: "center",
             marginBottom: "2vh",
             width: "85%",
-            border: "3px dashed #FFCA28",
-
-            marginTop: "1.5vh",
           }}
-          alignItems="center"
-          justifyContent="center"
         >
-          <Grid item xs={12} sx={{ marginTop: "1.5vh" }}>
-            <Container>
-              <Masonry columns={2} spacing={1} sx={{ margin: 0 }}>
-                {imgList.length === 0 ? (
-                  <>
-                    {[0, 1, 2, 3].map(function (img, i) {
-                      return (
-                        <img
-                          key={i}
-                          src={`/assets/sample/${i}.png`}
-                          style={
-                            {
-                              // border: "5px solid #FFCA28",
-                              // boxShadow: "1px 1px 3px #6f6f6f",
-                            }
-                          }
-                          onClick={() => {
-                            navigator("/gallery");
-                          }}
-                          alt="drawing"
-                        />
-                      );
-                    })}
-                  </>
-                ) : (
-                  <>
-                    {imgList.map(function (img, i) {
-                      return (
-                        <img
-                          key={i}
-                          src={img}
-                          style={
-                            {
-                              // border: "5px solid #FFCA28",
-                              // boxShadow: "1px 1px 3px #6f6f6f",
-                            }
-                          }
-                          onClick={() => {
-                            navigator("/gallery");
-                          }}
-                          alt="drawing"
-                        />
-                      );
-                    })}
-                  </>
-                )}
-              </Masonry>
-            </Container>
-          </Grid>
+          {imgList.length === 0 ? (
+            <>
+              {[0, 1, 2, 3].map(function (img, i) {
+                return (
+                  <Grid item key={i} xs={6} md={3} sx={{ marginTop: "1.5vh" }}>
+                    <img
+                      data-aos="zoom-in"
+                      data-aos-delay={i * 200}
+                      src={`/assets/sample/${i}.png`}
+                      style={{
+                        width: "18vh",
+                        height: "18vh",
+                        objectFit: "cover",
+                        backgroundColor: "#ffffff",
+                        backgroundSize: "contain",
+                        padding: "5%",
+                        backgroundImage: `url(${paper})`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "top center",
+                        // boxShadow: "1px 1px 3px #6f6f6f",
+                      }}
+                      onClick={() => {
+                        navigator("/gallery");
+                      }}
+                      alt="drawing"
+                    />
+                  </Grid>
+                );
+              })}
+            </>
+          ) : (
+            <>
+              {imgList.map(function (img, i) {
+                return (
+                  <Grid item key={i} xs={6} md={3} sx={{ marginTop: "1.5vh" }}>
+                    <img
+                      data-aos="zoom-in"
+                      data-aos-delay={i * 200}
+                      src={img}
+                      style={{
+                        width: "18vh",
+                        height: "18vh",
+                        objectFit: "cover",
+                        backgroundColor: "#ffffff",
+                        backgroundSize: "contain",
+                        padding: "5%",
+                        backgroundImage: `url(${paper})`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "top center",
+                        // boxShadow: "1px 1px 3px #6f6f6f",
+                      }}
+                      onClick={() => {
+                        navigator("/gallery");
+                      }}
+                      alt="drawing"
+                    />
+                  </Grid>
+                );
+              })}
+            </>
+          )}
         </Grid>
         {/* 감정 통계 */}
-        <Grid item xs={12} sx={{ fontSize: "2.3vh", marginBottom: "1vh" }}>
+        <Grid item xs={12} sx={{ fontSize: "2.3vh", marginBottom: "1vh", marginTop: "1vh" }}>
           <div style={{ textAlign: "center" }}>{currentKid.kidName}의 감정 분석</div>
         </Grid>
         <Grid
           container
           sx={{
             textAlign: "center",
-            marginBottom: "3vh",
+            marginBottom: "2vh",
             width: "85%",
             border: "3px dashed #FFCA28",
             padding: "1vh",
@@ -339,7 +356,7 @@ export default function Main() {
             <Piechart happy={happy} sad={sad} angry={angry} />
           )}
           <Grid item xs={12} sx={{ marginBottom: "3%" }}>
-            보건복지상담센터 ☎ 129
+            <Typography sx={{ color: "#6F6F6F" }}>⁕ 보건복지상담센터 ☎ 129</Typography>
           </Grid>
         </Grid>
         {/* 가족 정보 */}
