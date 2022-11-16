@@ -39,7 +39,7 @@ public class DrawingInterceptor implements HandlerInterceptor {
         String kidIdString = pathVariables.get("kidId");
 
         if(drawingIdString == null && kidIdString == null && drawingBoxIdString == null){
-            throw new CustomException(CustomExceptionList.BAD_REQUEST_ERROR);
+            throw new CustomException(CustomExceptionList.ACCESS_TOKEN_ERROR);
         }
 
         String accessToken = request.getHeader("accessToken");
