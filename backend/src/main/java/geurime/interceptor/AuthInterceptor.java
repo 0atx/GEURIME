@@ -33,7 +33,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         request.setAttribute("message", accessTokenError.getMessage());
         request.setAttribute("exception", "AuthenticationException");
-        request.getRequestDispatcher("/api/error").forward(request, response);
+        request.getRequestDispatcher("/error").forward(request, response);
 //        System.out.println("request = " + request);
         return false;
 
