@@ -22,7 +22,8 @@ public class WebConfig implements WebMvcConfigurer {
 
         interceptorRegistry.addInterceptor(authInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/oauth/**");
+                .excludePathPatterns("/oauth/**")
+                .excludePathPatterns("/error");
         interceptorRegistry.addInterceptor(boardInterceptor)
                 .addPathPatterns("/boards/**");
         interceptorRegistry.addInterceptor(drawingInterceptor)

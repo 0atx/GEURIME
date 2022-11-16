@@ -29,15 +29,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        CustomExceptionList accessTokenError = CustomExceptionList.ACCESS_TOKEN_ERROR;
-
-        request.setAttribute("message", accessTokenError.getMessage());
-        request.setAttribute("exception", "AuthenticationException");
-        request.getRequestDispatcher("/api/error").forward(request, response);
-//        System.out.println("request = " + request);
-        return false;
-
-//        throw new CustomException(CustomExceptionList.ACCESS_TOKEN_ERROR);
+        throw new CustomException(CustomExceptionList.ACCESS_TOKEN_ERROR);
     }
 
 }

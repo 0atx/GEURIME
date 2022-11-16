@@ -28,7 +28,9 @@ public enum CustomExceptionList {
     FAMILY_NOT_FOUND_ERROR(HttpStatus.NOT_FOUND, "E010", "존재하지 않는 가족입니다."),
     FAMILY_ALREADY_EXIST_ERROR(HttpStatus.NOT_FOUND, "E011", "이미 가족이 존재하는 회원입니다."),
     NO_AUTHENTICATION_ERROR(HttpStatus.UNAUTHORIZED, "E012", "접근 권한이 없습니다."),
-    BAD_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "E013", "요청에 필요한 값이 없습니다.");
+    BAD_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "E013", "요청에 필요한 값이 없습니다."),
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E014", "서버 오류 입니다."),
+    RUNTIME_EXCEPTION(HttpStatus.BAD_REQUEST, "E015", "잘못된 요청입니다.");
 
     private final HttpStatus status;
     private final String code;
