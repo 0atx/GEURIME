@@ -4,7 +4,7 @@
 @since 2022.11.01
 */
 import { useEffect, useRef, useState } from "react";
-import { Container, Grid, Typography } from "@mui/material";
+import { Container, Grid, IconButton, Typography } from "@mui/material";
 import BackMenu from "components/nav/BackMenu";
 import NavBar from "components/nav/NavBar";
 import moment from "moment";
@@ -30,6 +30,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import Modal from "components/common/Modal";
 import { useRecoilState } from "recoil";
 import { registState } from "states/RegistState";
+
+// 캡처
+import domtoimage from "dom-to-image";
+import { saveAs } from "file-saver";
 
 export default function DetailDiary() {
   const params = useParams();
@@ -81,20 +85,41 @@ export default function DetailDiary() {
 
   // 일기 조회
   async function getDiary() {
-    const response = await http.get(`/diaries/info/${params.diaryid}`);
-    console.log(response.data.data);
+    const response = await http
+      .get(`/diaries/info/${params.diaryid}`)
+      .then((response) => {
+        // console.log(response.data.data);
+        const info = response.data.data;
+        setDiary(info);
 
-    const info = response.data.data;
-    setDiary(info);
+        // 연동 후 데이터 가공
+        setYear(new Date(info.createTime).getFullYear());
+        setMonth(new Date(info.createTime).getMonth() + 1);
+        setDate(new Date(info.createTime).getDate());
+        setDays(WEEKDAY[new Date(info.createTime).getDay()]);
 
-    // 연동 후 데이터 가공
-    setYear(new Date(info.createTime).getFullYear());
-    setMonth(new Date(info.createTime).getMonth() + 1);
-    setDate(new Date(info.createTime).getDate());
-    setDays(WEEKDAY[new Date(info.createTime).getDay()]);
+        setWakeup(moment(info.drawingDiaryWakeUp).format("A h시 mm분"));
+        setSleep(moment(info.drawingDiarySleep).format("A h시 mm분"));
+      })
+      .catch((error) => {
+        if (error.response.data.code === "E012") {
+          navigate("/norights");
+        }
+      });
+  }
 
-    setWakeup(moment(info.drawingDiaryWakeUp).format("A h시 mm분"));
-    setSleep(moment(info.drawingDiarySleep).format("A h시 mm분"));
+  async function getBase64(url) {
+    const data = await fetch(url);
+    const blob = await data.blob();
+
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onloadend = function () {
+        const base64data = reader.result;
+        resolve(base64data);
+      };
+    });
   }
 
   const mounted = useRef(false);
@@ -112,6 +137,17 @@ export default function DetailDiary() {
   useEffect(() => {
     getDiary();
   }, [registInfo]);
+
+  // 일기장 캡처 함수
+  const cardRef = useRef();
+
+  function capture() {
+    const card = cardRef.current;
+    domtoimage.toBlob(card).then((blob) => {
+      saveAs(blob, "diary.png");
+    });
+  }
+
   return (
     <div>
       {/* 헤더 */}
@@ -124,6 +160,8 @@ export default function DetailDiary() {
       <Container id="container">
         {/* 일기장 */}
         <Grid
+          ref={cardRef}
+          id="diary"
           container
           sx={{
             border: 3,
@@ -257,7 +295,7 @@ export default function DetailDiary() {
         <div style={{ textAlign: "center" }}>
           {registInfo.state == false ? (
             <Button
-              sx={{ marginTop: "8%" }}
+              sx={{ marginTop: "8%", marginRight: "10%" }}
               width="20vh"
               onClick={showAnalysisModal}
             >
@@ -266,13 +304,22 @@ export default function DetailDiary() {
           ) : (
             <Button
               bgcolor="#D4D4D4"
-              sx={{ marginTop: "8%" }}
+              sx={{ marginTop: "8%", marginRight: "10%" }}
               width="20vh"
               onClick={showAnalysisModal}
             >
               분석중입니다..
             </Button>
           )}
+
+          <Button
+            sx={{ marginTop: "8%" }}
+            width="15vh"
+            onClick={capture}
+            bgcolor="#FFCA28"
+          >
+            다운로드
+          </Button>
         </div>
       </Container>
       {/* 네비 바 */}

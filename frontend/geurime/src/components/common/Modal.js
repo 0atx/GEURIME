@@ -27,9 +27,15 @@ export default function Modal({ open, close, text, onClick, icon }) {
     <Dialog open={open} onClose={close}>
       <DialogContent>
         <div style={{ marginBottom: "5%", textAlign: "center" }}>
-          {icon === "error" && <ErrorOutlineIcon sx={{ color: "#FFE082", fontSize: "10vh" }} />}
-          {icon === "ok" && <TaskAltIcon sx={{ color: "#FFE082", fontSize: "10vh" }} />}
-          {icon === "wait" && <HourglassBottomIcon sx={{ color: "#FFE082", fontSize: "10vh" }} />}
+          {icon === "error" && (
+            <ErrorOutlineIcon sx={{ color: "#FFE082", fontSize: "10vh" }} />
+          )}
+          {icon === "ok" && (
+            <TaskAltIcon sx={{ color: "#FFE082", fontSize: "10vh" }} />
+          )}
+          {icon === "wait" && (
+            <HourglassBottomIcon sx={{ color: "#FFE082", fontSize: "10vh" }} />
+          )}
         </div>
         <div
           style={{
@@ -41,7 +47,9 @@ export default function Modal({ open, close, text, onClick, icon }) {
           {icon === "wait" && <Typography>조금만 기다려주세요😉</Typography>}
         </div>
       </DialogContent>
-      <DialogActions sx={{ display: "flex", justifyContent: "center", marginBottom: "10px" }}>
+      <DialogActions
+        sx={{ display: "flex", justifyContent: "center", marginBottom: "10px" }}
+      >
         <Button width="100px" onClick={onClick}>
           확인
         </Button>

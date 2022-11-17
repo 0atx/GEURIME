@@ -91,32 +91,45 @@ export default function DetailDiary() {
 
     formData.append("request", new Blob([JSON.stringify(info)], { type: "application/json" }));
 
-    const response = await http2.put(`/diaries/${diary.drawingId}`, formData);
-    console.log(response.data);
-    if (response.data.message === "success") {
-      setModifyModal(true);
-    }
+    const response = await http2
+      .put(`/diaries/${diary.drawingId}`, formData)
+      .then((response) => {
+        setModifyModal(true);
+      })
+      .catch((error) => {
+        if (error.response.data.code === "E012") {
+          navigate("/norights");
+        }
+      });
   }
 
   // 일기 조회
   async function getDiary() {
-    const response = await http.get(`/diaries/info/${params.diaryid}`);
-    console.log(response.data.data);
+    const response = await http
+      .get(`/diaries/info/${params.diaryid}`)
+      .then((response) => {
+        console.log(response.data.data);
 
-    const info = response.data.data;
-    setDiary(info);
+        const info = response.data.data;
+        setDiary(info);
 
-    // 연동 후 데이터 가공
-    setYear(new Date(info.createTime).getFullYear());
-    setMonth(new Date(info.createTime).getMonth() + 1);
-    setDate(new Date(info.createTime).getDate());
-    setDays(WEEKDAY[new Date(info.createTime).getDay()]);
+        // 연동 후 데이터 가공
+        setYear(new Date(info.createTime).getFullYear());
+        setMonth(new Date(info.createTime).getMonth() + 1);
+        setDate(new Date(info.createTime).getDate());
+        setDays(WEEKDAY[new Date(info.createTime).getDay()]);
 
-    setWakeup(moment(info.drawingDiaryWakeUp).format("A h시 mm분"));
-    setSleep(moment(info.drawingDiarySleep).format("A h시 mm분"));
+        setWakeup(moment(info.drawingDiaryWakeUp).format("A h시 mm분"));
+        setSleep(moment(info.drawingDiarySleep).format("A h시 mm분"));
 
-    setTitle(info.drawingTitle);
-    setContent(info.drawingDiary);
+        setTitle(info.drawingTitle);
+        setContent(info.drawingDiary);
+      })
+      .catch((error) => {
+        if (error.response.data.code === "E012") {
+          navigate("/norights");
+        }
+      });
   }
 
   const mounted = useRef(false);
