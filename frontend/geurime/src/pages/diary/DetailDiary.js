@@ -34,6 +34,7 @@ import { registState } from "states/RegistState";
 // 캡처
 import domtoimage from "dom-to-image";
 import { saveAs } from "file-saver";
+import html2canvas from "html2canvas";
 
 export default function DetailDiary() {
   const params = useParams();
@@ -125,13 +126,22 @@ export default function DetailDiary() {
   }, [registInfo]);
 
   // 일기장 캡처 함수
-  const cardRef = useRef();
+  // const cardRef = useRef();
+
+  // function capture() {
+  //   const card = cardRef.current;
+  //   card.crossOrigin = "anonymous";
+  //   domtoimage.toBlob(card).then((blob) => {
+  //     saveAs(blob, "diary.png");
+  //   });
+  // }
 
   function capture() {
-    const card = cardRef.current;
-    card.crossOrigin = "Anonymous";
-    domtoimage.toBlob(card).then((blob) => {
-      saveAs(blob, "diary.png");
+    html2canvas(document.getElementById("diary")).then(function (canvas) {
+      var el = document.createElement("a");
+      el.href = canvas.toDataURL("image/jpeg");
+      el.download = "diary.jpg";
+      el.click();
     });
   }
 
@@ -147,7 +157,7 @@ export default function DetailDiary() {
       <Container id="container">
         {/* 일기장 */}
         <Grid
-          ref={cardRef}
+          // ref={cardRef}
           id="diary"
           container
           sx={{
