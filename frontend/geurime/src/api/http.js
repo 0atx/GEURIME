@@ -3,7 +3,7 @@
 @author 여예원
 @since 2022.11.01
 */
-
+//
 import axios, { AxiosRequestConfig } from "axios";
 
 function Instance() {
@@ -54,7 +54,8 @@ function Instance() {
         localStorage.setItem("accessToken", newAccessToken);
         localStorage.setItem("accessTokenExpiration", accessTokenExpiration);
 
-        http.defaults.headers["refreshToken"] = localStorage.getItem("refreshToken");
+        http.defaults.headers["refreshToken"] =
+          localStorage.getItem("refreshToken");
         originalRequest.headers["accessToken"] = newAccessToken;
 
         // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
