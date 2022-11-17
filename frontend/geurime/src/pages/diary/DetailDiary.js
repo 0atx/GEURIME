@@ -153,7 +153,7 @@ export default function DetailDiary() {
     }).then(function (canvas) {
       var el = document.createElement("a");
       el.href = canvas.toDataURL("image/jpeg");
-      el.download = "diary.jpg";
+      el.download = `${diary.drawingTitle}_diary.jpg`;
       el.click();
     });
     alert("확인");
@@ -306,7 +306,7 @@ export default function DetailDiary() {
         <div style={{ textAlign: "center" }}>
           {registInfo.state == false ? (
             <Button
-              sx={{ marginTop: "8%" }}
+              sx={{ marginTop: "8%", marginRight: "10%" }}
               width="20vh"
               onClick={showAnalysisModal}
             >
@@ -315,7 +315,7 @@ export default function DetailDiary() {
           ) : (
             <Button
               bgcolor="#D4D4D4"
-              sx={{ marginTop: "8%" }}
+              sx={{ marginTop: "8%", marginRight: "10%" }}
               width="20vh"
               onClick={showAnalysisModal}
             >
