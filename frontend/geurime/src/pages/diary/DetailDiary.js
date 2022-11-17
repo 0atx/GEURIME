@@ -108,20 +108,6 @@ export default function DetailDiary() {
       });
   }
 
-  async function getBase64(url) {
-    const data = await fetch(url);
-    const blob = await data.blob();
-
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onloadend = function () {
-        const base64data = reader.result;
-        resolve(base64data);
-      };
-    });
-  }
-
   const mounted = useRef(false);
   useEffect(() => {
     if (!mounted.current) {
@@ -143,6 +129,7 @@ export default function DetailDiary() {
 
   function capture() {
     const card = cardRef.current;
+    card.crossOrigin = "Anonymous";
     domtoimage.toBlob(card).then((blob) => {
       saveAs(blob, "diary.png");
     });
@@ -281,6 +268,7 @@ export default function DetailDiary() {
               src={diary.drawingImagePath}
               width="100%"
               style={{ borderRadius: "5%" }}
+              crossOrigin="anonymous"
             ></img>
           </Grid>
           <Grid
