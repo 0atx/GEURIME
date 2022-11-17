@@ -169,7 +169,7 @@ export default function Diary() {
               rowSpacing={2}
               // columnSpacing={{ xs: 2, sm: 3, md: 4 }}
             >
-              {[0, 1, 2, 3].map((data, i) => (
+              {[0, 1, 2, 3, 4, 5, 6, 7].map((data, i) => (
                 <Grid item xs={6} sm={4} md={2} key={i}>
                   <div
                     style={{

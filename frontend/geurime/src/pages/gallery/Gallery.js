@@ -84,14 +84,21 @@ export default function Gallery() {
             <Grid
               container
               rowSpacing={2}
+              justifyContent="center"
+              alignItems="center"
               columnSpacing={{ xs: 2, sm: 3, md: 4 }}
               textAlign="center"
             >
-              {[0, 1, 2, 3].map((item, i) => (
+              {[0, 1, 2, 3, 4, 5, 6, 7].map((item, i) => (
                 <Grid item xs={6} sm={4} md={2}>
                   <Skeleton
                     key={i}
-                    sx={{ borderRadius: "20px" }}
+                    sx={{
+                      borderRadius: "20px",
+                      display: "grid",
+                      justifyContent: "center",
+                      textAlign: "center",
+                    }}
                     variant="rectangular"
                     width="20vh"
                     height="20vh"
