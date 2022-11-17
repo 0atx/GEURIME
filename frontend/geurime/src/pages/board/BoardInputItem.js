@@ -12,23 +12,7 @@ import { fontWeight } from "@mui/system";
 import MenuItem from "@mui/material/MenuItem";
 
 export default function BoardInputItem(props) {
-  useEffect(() => {
-    // console.log({handleChange: handleChange})
-    // console.log({boardCategory: boardCategory})
-    // console.log({boardCategories: boardCategories})
-    // console.log({changeProfile: changeProfile})
-    // console.log({imgRef: imgRef})
-    // console.log({imageUrl: imageUrl})
-    // console.log({textRef: textRef})
-    // console.log({changeText: changeText})
 
-  }, [])
-  // const [title, setTitle] = useState();
-
-  // const titleChange = (event) => {
-  //   setTitle(event.target.value);
-  //   // console.log({제목: title})
-  // };
 
   return (
     <Grid>

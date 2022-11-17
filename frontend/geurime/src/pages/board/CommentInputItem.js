@@ -6,7 +6,6 @@ import { Avatar, Button, Grid, TextField } from "@mui/material";
 import moment from "moment";
 import 'moment/locale/ko';
 import { useEffect, useRef, useState } from "react";
-// import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DeleteCommentModal from "components/modal/DeleteCommentModal";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
@@ -63,7 +62,6 @@ export default function CommentInputItem({ item, setCommentList, getComment, che
       );
       setCheckEdit(false)
       setCheckOne(false)
-      // console.log(response.data)
       if (response.data.message == "success") {
         setOpenModifyModal(true);
         getComment()
@@ -93,9 +91,7 @@ export default function CommentInputItem({ item, setCommentList, getComment, che
           <EditOutlinedIcon onClick={() => clickEdit()}/>
         </Grid>
         <Grid item xs={1.5}>
-
-        <DeleteOutlineOutlinedIcon onClick={() => deleteComment()} />
-
+          <DeleteOutlineOutlinedIcon onClick={() => deleteComment()} />
         </Grid>
         </>
       )
@@ -173,8 +169,6 @@ export default function CommentInputItem({ item, setCommentList, getComment, che
         userId={userInfo.userId}
         setCommentList={setCommentList}
         getComment={getComment}
-        // setCommentLen={setCommentLen}
-        // commentLen={commentLen}
       >
       </DeleteCommentModal>
       <ModifyCommentModal
