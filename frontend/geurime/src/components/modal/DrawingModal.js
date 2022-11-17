@@ -94,13 +94,26 @@ export default function DrawingModal({ open, handleClose, setCanvas }) {
               </Paper>
             </Grid>
 
-            <Grid container alignItems="center">
+            <Grid
+              container
+              alignItems="center"
+              sx={{ backgroundColor: "#FFF3D0", padding: "3%", borderRadius: "20px" }}
+            >
               {/* 펜 두께 */}
               <Grid item xs={2} sx={{ mb: 1 }}>
                 <p>펜 두께</p>
               </Grid>
-              <Grid item xs={10} sx={{ mb: 1, pl: 2, pr: 2 }}>
+              <Grid
+                item
+                xs={10}
+                sx={{
+                  mb: 1,
+                  pl: 2,
+                  pr: 2,
+                }}
+              >
                 <Slider
+                  color="secondary"
                   step={5}
                   min={1}
                   max={50}
@@ -117,21 +130,30 @@ export default function DrawingModal({ open, handleClose, setCanvas }) {
                 <p>색깔</p>
               </Grid>
 
-              <Grid item xs={10} sx={{ mt: 1, textAlign: "center", pl: 2 }}>
+              <Grid
+                item
+                xs={10}
+                sx={{
+                  mt: 1,
+                  textAlign: "center",
+                  pl: 2,
+                }}
+              >
                 <CirclePicker
                   width="100%"
-                  circleSize={25}
+                  circleSize={23}
+                  // circleSpacing={10}
                   colors={[
-                    "#D33115",
-                    "#E27300",
-                    "#FCC400",
-                    "#B0BC00",
-                    "#68BC00",
-                    "#16A5A5",
-                    "#009CE0",
-                    "#7B64FF",
-                    "#FA28FF",
-                    "#FB9E00",
+                    "#f44e3b",
+                    "#fe9200",
+                    "#fcdc00",
+                    "#dbdf00",
+                    "#a4dd00",
+                    "#68ccca",
+                    "#03a9f4",
+                    "#aea1ff",
+                    "#fda1ff",
+                    "#f06292",
                     "#194D33",
                     "#0C797D",
                     "#0062B1",
@@ -139,10 +161,10 @@ export default function DrawingModal({ open, handleClose, setCanvas }) {
                     "#AB149E",
                     "#ff5722",
                     "#795548",
-                    "#607d8b",
+                    "#8b572a",
                     "#969696",
-                    "#263238",
                     "#000000",
+                    "#ffffff",
                   ]}
                   color={color}
                   onChange={(color) => {

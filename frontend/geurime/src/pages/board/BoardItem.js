@@ -14,9 +14,6 @@ import sampleImage from "assets/boardSample.png";
 
 export default function BoardItem({ item }) {
   const navigator = useNavigate();
-  // useEffect(() => {
-  //   console.log({아이템: item})
-  // }, [])
   const time = item.createTime.substring(0, 10);
 
   const year = item.createTime.substring(2, 4);

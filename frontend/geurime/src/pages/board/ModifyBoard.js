@@ -31,10 +31,6 @@ export default function ModifyBoard() {
   const [images, setImages] = useState();
   const imgRef = useRef();
   const boardCategories = [
-    // {
-    //   value: 'USD',
-    //   label: '$',
-    // },
     {
       value: '자유',
       label: '자유',
@@ -132,14 +128,6 @@ export default function ModifyBoard() {
               navigater("/norights");
             }
           });
-      // if (response.data.message == "success") {
-      //   // console.log('수정 완료!')
-      //   // navigator("/Board");
-      //   setOpen(true);
-      // } else {
-      //   alert("게시글을 수정하지 못했습니다");
-      //   return;
-      //   }
       }
     }
   };
@@ -207,7 +195,6 @@ export default function ModifyBoard() {
     sx={{textAlign: "center", justifyContent: 'center'}}
     >
       <BoardInputItem
-        // titleChange={titleChange}
         textRef={textRef}
         titleRef={titleRef}
         handleChange={handleChange} 
@@ -220,9 +207,8 @@ export default function ModifyBoard() {
         imgRef={imgRef}
         text={text}
         title={title}
-        
-        ></BoardInputItem>
-        {/* 버튼 */}
+      ></BoardInputItem>
+      {/* 버튼 */}
       <Grid
         container
         sx={{ marginTop:'5%'}}

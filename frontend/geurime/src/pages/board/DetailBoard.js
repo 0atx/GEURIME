@@ -64,7 +64,6 @@ export default function DetailBoard() {
   const navigator = useNavigate();
   // 페이지 들어왔을때 엑시오스 요청
   const getDetail = async () => {
-    // console.log({ 페이지id: location.pathname.slice(13,) })
     const boardid = location.pathname.slice(13,);
     const response = await http
       .get(`/boards/${boardid}`)
@@ -76,12 +75,6 @@ export default function DetailBoard() {
           navigater("/norights");
 
       });
-    // if (response.data.message == "success") {
-    //   setBoard(response.data.data)
-    //   setBoardInfo(response.data.data)
-    // } else {
-    //   alert("게시글을 불러오지 못했습니다");
-    // }
   }
 
   let [check, setCheck] = useState(false);
@@ -130,7 +123,6 @@ export default function DetailBoard() {
   }, [board])
 
   const getComment = async () => {
-    // console.log({ 페이지id: location.pathname.slice(13,) })
     const boardid = location.pathname.slice(13,);
     const response = await http.get(`/comments/${boardid}`);
     if (response.data.message == "success") {
@@ -209,30 +201,25 @@ export default function DetailBoard() {
         borderColor: '#FFE082', borderWidth: 5}}
         xs={7}  
       >
-          {/* <img
-            src={board.boardImagePath}
-            loading="lazy"
-
-            /> */}
-            {board.boardImagePath == null ? (
-                // 그림 업로드 안한 경우
-                <>
-                  <img
-                    src={sampleImage}
-                    loading="lazy"
-                    style={{ height: '21vh', width: '24vh', margin: '2%', borderRadius: 5, marginTop: '3.5%' }}
-                  />
-                </>
-              ) : (
-                // 그림 업로드 한 경우
-                <>
-                  <img
-                    src={board.boardImagePath}
-                    loading="lazy"
-                    style={{ height: '21vh', width: '24vh', margin: '2%', borderRadius: 5, marginTop: '3.5%' }}
-                  />
-                </>
-              )}
+      {board.boardImagePath == null ? (
+          // 그림 업로드 안한 경우
+          <>
+            <img
+              src={sampleImage}
+              loading="lazy"
+              style={{ height: '21vh', width: '24vh', margin: '2%', borderRadius: 5, marginTop: '3.5%' }}
+            />
+          </>
+        ) : (
+          // 그림 업로드 한 경우
+          <>
+            <img
+              src={board.boardImagePath}
+              loading="lazy"
+              style={{ height: '21vh', width: '24vh', margin: '2%', borderRadius: 5, marginTop: '3.5%' }}
+            />
+          </>
+        )}
       </Paper>
 
       {/* 작성자, 뷰 */}
@@ -287,8 +274,6 @@ export default function DetailBoard() {
             </div>
           })}
         </Grid>
-          
-          {/* {board.boardContent} */}
       </Paper>
 
 
