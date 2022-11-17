@@ -283,7 +283,6 @@ export default function DetailDiary() {
               src={diary.drawingImagePath}
               width="100%"
               style={{ borderRadius: "5%" }}
-              crossOrigin="anonymous"
             ></img>
           </Grid>
           <Grid
