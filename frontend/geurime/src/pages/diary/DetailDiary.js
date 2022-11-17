@@ -308,7 +308,7 @@ export default function DetailDiary() {
         <div style={{ textAlign: "center" }}>
           {registInfo.state == false ? (
             <Button
-              sx={{ marginTop: "8%" }}
+              sx={{ marginTop: "8%", marginRight: "10%" }}
               width="20vh"
               onClick={showAnalysisModal}
             >
@@ -317,7 +317,7 @@ export default function DetailDiary() {
           ) : (
             <Button
               bgcolor="#D4D4D4"
-              sx={{ marginTop: "8%" }}
+              sx={{ marginTop: "8%", marginRight: "10%" }}
               width="20vh"
               onClick={showAnalysisModal}
             >
