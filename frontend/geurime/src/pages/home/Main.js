@@ -228,13 +228,6 @@ export default function Main() {
     if (!mounted.current) {
       mounted.current = true;
     } else {
-      // AOS.init();
-
-      // getUserInfo();
-      // getFamilyInfo();
-
-      // getEmotion(month, year);
-
       setLoading(true);
       setTimeout(() => {
         AOS.init();
@@ -273,18 +266,21 @@ export default function Main() {
               width: "85%",
             }}
           >
-            <Grid item xs={6} md={3} sx={{ marginTop: "1.5vh" }}>
-              <Skeleton variant="rectangular" width="18vh" height="18vh" />
-            </Grid>
-            <Grid item xs={6} md={3} sx={{ marginTop: "1.5vh" }}>
-              <Skeleton variant="rectangular" width="18vh" height="18vh" />
-            </Grid>
-            <Grid item xs={6} md={3} sx={{ marginTop: "1.5vh" }}>
-              <Skeleton variant="rectangular" width="18vh" height="18vh" />
-            </Grid>
-            <Grid item xs={6} md={3} sx={{ marginTop: "1.5vh" }}>
-              <Skeleton variant="rectangular" width="18vh" height="18vh" />
-            </Grid>
+            {[0, 1, 2, 3].map((data, i) => (
+              <Grid
+                item
+                xs={6}
+                md={3}
+                sx={{
+                  display: "grid",
+                  marginTop: "1.5vh",
+                  justifyContent: "center",
+                  textAlign: "center",
+                }}
+              >
+                <Skeleton variant="rectangular" width="18vh" height="18vh" />
+              </Grid>
+            ))}
           </Grid>
           {/* 감정 통계 */}
           <Grid item xs={12} sx={{ fontSize: "2.3vh", margin: "1vh 25% 1vh 25%" }}>
