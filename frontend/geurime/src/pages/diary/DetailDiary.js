@@ -136,14 +136,19 @@ export default function DetailDiary() {
   //   });
   // }
 
-  function capture() {
-    html2canvas(document.getElementById("diary")).then(function (canvas) {
-      var el = document.createElement("a");
-      el.href = canvas.toDataURL("image/jpeg");
-      el.download = "diary.jpg";
-      el.click();
-    });
-  }
+  // function capture() {
+  //   html2canvas(document.getElementById("diary"), {
+  //     useCORS: true,
+  //     logging: true,
+  //     proxy: "html2canvasproxy.php",
+  //   }).then(function (canvas) {
+  //     var el = document.createElement("a");
+  //     el.href = canvas.toDataURL("image/jpeg");
+  //     el.download = "diary.jpg";
+  //     el.click();
+  //   });
+  //   alert("확인");
+  // }
 
   return (
     <div>
@@ -278,7 +283,6 @@ export default function DetailDiary() {
               src={diary.drawingImagePath}
               width="100%"
               style={{ borderRadius: "5%" }}
-              crossOrigin="anonymous"
             ></img>
           </Grid>
           <Grid
@@ -293,7 +297,7 @@ export default function DetailDiary() {
         <div style={{ textAlign: "center" }}>
           {registInfo.state == false ? (
             <Button
-              sx={{ marginTop: "8%", marginRight: "10%" }}
+              sx={{ marginTop: "8%" }}
               width="20vh"
               onClick={showAnalysisModal}
             >
@@ -302,14 +306,14 @@ export default function DetailDiary() {
           ) : (
             <Button
               bgcolor="#D4D4D4"
-              sx={{ marginTop: "8%", marginRight: "10%" }}
+              sx={{ marginTop: "8%" }}
               width="20vh"
               onClick={showAnalysisModal}
             >
               분석중입니다..
             </Button>
           )}
-
+          {/* 그림 이미지로 다운로드
           <Button
             sx={{ marginTop: "8%" }}
             width="15vh"
@@ -317,7 +321,7 @@ export default function DetailDiary() {
             bgcolor="#FFCA28"
           >
             다운로드
-          </Button>
+          </Button> */}
         </div>
       </Container>
       {/* 네비 바 */}
