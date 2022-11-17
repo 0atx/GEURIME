@@ -137,12 +137,17 @@ export default function DetailDiary() {
   // }
 
   function capture() {
-    html2canvas(document.getElementById("diary")).then(function (canvas) {
+    html2canvas(document.getElementById("diary"), {
+      useCORS: true,
+      logging: true,
+      proxy: "html2canvasproxy.php",
+    }).then(function (canvas) {
       var el = document.createElement("a");
       el.href = canvas.toDataURL("image/jpeg");
       el.download = "diary.jpg";
       el.click();
     });
+    alert("확인");
   }
 
   return (
