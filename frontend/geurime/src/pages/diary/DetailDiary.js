@@ -91,7 +91,16 @@ export default function DetailDiary() {
       .then((response) => {
         // console.log(response.data.data);
         const info = response.data.data;
-        setDiary(info);
+
+        let image = new Image();
+        image.crossOrigin = "anonymous";
+        image.src =
+          info.drawingImagePath + "?timestamp=" + new Date().getTime();
+
+        let copy = { ...info };
+        copy.drawingImagePath = image.src;
+        // console.log(image.src);
+        setDiary(copy);
 
         // 연동 후 데이터 가공
         setYear(new Date(info.createTime).getFullYear());
@@ -136,19 +145,19 @@ export default function DetailDiary() {
   //   });
   // }
 
-  // function capture() {
-  //   html2canvas(document.getElementById("diary"), {
-  //     useCORS: true,
-  //     logging: true,
-  //     proxy: "html2canvasproxy.php",
-  //   }).then(function (canvas) {
-  //     var el = document.createElement("a");
-  //     el.href = canvas.toDataURL("image/jpeg");
-  //     el.download = "diary.jpg";
-  //     el.click();
-  //   });
-  //   alert("확인");
-  // }
+  function capture() {
+    html2canvas(document.getElementById("diary"), {
+      useCORS: true,
+      logging: true,
+      proxy: "html2canvasproxy.php",
+    }).then(function (canvas) {
+      var el = document.createElement("a");
+      el.href = canvas.toDataURL("image/jpeg");
+      el.download = "diary.jpg";
+      el.click();
+    });
+    alert("확인");
+  }
 
   return (
     <div>
@@ -313,7 +322,6 @@ export default function DetailDiary() {
               분석중입니다..
             </Button>
           )}
-          {/* 그림 이미지로 다운로드
           <Button
             sx={{ marginTop: "8%" }}
             width="15vh"
@@ -321,7 +329,7 @@ export default function DetailDiary() {
             bgcolor="#FFCA28"
           >
             다운로드
-          </Button> */}
+          </Button>
         </div>
       </Container>
       {/* 네비 바 */}
