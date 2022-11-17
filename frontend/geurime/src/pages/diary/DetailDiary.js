@@ -156,7 +156,6 @@ export default function DetailDiary() {
       el.download = `${diary.drawingTitle}_diary.jpg`;
       el.click();
     });
-    alert("확인");
   }
 
   return (
