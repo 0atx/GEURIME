@@ -124,10 +124,6 @@ export default function RegistDiary({}) {
     }
   }
 
-  useEffect(() => {
-    getWeather();
-  }, []);
-
   // 전역에 담긴 일기 정보
   const [diaryInfo, setDiaryInfo] = useRecoilState(diaryState);
 
@@ -196,10 +192,12 @@ export default function RegistDiary({}) {
     setMonth(month);
     setDay(day);
 
-    getWeather();
-
     setCalOpen(false);
   };
+
+  useEffect(() => {
+    getWeather();
+  }, [date, month]);
 
   return (
     <div>
