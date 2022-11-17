@@ -81,6 +81,8 @@ export default function Gallery() {
             <Grid
               container
               rowSpacing={2}
+              justifyContent="center"
+              alignItems="center"
               columnSpacing={{ xs: 2, sm: 3, md: 4 }}
               textAlign="center"
             >
@@ -88,7 +90,12 @@ export default function Gallery() {
                 <Grid item xs={6} sm={4} md={2}>
                   <Skeleton
                     key={i}
-                    sx={{ borderRadius: "20px" }}
+                    sx={{
+                      borderRadius: "20px",
+                      display: "grid",
+                      justifyContent: "center",
+                      textAlign: "center",
+                    }}
                     variant="rectangular"
                     width="20vh"
                     height="20vh"
