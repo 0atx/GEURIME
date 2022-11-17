@@ -297,7 +297,7 @@ export default function DetailDiary() {
               분석중입니다..
             </Button>
           )}
-
+          {/* 그림 이미지로 다운로드 */}
           <Button
             sx={{ marginTop: "8%" }}
             width="15vh"
