@@ -136,19 +136,21 @@ export default function DetailDiary() {
   //   });
   // }
 
-  function capture() {
-    html2canvas(document.getElementById("diary"), {
-      useCORS: true,
-      logging: true,
-      proxy: "html2canvasproxy.php",
-    }).then(function (canvas) {
-      var el = document.createElement("a");
-      el.href = canvas.toDataURL("image/jpeg");
-      el.download = "diary.jpg";
-      el.click();
-    });
-    alert("확인");
-  }
+  // function capture() {
+  //   html2canvas(document.getElementById("diary"), {
+  //     allowTaint: false,
+  //     useCORS: true,
+  //     logging: true,
+  //     proxy: "html2canvasproxy.php",
+  //   }).then(function (canvas) {
+  //     canvas.crossOrigin = "Anonymous";
+
+  //     var el = document.createElement("a");
+  //     el.href = canvas.toDataURL("image/jpeg");
+  //     el.download = "diary.jpg";
+  //     el.click();
+  //   });
+  // }
 
   return (
     <div>
@@ -283,6 +285,7 @@ export default function DetailDiary() {
               src={diary.drawingImagePath}
               width="100%"
               style={{ borderRadius: "5%" }}
+              // crossOrigin="anonymous"
             ></img>
           </Grid>
           <Grid
@@ -313,15 +316,14 @@ export default function DetailDiary() {
               분석중입니다..
             </Button>
           )}
-          그림 이미지로 다운로드
-          <Button
+          {/* <Button
             sx={{ marginTop: "8%" }}
             width="15vh"
             onClick={capture}
             bgcolor="#FFCA28"
           >
             다운로드
-          </Button>
+          </Button> */}
         </div>
       </Container>
       {/* 네비 바 */}
