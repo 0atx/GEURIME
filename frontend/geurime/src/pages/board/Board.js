@@ -94,9 +94,6 @@ useEffect(() => {
         setCount(count + 1)
       }
     }
-    // else {
-    //   alert("게시글을 불러오지 못했습니다");
-    // }
   };
 
   // 전체 게시글 불러오기
@@ -135,7 +132,6 @@ useEffect(() => {
         alert("게시글을 불러오지 못했습니다");
       }
     }
-
   };
 
   const [openNoSearchModal, setOpenNoSearchModal] = useState(false);
