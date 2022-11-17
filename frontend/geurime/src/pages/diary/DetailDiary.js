@@ -99,7 +99,6 @@ export default function DetailDiary() {
 
         let copy = { ...info };
         copy.drawingImagePath = image.src;
-        // console.log(image.src);
         setDiary(copy);
 
         // 연동 후 데이터 가공
@@ -156,7 +155,7 @@ export default function DetailDiary() {
 
       var el = document.createElement("a");
       el.href = canvas.toDataURL("image/jpeg");
-      el.download = "diary.jpg";
+      el.download = `${diary.drawingTitle}_diary.jpg`;
       el.click();
     });
   }
