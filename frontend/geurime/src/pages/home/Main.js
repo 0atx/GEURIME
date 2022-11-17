@@ -23,6 +23,7 @@ import FamilyInfoModal from "components/modal/FamilyInfoModal";
 import { ResponsivePie } from "@nivo/pie";
 import drawing from "assets/icon/drawing.png";
 import paper from "assets/galleryPaper.png";
+import Skeleton from "@mui/material/Skeleton";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -184,9 +185,15 @@ export default function Main() {
 
           // 가입년도부터 현재년도까지의 배열
           let createYear = response.data.data.createDate.substring(0, 4);
-          for (let i = parseInt(createYear); i <= new Date().getFullYear(); i++) {
-            years.push(i);
+          // console.log({ 가장오래된: createYear });
+          let yearArr = [];
+          for (let i = new Date().getFullYear(); i >= parseInt(createYear); i--) {
+            // if (years.indexOf(i) == -1) {
+            //   console.log({ 연도: i });
+            // }
+            yearArr.push(i);
           }
+          setYears(yearArr);
         }
       })
       .catch((error) => {
@@ -211,22 +218,35 @@ export default function Main() {
       });
   }
 
+  const [imgList, setImgList] = useState(currentKid.sampleImageList);
+  const navigator = useNavigate();
+
+  const [loading, setLoading] = useState(true);
+
   const mounted = useRef(false);
   useEffect(() => {
     if (!mounted.current) {
       mounted.current = true;
     } else {
-      AOS.init();
+      // AOS.init();
 
-      getUserInfo();
-      getFamilyInfo();
+      // getUserInfo();
+      // getFamilyInfo();
 
-      getEmotion(month, year);
+      // getEmotion(month, year);
+
+      setLoading(true);
+      setTimeout(() => {
+        AOS.init();
+
+        getUserInfo();
+        getFamilyInfo();
+
+        getEmotion(month, year);
+        setLoading(false);
+      }, 1000);
     }
   }, [currentKid]);
-
-  const [imgList, setImgList] = useState(currentKid.sampleImageList);
-  const navigator = useNavigate();
 
   useEffect(() => {
     if (!mounted.current) {
@@ -239,213 +259,266 @@ export default function Main() {
   return (
     <div>
       <SelectKids setImgList={setImgList} />
-      <Grid id="container" container justifyContent="center" alignItems="center">
-        {/* 그림 갤러리 */}
-        <Grid
-          container
-          sx={{
-            textAlign: "center",
-            marginBottom: "2vh",
-            width: "85%",
-          }}
-        >
-          {imgList.length === 0 ? (
-            <>
-              {[0, 1, 2, 3].map(function (img, i) {
-                return (
-                  <Grid item key={i} xs={6} md={3} sx={{ marginTop: "1.5vh" }}>
-                    <img
-                      data-aos="zoom-in"
-                      data-aos-delay={i * 200}
-                      src={`/assets/sample/${i}.png`}
-                      style={{
-                        width: "18vh",
-                        height: "18vh",
-                        objectFit: "cover",
-                        backgroundColor: "#ffffff",
-                        backgroundSize: "contain",
-                        padding: "5%",
-                        backgroundImage: `url(${paper})`,
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "top center",
-                        // boxShadow: "1px 1px 3px #6f6f6f",
-                      }}
-                      onClick={() => {
-                        navigator("/gallery");
-                      }}
-                      alt="drawing"
-                    />
-                  </Grid>
-                );
-              })}
-            </>
-          ) : (
-            <>
-              {imgList.map(function (img, i) {
-                return (
-                  <Grid item key={i} xs={6} md={3} sx={{ marginTop: "1.5vh" }}>
-                    <img
-                      data-aos="zoom-in"
-                      data-aos-delay={i * 200}
-                      src={img}
-                      style={{
-                        width: "18vh",
-                        height: "18vh",
-                        objectFit: "cover",
-                        backgroundColor: "#ffffff",
-                        backgroundSize: "contain",
-                        padding: "5%",
-                        backgroundImage: `url(${paper})`,
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "top center",
-                        // boxShadow: "1px 1px 3px #6f6f6f",
-                      }}
-                      onClick={() => {
-                        navigator("/gallery");
-                      }}
-                      alt="drawing"
-                    />
-                  </Grid>
-                );
-              })}
-            </>
-          )}
-        </Grid>
-        {/* 감정 통계 */}
-        <Grid item xs={12} sx={{ fontSize: "2.3vh", marginBottom: "1vh", marginTop: "1vh" }}>
-          <div style={{ textAlign: "center" }}>{currentKid.kidName}의 감정 분석</div>
-        </Grid>
-        <Grid
-          container
-          sx={{
-            textAlign: "center",
-            marginBottom: "2vh",
-            width: "85%",
-            border: "3px dashed #FFCA28",
-            padding: "1vh",
-            marginTop: "1.5vh",
-          }}
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Grid item xs={4}>
-            {/* 년도 */}
-            <FormControl sx={{ m: 1, minWidth: 80 }} size="small">
-              <Select
-                labelId="demo-select-small"
-                id="demo-select-small"
-                value={year}
-                onChange={handleYear}
-              >
-                {years.map((data, i) => (
-                  <MenuItem value={data} key={i}>
-                    {data}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+      {loading ? (
+        // 스켈레톤
+        <Grid id="container" container justifyContent="center" alignItems="center">
+          {/* 그림 갤러리 */}
+          <Grid
+            container
+            justifyContent="center"
+            alignItems="center"
+            sx={{
+              textAlign: "center",
+              marginBottom: "2vh",
+              width: "85%",
+            }}
+          >
+            <Grid item xs={6} md={3} sx={{ marginTop: "1.5vh" }}>
+              <Skeleton variant="rectangular" width="18vh" height="18vh" />
+            </Grid>
+            <Grid item xs={6} md={3} sx={{ marginTop: "1.5vh" }}>
+              <Skeleton variant="rectangular" width="18vh" height="18vh" />
+            </Grid>
+            <Grid item xs={6} md={3} sx={{ marginTop: "1.5vh" }}>
+              <Skeleton variant="rectangular" width="18vh" height="18vh" />
+            </Grid>
+            <Grid item xs={6} md={3} sx={{ marginTop: "1.5vh" }}>
+              <Skeleton variant="rectangular" width="18vh" height="18vh" />
+            </Grid>
           </Grid>
-          <Grid item xs={1}>
-            년
+          {/* 감정 통계 */}
+          <Grid item xs={12} sx={{ fontSize: "2.3vh", margin: "1vh 25% 1vh 25%" }}>
+            <Typography variant="h3">
+              <Skeleton />
+            </Typography>
           </Grid>
-          {/* 월 */}
-          <Grid item xs={3}>
-            <FormControl sx={{ m: 1, minWidth: 60 }} size="small">
-              <Select
-                labelId="demo-select-small"
-                id="demo-select-small"
-                value={month}
-                onChange={handleMonth}
-                MenuProps={{
-                  disablePortal: true,
-                  PaperProps: { sx: { maxHeight: 200 } },
-                }}
-              >
-                {months.map((data, i) => (
-                  <MenuItem value={data} key={i}>
-                    {data}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+          <Grid container alignItems="center" justifyContent="center">
+            <Skeleton variant="rectangular" width="38vh" height="38vh" />
           </Grid>
-          <Grid item xs={1}>
-            월
+          {/* 가족 정보 */}
+          <Grid item xs={12} sx={{ fontSize: "2.3vh", margin: "1vh 25% 1vh 25%" }}>
+            <Typography variant="h3">
+              <Skeleton />
+            </Typography>
           </Grid>
-          {happy == 0 && sad == 0 && angry == 0 ? (
-            <div style={{ padding: "5%" }}>
-              <img src={drawing} width="150vh" style={{ marginTop: "10%", marginBottom: "10%" }} />
-              <Typography>등록한 그림이 없어요😥</Typography>
-            </div>
-          ) : (
-            <Piechart happy={happy} sad={sad} angry={angry} />
-          )}
-          <Grid item xs={12} sx={{ marginBottom: "3%" }}>
-            <Typography sx={{ color: "#6F6F6F" }}>⁕ 보건복지상담센터 ☎ 129</Typography>
+          <Grid container justifyContent="center" alignItems="center">
+            <Skeleton variant="rectangular" width="38vh" height="10vh" />
           </Grid>
         </Grid>
-        {/* 가족 정보 */}
-        <Grid item xs={12} sx={{ fontSize: "2.3vh", marginBottom: "1vh" }}>
-          <div style={{ textAlign: "center" }}>{userInfo.familyName}</div>
-        </Grid>
-        <Grid
-          container
-          sx={{
-            marginBottom: "3vh",
-            width: "85%",
-            border: "3px dashed #FFCA28",
-            padding: "1vh",
-            marginTop: "1.5vh",
-          }}
-          justifyContent="center"
-          alignItems="center"
-        >
-          {familyInfo.map(function (info, i) {
-            return (
-              <Grid
-                item
-                key={i}
-                sx={{
-                  textAlign: "center",
-                  justifyContent: "center",
-                  marginBottom: "10px",
-                  alignItems: "center",
-                }}
-              >
-                <Grid
-                  container
-                  justifyContent="center"
-                  alignItems="center"
-                  sx={{
-                    textAlign: "center",
-                    width: "70px",
-                  }}
-                  onClick={() => {
-                    setClickedId(info.userId);
-                    setFamilyInfoOpen(true);
+      ) : (
+        <Grid id="container" container justifyContent="center" alignItems="center">
+          {/* 그림 갤러리 */}
+          <Grid
+            container
+            sx={{
+              textAlign: "center",
+              marginBottom: "2vh",
+              width: "85%",
+            }}
+          >
+            {imgList.length === 0 ? (
+              <>
+                {[0, 1, 2, 3].map(function (img, i) {
+                  return (
+                    <Grid item key={i} xs={6} md={3} sx={{ marginTop: "1.5vh" }}>
+                      <img
+                        data-aos="zoom-in"
+                        data-aos-delay={i * 200}
+                        src={`/assets/sample/${i}.png`}
+                        style={{
+                          width: "18vh",
+                          height: "18vh",
+                          objectFit: "cover",
+                          backgroundColor: "#ffffff",
+                          backgroundSize: "contain",
+                          padding: "5%",
+                          backgroundImage: `url(${paper})`,
+                          backgroundRepeat: "no-repeat",
+                          backgroundPosition: "top center",
+                          // boxShadow: "1px 1px 3px #6f6f6f",
+                        }}
+                        onClick={() => {
+                          navigator("/gallery");
+                        }}
+                        alt="drawing"
+                      />
+                    </Grid>
+                  );
+                })}
+              </>
+            ) : (
+              <>
+                {imgList.map(function (img, i) {
+                  return (
+                    <Grid item key={i} xs={6} md={3} sx={{ marginTop: "1.5vh" }}>
+                      <img
+                        data-aos="zoom-in"
+                        data-aos-delay={i * 200}
+                        src={img}
+                        style={{
+                          width: "18vh",
+                          height: "18vh",
+                          objectFit: "cover",
+                          backgroundColor: "#ffffff",
+                          backgroundSize: "contain",
+                          padding: "5%",
+                          backgroundImage: `url(${paper})`,
+                          backgroundRepeat: "no-repeat",
+                          backgroundPosition: "top center",
+                          // boxShadow: "1px 1px 3px #6f6f6f",
+                        }}
+                        onClick={() => {
+                          navigator("/gallery");
+                        }}
+                        alt="drawing"
+                      />
+                    </Grid>
+                  );
+                })}
+              </>
+            )}
+          </Grid>
+          {/* 감정 통계 */}
+          <Grid item xs={12} sx={{ fontSize: "2.3vh", marginBottom: "1vh", marginTop: "1vh" }}>
+            <div style={{ textAlign: "center" }}>{currentKid.kidName}의 감정 분석</div>
+          </Grid>
+          <Grid
+            container
+            sx={{
+              textAlign: "center",
+              marginBottom: "2vh",
+              width: "85%",
+              border: "3px dashed #FFCA28",
+              padding: "1vh",
+              marginTop: "1.5vh",
+            }}
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Grid item xs={4}>
+              {/* 년도 */}
+              <FormControl sx={{ m: 1, minWidth: 80 }} size="small">
+                <Select
+                  labelId="demo-select-small"
+                  id="demo-select-small"
+                  value={year}
+                  onChange={handleYear}
+                >
+                  {years.map((data, i) => (
+                    <MenuItem value={data} key={i}>
+                      {data}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={1}>
+              년
+            </Grid>
+            {/* 월 */}
+            <Grid item xs={3}>
+              <FormControl sx={{ m: 1, minWidth: 60 }} size="small">
+                <Select
+                  labelId="demo-select-small"
+                  id="demo-select-small"
+                  value={month}
+                  onChange={handleMonth}
+                  MenuProps={{
+                    disablePortal: true,
+                    PaperProps: { sx: { maxHeight: 200 } },
                   }}
                 >
-                  <Avatar sx={{ marginTop: "5px" }} src={info.userProfileImage} />
-
+                  {months.map((data, i) => (
+                    <MenuItem value={data} key={i}>
+                      {data}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={1}>
+              월
+            </Grid>
+            {happy == 0 && sad == 0 && angry == 0 ? (
+              <div style={{ padding: "5%" }}>
+                <img
+                  src={drawing}
+                  width="150vh"
+                  style={{ marginTop: "10%", marginBottom: "10%" }}
+                />
+                <Typography>등록한 그림이 없어요😥</Typography>
+              </div>
+            ) : (
+              <Piechart happy={happy} sad={sad} angry={angry} />
+            )}
+            <Grid item xs={12} sx={{ marginBottom: "3%" }}>
+              <Typography sx={{ color: "#6F6F6F" }}>⁕ 보건복지상담센터 ☎ 129</Typography>
+            </Grid>
+          </Grid>
+          {/* 가족 정보 */}
+          <Grid item xs={12} sx={{ fontSize: "2.3vh", marginBottom: "1vh" }}>
+            <div style={{ textAlign: "center" }}>{userInfo.familyName}</div>
+          </Grid>
+          <Grid
+            container
+            sx={{
+              marginBottom: "3vh",
+              width: "85%",
+              border: "3px dashed #FFCA28",
+              padding: "1vh",
+              marginTop: "1.5vh",
+            }}
+            justifyContent="center"
+            alignItems="center"
+          >
+            {familyInfo.map(function (info, i) {
+              return (
+                <Grid
+                  item
+                  key={i}
+                  sx={{
+                    textAlign: "center",
+                    justifyContent: "center",
+                    marginBottom: "10px",
+                    alignItems: "center",
+                  }}
+                >
                   <Grid
-                    item
-                    xs={12}
+                    container
+                    justifyContent="center"
+                    alignItems="center"
                     sx={{
-                      marginTop: "3px",
+                      textAlign: "center",
+                      width: "70px",
+                    }}
+                    onClick={() => {
+                      setClickedId(info.userId);
+                      setFamilyInfoOpen(true);
                     }}
                   >
-                    {info.nickname.length > 4 ? (
-                      <>{info.nickname.substring(0, 3) + ".."}</>
-                    ) : (
-                      <>{info.nickname}</>
-                    )}
+                    <Avatar sx={{ marginTop: "5px" }} src={info.userProfileImage} />
+
+                    <Grid
+                      item
+                      xs={12}
+                      sx={{
+                        marginTop: "3px",
+                      }}
+                    >
+                      {info.nickname.length > 4 ? (
+                        <>{info.nickname.substring(0, 3) + ".."}</>
+                      ) : (
+                        <>{info.nickname}</>
+                      )}
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-            );
-          })}
+              );
+            })}
+          </Grid>
         </Grid>
-      </Grid>
+      )}
+
       <NavBar />
       {/* 가족 정보 모달 */}
       <FamilyInfoModal userId={clickedId} open={familyInfoOpen} setOpen={setFamilyInfoOpen} />
