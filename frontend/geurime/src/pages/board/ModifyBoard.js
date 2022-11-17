@@ -19,7 +19,7 @@ import NoCommentModal from "components/modal/NoCommentModal";
 import NoTitleModal from "components/modal/NoTitleModal";
 
 export default function ModifyBoard() {
-  const navigator = useNavigate();
+  const navigater = useNavigate();
 
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [boardInfo, setBoardInfo] = useRecoilState(boardState);
@@ -54,6 +54,22 @@ export default function ModifyBoard() {
     setBoardCategory(event.target.value);
   };
 
+
+  
+  let [check, setCheck] = useState(false);
+  useEffect(() => { 
+    if (check == false){
+      setCheck(true)
+    }
+    else{
+      if (boardInfo.boardTitle == '') {
+        navigater("/norights");
+      }
+    }
+    
+  }, [check])
+  
+
   const regist = async () => {
 
     let formData = new FormData();
@@ -86,13 +102,16 @@ export default function ModifyBoard() {
         setOpenNoCommentModal(true)
       }
       else{
-        const response = await http2.put(`/boards/${boardInfo.boardId}`, formData);
-      if (response.data.message == "success") {
-        setOpen(true);
-      } else {
-        alert("게시글을 수정하지 못했습니다");
-        return;
-        }
+        const response = await http2
+        .put(`/boards/${boardInfo.boardId}`, formData)
+        .then((res) => {
+          setOpen(true);
+        })
+        .catch((error) => {
+          if (error.response.data.code === "E012") {
+            navigater("/norights");
+          }
+        });
       }
     }
     else {
@@ -103,18 +122,28 @@ export default function ModifyBoard() {
         setOpenNoCommentModal(true)
       }
       else{
-        const response = await http2.put(`/boards/${boardInfo.boardId}`, formData);
-      if (response.data.message == "success") {
-        // console.log('수정 완료!')
-        // navigator("/Board");
-        setOpen(true);
-      } else {
-        alert("게시글을 수정하지 못했습니다");
-        return;
-        }
+        const response = await http2
+          .put(`/boards/${boardInfo.boardId}`, formData)
+          .then((res) => {
+            setOpen(true);
+          })
+          .catch((error) => {
+            if (error.response.data.code === "E012") {
+              navigater("/norights");
+            }
+          });
+      // if (response.data.message == "success") {
+      //   // console.log('수정 완료!')
+      //   // navigator("/Board");
+      //   setOpen(true);
+      // } else {
+      //   alert("게시글을 수정하지 못했습니다");
+      //   return;
+      //   }
       }
     }
   };
+
 
   function changeProfile(e) {
     const reader = new FileReader();
@@ -168,7 +197,7 @@ export default function ModifyBoard() {
       title={boardInfo.boardTitle}
       isRight="완료"
       clickRight={() => {
-        navigator(`/detailboard/${boardInfo.boardId}`);
+        navigater(`/detailboard/${boardInfo.boardId}`);
         }}
     >
     </BackMenu>
@@ -191,6 +220,7 @@ export default function ModifyBoard() {
         imgRef={imgRef}
         text={text}
         title={title}
+        
         ></BoardInputItem>
         {/* 버튼 */}
       <Grid

@@ -85,19 +85,27 @@ export default function DetailDiary() {
 
   // 일기 조회
   async function getDiary() {
-    const response = await http.get(`/diaries/info/${params.diaryid}`);
-    const info = response.data.data;
-    setDiary(info);
-    console.log(info);
+    const response = await http
+      .get(`/diaries/info/${params.diaryid}`)
+      .then((response) => {
+        // console.log(response.data.data);
+        const info = response.data.data;
+        setDiary(info);
 
-    // 연동 후 데이터 가공
-    setYear(new Date(info.createTime).getFullYear());
-    setMonth(new Date(info.createTime).getMonth() + 1);
-    setDate(new Date(info.createTime).getDate());
-    setDays(WEEKDAY[new Date(info.createTime).getDay()]);
+        // 연동 후 데이터 가공
+        setYear(new Date(info.createTime).getFullYear());
+        setMonth(new Date(info.createTime).getMonth() + 1);
+        setDate(new Date(info.createTime).getDate());
+        setDays(WEEKDAY[new Date(info.createTime).getDay()]);
 
-    setWakeup(moment(info.drawingDiaryWakeUp).format("A h시 mm분"));
-    setSleep(moment(info.drawingDiarySleep).format("A h시 mm분"));
+        setWakeup(moment(info.drawingDiaryWakeUp).format("A h시 mm분"));
+        setSleep(moment(info.drawingDiarySleep).format("A h시 mm분"));
+      })
+      .catch((error) => {
+        if (error.response.data.code === "E012") {
+          navigate("/norights");
+        }
+      });
   }
 
   const mounted = useRef(false);
@@ -273,8 +281,8 @@ export default function DetailDiary() {
         <div style={{ textAlign: "center" }}>
           {registInfo.state == false ? (
             <Button
-              sx={{ marginTop: "8%", marginRight: "3%" }}
-              width="15vh"
+              sx={{ marginTop: "8%", marginRight: "10%" }}
+              width="20vh"
               onClick={showAnalysisModal}
             >
               분석결과 보기
@@ -282,8 +290,8 @@ export default function DetailDiary() {
           ) : (
             <Button
               bgcolor="#D4D4D4"
-              sx={{ marginTop: "8%", marginRight: "3%" }}
-              width="15vh"
+              sx={{ marginTop: "8%", marginRight: "10%" }}
+              width="20vh"
               onClick={showAnalysisModal}
             >
               분석중입니다..
