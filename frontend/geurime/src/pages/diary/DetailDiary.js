@@ -91,7 +91,16 @@ export default function DetailDiary() {
       .then((response) => {
         // console.log(response.data.data);
         const info = response.data.data;
-        setDiary(info);
+
+        let image = new Image();
+        image.crossOrigin = "anonymous";
+        image.src =
+          info.drawingImagePath + "?timestamp=" + new Date().getTime();
+
+        let copy = { ...info };
+        copy.drawingImagePath = image.src;
+        // console.log(image.src);
+        setDiary(copy);
 
         // 연동 후 데이터 가공
         setYear(new Date(info.createTime).getFullYear());
@@ -313,7 +322,6 @@ export default function DetailDiary() {
               분석중입니다..
             </Button>
           )}
-          그림 이미지로 다운로드
           <Button
             sx={{ marginTop: "8%" }}
             width="15vh"
