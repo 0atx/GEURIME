@@ -248,7 +248,11 @@ export default function RegistDiary({}) {
                 setIsDrawing(true);
                 localStorage.setItem(
                   "savedDrawing",
-                  JSON.stringify({ lines: [], width: 354.90000000000003, height: 337.6 })
+                  JSON.stringify({
+                    lines: [],
+                    width: 354.90000000000003,
+                    height: 337.6,
+                  })
                 );
               }}
             >

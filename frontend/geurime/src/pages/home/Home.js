@@ -31,14 +31,12 @@ export default function Home() {
     if (!mounted.current) {
       mounted.current = true;
     } else {
-      // console.log(params);
       // param에 invitecode가 있을 때
       if (Object.keys(params).length !== 0) {
         // userInfo에 inviteCode 저장
         setUserInfo((info) => {
           const copyUserInfo = { ...info };
           copyUserInfo.inviteCode = params.invitecode;
-          // console.log(copyUserInfo);
           return { ...copyUserInfo };
         });
         localStorage.setItem("inviteCode", params.invitecode);

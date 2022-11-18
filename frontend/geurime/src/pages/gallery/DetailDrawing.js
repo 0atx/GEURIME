@@ -64,7 +64,6 @@ export default function DetailDrawing() {
       .get(`/drawings/${id}`)
       .then((res) => {
         setDrawingInfo(res.data.data);
-        console.log(res);
       })
       .catch((error) => {
         if (error.response.data.code === "E012") {

@@ -160,8 +160,6 @@ export default function Main() {
         },
       })
       .then((response) => {
-        // console.log(month, year, response.data.data);
-
         if (response.data.message === "success") {
           setHappy(response.data.data.happy);
           setSad(response.data.data.sad);
@@ -187,7 +185,11 @@ export default function Main() {
           let createYear = response.data.data.createDate.substring(0, 4);
           // console.log({ 가장오래된: createYear });
           let yearArr = [];
-          for (let i = new Date().getFullYear(); i >= parseInt(createYear); i--) {
+          for (
+            let i = new Date().getFullYear();
+            i >= parseInt(createYear);
+            i--
+          ) {
             // if (years.indexOf(i) == -1) {
             //   console.log({ 연도: i });
             // }
@@ -254,7 +256,12 @@ export default function Main() {
       <SelectKids setImgList={setImgList} />
       {loading ? (
         // 스켈레톤
-        <Grid id="container" container justifyContent="center" alignItems="center">
+        <Grid
+          id="container"
+          container
+          justifyContent="center"
+          alignItems="center"
+        >
           {/* 그림 갤러리 */}
           <Grid
             container
@@ -283,7 +290,11 @@ export default function Main() {
             ))}
           </Grid>
           {/* 감정 통계 */}
-          <Grid item xs={12} sx={{ fontSize: "2.3vh", margin: "1vh 25% 1vh 25%" }}>
+          <Grid
+            item
+            xs={12}
+            sx={{ fontSize: "2.3vh", margin: "1vh 25% 1vh 25%" }}
+          >
             <Typography variant="h3">
               <Skeleton />
             </Typography>
@@ -292,7 +303,11 @@ export default function Main() {
             <Skeleton variant="rectangular" width="38vh" height="38vh" />
           </Grid>
           {/* 가족 정보 */}
-          <Grid item xs={12} sx={{ fontSize: "2.3vh", margin: "1vh 25% 1vh 25%" }}>
+          <Grid
+            item
+            xs={12}
+            sx={{ fontSize: "2.3vh", margin: "1vh 25% 1vh 25%" }}
+          >
             <Typography variant="h3">
               <Skeleton />
             </Typography>
@@ -302,7 +317,12 @@ export default function Main() {
           </Grid>
         </Grid>
       ) : (
-        <Grid id="container" container justifyContent="center" alignItems="center">
+        <Grid
+          id="container"
+          container
+          justifyContent="center"
+          alignItems="center"
+        >
           {/* 그림 갤러리 */}
           <Grid
             container
@@ -316,7 +336,13 @@ export default function Main() {
               <>
                 {[0, 1, 2, 3].map(function (img, i) {
                   return (
-                    <Grid item key={i} xs={6} md={3} sx={{ marginTop: "1.5vh" }}>
+                    <Grid
+                      item
+                      key={i}
+                      xs={6}
+                      md={3}
+                      sx={{ marginTop: "1.5vh" }}
+                    >
                       <img
                         data-aos="zoom-in"
                         data-aos-delay={i * 200}
@@ -346,7 +372,13 @@ export default function Main() {
               <>
                 {imgList.map(function (img, i) {
                   return (
-                    <Grid item key={i} xs={6} md={3} sx={{ marginTop: "1.5vh" }}>
+                    <Grid
+                      item
+                      key={i}
+                      xs={6}
+                      md={3}
+                      sx={{ marginTop: "1.5vh" }}
+                    >
                       <img
                         data-aos="zoom-in"
                         data-aos-delay={i * 200}
@@ -375,8 +407,14 @@ export default function Main() {
             )}
           </Grid>
           {/* 감정 통계 */}
-          <Grid item xs={12} sx={{ fontSize: "2.3vh", marginBottom: "1vh", marginTop: "1vh" }}>
-            <div style={{ textAlign: "center" }}>{currentKid.kidName}의 감정 분석</div>
+          <Grid
+            item
+            xs={12}
+            sx={{ fontSize: "2.3vh", marginBottom: "1vh", marginTop: "1vh" }}
+          >
+            <div style={{ textAlign: "center" }}>
+              {currentKid.kidName}의 감정 분석
+            </div>
           </Grid>
           <Grid
             container
@@ -448,7 +486,9 @@ export default function Main() {
               <Piechart happy={happy} sad={sad} angry={angry} />
             )}
             <Grid item xs={12} sx={{ marginBottom: "3%" }}>
-              <Typography sx={{ color: "#6F6F6F" }}>⁕ 보건복지상담센터 ☎ 129</Typography>
+              <Typography sx={{ color: "#6F6F6F" }}>
+                ⁕ 보건복지상담센터 ☎ 129
+              </Typography>
             </Grid>
           </Grid>
           {/* 가족 정보 */}
@@ -492,7 +532,10 @@ export default function Main() {
                       setFamilyInfoOpen(true);
                     }}
                   >
-                    <Avatar sx={{ marginTop: "5px" }} src={info.userProfileImage} />
+                    <Avatar
+                      sx={{ marginTop: "5px" }}
+                      src={info.userProfileImage}
+                    />
 
                     <Grid
                       item
@@ -517,7 +560,11 @@ export default function Main() {
 
       <NavBar />
       {/* 가족 정보 모달 */}
-      <FamilyInfoModal userId={clickedId} open={familyInfoOpen} setOpen={setFamilyInfoOpen} />
+      <FamilyInfoModal
+        userId={clickedId}
+        open={familyInfoOpen}
+        setOpen={setFamilyInfoOpen}
+      />
     </div>
   );
 }

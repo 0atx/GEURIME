@@ -26,7 +26,7 @@ export default function DetailBoard() {
   const navigater = useNavigate();
   const location = useLocation()
   const [commentList, setCommentList] = useState([
-    { 'id': 1, 'commentUserId': 20, 'commentUserProfile': 'https://geurime-a506.s3.ap-northeast-2.amazonaws.c…86a5a%5Chome%5Cubuntu%5Cstatic%5CsunnyClicked.png', 'commentUserNickname': '해안', 'createTime': '2022-11-03 14:41:00', 'updateTime': null },
+   
     ])  
   const [board, setBoard] = useState({
     boardCategory: "",
