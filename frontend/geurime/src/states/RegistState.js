@@ -10,5 +10,6 @@ export const registState = atom({
   key: "regist",
   default: {
     "state": "",
+    "num" : ""
   },
 });

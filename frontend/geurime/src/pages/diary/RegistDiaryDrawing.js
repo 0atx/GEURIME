@@ -98,11 +98,9 @@ export default function RegistDiary({}) {
     const response = await http
       .get(`/ai/${id}`)
       .then((response) => {
-        // console.log(response.data);
-        // console.log("분석완료");
         // 일기 리스트에 추가
         localStorage.setItem("registD", false);
-        setRegistInfo({ state: false });
+        setRegistInfo({ state: false, num : '' });
       })
       .catch((error) => {
         if (error.response.data.code === "E012") {
@@ -147,8 +145,6 @@ export default function RegistDiary({}) {
       // 파일 전송
       file = imgRef.current.files[0];
     }
-
-    console.log("이거야?", file);
     let formData = new FormData();
     formData.append("imageFile", file);
 
@@ -169,14 +165,11 @@ export default function RegistDiary({}) {
         type: "application/json",
       })
     );
-
-    console.log(info);
     const response = await http2.post(`/diaries`, formData);
-    console.log(response.data);
 
     if (response.data.message == "success") {
       analyzeDrawing(response.data.data.drawingId);
-      setRegistInfo({ state: true });
+      setRegistInfo({ state: true, num: response.data.data.drawingId });
     } else {
     }
     setOpen(true);
