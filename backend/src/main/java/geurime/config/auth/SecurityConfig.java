@@ -1,5 +1,6 @@
 package geurime.config.auth;
 
+import geurime.api.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,7 +13,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final geurime.api.service.AuthService AuthService;
+    private final AuthService authService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -26,7 +27,7 @@ public class SecurityConfig {
                 .oauth2Login()
                 .defaultSuccessUrl("/oauth/info", true)
                 .userInfoEndpoint()
-                .userService(AuthService);
+                .userService(authService);
 
         return http.build();
 
@@ -39,20 +40,9 @@ public class SecurityConfig {
 
         configuration.addAllowedOriginPattern("http://localhost:3000");
         configuration.addAllowedOriginPattern("http://localhost:8000");
-        configuration.addAllowedOriginPattern("http://geurime.com");
-        configuration.addAllowedOriginPattern("http://www.geurime.com");
-        configuration.addAllowedOriginPattern("http://geurime.com:3000");
-        configuration.addAllowedOriginPattern("http://geurime.com:8000");
-        configuration.addAllowedOriginPattern("http://www.geurime.com:3000");
-        configuration.addAllowedOriginPattern("http://www.geurime.com:8000");
         configuration.addAllowedOriginPattern("http://k7a506.p.ssafy.io:3000");
         configuration.addAllowedOriginPattern("http://k7a506.p.ssafy.io:8000");
         configuration.addAllowedOriginPattern("https://geurime.com");
-        configuration.addAllowedOriginPattern("https://geurime.com:3000");
-        configuration.addAllowedOriginPattern("https://geurime.com:8000");
-        configuration.addAllowedOriginPattern("https://www.geurime.com");
-        configuration.addAllowedOriginPattern("https://www.geurime.com:3000");
-        configuration.addAllowedOriginPattern("https://www.geurime.com:8000");
         configuration.addAllowedOriginPattern("https://k7a506.p.ssafy.io");
         configuration.addAllowedOriginPattern("https://k7a506.p.ssafy.io:3000");
         configuration.addAllowedOriginPattern("https://k7a506.p.ssafy.io:8000");

@@ -3,7 +3,8 @@
 @since 2022.11.07
 */
 
-import { Button, Grid } from "@mui/material";
+import {  Grid } from "@mui/material";
+import Button from "components/common/Btn";
 import { http } from "api/http";
 import { http2 } from "api/http2";
 import BackMenu from "components/nav/BackMenu";
@@ -211,18 +212,29 @@ export default function ModifyBoard() {
       {/* 버튼 */}
       <Grid
         container
-        sx={{ marginTop:'5%'}}
+        sx={{ marginTop:'5%', justifyContent: 'center'}}
       >
+        <Grid
+          item xs={4}
+          sx={{marginRight: '10%'}}
+        >
         <Button
-        variant="contained"
-          sx={{ width: '25vw', borderRadius: 5, marginLeft: '10%' }}
+
+          sx={{ width: '100%', borderRadius: 5 }}
           onClick={() => deleteBoard()}
         >삭제</Button>
+        </Grid>
+        <Grid
+        item
+        xs={4}
+        >
         <Button
-        variant="contained"
-          sx={{ width: '25vw', borderRadius: 5, marginLeft: '30%'}}
+
+          bgcolor='#FFCA28'
+          sx={{ width: '100%', borderRadius: 5 }}
           onClick={() => regist()}
         >등록</Button>
+        </Grid>
       </Grid>
       </Grid>
       

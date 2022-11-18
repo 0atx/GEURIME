@@ -39,7 +39,10 @@ import html2canvas from "html2canvas";
 export default function DetailDiary() {
   const params = useParams();
   const navigate = useNavigate();
-
+  useEffect(() => {
+    console.log({파람:Number(params.diaryid)})
+    console.log({등록중:registInfo.num})
+  },[])
   // 삭제완료 모달
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   // 분석결과 모달
@@ -303,15 +306,8 @@ export default function DetailDiary() {
           </Grid>
         </Grid>
         <div style={{ textAlign: "center" }}>
-          {registInfo.state == false ? (
-            <Button
-              sx={{ marginTop: "8%", marginRight: "10%" }}
-              width="20vh"
-              onClick={showAnalysisModal}
-            >
-              분석결과 보기
-            </Button>
-          ) : (
+          {registInfo.state == true && registInfo.num == Number(params.diaryid) ? 
+          (
             <Button
               bgcolor="#D4D4D4"
               sx={{ marginTop: "8%", marginRight: "10%" }}
@@ -319,6 +315,15 @@ export default function DetailDiary() {
               onClick={showAnalysisModal}
             >
               분석중입니다..
+            </Button>
+          ):
+          (
+            <Button
+              sx={{ marginTop: "8%", marginRight: "10%" }}
+              width="20vh"
+              onClick={showAnalysisModal}
+            >
+              분석결과 보기
             </Button>
           )}
           <Button
@@ -340,7 +345,7 @@ export default function DetailDiary() {
         diaryid={diary.drawingId}
       ></DeleteDiaryModal>
       {/* 분석 결과 모달 */}
-      {registInfo.state == true ? (
+      {registInfo.state == true && params.diaryid == registInfo.num ? (
         <Modal
           open={openAnalysisModal}
           close={closeAnalysisModal}

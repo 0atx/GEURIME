@@ -35,29 +35,29 @@ public class CommentController {
 
     @PostMapping
     @ApiOperation(value = "댓글 등록", notes = "등록 정보를 받아 댓글을 등록한다")
-    public ResponseEntity<BasicResponse<Long>> createComment(@RequestBody Comment.CommentPostRequest request) {
+    public ResponseEntity<BasicResponse<Comment.CommentResponse>> createComment(@RequestBody Comment.CommentPostRequest request) {
         try {
-            Long commentId = commentService.createComment(request);
-            return new ResponseEntity<>(makeBasicResponse(SUCCESS, commentId), HttpStatus.CREATED);
+            Comment.CommentResponse response = commentService.createComment(request);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.CREATED);
         } catch (CustomException e) {
             return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PutMapping
+    @PutMapping("/{commentId}")
     @ApiOperation(value = "댓글 수정", notes = "수정 정보를 받아 댓글을 수정한다. 수정을 시도하는 유저(userId)가 작성자와 일치하지 않으면 0을 반환한다.")
-    public ResponseEntity<BasicResponse<Long>> updateComment(@RequestBody Comment.CommentPutRequest request) {
+    public ResponseEntity<BasicResponse<Comment.CommentResponse>> updateComment(@PathVariable Long commentId, @RequestBody Comment.CommentPutRequest request) {
         try {
-            Long commentId = commentService.updateComment(request);
-            return new ResponseEntity<>(makeBasicResponse(SUCCESS, commentId), HttpStatus.CREATED);
+            Comment.CommentResponse response = commentService.updateComment(request);
+            return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.CREATED);
         } catch (CustomException e) {
             return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{commentId}")
     @ApiOperation(value = "댓글 삭제", notes = "댓글 id를 받아 댓글을 삭제한다. 삭제을 시도하는 유저(userId)가 작성자와 일치하지 않으면 false를 반환한다.")
-    public ResponseEntity<BasicResponse<Boolean>> updateComment(@RequestParam Long userId, @RequestParam Long commentId) {
+    public ResponseEntity<BasicResponse<Boolean>> updateComment(@PathVariable Long commentId, @RequestParam Long userId) {
         try {
             Boolean isDelete = commentService.deleteComment(userId, commentId);
             return new ResponseEntity<>(makeBasicResponse(SUCCESS, isDelete), HttpStatus.CREATED);

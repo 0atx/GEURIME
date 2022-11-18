@@ -50,9 +50,6 @@ export default function CropModal({ open, handleClose, url, updatedImage, setUpd
       var updated_width = updated.clientWidth;
       var updated_height = updated.clientHeight;
 
-      // console.log("원래꺼", origin_width, origin_height);
-      // console.log("크롭꺼", updated_width, updated_height);
-
       const canvas = document.createElement("canvas");
       canvas.width = crop.width;
       canvas.height = crop.height;
@@ -69,12 +66,11 @@ export default function CropModal({ open, handleClose, url, updatedImage, setUpd
         crop.width,
         crop.height
       );
-      // console.log("크롭", crop);
       // canvas를 url로 바꾸기
       const base64Image = canvas.toDataURL("image/jpeg");
       setUpdatedImage(base64Image);
     } catch (e) {
-      console.log("crop the image");
+      // console.log("crop the image");
     }
   };
 

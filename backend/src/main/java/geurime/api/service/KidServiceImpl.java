@@ -1,5 +1,6 @@
 package geurime.api.service;
 
+import geurime.api.dto.EmotionDto;
 import geurime.api.service.inferface.KidService;
 import geurime.config.s3.S3Uploader;
 import geurime.database.entity.Drawing;
@@ -54,7 +55,7 @@ public class KidServiceImpl implements KidService {
         List<Kid.DrawingBoxDto> drawingBoxDtoList = new ArrayList<>(drawingBoxList.size());
 
         for (DrawingBox drawingBox : drawingBoxList){
-            Optional<Drawing> firstDrawing = drawingRepository.findFirstByDrawingBox(drawingBox);
+            Optional<Drawing> firstDrawing = drawingRepository.findFirstByDrawingBoxOrderByIdDesc(drawingBox);
             String thumbnailImage = firstDrawing.isPresent() ? firstDrawing.get().getDrawingImagePath() : null;
             long drawingCount = drawingRepository.countByDrawingBox(drawingBox);
 
@@ -70,7 +71,7 @@ public class KidServiceImpl implements KidService {
 
         response.setDrawingBoxDtoList(drawingBoxDtoList);
 
-        List<Drawing> sampleDrawingList = drawingRepository.findTop5ByDrawingBox_KidOrderByCreateTimeDesc(kid);
+        List<Drawing> sampleDrawingList = drawingRepository.findTop4ByDrawingBox_KidOrderByIdDesc(kid);
         List<String> sampleImageList = new ArrayList<>();
         for (Drawing sample : sampleDrawingList){
             sampleImageList.add(sample.getDrawingImagePath());
@@ -151,6 +152,24 @@ public class KidServiceImpl implements KidService {
     @Override
     public void deleteKid(Long kidId) {
         kidRepository.deleteById(kidId);
+    }
+
+    public EmotionDto readEmotionCount(Long kidId, LocalDate date){
+        Kid kid = kidRepository.findById(kidId)
+                .orElseThrow(() -> new CustomException(CustomExceptionList.KID_NOT_FOUND_ERROR));
+
+        LocalDate startDate = date.minusDays(1);
+        LocalDate endDate = date.plusMonths(1);
+
+        long happy = kidRepository.countHappy(kid.getId(), startDate, endDate);
+        long sad = kidRepository.countSad(kid.getId(), startDate, endDate);
+        long angry = kidRepository.countAngry(kid.getId(), startDate, endDate);
+
+        return EmotionDto.builder()
+                .happy(happy)
+                .sad(sad)
+                .angry(angry)
+                .build();
     }
 
     /**

@@ -24,6 +24,7 @@ public class BoardController {
     final BoardServiceImpl boardService;
 
     static final String SUCCESS = "success";
+    static final String FAIL = "fail";
 
     @GetMapping
     @ApiOperation(value = "게시글 리스트 조회", notes = "페이지 번호 page와 한번에 받아올 사이즈 size를 받아 전체 게시글 목록을 반환한다.")
@@ -82,11 +83,13 @@ public class BoardController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/{boardId}")
     @ApiOperation(value = "게시글 수정", notes = "수정 정보를 받아 수정하려는 유저가 작성자이면 게시글을 수정한다")
-    public ResponseEntity<BasicResponse<Board.BoardInfoResponse>> updateBoard(@RequestPart(value = "request") Board.BoardPutRequest request,
+    public ResponseEntity<BasicResponse<Board.BoardInfoResponse>> updateBoard(@PathVariable Long boardId ,@RequestPart(value = "request") Board.BoardPutRequest request,
                                                            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
-
+        if(boardId != request.getBoardId()){
+            return new ResponseEntity<>(makeBasicResponse(FAIL, null), HttpStatus.BAD_REQUEST);
+        }
         try{
             Board.BoardInfoResponse response = boardService.updateBoard(request, imageFile);
             return new ResponseEntity<>(makeBasicResponse(SUCCESS, response), HttpStatus.OK);
@@ -95,9 +98,9 @@ public class BoardController {
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{boardId}")
     @ApiOperation(value = "게시글 삭제", notes = "삭제하고자 하는 유저의 id를 비교하고 글작성자와 일치하면 삭제 후 true를 반환한다.")
-    public ResponseEntity<BasicResponse<Boolean>> deleteBoard(@RequestParam Long userId, @RequestParam Long boardId) {
+    public ResponseEntity<BasicResponse<Boolean>> deleteBoard(@RequestParam Long userId, @PathVariable Long boardId) {
 
         try{
             Boolean isDelete = boardService.deleteBoard(userId, boardId);

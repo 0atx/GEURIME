@@ -23,6 +23,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -77,29 +78,50 @@ public class BoardServiceImpl implements BoardService {
         Board.BoardInfoResponse boardInfoResponse = modelMapper.map(board, Board.BoardInfoResponse.class);
 
         //작성자
-        User user = board.getUser();
-        boardInfoResponse.setWriterId(user.getId());
-        boardInfoResponse.setWriterProfile(user.getUserProfileImage());
-        boardInfoResponse.setWriterNickname(user.getNickname());
+        Optional<User> userOptional = userRepository.findById(board.getUser().getId());
+        if(userOptional.isPresent()){
+            User user = userOptional.get();
+            boardInfoResponse.setWriterId(user.getId());
+            boardInfoResponse.setWriterProfile(user.getUserProfileImage());
+            boardInfoResponse.setWriterNickname(user.getNickname());
+        }else{
+            boardInfoResponse.setWriterId(0L);
+            boardInfoResponse.setWriterNickname("탈퇴한 회원");
+        }
 
         //댓글
-        List<Comment> commentList = board.getCommentList();
+        List<Comment> commentList = commentRepository.findByBoard(board);
+
         List<Board.BoardCommentDto> boardCommentDtoList = new ArrayList<>(commentList.size());
+        String ghostUser = "탈퇴한 회원";
 
         for (Comment comment : commentList){
-            User commentUser = userRepository.findById(comment.getCommentUserId())
-                    .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
+            Optional<User> commentUser = userRepository.findById(comment.getCommentUserId());
 
-            Board.BoardCommentDto commentDto = Board.BoardCommentDto.builder()
-                    .commentId(comment.getId())
-                    .commentUserId(comment.getCommentUserId())
-                    .commentUserProfile(commentUser.getUserProfileImage())
-                    .commentUserNickname(commentUser.getNickname())
-                    .createTime(comment.getCreateTime())
-                    .updateTime(comment.getUpdateTime())
-                    .commentContent(comment.getCommentContent())
-                    .build();
-            boardCommentDtoList.add(commentDto);
+            if(commentUser.isPresent()){
+                Board.BoardCommentDto commentDto = Board.BoardCommentDto.builder()
+                        .commentId(comment.getId())
+                        .commentUserId(comment.getCommentUserId())
+                        .commentUserProfile(commentUser.get().getUserProfileImage())
+                        .commentUserNickname(commentUser.get().getNickname())
+                        .createTime(comment.getCreateTime())
+                        .updateTime(comment.getUpdateTime())
+                        .commentContent(comment.getCommentContent())
+                        .build();
+                boardCommentDtoList.add(commentDto);
+            }else{
+                Board.BoardCommentDto commentDto = Board.BoardCommentDto.builder()
+                        .commentId(comment.getId())
+                        .commentUserId(comment.getCommentUserId())
+                        .commentUserNickname(ghostUser)
+                        .createTime(comment.getCreateTime())
+                        .updateTime(comment.getUpdateTime())
+                        .commentContent(comment.getCommentContent())
+                        .build();
+                boardCommentDtoList.add(commentDto);
+            }
+
+
         }
         boardInfoResponse.setBoardCommentDtoList(boardCommentDtoList);
 
@@ -159,7 +181,7 @@ public class BoardServiceImpl implements BoardService {
 
         // 전체인 경우에는 모두 조회
         if(boardType == BoardType.전체){
-            if(keyword != null && keyword != ""){
+            if(keyword != null && !keyword.equals("")){
                 //키워드 있는 경우
                 boardSlice = boardRepository.findByBoardTitleContains(keyword, pageRequest);
             }else{
@@ -169,7 +191,7 @@ public class BoardServiceImpl implements BoardService {
         }
         // 분류 조회
         else{
-            if(keyword != null && keyword != ""){
+            if(keyword != null && !keyword.equals("")){
                 //키워드 있는 경우
                 boardSlice = boardRepository.findByBoardCategoryAndBoardTitleContains(boardType, keyword, pageRequest);
             }else{
@@ -275,7 +297,7 @@ public class BoardServiceImpl implements BoardService {
                 .orElseThrow(() -> new CustomException(CustomExceptionList.BOARD_NOT_FOUND_ERROR));
 
         // 게시글 작성자와 일치하면 게시글 삭제
-        if(board.getUser().getId() == userId){
+        if(board.getUser().getId().equals(userId)){
             boardRepository.deleteById(boardId);
             return true;
         }else{

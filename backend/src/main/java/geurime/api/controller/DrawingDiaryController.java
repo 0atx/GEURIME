@@ -46,9 +46,9 @@ public class DrawingDiaryController {
         }
     }
 
-    @GetMapping("/date")
+    @GetMapping("/date/{kidId}")
     @ApiOperation(value = "자녀의 그림일기 날짜조회", notes = "날짜에 해당하는 그림일기 목록을 조회한다.")
-    public ResponseEntity<BasicResponse<List<Drawing.DrawingDiaryListResponse>>> readByDateDrawingDiaryList(@RequestParam Long kidId, @RequestParam String date) {
+    public ResponseEntity<BasicResponse<List<Drawing.DrawingDiaryListResponse>>> readByDateDrawingDiaryList(@PathVariable Long kidId, @RequestParam String date) {
         try {
             LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
             List<Drawing.DrawingDiaryListResponse> responseList = drawingDiaryService.readByDateDrawingDiaryList(kidId, localDate);
@@ -58,9 +58,9 @@ public class DrawingDiaryController {
         }
     }
 
-    @GetMapping("/title")
+    @GetMapping("/title/{kidId}")
     @ApiOperation(value = "자녀의 그림일기 제목검색", notes = "자녀의 그림일기 제목으로 검색하여 조회한다.")
-    public ResponseEntity<BasicResponse<List<Drawing.DrawingDiaryListResponse>>> readBySearchTitleDrawingDiaryList(@RequestParam Long kidId, @RequestParam String keyword) {
+    public ResponseEntity<BasicResponse<List<Drawing.DrawingDiaryListResponse>>> readBySearchTitleDrawingDiaryList(@PathVariable Long kidId, @RequestParam String keyword) {
         try {
             List<Drawing.DrawingDiaryListResponse> responseList = drawingDiaryService.readByTitleSearchDrawingDiaryList(kidId, keyword);
             return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseList), HttpStatus.OK);
@@ -81,9 +81,9 @@ public class DrawingDiaryController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/{drawingId}")
     @ApiOperation(value = "자녀의 그림일기 수정", notes = "자녀의 그림일기를 수정한다.")
-    public ResponseEntity<BasicResponse<Drawing.DrawingDiaryInfoResponse>> updateDrawingDiary(@RequestPart(value = "request") Drawing.DrawingDiaryPutRequest request,
+    public ResponseEntity<BasicResponse<Drawing.DrawingDiaryInfoResponse>> updateDrawingDiary(@PathVariable Long drawingId, @RequestPart(value = "request") Drawing.DrawingDiaryPutRequest request,
                                                                                               @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
         try {
             Drawing.DrawingDiaryInfoResponse response = drawingDiaryService.updateDrawingDiary(request, imageFile);
@@ -93,7 +93,7 @@ public class DrawingDiaryController {
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{drawingId}")
     @ApiOperation(value = "자녀의 그림일기 삭제", notes = "자녀의 그림일기를 삭제한다.")
     public ResponseEntity<BasicResponse<Boolean>> deleteDrawingDiary(@PathVariable Long drawingId) {
         try {
