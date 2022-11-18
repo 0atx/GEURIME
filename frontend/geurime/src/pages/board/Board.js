@@ -23,21 +23,7 @@ export default function Board() {
   const navigator = useNavigate();
 
   // 게시판 데이터
-  const [boards, setBoards] = useState([
-    // {
-    //   boardCategory: "",
-    //   boardFirstImage: "",
-    //   boardId: 0,
-    //   boardTitle: "",
-    //   boardViews: 0,
-    //   commentCount: 0,
-    //   createTime: "",
-    //   updateTime: "",
-    //   userId: 0,
-    //   userNickname: "",
-    //   userProfileImage: "",
-    // },
-  ]);
+  const [boards, setBoards] = useState([ ]);
   const [category, setCategory] = useState(""); // 카테고리 변수명
   // const [searchKeyWord, setSearchKeyWord] = useState();
   const searchInput = useRef(null); // 검색바 input 객체
