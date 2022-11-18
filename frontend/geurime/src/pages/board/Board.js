@@ -24,19 +24,19 @@ export default function Board() {
 
   // 게시판 데이터
   const [boards, setBoards] = useState([
-    {
-      boardCategory: "질문",
-      boardFirstImage: "https://en.pimg.jp/031/716/685/1/31716685.jpg",
-      boardId: 0,
-      boardTitle: "1번글",
-      boardViews: 0,
-      commentCount: 0,
-      createTime: "2022-10-28T06:37:58.611Z",
-      updateTime: "2022-10-28T06:37:58.611Z",
-      userId: 0,
-      userNickname: "1번유저",
-      userProfileImage: "string",
-    },
+    // {
+    //   boardCategory: "",
+    //   boardFirstImage: "",
+    //   boardId: 0,
+    //   boardTitle: "",
+    //   boardViews: 0,
+    //   commentCount: 0,
+    //   createTime: "",
+    //   updateTime: "",
+    //   userId: 0,
+    //   userNickname: "",
+    //   userProfileImage: "",
+    // },
   ]);
   const [category, setCategory] = useState(""); // 카테고리 변수명
   // const [searchKeyWord, setSearchKeyWord] = useState();
@@ -147,7 +147,7 @@ useEffect(() => {
   };
 
   return (
-    <div id="container">
+    <div>
       {/* 상단바 */}
       <BackMenu
         isLeft={true}
@@ -158,6 +158,7 @@ useEffect(() => {
         }}
       />
       {/* 상단바 끝 */}
+    <div id="container">
 
       {/* 검색바 영역 */}
       <Container>
@@ -202,7 +203,7 @@ useEffect(() => {
               variant="standard"
               inputRef={searchInput}
               onKeyUp={searchKeyword}
-              sx={{ color: "##FFCA28", width: "83%" }}
+              sx={{ color: "##FFCA28", width: "80%" }}
             />
 
             {/* 돋보기 버튼 */}
@@ -226,7 +227,6 @@ useEffect(() => {
           })}
         </Grid>
 
-        <NavBar />
         <NoSearchModal
           open={openNoSearchModal}
           handleClose={closeNoSearchModal}
@@ -237,5 +237,7 @@ useEffect(() => {
         ></NoCategoryModal>
       </Container>
     </div>
+        <NavBar />
+  </div>
   );
 }
