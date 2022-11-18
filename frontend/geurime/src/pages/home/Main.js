@@ -275,6 +275,7 @@ export default function Main() {
           >
             {[0, 1, 2, 3].map((data, i) => (
               <Grid
+                key={i}
                 item
                 xs={6}
                 md={3}
