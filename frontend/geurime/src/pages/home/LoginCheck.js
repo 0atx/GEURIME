@@ -52,7 +52,6 @@ export default function Logincheck() {
       localStorage.setItem("nickname", nickname);
       localStorage.setItem("email", email);
 
-      // console.log(name, accessToken, refreshToken)
       window.location.replace("/userinfo");
     }
 
@@ -70,7 +69,6 @@ export default function Logincheck() {
       localStorage.setItem("email", email);
       localStorage.setItem("inviteCode", inviteCode);
 
-      // console.log(name, accessToken, refreshToken)
       window.location.replace("/userinfo");
     }
 
