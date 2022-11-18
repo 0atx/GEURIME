@@ -193,8 +193,8 @@ export default function ModifyBoard() {
     <Grid
     id='container'
     container
-    sx={{textAlign: "center", justifyContent: 'center'}}
-    >
+      sx={{textAlign: "center", justifyContent: 'center'}}
+      >
       <BoardInputItem
         textRef={textRef}
         titleRef={titleRef}
@@ -219,7 +219,7 @@ export default function ModifyBoard() {
           sx={{marginRight: '10%'}}
         >
         <Button
-
+          
           sx={{ width: '100%', borderRadius: 5 }}
           onClick={() => deleteBoard()}
         >삭제</Button>

@@ -39,10 +39,7 @@ import html2canvas from "html2canvas";
 export default function DetailDiary() {
   const params = useParams();
   const navigate = useNavigate();
-  useEffect(() => {
-    console.log({파람:Number(params.diaryid)})
-    console.log({등록중:registInfo.num})
-  },[])
+
   // 삭제완료 모달
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   // 분석결과 모달
@@ -92,7 +89,7 @@ export default function DetailDiary() {
     const response = await http
       .get(`/diaries/info/${params.diaryid}`)
       .then((response) => {
-        // console.log(response.data.data);
+
         const info = response.data.data;
 
         let image = new Image();
@@ -102,7 +99,7 @@ export default function DetailDiary() {
 
         let copy = { ...info };
         copy.drawingImagePath = image.src;
-        // console.log(image.src);
+
         setDiary(copy);
 
         // 연동 후 데이터 가공
