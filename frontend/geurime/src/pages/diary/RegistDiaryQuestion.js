@@ -108,7 +108,6 @@ export default function RegistDiary({}) {
         day: day,
       },
     });
-    //   console.log(response.data);
     setWeather(response.data);
   }
 
@@ -140,8 +139,6 @@ export default function RegistDiary({}) {
       copyDiary.date = date;
       copyDiary.sleepTime = date + " " + sleepTime;
       copyDiary.getupTime = date + " " + getupTime;
-
-      console.log(copyDiary);
       return { ...copyDiary };
     });
   };

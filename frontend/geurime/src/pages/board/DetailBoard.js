@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react"
 import { useNavigate, useLocation } from "react-router-dom";
 import Visibility from '@mui/icons-material/Visibility';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
+import CommentIcon from "@mui/icons-material/Comment";
 import CommentInputItem from "./CommentInputItem";
 import NavBar from "components/nav/NavBar";
 import BackMenu from "components/nav/BackMenu";
@@ -189,12 +190,19 @@ export default function DetailBoard() {
         sx={{
         marginRight: '4%',
         marginLeft: '5%',
-        fontWeight:"bold"
+        fontWeight:"bold",
+        fontSize: '4.8vw'
         }}
          >
          제목:  { board.boardTitle.length > 18 ? (<>{board.boardTitle.substring(0,17)+".."}</>) : (<>{board.boardTitle}</>)}
       </Grid>
-      <Paper
+      <Grid
+          item
+          sx={{marginLeft: '5%', marginTop: '3%'}}
+          >
+              작성자 : {board.writerNickname}
+      </Grid>
+      {/* <Paper
         variant="outlined"
         sx={{
         alignItems: 'center', textAlign: 'center', margin: '3%', borderRadius: 3,
@@ -220,16 +228,71 @@ export default function DetailBoard() {
             />
           </>
         )}
-      </Paper>
+      </Paper> */}
+     <Paper
+          variant="outlined"
+          sx={{ marginTop:'3%',  backgroundColor: 'rgba(0,0,0,0)', borderRadius: 2, borderColor: '#FFE082', borderWidth: 2.5,  minHeight : '18vh', width:'94%', marginLeft:'3%'}}
+      >
+      <Grid
+        sx={{alignItems: 'center', textAlign: 'center', margin: '3%', borderRadius: 3}}  
+      >
+      {board.boardImagePath == null ? (
+          // 그림 업로드 안한 경우
+          <>
+            <img
+              src={sampleImage}
+              loading="lazy"
+              style={{ height: '18vh', width: '24vh', margin: '2%', borderRadius: 5, marginTop: '1%' }}
+            />
+          </>
+        ) : (
+          // 그림 업로드 한 경우
+          <>
+            <img
+              src={board.boardImagePath}
+              loading="lazy"
+              style={{ height: '18vh', width: '24vh', margin: '2%', borderRadius: 5, marginTop: '1%' }}
+            />
+          </>
+        )}
+      </Grid>
+        <Grid item sx={{marginTop:'1%', marginBottom:'3%', marginLeft: '5%', backgroundColor: 'rgba(0,0,0,0)'}}>
 
+          {board.boardContent.split("\n").map((line, idx) => {
+            return <div key={idx}>
+              <span>
+                {line}
+                <br />
+              </span>
+            </div>
+          })}
+        </Grid>
+      </Paper>
       {/* 작성자, 뷰 */}
       <Grid
         container
         direction='row'
-        sx={{ justifyContent: 'space-between' }}
+        sx={{ justifyContent: 'space-between', marginTop: '3%'}}
       >
-        
-        <Grid
+        <Grid container alignItems="center" justifyContent="flex-end" sx={{marginRight: '5%' }}>
+          <Visibility
+            sx={{
+              fontSize: "2vh",
+              marginRight: "3%",
+              color: "#6f6f6f",
+            }}
+          />
+          <div style={{ marginRight: "3%" }}>{board.boardViews}</div>
+          <CommentIcon
+            sx={{
+              fontSize: "2vh",
+              marginRight: "3%",
+              color: "#6f6f6f",
+            }}
+          />
+          <div>{commentLen}</div>
+        </Grid>
+        {/* <Grid
           item
           sx={{marginLeft: '5%', marginTop: '1%'}}
           >
@@ -257,24 +320,9 @@ export default function DetailBoard() {
                     {commentLen}
               </Grid>
           </Grid>
-        </Grid>
+        </Grid> */}
       </Grid>
-      <Paper
-          variant="outlined"
-          sx={{ marginTop:'3%',  backgroundColor: 'rgba(0,0,0,0)', borderRadius: 2, borderColor: '#FFE082', borderWidth: 2.5,  minHeight : '18vh', width:'94%', marginLeft:'3%'}}
-      >
-        <Grid item sx={{marginTop:'2.5%', marginBottom:'3%', marginLeft: '3%', backgroundColor: 'rgba(0,0,0,0)'}}>
-
-          {board.boardContent.split("\n").map((line, idx) => {
-            return <div key={idx}>
-              <span>
-                {line}
-                <br />
-              </span>
-            </div>
-          })}
-        </Grid>
-      </Paper>
+     
 
 
       {/* 유저 아이디, 사진정보 리코일에서 가져오기 */}
