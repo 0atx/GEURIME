@@ -159,8 +159,6 @@ export default function Main() {
         },
       })
       .then((response) => {
-        // console.log(month, year, response.data.data);
-
         if (response.data.message === "success") {
           setHappy(response.data.data.happy);
           setSad(response.data.data.sad);
@@ -184,7 +182,11 @@ export default function Main() {
 
           // 가입년도부터 현재년도까지의 배열
           let createYear = response.data.data.createDate.substring(0, 4);
-          for (let i = parseInt(createYear); i <= new Date().getFullYear(); i++) {
+          for (
+            let i = parseInt(createYear);
+            i <= new Date().getFullYear();
+            i++
+          ) {
             years.push(i);
           }
         }
@@ -239,7 +241,12 @@ export default function Main() {
   return (
     <div>
       <SelectKids setImgList={setImgList} />
-      <Grid id="container" container justifyContent="center" alignItems="center">
+      <Grid
+        id="container"
+        container
+        justifyContent="center"
+        alignItems="center"
+      >
         {/* 그림 갤러리 */}
         <Grid
           container
@@ -312,8 +319,14 @@ export default function Main() {
           )}
         </Grid>
         {/* 감정 통계 */}
-        <Grid item xs={12} sx={{ fontSize: "2.3vh", marginBottom: "1vh", marginTop: "1vh" }}>
-          <div style={{ textAlign: "center" }}>{currentKid.kidName}의 감정 분석</div>
+        <Grid
+          item
+          xs={12}
+          sx={{ fontSize: "2.3vh", marginBottom: "1vh", marginTop: "1vh" }}
+        >
+          <div style={{ textAlign: "center" }}>
+            {currentKid.kidName}의 감정 분석
+          </div>
         </Grid>
         <Grid
           container
@@ -374,14 +387,20 @@ export default function Main() {
           </Grid>
           {happy == 0 && sad == 0 && angry == 0 ? (
             <div style={{ padding: "5%" }}>
-              <img src={drawing} width="150vh" style={{ marginTop: "10%", marginBottom: "10%" }} />
+              <img
+                src={drawing}
+                width="150vh"
+                style={{ marginTop: "10%", marginBottom: "10%" }}
+              />
               <Typography>등록한 그림이 없어요😥</Typography>
             </div>
           ) : (
             <Piechart happy={happy} sad={sad} angry={angry} />
           )}
           <Grid item xs={12} sx={{ marginBottom: "3%" }}>
-            <Typography sx={{ color: "#6F6F6F" }}>⁕ 보건복지상담센터 ☎ 129</Typography>
+            <Typography sx={{ color: "#6F6F6F" }}>
+              ⁕ 보건복지상담센터 ☎ 129
+            </Typography>
           </Grid>
         </Grid>
         {/* 가족 정보 */}
@@ -425,7 +444,10 @@ export default function Main() {
                     setFamilyInfoOpen(true);
                   }}
                 >
-                  <Avatar sx={{ marginTop: "5px" }} src={info.userProfileImage} />
+                  <Avatar
+                    sx={{ marginTop: "5px" }}
+                    src={info.userProfileImage}
+                  />
 
                   <Grid
                     item
@@ -448,7 +470,11 @@ export default function Main() {
       </Grid>
       <NavBar />
       {/* 가족 정보 모달 */}
-      <FamilyInfoModal userId={clickedId} open={familyInfoOpen} setOpen={setFamilyInfoOpen} />
+      <FamilyInfoModal
+        userId={clickedId}
+        open={familyInfoOpen}
+        setOpen={setFamilyInfoOpen}
+      />
     </div>
   );
 }
