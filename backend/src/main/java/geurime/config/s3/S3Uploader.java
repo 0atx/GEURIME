@@ -35,7 +35,7 @@ public class S3Uploader {
     public String upload(File uploadFile, String filePath) {
         String fileName = filePath + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
         String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
-        removeNewFile(uploadFile);
+        uploadFile.delete(); // 로컬 파일 삭제
         return uploadImageUrl;
     }
 
@@ -43,15 +43,6 @@ public class S3Uploader {
     private String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket, fileName).toString();
-    }
-
-    // 로컬에 저장된 이미지 지우기
-    private void removeNewFile(File targetFile) {
-        if (targetFile.delete()) {
-//            System.out.println("File delete success");
-            return;
-        }
-//        System.out.println("File delete fail");
     }
 
     // 로컬에 파일 업로드 하기

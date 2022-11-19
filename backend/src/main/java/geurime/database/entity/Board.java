@@ -51,14 +51,12 @@ public class Board {
     @JoinColumn(name = "user_id")
     private User user;
 
-//    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-//    private List<BoardImage> boardImageList = new ArrayList<>();
-
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> commentList = new ArrayList<>();
 
     @Builder
-    public Board(Long id, LocalDateTime createTime, LocalDateTime updateTime, String boardTitle, String boardContent, BoardType boardCategory, Integer boardViews, String boardImagePath, User user, List<Comment> commentList) {
+    public Board(Long id, LocalDateTime createTime, LocalDateTime updateTime, String boardTitle, String boardContent,
+                 BoardType boardCategory, Integer boardViews, String boardImagePath, User user, List<Comment> commentList) {
         this.id = id;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -70,10 +68,6 @@ public class Board {
         this.user = user;
         this.commentList = commentList;
     }
-
-
-
-
     /**
      * 게시글 조회수 1 증가
      */
@@ -164,11 +158,12 @@ public class Board {
         private Integer boardViews;
 
         private String boardImagePath;
-//        List<String> boardImagePathList;
         List<BoardCommentDto> boardCommentDtoList;
 
         @Builder
-        public BoardInfoResponse(Long boardId, Long writerId, String writerNickname, String writerProfile, LocalDateTime createTime, LocalDateTime updateTime, String boardTitle, String boardContent, String boardCategory, Integer boardViews, String boardImagePath, List<BoardCommentDto> boardCommentDtoList) {
+        public BoardInfoResponse(Long boardId, Long writerId, String writerNickname, String writerProfile,
+                                 LocalDateTime createTime, LocalDateTime updateTime, String boardTitle, String boardContent,
+                                 String boardCategory, Integer boardViews, String boardImagePath, List<BoardCommentDto> boardCommentDtoList) {
             this.boardId = boardId;
             this.writerId = writerId;
             this.writerNickname = writerNickname;

@@ -48,7 +48,7 @@ public class UserInterceptor implements HandlerInterceptor {
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
         Family familyRequest = userRequest.getFamily();
 
-        if(requestUserId == null || !requestUserId.equals(userRequest.getId())){
+        if(familyRequest != null && familyRequest.getId() == familyJwt.getId()){
             throw new CustomException(CustomExceptionList.NO_AUTHENTICATION_ERROR);
         }
 

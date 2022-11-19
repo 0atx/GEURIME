@@ -48,7 +48,7 @@ public class AiPredictServiceImpl {
         try {
             jsonObject = (JSONObject) parser.parse(responseJson);
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
 
         // Double float로 변환
