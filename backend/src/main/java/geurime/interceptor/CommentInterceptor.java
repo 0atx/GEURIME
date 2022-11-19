@@ -43,14 +43,12 @@ public class CommentInterceptor implements HandlerInterceptor {
 
             Long requestUserId = commentRepository.getUserIdByCommentId(Long.parseLong(commentIdString));
 
-            if(userJwt.getId() == requestUserId){
-                return true;
-            }else{
+            if(!userJwt.getId().equals(requestUserId)){
                 throw new CustomException(CustomExceptionList.NO_AUTHENTICATION_ERROR);
             }
 
-        } else{
-            return true;
         }
+
+        return true;
     }
 }

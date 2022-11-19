@@ -87,7 +87,7 @@ public class BoardController {
     @ApiOperation(value = "게시글 수정", notes = "수정 정보를 받아 수정하려는 유저가 작성자이면 게시글을 수정한다")
     public ResponseEntity<BasicResponse<Board.BoardInfoResponse>> updateBoard(@PathVariable Long boardId ,@RequestPart(value = "request") Board.BoardPutRequest request,
                                                            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
-        if(boardId != request.getBoardId()){
+        if(!boardId.equals(request.getBoardId())){
             return new ResponseEntity<>(makeBasicResponse(FAIL, null), HttpStatus.BAD_REQUEST);
         }
         try{

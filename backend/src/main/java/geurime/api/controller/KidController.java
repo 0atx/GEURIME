@@ -63,7 +63,7 @@ public class KidController {
     @ApiOperation(value = "자녀 정보수정", notes = "자녀 정보를 수정한다. 수정된 자녀의 id를 반환한다")
     public ResponseEntity<BasicResponse<Kid.KidInfoResponse>> updateKidInfo(@PathVariable Long kidId, @RequestPart(value = "request") Kid.KidPutRequest request,
                                                              @RequestPart(value = "imageFile", required = false) MultipartFile imageFile) {
-        if(kidId != request.getKidId()){
+        if(!kidId.equals(request.getKidId())){
             return new ResponseEntity<>(makeBasicResponse(FAIL, null), HttpStatus.BAD_REQUEST);
         }
         try {

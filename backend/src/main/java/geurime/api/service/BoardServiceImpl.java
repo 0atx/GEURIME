@@ -144,7 +144,7 @@ public class BoardServiceImpl implements BoardService {
         Slice<Board> boardSlice = null;
 
         // 전체인 경우에는 모두 조회
-        if(boardType == BoardType.전체){
+        if(boardType == BoardType.ALL){
             boardSlice = boardRepository.findAllJPQLFetch(pageRequest);
         }else{
             boardSlice = boardRepository.findByBoardCategory(boardType ,pageRequest);
@@ -180,7 +180,7 @@ public class BoardServiceImpl implements BoardService {
         Slice<Board> boardSlice = null;
 
         // 전체인 경우에는 모두 조회
-        if(boardType == BoardType.전체){
+        if(boardType == BoardType.ALL){
             if(keyword != null && !keyword.equals("")){
                 //키워드 있는 경우
                 boardSlice = boardRepository.findByBoardTitleContains(keyword, pageRequest);
@@ -226,8 +226,8 @@ public class BoardServiceImpl implements BoardService {
         //enum 유효성 검사
         BoardType boardType = checkBoardType(request.getBoardCategory());
         
-        if(boardType == BoardType.전체){
-            boardType = BoardType.자유;
+        if(boardType == BoardType.ALL){
+            boardType = BoardType.FREE;
         }
 
         String imagePath = null;
@@ -315,7 +315,17 @@ public class BoardServiceImpl implements BoardService {
     private BoardType checkBoardType(String stringBoardType){
         BoardType boardType = null;
         try {
-            boardType = BoardType.valueOf(stringBoardType);
+            if("전체".equals(stringBoardType)) {
+                boardType = BoardType.valueOf("ALL");
+            } else if("자유".equals(stringBoardType)) {
+                boardType = BoardType.valueOf("FREE");
+            } else if("질문".equals(stringBoardType)) {
+                boardType = BoardType.valueOf("QUESTION");
+            } else if("정보".equals(stringBoardType)) {
+                boardType = BoardType.valueOf("INFO");
+            } else {
+                boardType = BoardType.valueOf(stringBoardType);
+            }
         }catch (IllegalArgumentException e){
             throw new CustomException(CustomExceptionList.BOARD_TYPE_NOT_FOUND_ERROR);
         }

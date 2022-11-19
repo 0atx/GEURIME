@@ -39,7 +39,7 @@ public class DrawingInterceptor implements HandlerInterceptor {
         String kidIdString = pathVariables.get("kidId");
 
         if(drawingIdString == null && kidIdString == null && drawingBoxIdString == null){
-            throw new CustomException(CustomExceptionList.ACCESS_TOKEN_ERROR);
+            throw new CustomException(CustomExceptionList.BAD_REQUEST_ERROR);
         }
 
         String accessToken = request.getHeader("accessToken");
@@ -55,9 +55,7 @@ public class DrawingInterceptor implements HandlerInterceptor {
         if(drawingIdString != null){
             Long ownerFamilyId = drawingRepository.getFamilyIdByDrawingId(Long.parseLong(drawingIdString));
 
-            if(requestFamilyId != null && requestFamilyId == ownerFamilyId){
-                return true;
-            }else{
+            if(requestFamilyId == null || !requestFamilyId.equals(ownerFamilyId)){
                 throw new CustomException(CustomExceptionList.NO_AUTHENTICATION_ERROR);
             }
         }
@@ -65,26 +63,20 @@ public class DrawingInterceptor implements HandlerInterceptor {
         else if (drawingBoxIdString != null) {
             Long ownerFamilyId = drawingRepository.getFamilyIdByDrawingBoxId(Long.parseLong(drawingBoxIdString));
 
-            if(requestFamilyId != null && requestFamilyId == ownerFamilyId){
-                return true;
-            }else{
+            if(requestFamilyId == null || !requestFamilyId.equals(ownerFamilyId)){
                 throw new CustomException(CustomExceptionList.NO_AUTHENTICATION_ERROR);
             }
         }
         //kidId 받는 API
-        else if(kidIdString != null){
+        else {
             Long kidFamilyId = drawingRepository.getFamilyIdByKidId(Long.parseLong(kidIdString));
 
-            if(requestFamilyId != null && requestFamilyId == kidFamilyId){
-                return true;
-            }else{
+            if(requestFamilyId == null || !requestFamilyId.equals(kidFamilyId)){
                 throw new CustomException(CustomExceptionList.NO_AUTHENTICATION_ERROR);
             }
         }
-        //pathvariable 없는 경우
-        else {
-            throw new CustomException(CustomExceptionList.BAD_REQUEST_ERROR);
-        }
+
+        return true;
 
     }
 }

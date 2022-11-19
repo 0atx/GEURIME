@@ -46,13 +46,11 @@ public class UserInterceptor implements HandlerInterceptor {
         User userRequest = userRepository.findById(Long.parseLong(userIdString))
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
-        if(requestUserId != null && requestUserId == userRequest.getId()){
-            return true;
-        }else{
+        if(requestUserId == null || !requestUserId.equals(userRequest.getId())){
             throw new CustomException(CustomExceptionList.NO_AUTHENTICATION_ERROR);
         }
 
-
+        return true;
 
     }
 }
