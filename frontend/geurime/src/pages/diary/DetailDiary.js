@@ -89,7 +89,6 @@ export default function DetailDiary() {
     const response = await http
       .get(`/diaries/info/${params.diaryid}`)
       .then((response) => {
-
         const info = response.data.data;
 
         let image = new Image();
@@ -147,10 +146,13 @@ export default function DetailDiary() {
 
   function capture() {
     html2canvas(document.getElementById("diary"), {
+      allowTaint: false,
       useCORS: true,
       logging: true,
       proxy: "html2canvasproxy.php",
     }).then(function (canvas) {
+      canvas.crossOrigin = "Anonymous";
+
       var el = document.createElement("a");
       el.href = canvas.toDataURL("image/jpeg");
       el.download = `${diary.drawingTitle}_diary.jpg`;
@@ -291,6 +293,7 @@ export default function DetailDiary() {
               src={diary.drawingImagePath}
               width="100%"
               style={{ borderRadius: "5%" }}
+              // crossOrigin="anonymous"
             ></img>
           </Grid>
           <Grid
@@ -303,8 +306,8 @@ export default function DetailDiary() {
           </Grid>
         </Grid>
         <div style={{ textAlign: "center" }}>
-          {registInfo.state == true && registInfo.num == Number(params.diaryid) ? 
-          (
+          {registInfo.state == true &&
+          registInfo.num == Number(params.diaryid) ? (
             <Button
               bgcolor="#D4D4D4"
               sx={{ marginTop: "8%", marginRight: "10%" }}
@@ -313,8 +316,7 @@ export default function DetailDiary() {
             >
               분석중입니다..
             </Button>
-          ):
-          (
+          ) : (
             <Button
               sx={{ marginTop: "8%", marginRight: "10%" }}
               width="20vh"
