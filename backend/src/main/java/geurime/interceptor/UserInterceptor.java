@@ -1,6 +1,7 @@
 package geurime.interceptor;
 
 import geurime.config.jwt.JwtService;
+import geurime.database.entity.Family;
 import geurime.database.entity.User;
 import geurime.database.repository.DrawingRepository;
 import geurime.database.repository.UserRepository;
@@ -41,10 +42,11 @@ public class UserInterceptor implements HandlerInterceptor {
         User userJwt = userRepository.findByEmailAndProvider(email, provider)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
-        Long requestUserId = userJwt.getId();
+        Family familyJwt = userJwt.getFamily();
 
         User userRequest = userRepository.findById(Long.parseLong(userIdString))
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
+        Family familyRequest = userRequest.getFamily();
 
         if(requestUserId == null || !requestUserId.equals(userRequest.getId())){
             throw new CustomException(CustomExceptionList.NO_AUTHENTICATION_ERROR);

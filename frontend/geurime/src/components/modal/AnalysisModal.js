@@ -16,11 +16,11 @@ import { useState, useEffect } from "react";
 const Piechart = ({ happy, sad, angry }) => {
   const handle = {
     padClick: (data) => {
-      console.log(data);
+      // console.log(data);  
     },
 
     legendClick: (data) => {
-      console.log(data);
+      // console.log(data);
     },
   };
 

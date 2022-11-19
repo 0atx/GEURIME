@@ -108,8 +108,6 @@ export default function DetailDiary() {
     const response = await http
       .get(`/diaries/info/${params.diaryid}`)
       .then((response) => {
-        console.log(response.data.data);
-
         const info = response.data.data;
         setDiary(info);
 

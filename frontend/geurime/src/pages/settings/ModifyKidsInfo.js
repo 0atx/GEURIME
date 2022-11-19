@@ -99,8 +99,6 @@ export default function ModifyKidsInfo() {
       );
 
       const response = await http2.put(`/kids/${selectKidInfo.kidId}`, formData);
-      // console.log(response.data);
-
       let kidInfo = response.data.data;
 
       if (response.data.message === "success") {
@@ -174,7 +172,6 @@ export default function ModifyKidsInfo() {
   // 아이 삭제
   async function deleteKid() {
     const response = await http.delete(`/kids/${selectKidInfo.kidId}`);
-    console.log(response.data);
     setOpenDelete(false);
     navigate("/settings");
   }
@@ -206,7 +203,6 @@ export default function ModifyKidsInfo() {
 
   async function getUserInfo() {
     const response = await http.get(`/users/${userInfo.userId}`);
-    console.log(response.data);
     let info = response.data.data;
     setKidsList(info.kidDtoList);
     setSelectKidInfo(info.kidDtoList[0]);
