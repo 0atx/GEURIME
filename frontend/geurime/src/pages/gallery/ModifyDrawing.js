@@ -87,7 +87,7 @@ export default function ModifyDrawing() {
   // 그림 수정 axios 함수
   async function modifyDrawing() {
     const response = await http.put(`drawings/${drawingInfo.drawingId}`, {
-      drawingBoxId: drawingInfo.drawingBoxId,
+      drawingBoxId: drawingBox.drawingBoxId,
       drawingId: drawingInfo.drawingId,
       drawingTitle: document.getElementById("drawingTitle").value,
       isLike: drawingInfo.isLike,
