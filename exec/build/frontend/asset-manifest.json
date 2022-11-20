@@ -1,0 +1,41 @@
+{
+  "files": {
+    "main.css": "/static/css/main.230e348f.css",
+    "main.js": "/static/js/main.7643077f.js",
+    "static/js/787.099446d7.chunk.js": "/static/js/787.099446d7.chunk.js",
+    "static/media/TmoneyRoundWindExtraBold.ttf": "/static/media/TmoneyRoundWindExtraBold.9f066654a62d2482c049.ttf",
+    "static/media/TmoneyRoundWindRegular.ttf": "/static/media/TmoneyRoundWindRegular.18aaa02c5151011453a0.ttf",
+    "static/media/THE_HongChawangjanemo.ttf": "/static/media/THE_HongChawangjanemo.3bb7069d43e74279963a.ttf",
+    "static/media/boardSample.png": "/static/media/boardSample.2c5b92d0a798e5b79214.png",
+    "static/media/home.png": "/static/media/home.3622e5261968aff4f16e.png",
+    "static/media/drawing.png": "/static/media/drawing.db44acf9ff1eb74a92f3.png",
+    "static/media/diaryPaper.png": "/static/media/diaryPaper.5f3cb5c87ca5b19f381a.png",
+    "static/media/logotext.png": "/static/media/logotext.931e554af141b8f85389.png",
+    "static/media/easel.png": "/static/media/easel.83bdc60cc680518086ab.png",
+    "static/media/norights.png": "/static/media/norights.a0205727e60d55998d8e.png",
+    "static/media/sadClicked.png": "/static/media/sadClicked.2b3986d8b7d7957e4815.png",
+    "static/media/bottomcrayon.png": "/static/media/bottomcrayon.a0a5388723982c6edacc.png",
+    "static/media/topcrayon.png": "/static/media/topcrayon.63e95d90622269883448.png",
+    "static/media/scaryClicked.png": "/static/media/scaryClicked.04e1b2230766ca283f64.png",
+    "static/media/snowyClicked.png": "/static/media/snowyClicked.85c6ea42926c4d2530df.png",
+    "static/media/sunnyClicked.png": "/static/media/sunnyClicked.c093f1cd98a78569e081.png",
+    "static/media/404.png": "/static/media/404.09146526038562170b49.png",
+    "static/media/surpriseClicked.png": "/static/media/surpriseClicked.03369d9b41ce6ae51a91.png",
+    "static/media/windyClicked.png": "/static/media/windyClicked.c657d45a16ef55f52a09.png",
+    "static/media/rainyClicked.png": "/static/media/rainyClicked.c07228b5710f09d94191.png",
+    "static/media/cloudyClicked.png": "/static/media/cloudyClicked.689bb653defee00eb956.png",
+    "static/media/happyClicked.png": "/static/media/happyClicked.b8720608916ed3d7a26c.png",
+    "static/media/sadUnclicked.png": "/static/media/sadUnclicked.f7ea76399bdac628e09e.png",
+    "static/media/angryClicked.png": "/static/media/angryClicked.a2d695373b9f5ff732f6.png",
+    "static/media/scaryUnclicked.png": "/static/media/scaryUnclicked.92cfcc2c83ad919430a2.png",
+    "static/media/sunnyUnclicked.png": "/static/media/sunnyUnclicked.613dfb71f7b1bf858ea5.png",
+    "index.html": "/index.html",
+    "main.230e348f.css.map": "/static/css/main.230e348f.css.map",
+    "main.7643077f.js.map": "/static/js/main.7643077f.js.map",
+    "787.099446d7.chunk.js.map": "/static/js/787.099446d7.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.230e348f.css",
+    "static/js/main.7643077f.js"
+  ]
+}
