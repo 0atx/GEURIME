@@ -144,7 +144,7 @@ public class BoardServiceImpl implements BoardService {
         Slice<Board> boardSlice = null;
 
         // 전체인 경우에는 모두 조회
-        if(boardType == BoardType.ALL){
+        if(boardType == BoardType.전체){
             boardSlice = boardRepository.findAllJPQLFetch(pageRequest);
         }else{
             boardSlice = boardRepository.findByBoardCategory(boardType ,pageRequest);
@@ -180,7 +180,7 @@ public class BoardServiceImpl implements BoardService {
         Slice<Board> boardSlice = null;
 
         // 전체인 경우에는 모두 조회
-        if(boardType == BoardType.ALL){
+        if(boardType == BoardType.전체){
             if(keyword != null && !keyword.equals("")){
                 //키워드 있는 경우
                 boardSlice = boardRepository.findByBoardTitleContains(keyword, pageRequest);
@@ -226,8 +226,8 @@ public class BoardServiceImpl implements BoardService {
         //enum 유효성 검사
         BoardType boardType = checkBoardType(request.getBoardCategory());
         
-        if(boardType == BoardType.ALL){
-            boardType = BoardType.FREE;
+        if(boardType == BoardType.전체){
+            boardType = BoardType.자유;
         }
 
         String imagePath = null;
@@ -316,13 +316,13 @@ public class BoardServiceImpl implements BoardService {
         BoardType boardType = null;
         try {
             if("전체".equals(stringBoardType)) {
-                boardType = BoardType.valueOf("ALL");
+                boardType = BoardType.valueOf("전체");
             } else if("자유".equals(stringBoardType)) {
-                boardType = BoardType.valueOf("FREE");
+                boardType = BoardType.valueOf("자유");
             } else if("질문".equals(stringBoardType)) {
-                boardType = BoardType.valueOf("QUESTION");
+                boardType = BoardType.valueOf("질문");
             } else if("정보".equals(stringBoardType)) {
-                boardType = BoardType.valueOf("INFO");
+                boardType = BoardType.valueOf("정보");
             } else {
                 boardType = BoardType.valueOf(stringBoardType);
             }

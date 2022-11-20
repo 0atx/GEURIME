@@ -40,7 +40,7 @@ public class DrawingBoxServiceImpl implements DrawingBoxService {
         DrawingBox drawingBox = DrawingBox.builder()
                 .kid(kid)
                 .drawingBoxName(drawingBoxName)
-                .drawingBoxCategory(BoxType.CUSTOM)
+                .drawingBoxCategory(BoxType.커스텀)
                 .build();
         drawingBoxRepository.save(drawingBox);
 
@@ -86,7 +86,7 @@ public class DrawingBoxServiceImpl implements DrawingBoxService {
         DrawingBox drawingBox = drawingBoxRepository.findById(drawingBoxId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_BOX_NOT_FOUND_ERROR));
 
-        if(drawingBox.getDrawingBoxCategory() == BoxType.CUSTOM){
+        if(drawingBox.getDrawingBoxCategory() == BoxType.커스텀){
             drawingBox.updateName(drawingBoxName);
             return true;
         }
@@ -104,7 +104,7 @@ public class DrawingBoxServiceImpl implements DrawingBoxService {
         DrawingBox drawingBox = drawingBoxRepository.findById(drawingBoxId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_BOX_NOT_FOUND_ERROR));
 
-        if(drawingBox.getDrawingBoxCategory() == BoxType.CUSTOM){
+        if(drawingBox.getDrawingBoxCategory() == BoxType.커스텀){
             drawingBoxRepository.delete(drawingBox);
             return true;
         }
