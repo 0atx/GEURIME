@@ -42,7 +42,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
      */
     @Override
     public Drawing.DrawingDiaryInfoResponse readDrawingDiary(Long drawingId) {
-        Drawing drawing = getDrawing(drawingId);
+        var drawing = getDrawing(drawingId);
         Drawing.DrawingDiaryInfoResponse response = modelMapper.map(drawing, Drawing.DrawingDiaryInfoResponse.class);
         response.setDrawingId(drawing.getId());
 
@@ -56,7 +56,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
      */
     @Override
     public List<Drawing.DrawingDiaryListResponse> readAllDrawingDiaryList(Long kidId) {
-        Kid kid = getKid(kidId);
+        var kid = getKid(kidId);
         List<Drawing> drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingBox_DrawingBoxCategoryOrderByCreateTimeDescIdDesc(kid, BoxType.일기);
         List<Drawing.DrawingDiaryListResponse> responseList = new ArrayList<>(drawingDiaryList.size());
         for (Drawing drawing : drawingDiaryList){
@@ -80,7 +80,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
      */
     @Override
     public List<Drawing.DrawingDiaryListResponse> readByDateDrawingDiaryList(Long kidId, LocalDate date) {
-        Kid kid = getKid(kidId);
+        var kid = getKid(kidId);
 
         List<Drawing> drawingDiaryList = drawingRepository.findByDrawingBox_KidAndCreateTimeOrderByIdDesc(kid, date);
         List<Drawing.DrawingDiaryListResponse> responseList = new ArrayList<>(drawingDiaryList.size());
@@ -107,7 +107,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
      */
     @Override
     public List<Drawing.DrawingDiaryListResponse> readByTitleSearchDrawingDiaryList(Long kidId, String keyword) {
-        Kid kid = getKid(kidId);
+        var kid = getKid(kidId);
         List<Drawing> drawingDiaryList = null;
         if(keyword != null && !keyword.isBlank()){
             drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingTitleContainsAndDrawingBox_DrawingBoxCategoryOrderByIdDesc(kid, keyword, BoxType.일기);
@@ -138,17 +138,17 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
      */
     @Override
     public Drawing.DrawingDiaryInfoResponse createDrawingDiary(Drawing.DrawingDiaryPostRequest request, MultipartFile imageFile) {
-        Kid kid = getKid(request.getKidId());
-        DrawingBox drawingBox = drawingBoxRepository.findByKidAndDrawingBoxCategory(kid, BoxType.일기)
+        var kid = getKid(request.getKidId());
+        var drawingBox = drawingBoxRepository.findByKidAndDrawingBoxCategory(kid, BoxType.일기)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_BOX_NOT_FOUND_ERROR));
 
         //이미지 업로드 후 반환된 이미지경로
-        String drawingImagePath = "";
+        var drawingImagePath = "";
         if(imageFile != null && !imageFile.isEmpty()){
             drawingImagePath = s3Uploader.uploadAndGetUrl(imageFile);
         }
 
-        Drawing drawing = Drawing.builder()
+        var drawing = Drawing.builder()
                 .drawingBox(drawingBox)
                 .drawingImagePath(drawingImagePath)
                 .createTime(LocalDate.parse(request.getCreateTime(), DateTimeFormatter.ISO_DATE))
@@ -177,7 +177,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
      */
     @Override
     public Drawing.DrawingDiaryInfoResponse updateDrawingDiary(Drawing.DrawingDiaryPutRequest request, MultipartFile imageFile) {
-        Drawing drawing = getDrawing(request.getDrawingId());
+        var drawing = getDrawing(request.getDrawingId());
 
         //이미지 업로드 후 반환된 이미지경로 업데이트
         if(imageFile != null && !imageFile.isEmpty()){

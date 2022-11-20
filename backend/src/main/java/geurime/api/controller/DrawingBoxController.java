@@ -13,8 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/drawings/box")
@@ -65,7 +63,7 @@ public class DrawingBoxController {
     public ResponseEntity<BasicResponse<String>> deleteDrawingBox(@RequestParam Long kidId, @PathVariable Long drawingBoxId, @RequestParam Boolean isDelete){
         Boolean deleteResult = drawingService.deleteDrawingBox(kidId, drawingBoxId, isDelete);
         try {
-            String result = deleteResult == true ? "삭제완료" : "삭제실패";
+            String result = deleteResult ? "삭제완료" : "삭제실패";
             return new ResponseEntity<>(makeBasicResponse(SUCCESS, result), HttpStatus.OK);
         } catch (CustomException e) {
             return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);

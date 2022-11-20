@@ -37,12 +37,12 @@ public class JwtService {
 
     public Jwt generateToken(String provider, String name, String email) {
 
-        Claims claims = Jwts.claims().setSubject("token");
+        var claims = Jwts.claims().setSubject("token");
         claims.put("provider", provider);
         claims.put("name", name);
         claims.put("email", email);
 
-        Date now = new Date();
+        var now = new Date();
         return new Jwt(
                 Jwts.builder()
                         .setClaims(claims)
@@ -90,7 +90,7 @@ public class JwtService {
 
     public String dateToString(String token) {
         DateFormat expirationFormat = new SimpleDateFormat(DATE_FORMAT);
-        Date tokenExpirationDate = getExpiration(token);
+        var tokenExpirationDate = getExpiration(token);
         return expirationFormat.format(tokenExpirationDate);
     }
 

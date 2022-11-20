@@ -38,9 +38,9 @@ public class KidController {
 
     @GetMapping("/emotion/{kidId}")
     @ApiOperation(value = "자녀 감정 통계 조회", notes = "자녀 Id와 조회할 날짜를 연월(ex : 202208)로 받아 자녀의 그림감정 통계를 조회한다")
-    public ResponseEntity<BasicResponse<EmotionDto>> readEmotionCount(@PathVariable("kidId") Long kidId, @RequestParam String yyyy, @RequestParam String MM) {
+    public ResponseEntity<BasicResponse<EmotionDto>> readEmotionCount(@PathVariable("kidId") Long kidId, @RequestParam String year, @RequestParam String month) {
         try {
-            EmotionDto emotionDto = kidService.readEmotionCount(kidId, LocalDate.of(Integer.parseInt(yyyy), Integer.parseInt(MM), 1));
+            var emotionDto = kidService.readEmotionCount(kidId, LocalDate.of(Integer.parseInt(year), Integer.parseInt(month), 1));
             return new ResponseEntity<>(makeBasicResponse(SUCCESS, emotionDto), HttpStatus.OK);
         } catch (CustomException e) {
             return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);

@@ -47,7 +47,7 @@ public class KidServiceImpl implements KidService {
      */
     @Override
     public Kid.KidMainInfoResponse readKidInfo(Long kidId) {
-        Kid kid = kidRepository.findByIdWithDrawingBox(kidId)
+        var kid = kidRepository.findByIdWithDrawingBox(kidId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.KID_NOT_FOUND_ERROR));
         Kid.KidMainInfoResponse response = modelMapper.map(kid, Kid.KidMainInfoResponse.class);
 
@@ -59,7 +59,7 @@ public class KidServiceImpl implements KidService {
             String thumbnailImage = firstDrawing.isPresent() ? firstDrawing.get().getDrawingImagePath() : null;
             long drawingCount = drawingRepository.countByDrawingBox(drawingBox);
 
-            Kid.DrawingBoxDto drawingBoxDto = Kid.DrawingBoxDto.builder()
+            var drawingBoxDto = Kid.DrawingBoxDto.builder()
                     .drawingBoxId(drawingBox.getId())
                     .drawingBoxName(drawingBox.getDrawingBoxName())
                     .drawingBoxCategory(drawingBox.getDrawingBoxCategory().toString())
@@ -88,16 +88,16 @@ public class KidServiceImpl implements KidService {
      */
     @Override
     public Kid.KidInfoResponse createKid(Kid.KidPostRequest request, MultipartFile profileImage) {
-        Family family = familyRepository.findById(request.getFamilyId())
+        var family = familyRepository.findById(request.getFamilyId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.FAMILY_NOT_FOUND_ERROR));
 
-        String kidProfileImage = "";
+        var kidProfileImage = "";
         //이미지 업로드 후 반환된 이미지경로 db에 저장
         if(profileImage != null && !profileImage.isEmpty()){
             kidProfileImage = s3Uploader.uploadAndGetUrl(profileImage);
         }
 
-        Kid kid = Kid.builder()
+        var kid = Kid.builder()
                 .family(family)
                 .kidName(request.getKidName())
                 .kidProfileImage(kidProfileImage)
@@ -105,12 +105,12 @@ public class KidServiceImpl implements KidService {
                 .build();
         kidRepository.save(kid);
 
-        DrawingBox basicDrawingBox = DrawingBox.builder()
+        var basicDrawingBox = DrawingBox.builder()
                 .kid(kid)
                 .drawingBoxName("기본 보관함")
                 .drawingBoxCategory(BoxType.기본)
                 .build();
-        DrawingBox diaryDrawingBox = DrawingBox.builder()
+        var diaryDrawingBox = DrawingBox.builder()
                 .kid(kid)
                 .drawingBoxName("그림일기 보관함")
                 .drawingBoxCategory(BoxType.기본)
@@ -130,7 +130,7 @@ public class KidServiceImpl implements KidService {
      */
     @Override
     public Kid.KidInfoResponse updateKid(Kid.KidPutRequest request, MultipartFile profileImage) {
-        Kid kid = kidRepository.findById(request.getKidId())
+        var kid = kidRepository.findById(request.getKidId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.KID_NOT_FOUND_ERROR));
         kid.updateKidInfo(request);
 
@@ -155,7 +155,7 @@ public class KidServiceImpl implements KidService {
     }
 
     public EmotionDto readEmotionCount(Long kidId, LocalDate date){
-        Kid kid = kidRepository.findById(kidId)
+        var kid = kidRepository.findById(kidId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.KID_NOT_FOUND_ERROR));
 
         LocalDate startDate = date.minusDays(1);

@@ -28,7 +28,7 @@ public class CommentServiceImpl implements CommentService {
     private final ModelMapper modelMapper = new ModelMapper();
 
     public List<Comment.CommentResponse> readComment(Long boardId){
-        Board board = boardRepository.findById(boardId)
+        var board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.BOARD_NOT_FOUND_ERROR));
 
         //댓글
@@ -36,7 +36,7 @@ public class CommentServiceImpl implements CommentService {
         List<Comment.CommentResponse> responseList = new ArrayList<>(commentList.size());
 
         for (Comment comment : commentList){
-            User commentUser = userRepository.findById(comment.getCommentUserId())
+            var commentUser = userRepository.findById(comment.getCommentUserId())
                     .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
             Comment.CommentResponse response = modelMapper.map(comment, Comment.CommentResponse.class);
@@ -55,12 +55,12 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     public Comment.CommentResponse createComment(Comment.CommentPostRequest request) {
-        Board board = boardRepository.findById(request.getBoardId())
+        var board = boardRepository.findById(request.getBoardId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.BOARD_NOT_FOUND_ERROR));
-        User user = userRepository.findById(request.getCommentUserId())
+        var user = userRepository.findById(request.getCommentUserId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
-        Comment comment = Comment.builder()
+        var comment = Comment.builder()
                 .board(board)
                 .commentUserId(user.getId())
                 .createTime(LocalDateTime.now())
@@ -82,11 +82,11 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     public Comment.CommentResponse updateComment(Comment.CommentPutRequest request) {
-        Comment comment = commentRepository.findById(request.getCommentId())
+        var comment = commentRepository.findById(request.getCommentId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.COMMENT_NOT_FOUND_ERROR));
 
 
-        User user = userRepository.findById(request.getUserId())
+        var user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         comment.updateComment(request.getCommentContent());
@@ -106,7 +106,7 @@ public class CommentServiceImpl implements CommentService {
      */
     @Override
     public Boolean deleteComment(Long userId, Long commentId) {
-        Comment comment = commentRepository.findById(commentId)
+        var comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.COMMENT_NOT_FOUND_ERROR));
         if(comment.getCommentUserId().equals(userId)){
             commentRepository.delete(comment);

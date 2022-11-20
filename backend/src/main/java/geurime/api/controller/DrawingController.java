@@ -28,7 +28,7 @@ public class DrawingController {
     @ApiOperation(value = "그림기록 상세조회", notes = "그림기록 id를 받아 상세정보를 조회한다")
     public ResponseEntity<BasicResponse<Drawing.DrawingInfoResponse>> readDrawingInfo(@PathVariable("drawingId") Long drawingId){
         try {
-            Drawing.DrawingInfoResponse drawingInfoResponse = drawingService.readDrawingInfo(drawingId);
+            var drawingInfoResponse = drawingService.readDrawingInfo(drawingId);
             return new ResponseEntity<>(makeBasicResponse(SUCCESS, drawingInfoResponse), HttpStatus.OK);
         } catch (CustomException e) {
             return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);
@@ -95,7 +95,7 @@ public class DrawingController {
     public ResponseEntity<BasicResponse<String>> deleteDrawing(@RequestParam Long kidId, @PathVariable Long drawingId){
         try {
             Boolean isDelete = drawingService.deleteDrawing(kidId, drawingId);
-            String result = isDelete == true ? "삭제완료" : "삭제실패";
+            String result = isDelete ? "삭제완료" : "삭제실패";
             return new ResponseEntity<>(makeBasicResponse(SUCCESS, result), HttpStatus.OK);
         } catch (CustomException e) {
             return new ResponseEntity<>(makeBasicResponse(e.getMessage(), null), HttpStatus.BAD_REQUEST);

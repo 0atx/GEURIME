@@ -47,7 +47,7 @@ public class BoardServiceImpl implements BoardService {
      */
     @Override
     public List<Board.BoardTitleResponse> readAllTitle(Integer page, Integer size) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        var pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
 
         Slice<Board> boardSlice = boardRepository.findAllJPQLFetch(pageRequest);
 
@@ -71,16 +71,16 @@ public class BoardServiceImpl implements BoardService {
      */
     @Override
     public Board.BoardInfoResponse readBoardDetail(Long boardId) {
-        Board board = boardRepository.findById(boardId)
+        var board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.BOARD_NOT_FOUND_ERROR));
         //조회수 증가
         board.increaseBoardViews();
-        Board.BoardInfoResponse boardInfoResponse = modelMapper.map(board, Board.BoardInfoResponse.class);
+        var boardInfoResponse = modelMapper.map(board, Board.BoardInfoResponse.class);
 
         //작성자
         Optional<User> userOptional = userRepository.findById(board.getUser().getId());
         if(userOptional.isPresent()){
-            User user = userOptional.get();
+            var user = userOptional.get();
             boardInfoResponse.setWriterId(user.getId());
             boardInfoResponse.setWriterProfile(user.getUserProfileImage());
             boardInfoResponse.setWriterNickname(user.getNickname());
@@ -93,7 +93,7 @@ public class BoardServiceImpl implements BoardService {
         List<Comment> commentList = commentRepository.findByBoard(board);
 
         List<Board.BoardCommentDto> boardCommentDtoList = new ArrayList<>(commentList.size());
-        String ghostUser = "탈퇴한 회원";
+        var ghostUser = "탈퇴한 회원";
 
         for (Comment comment : commentList){
             Optional<User> commentUser = userRepository.findById(comment.getCommentUserId());
@@ -137,9 +137,9 @@ public class BoardServiceImpl implements BoardService {
      */
     @Override
     public List<Board.BoardTitleResponse> readTitleByCategory(Integer page, Integer size, String stringBoardType) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        var pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
 
-        BoardType boardType = checkBoardType(stringBoardType);
+        var boardType = checkBoardType(stringBoardType);
 
         Slice<Board> boardSlice = null;
 
@@ -173,9 +173,9 @@ public class BoardServiceImpl implements BoardService {
      */
     @Override
     public List<Board.BoardTitleResponse> readTitleBySearch(Integer page, Integer size, String stringBoardType, String keyword) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        var pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
 
-        BoardType boardType = checkBoardType(stringBoardType);
+        var boardType = checkBoardType(stringBoardType);
 
         Slice<Board> boardSlice = null;
 
@@ -220,11 +220,11 @@ public class BoardServiceImpl implements BoardService {
      */
     @Override
     public Board.BoardInfoResponse createBoard(Board.BoardPostRequest request, MultipartFile imageFile) {
-        User user = userRepository.findById(request.getUserId())
+         var user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         //enum 유효성 검사
-        BoardType boardType = checkBoardType(request.getBoardCategory());
+        var boardType = checkBoardType(request.getBoardCategory());
         
         if(boardType == BoardType.전체){
             boardType = BoardType.자유;
@@ -237,7 +237,7 @@ public class BoardServiceImpl implements BoardService {
             imagePath = s3Uploader.uploadAndGetUrl(imageFile);
         }
 
-        Board board = Board.builder()
+        var board = Board.builder()
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
                 .boardTitle(request.getBoardTitle())
@@ -264,7 +264,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Board.BoardInfoResponse updateBoard(Board.BoardPutRequest request, MultipartFile imageFile) {
-        Board board = boardRepository.findById(request.getBoardId())
+        var board = boardRepository.findById(request.getBoardId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.BOARD_NOT_FOUND_ERROR));
         board.updateBoard(request);
 
@@ -276,7 +276,7 @@ public class BoardServiceImpl implements BoardService {
 
         Board.BoardInfoResponse response = modelMapper.map(board, Board.BoardInfoResponse.class);
 
-        User writer = board.getUser();
+        var writer = board.getUser();
 
         response.setWriterId(writer.getId());
         response.setWriterProfile(writer.getUserProfileImage());
@@ -293,7 +293,7 @@ public class BoardServiceImpl implements BoardService {
      */
     @Override
     public Boolean deleteBoard(Long userId, Long boardId) {
-        Board board = boardRepository.findById(boardId)
+        var board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.BOARD_NOT_FOUND_ERROR));
 
         // 게시글 작성자와 일치하면 게시글 삭제

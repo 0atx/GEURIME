@@ -50,7 +50,7 @@ public class DrawingDiaryController {
     @ApiOperation(value = "자녀의 그림일기 날짜조회", notes = "날짜에 해당하는 그림일기 목록을 조회한다.")
     public ResponseEntity<BasicResponse<List<Drawing.DrawingDiaryListResponse>>> readByDateDrawingDiaryList(@PathVariable Long kidId, @RequestParam String date) {
         try {
-            LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
+            var localDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
             List<Drawing.DrawingDiaryListResponse> responseList = drawingDiaryService.readByDateDrawingDiaryList(kidId, localDate);
             return new ResponseEntity<>(makeBasicResponse(SUCCESS, responseList), HttpStatus.OK);
         } catch (CustomException e) {

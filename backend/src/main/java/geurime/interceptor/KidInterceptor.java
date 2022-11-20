@@ -29,7 +29,7 @@ public class KidInterceptor implements HandlerInterceptor {
         if(method.equals("POST")){
             return true;
         }
-        String kidIdString = pathVariables.get("kidId");
+        var kidIdString = pathVariables.get("kidId");
 
         //pathvariable 없는 경우
         if(kidIdString == null){
@@ -40,7 +40,7 @@ public class KidInterceptor implements HandlerInterceptor {
         String email = jwtService.getEmail(accessToken);
         String provider = jwtService.getProvider(accessToken);
 
-        User userJwt = userRepository.findByEmailAndProvider(email, provider)
+        var userJwt = userRepository.findByEmailAndProvider(email, provider)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         Long requestFamilyId = userJwt.getFamily().getId();

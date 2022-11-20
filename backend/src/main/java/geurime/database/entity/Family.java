@@ -46,7 +46,7 @@ public class Family {
     static final char[] BASE62 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
 
     public String makeInviteCode() {
-        final StringBuilder sb = new StringBuilder();
+        final var sb = new StringBuilder();
         int value = this.id.intValue() + 100_000;
         do{
             int i = value % 62;

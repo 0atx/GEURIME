@@ -34,10 +34,10 @@ public class DrawingBoxServiceImpl implements DrawingBoxService {
      */
     @Override
     public Kid.KidInfoResponse createDrawingBox(Long kidId, String drawingBoxName) {
-        Kid kid = kidRepository.findById(kidId)
+        var kid = kidRepository.findById(kidId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.KID_NOT_FOUND_ERROR));
 
-        DrawingBox drawingBox = DrawingBox.builder()
+        var drawingBox = DrawingBox.builder()
                 .kid(kid)
                 .drawingBoxName(drawingBoxName)
                 .drawingBoxCategory(BoxType.커스텀)
@@ -60,7 +60,7 @@ public class DrawingBoxServiceImpl implements DrawingBoxService {
             String thumbnailImage = firstDrawing.isPresent() ? firstDrawing.get().getDrawingImagePath() : null;
             long drawingCount = drawingRepository.countByDrawingBox(box);
 
-            Kid.DrawingBoxDto drawingBoxDto = Kid.DrawingBoxDto.builder()
+            var drawingBoxDto = Kid.DrawingBoxDto.builder()
                     .drawingBoxId(box.getId())
                     .drawingBoxName(box.getDrawingBoxName())
                     .drawingBoxCategory(box.getDrawingBoxCategory().toString())
@@ -83,7 +83,7 @@ public class DrawingBoxServiceImpl implements DrawingBoxService {
      */
     @Override
     public Boolean updateDrawingBox(Long drawingBoxId, String drawingBoxName) {
-        DrawingBox drawingBox = drawingBoxRepository.findById(drawingBoxId)
+        var drawingBox = drawingBoxRepository.findById(drawingBoxId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_BOX_NOT_FOUND_ERROR));
 
         if(drawingBox.getDrawingBoxCategory() == BoxType.커스텀){
@@ -101,7 +101,7 @@ public class DrawingBoxServiceImpl implements DrawingBoxService {
      */
     @Override
     public Boolean deleteDrawingBox(Long drawingBoxId) {
-        DrawingBox drawingBox = drawingBoxRepository.findById(drawingBoxId)
+        var drawingBox = drawingBoxRepository.findById(drawingBoxId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_BOX_NOT_FOUND_ERROR));
 
         if(drawingBox.getDrawingBoxCategory() == BoxType.커스텀){

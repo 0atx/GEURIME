@@ -26,11 +26,11 @@ public class AiPredictServiceImpl {
 
 
     public void predict(Long drawingId) {
-        Drawing drawing = getDrawing(drawingId);
+        var drawing = getDrawing(drawingId);
         String url = drawing.getDrawingImagePath();
 
         // url json형태로 바꿔줌
-        String request = String.format("{\"url\":\"%s\"}", url);
+        var request = String.format("{\"url\":\"%s\"}", url);
 
         // webClient 이용하여 fastApi로 그림 분석 요청
         String responseJson = webClient.post()
@@ -43,7 +43,7 @@ public class AiPredictServiceImpl {
                 .block();
 
         // 반환된 값(String)을 JSONParser로 JSONObject로 변환
-        JSONParser parser = new JSONParser();
+        var parser = new JSONParser();
         JSONObject jsonObject = null;
         try {
             jsonObject = (JSONObject) parser.parse(responseJson);
@@ -53,11 +53,11 @@ public class AiPredictServiceImpl {
 
         // Double float로 변환
         Double dep = (Double) jsonObject.get("depression");
-        float depression = dep.floatValue();
+        var depression = dep.floatValue();
         Double vio = (Double) jsonObject.get("violence");
-        float violence = vio.floatValue();
+        var violence = vio.floatValue();
         Double hap = (Double) jsonObject.get("happiness");
-        float happiness = hap.floatValue();
+        var happiness = hap.floatValue();
         
         //DB에 값 저장
         drawing.changeDrawingEmotion(depression, violence, happiness);

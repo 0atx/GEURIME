@@ -27,7 +27,7 @@ public class CommentInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Map<String, String> pathVariables = (Map)request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         String method = request.getMethod();
-        String commentIdString = pathVariables.get("commentId");
+        var commentIdString = pathVariables.get("commentId");
         if(commentIdString == null){
             throw new CustomException(CustomExceptionList.BAD_REQUEST_ERROR);
         }
@@ -38,7 +38,7 @@ public class CommentInterceptor implements HandlerInterceptor {
             String email = jwtService.getEmail(accessToken);
             String provider = jwtService.getProvider(accessToken);
 
-            User userJwt = userRepository.findByEmailAndProvider(email, provider)
+            var userJwt = userRepository.findByEmailAndProvider(email, provider)
                     .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
             Long requestUserId = commentRepository.getUserIdByCommentId(Long.parseLong(commentIdString));

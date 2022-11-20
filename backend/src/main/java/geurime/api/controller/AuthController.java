@@ -43,22 +43,22 @@ public class AuthController {
      */
     @GetMapping("/info")
     public void createToken(HttpServletResponse response, Authentication authentication) throws IOException {
-        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        var oAuth2User = (OAuth2User) authentication.getPrincipal();
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
-        User user = getAuthUser(attributes);
+        var user = getAuthUser(attributes);
 
-        Jwt token = jwtService.generateToken(user.getProvider(), user.getUserName(), user.getEmail());
+        var token = jwtService.generateToken(user.getProvider(), user.getUserName(), user.getEmail());
 
         user.setRefreshToken(token.getRefreshToken());
         userRepository.save(user);
 
-        String accessTokenExpiration = jwtService.dateToString(token.getAccessToken());
-        String refreshTokenExpiration = jwtService.dateToString(token.getRefreshToken());
+        var accessTokenExpiration = jwtService.dateToString(token.getAccessToken());
+        var refreshTokenExpiration = jwtService.dateToString(token.getRefreshToken());
 
         String nickname = user.getNickname() == null ? "" : user.getNickname();
 
-        String uri = "https://geurime.com/logincheck";
+        var uri = "https://geurime.com/logincheck";
 
         response.sendRedirect(UriComponentsBuilder.fromUriString(uri)
                 .queryParam("accessToken", token.getAccessToken())
@@ -95,7 +95,7 @@ public class AuthController {
         String name = jwtService.getName(refreshToken);
         String email = jwtService.getEmail(refreshToken);
 
-        User user = userRepository.findByEmailAndProvider(email, provider)
+        var user = userRepository.findByEmailAndProvider(email, provider)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         if (!user.getRefreshToken()
@@ -103,9 +103,9 @@ public class AuthController {
             throw new CustomException(CustomExceptionList.REFRESH_TOKEN_ERROR);
         }
 
-        Jwt token = jwtService.generateToken(provider, name, email);
+        var token = jwtService.generateToken(provider, name, email);
 
-        String accessTokenExpiration = jwtService.dateToString(token.getAccessToken());
+        var accessTokenExpiration = jwtService.dateToString(token.getAccessToken());
 
         Map<String, String> map = new HashMap<>();
         map.put("accessToken", token.getAccessToken());

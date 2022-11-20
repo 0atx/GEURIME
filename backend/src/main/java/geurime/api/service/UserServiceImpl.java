@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User.UserInfoResponse readUserInfo(Long userId) {
-        User user = userRepository.findByIdFetch(userId)
+        var user = userRepository.findByIdFetch(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         User.UserInfoResponse response = modelMapper.map(user, User.UserInfoResponse.class);
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User.UserInfoResponse createNewUser(Long userId, User.UserSignUpRequest request, MultipartFile profileImage) {
-        User user = userRepository.findById(userId)
+        var user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         //중복닉네임 검사
@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService {
 
         //새 가족 생성
         user.singUpUpdate(request);
-        Family family = Family.builder()
+        var family = Family.builder()
                 .familyName(request.getFamilyName())
                 .familyLeaderId(userId)
                 .build();
@@ -138,7 +138,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User.UserInfoResponse createInvitedUser(Long userId, User.UserInviteSignUpRequest request, MultipartFile profileImage) {
-        User user = userRepository.findById(userId)
+        var user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         user.inviteSingUpUpdate(request);
@@ -151,7 +151,7 @@ public class UserServiceImpl implements UserService {
         }
 
         //초대코드에 해당하는 가족에 추가
-        Family family = familyRepository.findByInviteCode(request.getInviteCode());
+        var family = familyRepository.findByInviteCode(request.getInviteCode());
         user.joinFamily(family);
         userRepository.save(user);
 
@@ -160,10 +160,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User.UserInfoResponse updateUserInfo(Long userId, User.UserInfoUpdateRequest request, MultipartFile imageFile) {
-        User user = userRepository.findById(userId)
+        var user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
-        Family family = familyRepository.findById(user.getFamily().getId())
+        var family = familyRepository.findById(user.getFamily().getId())
                 .orElseThrow(() -> new CustomException(CustomExceptionList.FAMILY_NOT_FOUND_ERROR));
         family.changeName(request.getFamilyName());
 
@@ -179,10 +179,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long userId) {
         //7일간 회원정보 유지하는 기능 추후 구현예정
-        User user = userRepository.findByIdFetch(userId)
+        var user = userRepository.findByIdFetch(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
-        Family family = user.getFamily();
+        var family = user.getFamily();
         if(family != null){
             family.removeMember(user);
             List<User> users = family.getUsers();
@@ -200,10 +200,10 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     public List<Family.FamilyMemberResponse> readFamilyMembers(Long userId){
-        User user = userRepository.findByIdFetch(userId)
+        var user = userRepository.findByIdFetch(userId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
-        Family family = user.getFamily();
+        var family = user.getFamily();
         List<Family.FamilyMemberResponse> responseList = new ArrayList<>();
 
         for (User u : family.getUsers()){

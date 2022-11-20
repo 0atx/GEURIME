@@ -29,7 +29,7 @@ public class UserInterceptor implements HandlerInterceptor {
         if(method.equals("POST")){
             return true;
         }
-        String userIdString = pathVariables.get("userId");
+        var userIdString = pathVariables.get("userId");
 
         if(userIdString == null){
             throw new CustomException(CustomExceptionList.BAD_REQUEST_ERROR);
@@ -39,12 +39,12 @@ public class UserInterceptor implements HandlerInterceptor {
         String email = jwtService.getEmail(accessToken);
         String provider = jwtService.getProvider(accessToken);
 
-        User userJwt = userRepository.findByEmailAndProvider(email, provider)
+        var userJwt = userRepository.findByEmailAndProvider(email, provider)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         Family familyJwt = userJwt.getFamily();
 
-        User userRequest = userRepository.findById(Long.parseLong(userIdString))
+        var userRequest = userRepository.findById(Long.parseLong(userIdString))
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
         Family familyRequest = userRequest.getFamily();
 

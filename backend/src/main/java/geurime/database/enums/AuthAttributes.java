@@ -9,7 +9,7 @@ import java.util.function.Function;
 public enum AuthAttributes {
 
     GOOGLE("google", (attributes) -> {
-        UserProfile userProfile = new UserProfile();
+        var userProfile = new UserProfile();
         userProfile.setName((String) attributes.get("name"));
         userProfile.setEmail((String) attributes.get("email"));
         return userProfile;
@@ -21,7 +21,7 @@ public enum AuthAttributes {
         // kakao_account안에 또 profile이라는 JSON객체가 있다. (nickname, profile_image)
         Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
 
-        UserProfile userProfile = new UserProfile();
+        var userProfile = new UserProfile();
         userProfile.setName((String) kakaoProfile.get("nickname"));
         userProfile.setEmail((String) kakaoAccount.get("email"));
         return userProfile;

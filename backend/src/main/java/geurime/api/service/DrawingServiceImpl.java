@@ -45,7 +45,7 @@ public class DrawingServiceImpl implements DrawingService {
      */
     @Override
     public Drawing.DrawingInfoResponse readDrawingInfo(Long drawingId) {
-        Drawing drawing = getDrawing(drawingId);
+        var drawing = getDrawing(drawingId);
         Drawing.DrawingInfoResponse response = modelMapper.map(drawing, Drawing.DrawingInfoResponse.class);
         response.setDrawingId(drawing.getId());
 
@@ -59,7 +59,7 @@ public class DrawingServiceImpl implements DrawingService {
      */
     @Override
     public List<Drawing.DrawingGalleryDto> readLikeDrawingList(Long kidId) {
-        Kid kid = getKid(kidId);
+        var kid = getKid(kidId);
         List<Drawing> drawingList = drawingRepository.findByDrawingBox_KidAndIsLikeTrueOrderByIdDesc(kid);
         List<Drawing.DrawingGalleryDto> responseList = new ArrayList<>(drawingList.size());
         for (Drawing drawing : drawingList){
@@ -80,9 +80,9 @@ public class DrawingServiceImpl implements DrawingService {
      */
     @Override
     public Drawing.DrawingGalleryResponse readBoxDrawingList(Long kidId, Long drawingBoxId) {
-        DrawingBox drawingBox = getDrawingBox(drawingBoxId);
+        var drawingBox = getDrawingBox(drawingBoxId);
 
-        Drawing.DrawingGalleryResponse response = new Drawing.DrawingGalleryResponse();
+        var response = new Drawing.DrawingGalleryResponse();
         response.setDrawingBoxName(drawingBox.getDrawingBoxName());
 
         //조회하는 자녀의 아이디가 일치하면
@@ -92,8 +92,8 @@ public class DrawingServiceImpl implements DrawingService {
 
             //DTO에 매핑 - id역순 (최신순으로)
             for (int i = drawingList.size() - 1; i >= 0; i--) {
-                Drawing drawing = drawingList.get(i);
-                Drawing.DrawingGalleryDto dto = new Drawing.DrawingGalleryDto();
+                var drawing = drawingList.get(i);
+                var dto = new Drawing.DrawingGalleryDto();
                 dto.setDrawingId(drawing.getId());
                 dto.setDrawingImagePath(drawing.getDrawingImagePath());
 
@@ -119,14 +119,14 @@ public class DrawingServiceImpl implements DrawingService {
     public Drawing.DrawingInfoResponse createDrawing(Drawing.DrawingPostRequest request, MultipartFile imageFile) {
 
         //이미지 업로드 후 반환된 이미지경로
-        String drawingImagePath = "";
+        var drawingImagePath = "";
         if(imageFile != null && !imageFile.isEmpty()){
             drawingImagePath = s3Uploader.uploadAndGetUrl(imageFile);
         }
 
-        DrawingBox drawingBox = getDrawingBox(request.getDrawingBoxId());
+        var drawingBox = getDrawingBox(request.getDrawingBoxId());
 
-        Drawing drawing = Drawing.builder()
+        var drawing = Drawing.builder()
                 .drawingBox(drawingBox)
                 .drawingTitle(request.getDrawingTitle())
                 .drawingImagePath(drawingImagePath)
@@ -149,8 +149,8 @@ public class DrawingServiceImpl implements DrawingService {
      */
     @Override
     public Long updateDrawing(Drawing.DrawingPutRequest request) {
-        Drawing drawing = getDrawing(request.getDrawingId());
-        DrawingBox drawingBox = getDrawingBox(request.getDrawingBoxId());
+        var drawing = getDrawing(request.getDrawingId());
+        var drawingBox = getDrawingBox(request.getDrawingBoxId());
 
         if(drawingBox.getKid().getId().equals(request.getKidId())){
             drawing.changeDrawingInfo(drawingBox, request.getDrawingTitle(), request.getIsLike());
@@ -167,10 +167,10 @@ public class DrawingServiceImpl implements DrawingService {
      */
     @Override
     public Long drawingBoxMigration(Drawing.DrawingMigrationPutRequest request) {
-        DrawingBox drawingBox = getDrawingBox(request.getDrawingBoxId());
+        var drawingBox = getDrawingBox(request.getDrawingBoxId());
 
         for (Long drawingId : request.getDrawingIdList()){
-            Drawing drawing = getDrawing(drawingId);
+            var drawing = getDrawing(drawingId);
             drawing.migrationDrawing(drawingBox);
         }
 
@@ -184,8 +184,8 @@ public class DrawingServiceImpl implements DrawingService {
      */
     @Override
     public Boolean deleteDrawingBox(Long kidId, Long drawingBoxId, Boolean isDelete) {
-        DrawingBox deleteDrawingBox = getDrawingBox(drawingBoxId);
-        Kid kid = getKid(kidId);
+        var deleteDrawingBox = getDrawingBox(drawingBoxId);
+        var kid = getKid(kidId);
 
         //커스텀 보관함이 아니거나
         //삭제하려는 자녀가 보관함의 주인이 아니면 false 반환
@@ -195,7 +195,7 @@ public class DrawingServiceImpl implements DrawingService {
 
         //삭제할 보관함의 사진들을 기본보관함으로 이동
         if(!isDelete){
-            DrawingBox basicDrawingBox = drawingBoxRepository.findByKidAndDrawingBoxCategory(kid, BoxType.기본)
+            var basicDrawingBox = drawingBoxRepository.findByKidAndDrawingBoxCategory(kid, BoxType.기본)
                     .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_BOX_NOT_FOUND_ERROR));
             for (Drawing drawing : deleteDrawingBox.getDrawingList()){
                 drawing.migrationDrawing(basicDrawingBox);
@@ -214,7 +214,7 @@ public class DrawingServiceImpl implements DrawingService {
      */
     @Override
     public Boolean deleteDrawing(Long kidId, Long drawingId) {
-        Drawing drawing = getDrawing(drawingId);
+        var drawing = getDrawing(drawingId);
 
         if(drawing.getDrawingBox().getKid().getId().equals(kidId)){
             drawingRepository.delete(drawing);
@@ -225,7 +225,7 @@ public class DrawingServiceImpl implements DrawingService {
 
     @Override
     public List<CountHeatMapResponse> readDrawingCountHeatMap(Long kidId) {
-        Kid kid = getKid(kidId);
+        var kid = getKid(kidId);
 
         List<CountHeatMapResponse> countHeatMapResponseList =  drawingRepository.findDrawingCountList(kid);
 

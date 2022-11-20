@@ -34,9 +34,9 @@ public class DrawingInterceptor implements HandlerInterceptor {
         if(method.equals("POST")){
             return true;
         }
-        String drawingIdString = pathVariables.get("drawingId");
-        String drawingBoxIdString = pathVariables.get("drawingBoxId");
-        String kidIdString = pathVariables.get("kidId");
+        var drawingIdString = pathVariables.get("drawingId");
+        var drawingBoxIdString = pathVariables.get("drawingBoxId");
+        var kidIdString = pathVariables.get("kidId");
 
         if(drawingIdString == null && kidIdString == null && drawingBoxIdString == null){
             throw new CustomException(CustomExceptionList.BAD_REQUEST_ERROR);
@@ -46,7 +46,7 @@ public class DrawingInterceptor implements HandlerInterceptor {
         String email = jwtService.getEmail(accessToken);
         String provider = jwtService.getProvider(accessToken);
 
-        User userJwt = userRepository.findByEmailAndProvider(email, provider)
+        var userJwt = userRepository.findByEmailAndProvider(email, provider)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.USER_NOT_FOUND_ERROR));
 
         Long requestFamilyId = userJwt.getFamily().getId();

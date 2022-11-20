@@ -4,7 +4,6 @@ import geurime.api.dto.common.BasicResponse;
 import geurime.api.service.BoardServiceImpl;
 import geurime.database.entity.Board;
 import geurime.exception.CustomException;
-import geurime.exception.CustomExceptionList;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
