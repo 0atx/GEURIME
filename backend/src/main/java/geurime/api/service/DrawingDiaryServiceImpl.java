@@ -114,7 +114,19 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
         }else{
             drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingBox_DrawingBoxCategoryOrderByCreateTimeDescIdDesc(kid, BoxType.DIARY);
         }
-        List<Drawing.DrawingDiaryListResponse> responseList = mapList(drawingDiaryList, Drawing.DrawingDiaryListResponse.class);
+
+        List<Drawing.DrawingDiaryListResponse> responseList = new ArrayList<>(drawingDiaryList.size());
+
+        for (Drawing drawing : drawingDiaryList){
+            responseList.add(
+                    Drawing.DrawingDiaryListResponse.builder()
+                            .drawingId(drawing.getId())
+                            .createTime(drawing.getCreateTime())
+                            .drawingTitle(drawing.getDrawingTitle())
+                            .drawingImagePath(drawing.getDrawingImagePath())
+                            .build()
+            );
+        }
 
         return responseList;
     }
