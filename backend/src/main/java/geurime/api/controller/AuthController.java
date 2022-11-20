@@ -58,8 +58,8 @@ public class AuthController {
 
         String nickname = user.getNickname() == null ? "" : user.getNickname();
 
-        String uri = "https://geurime.com/logincheck";
-//        String uri = "http://localhost:3000/logincheck";
+//        String uri = "https://geurime.com/logincheck";
+        String uri = "http://localhost:3000/logincheck";
 
 
         response.sendRedirect(UriComponentsBuilder.fromUriString(uri)
