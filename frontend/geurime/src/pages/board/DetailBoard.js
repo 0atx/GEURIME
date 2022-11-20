@@ -194,7 +194,7 @@ export default function DetailBoard() {
         fontSize: '4.8vw'
         }}
          >
-         제목:  { board.boardTitle.length > 18 ? (<>{board.boardTitle.substring(0,17)+".."}</>) : (<>{board.boardTitle}</>)}
+         제목:  { board.boardTitle }
       </Grid>
       <Grid
           item
@@ -292,39 +292,8 @@ export default function DetailBoard() {
           />
           <div>{commentLen}</div>
         </Grid>
-        {/* <Grid
-          item
-          sx={{marginLeft: '5%', marginTop: '1%'}}
-          >
-              작성자 : {board.writerNickname}
-        </Grid>
-        
-        <Grid
-          item
-          xs={3.5}
-          sx={{ marginTop: '1%'}}
-        >
-          <Grid
-          container
-          direction='row'
-          >
-              <Grid
-                item
-                sx={{marginRight: '10%'}}
-                  >
-                  <Visibility fontSize="8"/>
-                      {board.boardViews}
-              </Grid> 
-              <Grid>
-                  <QuestionAnswerOutlinedIcon fontSize="8" />
-                    {commentLen}
-              </Grid>
-          </Grid>
-        </Grid> */}
       </Grid>
      
-
-
       {/* 유저 아이디, 사진정보 리코일에서 가져오기 */}
     <Grid
       sx={{marginTop: '5%', marginLeft: '3%',alignItems: 'center'}}
@@ -339,7 +308,7 @@ export default function DetailBoard() {
      {/* 작성 내용 */}
       <Grid
           item
-        sx={{marginLeft:'5%', justifyContent: 'space-between'}}
+        sx={{marginLeft:'5%',marginRight:'5%', justifyContent: 'space-between'}}
       >
           <TextField placeholder="댓글을 등록하세요..." variant="standard" sx={{width: '57vw'}} inputRef={commentRef} onKeyUp={commentKeyword}/>
           <Button onClick={postComment}>확인</Button>
