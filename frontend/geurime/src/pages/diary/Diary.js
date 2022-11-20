@@ -65,8 +65,6 @@ export default function Diary() {
     const response = await http
       .get(`/diaries/${kidInfo.kidId}`)
       .then((response) => {
-        // console.log(kidInfo);
-        // console.log(response.data.data);
         setDiaries(response.data.data);
       })
       .catch((error) => {
@@ -92,10 +90,7 @@ export default function Diary() {
             },
           })
           .then((response) => {
-            // console.log({ 일기들: response.data.data });
             setDiaries(response.data.data);
-
-            // searchInput.current.value = "";
           })
           .catch((error) => {
             if (error.response.data.code === "E012") {
@@ -121,10 +116,8 @@ export default function Diary() {
           },
         })
         .then((response) => {
-          // console.log({ 일기들: response.data.data });
           setDiaries(response.data.data);
 
-          // searchInput.current.value = "";
         })
         .catch((error) => {
           if (error.response.data.code === "E012") {

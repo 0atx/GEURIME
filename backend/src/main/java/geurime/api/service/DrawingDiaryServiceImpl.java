@@ -57,7 +57,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
     @Override
     public List<Drawing.DrawingDiaryListResponse> readAllDrawingDiaryList(Long kidId) {
         Kid kid = getKid(kidId);
-        List<Drawing> drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingBox_DrawingBoxCategoryOrderByCreateTimeDescIdDesc(kid, BoxType.일기);
+        List<Drawing> drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingBox_DrawingBoxCategoryOrderByCreateTimeDescIdDesc(kid, BoxType.DIARY);
         List<Drawing.DrawingDiaryListResponse> responseList = new ArrayList<>(drawingDiaryList.size());
         for (Drawing drawing : drawingDiaryList){
             Drawing.DrawingDiaryListResponse response = Drawing.DrawingDiaryListResponse.builder()
@@ -110,11 +110,23 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
         Kid kid = getKid(kidId);
         List<Drawing> drawingDiaryList = null;
         if(keyword != null && !keyword.isBlank()){
-            drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingTitleContainsAndDrawingBox_DrawingBoxCategoryOrderByIdDesc(kid, keyword, BoxType.일기);
+            drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingTitleContainsAndDrawingBox_DrawingBoxCategoryOrderByIdDesc(kid, keyword, BoxType.DIARY);
         }else{
-            drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingBox_DrawingBoxCategoryOrderByCreateTimeDescIdDesc(kid, BoxType.일기);
+            drawingDiaryList = drawingRepository.findByDrawingBox_KidAndDrawingBox_DrawingBoxCategoryOrderByCreateTimeDescIdDesc(kid, BoxType.DIARY);
         }
-        List<Drawing.DrawingDiaryListResponse> responseList = mapList(drawingDiaryList, Drawing.DrawingDiaryListResponse.class);
+
+        List<Drawing.DrawingDiaryListResponse> responseList = new ArrayList<>(drawingDiaryList.size());
+
+        for (Drawing drawing : drawingDiaryList){
+            responseList.add(
+                    Drawing.DrawingDiaryListResponse.builder()
+                            .drawingId(drawing.getId())
+                            .createTime(drawing.getCreateTime())
+                            .drawingTitle(drawing.getDrawingTitle())
+                            .drawingImagePath(drawing.getDrawingImagePath())
+                            .build()
+            );
+        }
 
         return responseList;
     }
@@ -127,7 +139,7 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
     @Override
     public Drawing.DrawingDiaryInfoResponse createDrawingDiary(Drawing.DrawingDiaryPostRequest request, MultipartFile imageFile) {
         Kid kid = getKid(request.getKidId());
-        DrawingBox drawingBox = drawingBoxRepository.findByKidAndDrawingBoxCategory(kid, BoxType.일기)
+        DrawingBox drawingBox = drawingBoxRepository.findByKidAndDrawingBoxCategory(kid, BoxType.DIARY)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_BOX_NOT_FOUND_ERROR));
 
         //이미지 업로드 후 반환된 이미지경로
@@ -198,10 +210,6 @@ public class DrawingDiaryServiceImpl implements DrawingDiaryService {
                 .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_NOT_FOUND_ERROR));
     }
 
-    private DrawingBox getDrawingBox(Long drawingBoxId){
-        return drawingBoxRepository.findById(drawingBoxId)
-                .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_BOX_NOT_FOUND_ERROR));
-    }
     private Kid getKid(Long kidId){
         return kidRepository.findById(kidId)
                 .orElseThrow(() -> new CustomException(CustomExceptionList.KID_NOT_FOUND_ERROR));

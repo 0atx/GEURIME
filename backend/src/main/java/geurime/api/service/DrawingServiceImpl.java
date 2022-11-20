@@ -189,13 +189,13 @@ public class DrawingServiceImpl implements DrawingService {
 
         //커스텀 보관함이 아니거나
         //삭제하려는 자녀가 보관함의 주인이 아니면 false 반환
-        if(deleteDrawingBox.getDrawingBoxCategory() != BoxType.커스텀 || !deleteDrawingBox.getKid().getId().equals(kid.getId())){
+        if(deleteDrawingBox.getDrawingBoxCategory() != BoxType.CUSTOM || !deleteDrawingBox.getKid().getId().equals(kid.getId())){
             return false;
         }
 
         //삭제할 보관함의 사진들을 기본보관함으로 이동
         if(!isDelete){
-            DrawingBox basicDrawingBox = drawingBoxRepository.findByKidAndDrawingBoxCategory(kid, BoxType.기본)
+            DrawingBox basicDrawingBox = drawingBoxRepository.findByKidAndDrawingBoxCategory(kid, BoxType.BASIC)
                     .orElseThrow(() -> new CustomException(CustomExceptionList.DRAWING_BOX_NOT_FOUND_ERROR));
             for (Drawing drawing : deleteDrawingBox.getDrawingList()){
                 drawing.migrationDrawing(basicDrawingBox);

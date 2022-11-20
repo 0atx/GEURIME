@@ -113,7 +113,6 @@ export default function RegistDiary({}) {
     setDiaryInfo((diary) => {
       const copyDiary = { ...diary };
       copyDiary.writing = writing;
-      // console.log(copyDiary);
       return { ...copyDiary };
     });
   };
@@ -125,7 +124,6 @@ export default function RegistDiary({}) {
     setDiaryInfo((diary) => {
       const copyDiary = { ...diary };
       copyDiary.writing = speech;
-      // console.log(copyDiary);
       return { ...copyDiary };
     });
   };

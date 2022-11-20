@@ -75,9 +75,9 @@ export default function Gallery() {
   }, [open]);
 
   return (
-    <Grid>
+    <div>
       <BackMenu title={`${currentKid.kidName}의 갤러리`} type="registKids" clickRight={modalOpen} />
-      <Grid id="container">
+      <div id="container">
         <RegistDrawingBoxModal open={open} setOpen={setOpen} />
         <Container>
           {loading ? (
@@ -224,7 +224,7 @@ export default function Gallery() {
         </Container>
         {/* 하단 네비 */}
         <NavBar />
-      </Grid>
-    </Grid>
+      </div>
+    </div>
   );
 }

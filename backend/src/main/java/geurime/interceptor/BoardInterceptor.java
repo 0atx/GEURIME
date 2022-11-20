@@ -38,11 +38,11 @@ public class BoardInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Map<String, String> pathVariables = (Map)request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        Map<String, String> pathVariables = (Map) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         String method = request.getMethod();
         String boardIdString = pathVariables.get("boardId");
 
-        if(method.equals("PUT") || method.equals("DELETE")){
+        if (method.equals("PUT") || method.equals("DELETE")) {
 
             String accessToken = request.getHeader("accessToken");
             String email = jwtService.getEmail(accessToken);
@@ -53,15 +53,12 @@ public class BoardInterceptor implements HandlerInterceptor {
 
             Long requestUserId = boardRepository.getUserIdByBoardId(Long.parseLong(boardIdString));
 
-            if(userJwt.getId() == requestUserId){
-                return true;
-            }else{
+            if (!userJwt.getId().equals(requestUserId)) {
                 throw new CustomException(CustomExceptionList.NO_AUTHENTICATION_ERROR);
             }
 
-        } else{
-            return true;
         }
+        return true;
 
     }
 }

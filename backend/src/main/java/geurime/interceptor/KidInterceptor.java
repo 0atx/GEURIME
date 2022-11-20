@@ -31,6 +31,7 @@ public class KidInterceptor implements HandlerInterceptor {
         }
         String kidIdString = pathVariables.get("kidId");
 
+        //pathvariable 없는 경우
         if(kidIdString == null){
             throw new CustomException(CustomExceptionList.BAD_REQUEST_ERROR);
         }
@@ -45,19 +46,13 @@ public class KidInterceptor implements HandlerInterceptor {
         Long requestFamilyId = userJwt.getFamily().getId();
 
         //kidId 받는 API
-        if(kidIdString != null){
-            Long kidFamilyId = drawingRepository.getFamilyIdByKidId(Long.parseLong(kidIdString));
+        Long kidFamilyId = drawingRepository.getFamilyIdByKidId(Long.parseLong(kidIdString));
 
-            if(requestFamilyId != null && requestFamilyId == kidFamilyId){
-                return true;
-            }else{
-                throw new CustomException(CustomExceptionList.NO_AUTHENTICATION_ERROR);
-            }
+        if(requestFamilyId == null || !requestFamilyId.equals(kidFamilyId)){
+            throw new CustomException(CustomExceptionList.NO_AUTHENTICATION_ERROR);
         }
-        //pathvariable 없는 경우
-        else {
-            throw new CustomException(CustomExceptionList.BAD_REQUEST_ERROR);
-        }
+
+        return true;
 
     }
 }
