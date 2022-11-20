@@ -108,12 +108,12 @@ public class KidServiceImpl implements KidService {
         DrawingBox basicDrawingBox = DrawingBox.builder()
                 .kid(kid)
                 .drawingBoxName("기본 보관함")
-                .drawingBoxCategory(BoxType.BASIC)
+                .drawingBoxCategory(BoxType.기본)
                 .build();
         DrawingBox diaryDrawingBox = DrawingBox.builder()
                 .kid(kid)
                 .drawingBoxName("그림일기 보관함")
-                .drawingBoxCategory(BoxType.BASIC)
+                .drawingBoxCategory(BoxType.기본)
                 .build();
         drawingBoxRepository.save(basicDrawingBox);
         drawingBoxRepository.save(diaryDrawingBox);
