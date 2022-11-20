@@ -202,33 +202,6 @@ export default function DetailBoard() {
           >
               작성자 : {board.writerNickname}
       </Grid>
-      {/* <Paper
-        variant="outlined"
-        sx={{
-        alignItems: 'center', textAlign: 'center', margin: '3%', borderRadius: 3,
-        borderColor: '#FFE082', borderWidth: 5}}
-        xs={7}  
-      >
-      {board.boardImagePath == null ? (
-          // 그림 업로드 안한 경우
-          <>
-            <img
-              src={sampleImage}
-              loading="lazy"
-              style={{ height: '21vh', width: '24vh', margin: '2%', borderRadius: 5, marginTop: '3.5%' }}
-            />
-          </>
-        ) : (
-          // 그림 업로드 한 경우
-          <>
-            <img
-              src={board.boardImagePath}
-              loading="lazy"
-              style={{ height: '21vh', width: '24vh', margin: '2%', borderRadius: 5, marginTop: '3.5%' }}
-            />
-          </>
-        )}
-      </Paper> */}
      <Paper
           variant="outlined"
           sx={{ marginTop:'3%',  backgroundColor: 'rgba(0,0,0,0)', borderRadius: 2, borderColor: '#FFE082', borderWidth: 2.5,  minHeight : '18vh', width:'94%', marginLeft:'3%'}}
@@ -256,7 +229,7 @@ export default function DetailBoard() {
           </>
         )}
       </Grid>
-        <Grid item sx={{marginTop:'1%', marginBottom:'3%', marginLeft: '5%', backgroundColor: 'rgba(0,0,0,0)'}}>
+        <Grid item sx={{marginTop:'1%', marginBottom:'3%', marginLeft: '5%',marginRight:'5%', backgroundColor: 'rgba(0,0,0,0)'}}>
 
           {board.boardContent.split("\n").map((line, idx) => {
             return <div key={idx}>
@@ -308,7 +281,7 @@ export default function DetailBoard() {
      {/* 작성 내용 */}
       <Grid
           item
-        sx={{marginLeft:'5%',marginRight:'5%', justifyContent: 'space-between'}}
+        sx={{marginLeft:'5%', justifyContent: 'space-between'}}
       >
           <TextField placeholder="댓글을 등록하세요..." variant="standard" sx={{width: '57vw'}} inputRef={commentRef} onKeyUp={commentKeyword}/>
           <Button onClick={postComment}>확인</Button>
