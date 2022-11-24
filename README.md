@@ -108,9 +108,9 @@
 
 
 **Backend - AI**
-- Python
-- Tensorflow
-- FAST API
+- Python 3.9.13
+- Tensorflow 2.10.0
+- FAST API 0.85.1
 
 
 **Frontend - React**
