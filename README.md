@@ -167,7 +167,7 @@ planeat-backend
 ### Front
 
 ```
-planeat-front
+guerime-front
   ├── node_modules
   ├── public
   └── src
@@ -178,11 +178,13 @@ planeat-front
       │   ├── modal
       │   └── nav
       ├── pages
-      │   ├── analysis
-      │   ├── home
-      │   ├── main
-      │   ├── myPage
-      │   └── search
+      │   ├── board
+      │   ├── diary
+      │   ├── drawing
+      │   ├── error
+      │   ├── gallery
+      │   ├── home            
+      │   └── settings
       └── states
 ```
 <br/>
