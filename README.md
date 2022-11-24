@@ -1,6 +1,6 @@
 # ✨그리미(Geurime) - 우리 아이 추억 저장소, 그리미
 
-<img src="/uploads/147ce45cd0d06c0ac303e23f0d4dab65/제목을-입력해주세요_-002.png" alt="배너 이미지">
+<img src="https://user-images.githubusercontent.com/55011885/203720193-d4b1d011-3627-4cc6-ad15-ebfbb497e985.png" alt="배너 이미지">
 
 ## 👉 [그리미 체험해보기](https://geurime.com/)
 
@@ -64,28 +64,28 @@
 ## 🖥️ 화면 구성
 
 - ### 홈 화면
-![홈](/uploads/28492a85b0d3528afd3473ca6a226573/홈_화면)
+![홈](https://user-images.githubusercontent.com/55011885/203720598-01685867-cc08-4a3f-a38b-921c52986ee9.png)
 <br/>
 - ### 소셜로그인 후 회원가입
-![회원가입](/uploads/8132cbbe253eac12217eed6a21b1a164/일반_회원가입1.gif)
+![회원가입](https://user-images.githubusercontent.com/55011885/203720728-7b797512-858f-4055-a292-3527611383ac.gif)
 <br/>
 - ### 회원 정보 및 자녀 정보 수정 페이지
-![회원정보_수정](/uploads/c2709473f7feda6b62cd032375ba9e92/회원정보_수정1.gif)
+![회원정보_수정](https://user-images.githubusercontent.com/55011885/203720794-8cd89e6a-aedd-4efa-b32b-ca1638a6fb43.gif)
 <br/>
 - ### 초대링크 발급 및 초대링크로 회원가입 페이지
-![초대회원가입](/uploads/61d021c31125e073625f260f32f00136/초대_회원가입1.gif)
+![초대회원가입](https://user-images.githubusercontent.com/55011885/203720520-8c8c5bc8-53a5-4573-b93d-4cee92c85db5.gif)
 <br/>
 - ### 그림 일기 등록 페이지
-![그림 일기 등록](/uploads/ae40b2e6d8cbe6923a1fb3a71f161555/그림일기_등록1.gif)
+![그림 일기 등록](https://user-images.githubusercontent.com/55011885/203720839-4005bbfc-4455-4cc6-b94c-dedde3f0f40f.gif)
 <br/>
 - ### 그림 등록 페이지
-![그림 등록](/uploads/16a8a997db7dede68c4e2d4bc6fdf37c/그림_등록1.gif)
+![그림 등록](https://user-images.githubusercontent.com/55011885/203720438-d9765f07-490e-404e-b41f-037cc30abe94.gif)
 <br/>
 - ### 그림 감정 분석 결과 페이지
-![식사기록_+_영양제_기록](/uploads/55ec1199b92db69eb8b2a60daf4a4d7d/그림_분석_보기1.gif)
+![그림 감정 분석 결과 페이지](https://user-images.githubusercontent.com/55011885/203720933-161995c9-70f9-47a3-9285-bd5ba286053b.gif)
 <br/>
 - ### 게시판 페이지
-![영양분석](/uploads/05926a4f28bebd4523487fbd9bad146f/게시글_작성1.gif)
+![게시판](https://user-images.githubusercontent.com/55011885/203721103-91248879-8f7e-438e-b2ea-3aa37d64c127.gif)
 
 <br/>
 <br/>
@@ -106,8 +106,11 @@
 - MySQL 8.0.29
 - Hibernate 5.6.9 Final
 
-**Backend - Hadoop**
 
+**Backend - AI**
+- Python
+- Tensorflow
+- FAST API
 
 
 **Frontend - React**
@@ -132,13 +135,15 @@
 
 ## 📰 ERD
 
-![ERD](/uploads/c509781257dcacabd28531f4897f32c1/Geurime_ERD.png)
+![Geurime_ERD](https://user-images.githubusercontent.com/55011885/203721202-ecd0c6be-f1c9-4996-a438-3f748b1fc645.png)
+
 <br/>
 <br/>
 
 ## 📝 시스템 아키텍처
 
-![서비스_아키텍처](/uploads/9bf6778274f9fc6e88f018ae0f9b230f/Geurime_아키텍처.PNG)
+![서비스_아키텍처](https://user-images.githubusercontent.com/55011885/203721181-c5b4a24f-0c7f-4fa3-b1bf-d915ce2fc9f6.PNG)
+
 <br/>
 <br/>
 
@@ -259,7 +264,8 @@ geurime-front
 
 ## 🗃️ 프로젝트 결과물
 
-- [포팅 매뉴얼](/uploads/ee1b8d51c96c0b6ac9392302b86a2265/그리미_포팅메뉴얼.pdf)
-- [중간 발표자료](/uploads/978746a28fb1869aa08ddd44701b7e09/그리미_중간발표.pdf)
-- [최종 발표자료](/uploads/282896b6189b6bba8d343c26356155ee/그리미_최종발표.pdf)
+- [포팅 메뉴얼](https://github.com/0atx/GEURIME/files/10081733/_.pdf)
+- [중간 발표자료](https://github.com/0atx/GEURIME/files/10081730/default.pdf)
+- [최종 발표자료](https://github.com/0atx/GEURIME/files/10081732/default.pdf)
+
 
