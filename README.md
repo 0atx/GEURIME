@@ -196,16 +196,13 @@ geurime-front
 ```
 <br/>
 <br/>
+
 ## 💻 협업 툴
 
 ---
 
-- Git
-- Notion
-- JIRA
-- MatterMost
-- Webex
-- GatherTown
+<img src="https://img.shields.io/badge/-GitLab-FC6D26?style=flat&logo=GitLab&logoColor=white"/> <img src="https://img.shields.io/badge/-Jira-0052CC?style=flat&logo=JiraSoftware&logoColor=white"/> <img src="https://img.shields.io/badge/-Figma-F24E1E?style=flat&logo=Figma&logoColor=white"/> <img src="https://img.shields.io/badge/-Notion-000000?style=flat&logo=Notion&logoColor=white"/> <img src="https://img.shields.io/badge/-Postman-FF6C37?style=flat&logo=Postman&logoColor=white"/> <img src="https://img.shields.io/badge/-Mattermost-0058CC?style=flat&logo=Mattermost&logoColor=white"/>
+
 <br/>
 <br/>
 
